@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+        if (theme === 'dark' || (!theme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {
+        // Failsafe: default to light mode if any errors occur.
+        console.error("Error applying initial theme:", e);
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Image & Design Tools | toolsTree</title>
+  <meta name="description" content="Essential tools for converting, resizing, compressing, and editing image files effortlessly, including background removal and color analysis.">
+  <link rel="canonical" href="https://yourdomain.com/categories/image.html">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script> 
+  
+  <script>
+    window.GLOBAL_ROOT_PATH = '../';
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+          fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    :root { --tt-primary-stroke: #10b981; }
+    .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Image & Design Tools",
+    "description": "Essential tools for converting, resizing, compressing, and editing image files effortlessly.",
+    "url": "https://yourdomain.com/categories/image.html",
+    "publisher": {
+      "@type": "Organization",
+      "name": "toolsTree"
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Advanced Image Optimizer with Watermark", "url": "https://yourdomain.com/tools/image-compressor.html" },
+        { "@type": "ListItem", "position": 2, "name": "Image Converter", "url": "https://yourdomain.com/tools/image-converter.html" },
+        { "@type": "ListItem", "position": 3, "name": "Color Picker", "url": "https://yourdomain.com/tools/color-picker.html" },
+        { "@type": "ListItem", "position": 4, "name": "Background Remover", "url": "https://yourdomain.com/tools/background-remover.html" },
+        { "@type": "ListItem", "position": 5, "name": "Image Crop & Rotate", "url": "https://yourdomain.com/tools/image-crop-rotate.html" },
+        { "@type": "ListItem", "position": 6, "name": "WCAG Color Contrast Checker", "url": "https://yourdomain.com/tools/contrast-checker.html" }
+      ]
+    }
+  }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+    
+    <nav class="flex mb-6" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+            <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+            <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Image & Design Tools</span></div></li>
+        </ol>
+    </nav>
+    
+    <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center p-3 rounded-full bg-tt-primary/10 mb-4">
+            <i data-lucide="image" class="w-8 h-8 text-tt-primary"></i>
+        </div>
+      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">Image & Design Tools</h1>
+      <p class="text-lg text-gray-600 mt-2 dark:text-gray-300">Essential tools for converting, resizing, compressing, and editing image files effortlessly.</p>
+    </div>
+
+    <div id="image-tools" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+    </main>
+
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+        const ALL_TOOLS_IMAGE = [
+            { name: "Advanced Image Optimizer with Watermark", url: "../tools/image-compressor.html", category: "Image", icon: "maximize-2", color: "text-indigo-600", description: "Securely compress, resize, convert, and watermark images instantly in your browser." },
+            { name: "Image Converter", url: "../tools/image-converter.html", category: "Image", icon: "repeat", color: "text-blue-600", description: "Convert between various image formats like JPG, PNG, WebP, and SVG." }, 
+            { name: "Color Picker", url: "../tools/color-picker.html", category: "Image", icon: "droplet", color: "text-pink-500", description: "Select colors from an image or chart and get Hex/RGB/HSL values." },
+            { name: "Background Remover", url: "../tools/background-remover.html", category: "Image", icon: "scissors", color: "text-red-500", description: "Automatically remove backgrounds from images quickly and cleanly." },
+            { name: "Image Crop & Rotate", url: "../tools/image-crop-rotate.html", category: "Image", icon: "crop", color: "text-amber-500", description: "Quickly crop, rotate, and flip images without quality loss." },
+            { name: "WCAG Color Contrast Checker", url: "../tools/contrast-checker.html", category: "Image", icon: "contrast", color: "text-green-600", description: "Ensure your foreground and background colors meet WCAG 2.1 AA/AAA accessibility standards." },
+        ];
+
+        const renderTools = (tools, containerId) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = tools.map(tool => `
+                <a href="${tool.url}" class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 space-y-2 dark:bg-gray-800 dark:border-gray-700 hover:scale-[1.01] transform">
+                    <i data-lucide="${tool.icon}" class="w-7 h-7 mb-2 ${tool.color} transition group-hover:text-tt-secondary"></i>
+                    <h2 class="text-base font-semibold text-gray-800 dark:text-gray-100">${tool.name}</h2>
+                    <p class="text-gray-500 text-sm dark:text-gray-400">${tool.description || 'Quick access tool.'}</p>
+                </a>`).join('');
+            window.lucide.createIcons();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof window.injectLayout === 'function') {
+                window.injectLayout(true);
+            } else {
+                console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+            }
+            renderTools(ALL_TOOLS_IMAGE, 'image-tools');
+        });
+    </script>
+</body>
+</html>
+

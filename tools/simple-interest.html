@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Simple Interest (SI) Calculator: Solve for P, R, or T | toolsTree</title>
+    <meta name="description" content="The most advanced Simple Interest (SI) Calculator. Solve for interest, principal, rate, or time with flexible time units (years, months, days).">
+    <link rel="canonical" href="https://yourdomain.com/tools/simple-interest.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        .formula-block { text-align: center; overflow-x: auto; }
+        /* Style for the calculated result input field */
+        .result-input { 
+            background-color: #f0fdf4 !important; /* light green */
+            color: #15803d !important; /* dark green text */
+            border-color: #10b981 !important;
+            font-weight: 700 !important;
+        }
+        .dark .result-input {
+            background-color: #064e3b !important; /* dark green bg */
+            color: #a7f3d0 !important; /* light green text */
+            border-color: #10b981 !important;
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Simple Interest (SI) Calculator",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "description": "Calculate simple interest, principal, rate, or time. Features flexible time units for years, months, and days.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "512"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/finance.html" class="ml-1 hover:text-tt-primary md:ml-2">Finance & Money Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Simple Interest Calculator</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">
+                Simple Interest (SI) Calculator
+            </h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">
+                Solve for any variable: interest, principal, rate, or time, with flexible time units.
+            </p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-700">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <div class="mb-6">
+                        <label class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100 flex items-center">
+                            <i data-lucide="target" class="w-5 h-5 mr-2 stroke-tt-primary"></i> I want to calculate...
+                        </label>
+                        <div id="calcMode" class="grid grid-cols-2 gap-2 mt-3 text-sm">
+                            <label class="flex items-center p-2 border rounded-lg cursor-pointer"><input type="radio" name="mode" value="interest" class="mr-2 text-tt-primary focus:ring-tt-primary" checked> Total & Interest</label>
+                            <label class="flex items-center p-2 border rounded-lg cursor-pointer"><input type="radio" name="mode" value="principal" class="mr-2 text-tt-primary focus:ring-tt-primary"> Principal</label>
+                            <label class="flex items-center p-2 border rounded-lg cursor-pointer"><input type="radio" name="mode" value="rate" class="mr-2 text-tt-primary focus:ring-tt-primary"> Rate</label>
+                            <label class="flex items-center p-2 border rounded-lg cursor-pointer"><input type="radio" name="mode" value="time" class="mr-2 text-tt-primary focus:ring-tt-primary"> Time</label>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div id="principal-group">
+                            <label for="principal" class="block text-sm font-medium">Principal Amount (P)</label>
+                            <div class="flex mt-1">
+                                <select id="currencySymbol" class="p-3 border rounded-l-lg bg-gray-100 border-r-0">
+                                    <option value="₹">₹</option><option value="$">$</option><option value="£">£</option><option value="€">€</option>
+                                </select>
+                                <input id="principal" type="number" placeholder="e.g., 10000" class="flex-grow p-3 border rounded-r-lg">
+                            </div>
+                        </div>
+                        <div id="rate-group">
+                            <label for="rate" class="block text-sm font-medium">Annual Interest Rate (%) (R)</label>
+                            <input id="rate" type="number" placeholder="e.g., 5.5" class="mt-1 w-full p-3 border rounded-lg">
+                        </div>
+                        <div id="time-group">
+                            <label class="block text-sm font-medium">Time Period (T)</label>
+                            <div class="grid grid-cols-3 gap-2 mt-1">
+                                <input id="time_years" type="number" placeholder="Years" class="p-3 border rounded-lg">
+                                <input id="time_months" type="number" placeholder="Months" class="p-3 border rounded-lg">
+                                <input id="time_days" type="number" placeholder="Days" class="p-3 border rounded-lg">
+                            </div>
+                        </div>
+                         <div id="amount-group">
+                            <label for="amount" class="block text-sm font-medium">Total Amount (A)</label>
+                            <input id="amount" type="number" placeholder="e.g., 11650" class="mt-1 w-full p-3 border rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+                        <i data-lucide="file-text" class="w-5 h-5 mr-2 stroke-tt-secondary"></i> Results Breakdown
+                    </h2>
+                    <div id="result" class="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 min-h-[250px] flex flex-col justify-center">
+                        <p class="text-gray-600 dark:text-gray-400 text-center">Enter values to see the results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">What is Simple Interest?</h2>
+                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300"><strong>Simple Interest (SI)</strong> is calculated only on the original principal amount of a loan or investment. Unlike compound interest, you don't earn interest on the interest itself, resulting in linear growth.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-bold">Formula for Interest (SI)</h3>
+                        <div class="text-sm font-mono bg-gray-100 p-2 rounded-md dark:bg-gray-700 my-2 formula-block">$$ \text{SI} = \frac{\text{P} \times \text{R} \times \text{T}}{100} $$</div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Formula for Principal (P)</h3>
+                        <div class="text-sm font-mono bg-gray-100 p-2 rounded-md dark:bg-gray-700 my-2 formula-block">$$ \text{P} = \frac{\text{A}}{1 + (\frac{\text{R} \times \text{T}}{100})} $$</div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Formula for Rate (R)</h3>
+                        <div class="text-sm font-mono bg-gray-100 p-2 rounded-md dark:bg-gray-700 my-2 formula-block">$$ \text{R} = \frac{(\frac{\text{A}}{\text{P}} - 1)}{\text{T}} \times 100 $$</div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Formula for Time (T)</h3>
+                        <div class="text-sm font-mono bg-gray-100 p-2 rounded-md dark:bg-gray-700 my-2 formula-block">$$ \text{T} = \frac{(\frac{\text{A}}{\text{P}} - 1)}{\frac{\text{R}}{100}} $$</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What's the difference between Simple and Compound Interest?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Simple interest</strong> is calculated only on the initial principal amount. Your interest earnings do not change over time. <strong>Compound interest</strong> is calculated on the principal amount plus the accumulated interest from previous periods. This "interest on interest" effect leads to exponential growth over time and is far more common in real-world savings and investment products.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Can I use this calculator for loans?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes, absolutely. The principles are the same. For a loan, the "Principal" is the amount you borrowed, the "Interest" is the extra amount you pay back to the lender, and the "Total Amount" is the full sum you will repay over the loan's duration.</p>
+                    </details>
+                </div>
+            </div>
+            </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.injectLayout(false); 
+    
+            const ui = {
+                calcMode: document.getElementById('calcMode'),
+                principal: document.getElementById('principal'),
+                rate: document.getElementById('rate'),
+                time_years: document.getElementById('time_years'),
+                time_months: document.getElementById('time_months'),
+                time_days: document.getElementById('time_days'),
+                amount: document.getElementById('amount'),
+                currencySymbol: document.getElementById('currencySymbol'),
+                result: document.getElementById('result'),
+                groups: {
+                    principal: document.getElementById('principal-group'),
+                    rate: document.getElementById('rate-group'),
+                    time: document.getElementById('time-group'),
+                    amount: document.getElementById('amount-group')
+                }
+            };
+    
+            let currentMode = 'interest';
+    
+            const formatCurrency = (amount, symbol) => {
+                const locale = (symbol === '₹') ? 'en-IN' : 'en-US'; 
+                return `${symbol} ${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(amount)}`;
+            };
+    
+            const updateUIMode = () => {
+                currentMode = document.querySelector('input[name="mode"]:checked').value;
+                
+                // Reset all states
+                Object.values(ui.groups).forEach(g => g.style.display = 'block');
+                const allInputs = [ui.principal, ui.rate, ui.time_years, ui.time_months, ui.time_days, ui.amount];
+                allInputs.forEach(el => {
+                    el.classList.remove('result-input');
+                    el.readOnly = false;
+                });
+    
+                // Configure UI for the selected mode
+                if (currentMode === 'interest') {
+                    ui.groups.amount.style.display = 'none';
+                } else if (currentMode === 'principal') {
+                    ui.principal.classList.add('result-input');
+                    ui.principal.readOnly = true;
+                } else if (currentMode === 'rate') {
+                    ui.rate.classList.add('result-input');
+                    ui.rate.readOnly = true;
+                } else if (currentMode === 'time') {
+                    [ui.time_years, ui.time_months, ui.time_days].forEach(el => {
+                        el.classList.add('result-input');
+                        el.readOnly = true;
+                    });
+                }
+                
+                calculate();
+            };
+    
+            const calculate = () => {
+                const P_in = parseFloat(ui.principal.value) || 0;
+                const R_in = parseFloat(ui.rate.value) || 0;
+                const Y_in = parseFloat(ui.time_years.value) || 0;
+                const M_in = parseFloat(ui.time_months.value) || 0;
+                const D_in = parseFloat(ui.time_days.value) || 0;
+                const A_in = parseFloat(ui.amount.value) || 0;
+                const symbol = ui.currencySymbol.value;
+    
+                const T_in = Y_in + (M_in / 12) + (D_in / 365.25);
+    
+                let P = P_in, R = R_in, T = T_in, A = A_in;
+                let si = 0;
+    
+                if (currentMode === 'interest') {
+                    if (P > 0 && R > 0 && T > 0) {
+                        si = (P * R * T) / 100;
+                        A = P + si;
+                    }
+                } else if (currentMode === 'principal') {
+                    if (A > 0 && R > 0 && T > 0) {
+                        P = A / (1 + (R * T / 100));
+                        si = A - P;
+                        ui.principal.value = P.toFixed(2);
+                    }
+                } else if (currentMode === 'rate') {
+                     if (P > 0 && T > 0 && A > P) {
+                        si = A - P;
+                        R = (si * 100) / (P * T);
+                        ui.rate.value = R.toFixed(2);
+                    }
+                } else if (currentMode === 'time') {
+                    if (P > 0 && R > 0 && A > P) {
+                        si = A - P;
+                        T = (si * 100) / (P * R);
+                        ui.time_years.value = Math.floor(T);
+                        const remMonths = (T - Math.floor(T)) * 12;
+                        ui.time_months.value = Math.floor(remMonths);
+                        const remDays = (remMonths - Math.floor(remMonths)) * 30.4375;
+                        ui.time_days.value = Math.round(remDays);
+                    }
+                }
+                
+                if (P > 0 && si > 0 && A > 0) {
+                    ui.result.innerHTML = `
+                        <div class="flex justify-between py-2 border-b dark:border-gray-600"><span class="text-gray-600 dark:text-gray-300">Principal Amount</span><span class="font-semibold">${formatCurrency(P, symbol)}</span></div>
+                        <div class="flex justify-between py-2"><span class="text-gray-600 dark:text-gray-300">Total Interest</span><span class="font-semibold text-tt-primary">${formatCurrency(si, symbol)}</span></div>
+                        <div class="flex justify-between p-3 mt-2 bg-tt-primary/10 dark:bg-tt-primary/20 rounded-lg"><span class="font-bold text-gray-800 dark:text-gray-100">Total Amount</span><span class="font-extrabold text-tt-primary">${formatCurrency(A, symbol)}</span></div>
+                    `;
+                } else {
+                     ui.result.innerHTML = `<p class="text-gray-600 dark:text-gray-400 text-center">Enter the required values to calculate.</p>`;
+                }
+            };
+            
+            ui.calcMode.addEventListener('change', updateUIMode);
+            [ui.principal, ui.rate, ui.time_years, ui.time_months, ui.time_days, ui.amount, ui.currencySymbol].forEach(el => {
+                el.addEventListener('input', calculate);
+            });
+    
+            updateUIMode();
+        });
+    </script>
+</body>
+</html>

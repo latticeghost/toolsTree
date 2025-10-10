@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+        if (theme === 'dark' || (!theme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {
+        // Failsafe: default to light mode if any errors occur.
+        console.error("Error applying initial theme:", e);
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online General Utility Tools & Miscellaneous Utilities | toolsTree</title>
+  <meta name="description" content="A collection of essential everyday utilities including secure password generators, UUID generators, and QR code creators.">
+  <link rel="canonical" href="https://yourdomain.com/categories/misc.html">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script> 
+  
+  <script>
+    window.GLOBAL_ROOT_PATH = '../';
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+          fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    :root { --tt-primary-stroke: #10b981; }
+    .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "General Utility Tools",
+    "description": "A collection of essential everyday utilities including secure password generators, UUID generators, and QR code creators.",
+    "url": "https://yourdomain.com/categories/misc.html",
+    "publisher": {
+      "@type": "Organization",
+      "name": "toolsTree"
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Ultimate Password Generator & Analyzer", "url": "https://yourdomain.com/tools/password-generator.html" },
+        { "@type": "ListItem", "position": 3, "name": "Advanced QR Code Generator", "url": "https://yourdomain.com/tools/qr-generator.html" }
+      ]
+    }
+  }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+    
+    <nav class="flex mb-6" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+            <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+            <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">General Utility Tools</span></div></li>
+        </ol>
+    </nav>
+    
+    <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center p-3 rounded-full bg-tt-primary/10 mb-4">
+            <i data-lucide="zap" class="w-8 h-8 text-tt-primary"></i>
+        </div>
+      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">General Utility Tools (Miscellaneous)</h1>
+      <p class="text-lg text-gray-600 mt-2 dark:text-gray-300">A collection of essential everyday utilities including secure password generators, UUID generators, and QR code creators.</p>
+    </div>
+
+    <div id="misc-tools" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+    </main>
+
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+        const ALL_TOOLS_MISC = [
+            { name: "Ultimate Password Generator & Analyzer", url: "../tools/password-generator.html", category: "Misc", icon: "key", color: "text-purple-600", description: "Create strong, unique, and highly secure passwords instantly." },
+            { name: "Advanced QR Code Generator", url: "../tools/qr-generator.html", category: "Misc", icon: "qr-code", color: "text-pink-500", description: "Generate highly customizable QR codes with logo support and high error correction." },
+        ];
+
+        const renderTools = (tools, containerId) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = tools.map(tool => `
+                <a href="${tool.url}" class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 space-y-2 dark:bg-gray-800 dark:border-gray-700 hover:scale-[1.01] transform">
+                    <i data-lucide="${tool.icon}" class="w-7 h-7 mb-2 ${tool.color} transition group-hover:text-tt-secondary"></i>
+                    <h2 class="text-base font-semibold text-gray-800 dark:text-gray-100">${tool.name}</h2>
+                    <p class="text-gray-500 text-sm dark:text-gray-400">${tool.description || 'Quick access tool.'}</p>
+                </a>`).join('');
+            window.lucide.createIcons();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof window.injectLayout === 'function') {
+                window.injectLayout(true); 
+            } else {
+                console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+            }
+            renderTools(ALL_TOOLS_MISC, 'misc-tools');
+        });
+    </script>
+</body>
+</html>
+

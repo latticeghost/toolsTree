@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          
+          // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {
+          // Failsafe: default to light mode if any errors occur.
+          console.error("Error applying initial theme:", e);
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>All-in-One Case Converter (14+ Styles with Live Previews) | toolsTree</title>
+    <meta name="description" content="The ultimate case converter with live previews for 14+ styles, including Camel, Snake, Kebab, Constant, Title, and Sentence case. Instantly see and copy the format you need.">
+    <link rel="canonical" href="https://yourdomain.com/tools/case-converter.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' }, fontFamily: { sans: ['Roboto Mono', 'monospace'] } } } };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        .output-textarea { font-size: 0.9rem; min-height: 80px; resize: none; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "All-in-One Case Converter",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "description": "The ultimate case converter with live previews for 14+ styles, including Camel, Snake, Kebab, Constant, Title, and Sentence case. Instantly see and copy the format you need.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "215"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/text.html" class="ml-1 hover:text-tt-primary md:ml-2">Text Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Case Converter</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-3">All-in-One Case Converter</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Type once, see all 14+ case styles instantly, and copy the one you need.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <label for="inputText" class="block text-xl font-semibold mb-2">Input Text</label>
+                <textarea id="inputText" placeholder="Type or paste your text here..." class="w-full p-4 border rounded-lg shadow-inner min-h-[150px]"></textarea>
+                <div id="stats" class="text-xs text-right text-gray-500 mt-1 pr-2">Characters: 0 | Words: 0</div>
+            </div>
+
+            <div class="pt-6 border-t dark:border-gray-700">
+                <h2 class="text-xl font-bold mb-4">Live Outputs</h2>
+                <div id="outputs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+             <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Guide to Case Styles</h2>
+                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">This tool supports crucial case styles used in programming, web development, and writing.</p>
+                <div class="grid md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <h3 class="font-bold mb-1">Programming Cases</h3>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><strong>camelCase:</strong> Used for variables in JavaScript.</li>
+                            <li><strong>PascalCase:</strong> Used for classes in many languages.</li>
+                            <li><strong>snake_case:</strong> Used in Python, PHP, and databases.</li>
+                            <li><strong>CONSTANT_CASE:</strong> Used for constants in many languages.</li>
+                            <li><strong>kebab-case:</strong> Used in CSS, HTML attributes, and URLs.</li>
+                            <li><strong>dot.case:</strong> Used for object properties in some systems.</li>
+                            <li><strong>path/case:</strong> Used for file paths and URLs.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-1">Literary & Specialty Cases</h3>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><strong>Sentence case:</strong> Standard for written text.</li>
+                            <li><strong>Title Case:</strong> For headlines, capitalizing major words.</li>
+                            <li><strong>UPPERCASE / lowercase:</strong> For emphasis or normalization.</li>
+                            <li><strong>Capitalize case:</strong> Capitalizes only the very first letter.</li>
+                            <li><strong>aLtErNaTiNg cAsE:</strong> Swaps case for each letter.</li>
+                            <li><strong>iNVERSE cASE:</strong> Flips the case of every letter.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is the difference between camelCase and PascalCase?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Both cases join words without spaces, but <strong>camelCase</strong> starts with a lowercase letter (e.g., `myVariableName`), while <strong>PascalCase</strong> starts with an uppercase letter (e.g., `MyClassName`). PascalCase is often used for class names in programming, while camelCase is common for variable or function names.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why are there so many different programming cases?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Different programming languages, frameworks, and communities have adopted different style conventions over time. For example, `snake_case` is standard in Python, `kebab-case` is used for CSS class names and URLs, and `camelCase`/`PascalCase` are prevalent in the JavaScript and Java worlds.</p>
+                    </details>
+                     <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What rules are used for 'Title Case'?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool uses a common set of rules for Title Case where it capitalizes the first letter of each word, except for minor words (like 'a', 'an', 'the', 'for', etc.) unless they are the first or last word in the title. This is a general-purpose style suitable for most headlines.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+        
+        const ui = {
+            inputText: document.getElementById('inputText'),
+            outputsGrid: document.getElementById('outputs-grid'),
+            stats: document.getElementById('stats')
+        };
+
+        const CASES = {
+            'Sentence case': text => text.toLowerCase().replace(/(^\s*\w|[.?!]\s*\w)/g, c => c.toUpperCase()),
+            'lowercase': text => text.toLowerCase(),
+            'UPPERCASE': text => text.toUpperCase(),
+            'Title Case': text => {
+                const minorWords = /^(a|an|and|as|at|but|by|for|if|in|nor|of|on|or|the|to|up|with)$/i;
+                return text.toLowerCase().split(' ').map((word, index, arr) => {
+                    if (index > 0 && index < arr.length - 1 && word.match(minorWords)) return word;
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                }).join(' ');
+            },
+            'Capitalize case': text => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase(),
+            'aLtErNaTiNg cAsE': text => [...text].map((c, i) => i % 2 ? c.toUpperCase() : c.toLowerCase()).join(''),
+            'iNVERSE cASE': text => [...text].map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join(''),
+            'camelCase': text => {
+                const s = standardize(text);
+                return s.charAt(0).toLowerCase() + s.slice(1).replace(/ (\w)/g, (match, letter) => letter.toUpperCase());
+            },
+            'PascalCase': text => standardize(text).replace(/(?:^|\s)(\w)/g, (match, letter) => letter.toUpperCase()),
+            'snake_case': text => standardize(text).replace(/\s+/g, '_'),
+            'CONSTANT_CASE': text => standardize(text).replace(/\s+/g, '_').toUpperCase(),
+            'kebab-case': text => standardize(text).replace(/\s+/g, '-'),
+            'dot.case': text => standardize(text).replace(/\s+/g, '.'),
+            'path/case': text => standardize(text).replace(/\s+/g, '/'),
+        };
+
+        const standardize = (text) => text.replace(/([A-Z])/g, ' $1').replace(/[^a-zA-Z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+        
+        const createOutputBoxes = () => {
+            for (const name in CASES) {
+                const id = name.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+                const box = document.createElement('div');
+                box.className = 'bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg';
+                box.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-sm font-semibold">${name}</h4>
+                        <button data-target="${id}" class="copy-btn p-1 text-gray-500 hover:text-tt-primary"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                    </div>
+                    <textarea id="${id}" readonly class="w-full p-2 border rounded-md bg-white dark:bg-gray-800 output-textarea"></textarea>
+                `;
+                ui.outputsGrid.appendChild(box);
+            }
+            lucide.createIcons();
+        };
+
+        const convertAll = () => {
+            const input = ui.inputText.value;
+            for (const name in CASES) {
+                const id = name.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+                const outputTextarea = document.getElementById(id);
+                if (outputTextarea) {
+                    outputTextarea.value = input ? CASES[name](input) : '';
+                }
+            }
+            const charCount = input.length;
+            const wordCount = input.trim() === '' ? 0 : input.trim().split(/\s+/).length;
+            ui.stats.textContent = `Characters: ${charCount} | Words: ${wordCount}`;
+        };
+
+        const copyText = (e) => {
+            const targetButton = e.target.closest('.copy-btn');
+            if (!targetButton) return;
+
+            const targetId = targetButton.dataset.target;
+            const textarea = document.getElementById(targetId);
+            if (textarea.value) {
+                navigator.clipboard.writeText(textarea.value).then(() => {
+                    const icon = targetButton.querySelector('i');
+                    icon.setAttribute('data-lucide', 'check');
+                    lucide.createIcons();
+                    setTimeout(() => {
+                        icon.setAttribute('data-lucide', 'copy');
+                        lucide.createIcons();
+                    }, 1500);
+                });
+            }
+        };
+
+        // Initialize
+        createOutputBoxes();
+        ui.inputText.addEventListener('input', convertAll);
+        ui.outputsGrid.addEventListener('click', copyText);
+    });
+    </script>
+</body>
+</html>

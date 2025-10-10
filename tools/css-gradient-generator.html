@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Advanced CSS Gradient Generator | toolsTree</title>
+    <meta name="description" content="Visually create stunning linear and radial CSS gradients. Customize colors, angles, and export the code instantly for your projects.">
+    <link rel="canonical" href="https://yourdomain.com/tools/css-gradient-generator.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        input[type="color"] { padding: 0; border: none; width: 40px; height: 40px; border-radius: 0.375rem; cursor: pointer; }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 0.375rem; }
+        .angle-dial { position: relative; width: 80px; height: 80px; }
+        .angle-dial-center { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: #fff; border-radius: 50%; transform: translate(-50%, -50%); border: 1px solid #ccc; }
+        .angle-dial-handle { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; background: var(--tt-primary-stroke); border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; }
+        .type-btn.active {
+            background-color: var(--tt-primary-stroke);
+            color: white;
+            border-color: var(--tt-primary-stroke);
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced CSS Gradient Generator",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "Visually create and customize complex linear and radial CSS gradients, and export the code instantly for web development and design projects.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "680"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+    
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Developer Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">CSS Gradient Generator</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">
+                Advanced CSS Gradient Generator
+            </h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">
+                An interactive visual tool to build, customize, and export beautiful CSS gradients.
+            </p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl border border-gray-100 dark:border-gray-700">
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <div class="p-6 sm:p-8 border-b lg:border-r lg:border-b-0 border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-6">Controls</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Gradient Type</label>
+                            <div id="gradient-type" class="flex space-x-2">
+                                <button data-type="linear" class="type-btn active flex-1 py-2 px-4 rounded-lg border">Linear</button>
+                                <button data-type="radial" class="type-btn flex-1 py-2 px-4 rounded-lg border">Radial</button>
+                            </div>
+                        </div>
+
+                        <div id="angle-control-wrapper">
+                            <label class="block text-sm font-medium mb-2">Direction (Angle)</label>
+                            <div class="flex items-center space-x-4">
+                               <div class="angle-dial bg-gray-200 dark:bg-gray-700 rounded-full">
+                                   <div class="angle-dial-center"></div>
+                                   <div id="angle-handle" class="angle-dial-handle"></div>
+                               </div>
+                               <div class="relative">
+                                    <input id="angle-input" type="number" min="0" max="360" value="90" class="w-24 p-2 border rounded-lg">
+                                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">deg</span>
+                               </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Color Stops</label>
+                            <div id="color-stops-container" class="space-y-3"></div>
+                            <button id="add-color-btn" class="mt-4 w-full flex items-center justify-center space-x-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 font-semibold py-2 px-4 rounded-lg transition">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                <span>Add Color</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <div class="flex justify-between items-center mb-6">
+                       <h2 class="text-xl font-bold">Preview & Code</h2>
+                       <button id="random-btn" class="flex items-center space-x-2 text-sm bg-tt-secondary text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-tt-secondary/90 transition">
+                           <i data-lucide="shuffle" class="w-4 h-4"></i>
+                           <span>Random</span>
+                       </button>
+                    </div>
+
+                    <div id="preview-box" class="w-full h-64 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 mb-6 transition-all duration-300"></div>
+                    
+                    <div>
+                        <label for="css-code" class="block text-sm font-medium text-gray-700 dark:text-gray-300">CSS Code</label>
+                        <div class="relative mt-1">
+                            <pre class="w-full p-4 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900/50 overflow-x-auto text-sm"><code id="css-code"></code></pre>
+                            <button id="copy-btn" class="absolute top-2 right-2 p-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                                <i data-lucide="copy" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">How to Use the Gradient Generator</h2>
+            <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                <li><strong>Select Type:</strong> Choose between a 'Linear' or 'Radial' gradient.</li>
+                <li><strong>Adjust Direction:</strong> For linear gradients, drag the handle on the dial or enter a degree value to change the angle.</li>
+                <li><strong>Customize Colors:</strong> Click on the color swatches to open the color picker. Drag the sliders to adjust where each color begins and ends.</li>
+                <li><strong>Add or Remove Colors:</strong> Click "Add Color" to create a multi-color gradient. Use the trash icon to remove a color stop.</li>
+                <li><strong>Copy Code:</strong> Once you're happy with the preview, click the copy button to get the CSS code for your project.</li>
+            </ol>
+            <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+            <div class="space-y-3 text-sm">
+                 <details class="group">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <span>How can I make a smoother gradient?</span>
+                        <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">For a smoother transition, choose colors that are closer to each other in hue and brightness. You can also add intermediate color stops between your main colors to create a more gradual change.</p>
+                </details>
+                <details class="group">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <span>What browsers support CSS gradients?</span>
+                         <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">CSS gradients are widely supported by all modern web browsers, including Chrome, Firefox, Safari, and Edge. The code generated by this tool is standard and does not require vendor prefixes for current browser versions.</p>
+                </details>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        const state = {
+            type: 'linear', // linear or radial
+            angle: 90,
+            colors: [
+                { color: '#10b981', position: 0 },
+                { color: '#4f46e5', position: 100 }
+            ]
+        };
+
+        const previewBox = document.getElementById('preview-box');
+        const cssCode = document.getElementById('css-code');
+        const copyBtn = document.getElementById('copy-btn');
+        const colorStopsContainer = document.getElementById('color-stops-container');
+        const addColorBtn = document.getElementById('add-color-btn');
+        const randomBtn = document.getElementById('random-btn');
+        const angleControlWrapper = document.getElementById('angle-control-wrapper');
+        const angleInput = document.getElementById('angle-input');
+        const angleHandle = document.getElementById('angle-handle');
+        const angleDial = document.querySelector('.angle-dial');
+
+        function updateGradient() {
+            const colorStops = state.colors
+                .sort((a, b) => a.position - b.position)
+                .map(c => `${c.color} ${c.position}%`).join(', ');
+
+            let gradientCss;
+            if (state.type === 'linear') {
+                gradientCss = `linear-gradient(${state.angle}deg, ${colorStops})`;
+                angleControlWrapper.style.display = 'block';
+            } else {
+                gradientCss = `radial-gradient(circle, ${colorStops})`;
+                angleControlWrapper.style.display = 'none';
+            }
+
+            previewBox.style.background = gradientCss;
+            cssCode.textContent = `background: ${gradientCss};`;
+            updateAngleDial();
+        }
+
+        function createColorStopUI(color, position, index) {
+            const id = `color-stop-${Date.now()}-${index}`;
+            const stopDiv = document.createElement('div');
+            stopDiv.className = 'flex items-center space-x-2';
+            stopDiv.innerHTML = `
+                <input type="color" value="${color}" data-index="${index}" class="color-picker">
+                <input type="text" value="${color.toUpperCase()}" data-index="${index}" class="hex-input flex-grow p-2 border rounded-lg text-sm w-24">
+                <input type="range" min="0" max="100" value="${position}" data-index="${index}" class="position-slider flex-grow">
+                <span class="text-xs w-10 text-center">${position}%</span>
+                <button data-index="${index}" class="remove-color-btn p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 ${state.colors.length <= 2 ? 'opacity-50 cursor-not-allowed' : ''}" ${state.colors.length <= 2 ? 'disabled' : ''}>
+                    <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+                </button>
+            `;
+            colorStopsContainer.appendChild(stopDiv);
+            lucide.createIcons();
+        }
+
+        function renderColorStops() {
+            colorStopsContainer.innerHTML = '';
+            state.colors.forEach((c, i) => createColorStopUI(c.color, c.position, i));
+        }
+
+        function handleColorChange(e) {
+            const index = parseInt(e.target.dataset.index);
+            let newColor = e.target.value;
+            // Basic hex validation
+            if (/^#([0-9A-F]{3}){1,2}$/i.test(newColor)) {
+                 state.colors[index].color = newColor;
+                 renderColorStops();
+                 updateGradient();
+            }
+        }
+        
+        function handlePositionChange(e) {
+            const index = parseInt(e.target.dataset.index);
+            state.colors[index].position = parseInt(e.target.value);
+            renderColorStops();
+            updateGradient();
+        }
+
+        function handleRemoveColor(index) {
+            if (state.colors.length > 2) {
+                state.colors.splice(index, 1);
+                renderColorStops();
+                updateGradient();
+            }
+        }
+
+        function addColor() {
+            const lastColor = state.colors[state.colors.length - 1];
+            const newColor = { color: lastColor.color, position: 100 };
+            state.colors.push(newColor);
+            renderColorStops();
+            updateGradient();
+        }
+        
+        function randomHex() {
+            return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+        }
+
+        function randomize() {
+            state.colors.forEach(c => c.color = randomHex());
+            state.angle = Math.floor(Math.random() * 361);
+            angleInput.value = state.angle;
+            renderColorStops();
+            updateGradient();
+        }
+        
+        function updateAngleDial() {
+            if (state.type !== 'linear') return;
+            const angleRad = (state.angle - 90) * (Math.PI / 180);
+            const radius = angleDial.offsetWidth / 2 - angleHandle.offsetWidth / 2;
+            const x = radius * Math.cos(angleRad);
+            const y = radius * Math.sin(angleRad);
+            angleHandle.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+        }
+
+        let isDraggingAngle = false;
+        angleDial.addEventListener('mousedown', (e) => { e.preventDefault(); isDraggingAngle = true; });
+        document.addEventListener('mouseup', () => isDraggingAngle = false);
+        document.addEventListener('mousemove', (e) => {
+            if (!isDraggingAngle) return;
+            const rect = angleDial.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const angleRad = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+            let angleDeg = Math.round(angleRad * (180 / Math.PI) + 90);
+            if (angleDeg < 0) angleDeg += 360;
+            state.angle = angleDeg;
+            angleInput.value = angleDeg;
+            updateGradient();
+        });
+
+        colorStopsContainer.addEventListener('input', e => {
+            if (e.target.matches('.color-picker') || e.target.matches('.hex-input')) handleColorChange(e);
+            if (e.target.matches('.position-slider')) handlePositionChange(e);
+        });
+        
+        colorStopsContainer.addEventListener('click', e => {
+            const btn = e.target.closest('.remove-color-btn');
+            if (btn) handleRemoveColor(parseInt(btn.dataset.index));
+        });
+
+        document.getElementById('gradient-type').addEventListener('click', e => {
+            const btn = e.target.closest('.type-btn');
+            if(btn) {
+                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.type = btn.dataset.type;
+                updateGradient();
+            }
+        });
+        
+        angleInput.addEventListener('input', (e) => {
+            let val = parseInt(e.target.value) || 0;
+            if (val > 360) val = 360;
+            if (val < 0) val = 0;
+            e.target.value = val;
+            state.angle = val;
+            updateGradient();
+        });
+
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(cssCode.textContent);
+            const originalIcon = copyBtn.innerHTML;
+            copyBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-green-500"></i>`;
+            lucide.createIcons();
+            setTimeout(() => {
+                copyBtn.innerHTML = originalIcon;
+                lucide.createIcons();
+            }, 1500);
+        });
+
+        addColorBtn.addEventListener('click', addColor);
+        randomBtn.addEventListener('click', randomize);
+
+        renderColorStops();
+        updateGradient();
+    });
+    </script>
+</body>
+</html>

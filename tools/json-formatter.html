@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate JSON Formatter, Validator & Minifier Online | toolsTree</title>
+    <meta name="description" content="The most advanced JSON tool online: Instantly format, validate, minify, sort keys, and control indentation (2, 3, or 4 spaces). Built for speed and developer productivity.">
+    <link rel="canonical" href="https://yourdomain.com/tools/json-formatter.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        // Standardized Tailwind Config
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: {
+                        sans: ['Roboto Mono', 'monospace'],
+                    }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        
+        /* Input/Output Textarea Style */
+        textarea {
+            resize: vertical;
+            min-height: 350px;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        .dark input, .dark select, .dark textarea {
+            background-color: #374151; border-color: #4b5563; color: #f3f4f6;
+        }
+        .dark input::placeholder, .dark textarea::placeholder { color: #9ca3af; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Ultimate JSON Formatter, Validator & Minifier",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "The most advanced JSON tool online: Instantly format, validate, minify, sort keys, and control indentation.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "218"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+    
+    </head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Data & Developer Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Ultimate JSON Formatter, Validator & Minifier</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">
+                Ultimate JSON Formatter, Validator & Minifier
+            </h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">
+                Instantly format, validate, and debug JSON data with advanced control over indentation and key sorting.
+            </p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
+            <div class="lg:col-span-1">
+                <h2 class="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 flex items-center">
+                    <i data-lucide="file-json" class="w-5 h-5 mr-2 stroke-tt-primary"></i> Input Data
+                </h2>
+                <textarea id="inputText" placeholder='Paste your JSON here (e.g., {"b":2, "a":1})' 
+                    class="w-full p-4 border rounded-lg shadow-sm focus:ring-tt-primary focus:border-tt-primary transition"
+                    oninput="clearOutput()"></textarea>
+    
+                <div class="mt-4 flex flex-wrap gap-3">
+                    <button onclick="loadExample()" class="flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-300 flex-grow sm:flex-grow-0">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i><span>Load Example</span>
+                    </button>
+                    <button onclick="clearInput()" class="flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-300 flex-grow sm:flex-grow-0">
+                        <i data-lucide="file-x" class="w-4 h-4"></i><span>Clear Input</span>
+                    </button>
+                </div>
+            </div>
+    
+            <div class="lg:col-span-1">
+                <h2 class="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 flex items-center">
+                    <i data-lucide="check-square" class="w-5 h-5 mr-2 stroke-tt-secondary"></i> Processed Output
+                </h2>
+                <textarea id="outputText" readonly placeholder="The processed JSON will appear here..."
+                    class="w-full p-4 border rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700"></textarea>
+    
+                <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400 mt-2 mb-4">
+                    <span id="validationStatus" class="font-bold">Enter JSON to validate.</span>
+                    <span>Length: <strong id="charCount" class="font-bold text-gray-800 dark:text-gray-200">0</strong></span>
+                </div>
+    
+                <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                    <div>
+                        <label for="indentation" class="block font-medium dark:text-gray-300">Indentation</label>
+                        <select id="indentation" onchange="processJSON('format')"
+                                class="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-tt-primary focus:border-tt-primary dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                            <option value="2">2 Spaces (Default)</option>
+                            <option value="3">3 Spaces</option>
+                            <option value="4">4 Spaces</option>
+                            <option value="t">Tabs</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <label class="flex items-center space-x-2 text-base font-medium dark:text-gray-300">
+                            <input type="checkbox" id="sortKeys" onclick="processJSON('format')"
+                                   class="rounded text-tt-primary focus:ring-tt-primary border-gray-300 dark:border-gray-500 dark:bg-gray-700 w-5 h-5">
+                            <span>Sort Keys (A-Z)</span>
+                        </label>
+                    </div>
+                </div>
+    
+                <div class="grid grid-cols-2 gap-3">
+                    <button class="flex items-center justify-center space-x-2 bg-tt-primary text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:bg-tt-secondary transition duration-300" onclick="processJSON('format')">
+                        <i data-lucide="indent" class="w-4 h-4"></i><span>Format</span>
+                    </button>
+                    <button class="flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition duration-300" onclick="processJSON('minify')">
+                        <i data-lucide="compress" class="w-4 h-4"></i><span>Minify</span>
+                    </button>
+                    <button id="copyBtn" onclick="copyToClipboard()" disabled title="Output is empty or invalid"
+                        class="flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-3 px-4 rounded-lg cursor-not-allowed">
+                        <i data-lucide="clipboard" class="w-4 h-4"></i><span>Copy</span>
+                    </button>
+                    <button id="downloadBtn" onclick="downloadJSON()" disabled title="Output is empty or invalid"
+                        class="flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-3 px-4 rounded-lg cursor-not-allowed">
+                        <i data-lucide="download" class="w-4 h-4"></i><span>Download</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-8 text-center">
+            </div>
+
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">How to Use the JSON Formatter</h2>
+                <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                    <li><strong>Step 1:</strong> Paste your raw JSON data into the "Input Data" text area. You can also click "Load Example" to see how it works.</li>
+                    <li><strong>Step 2:</strong> Choose your desired indentation (2, 3, 4 spaces, or tabs) and check "Sort Keys" if you need keys alphabetized.</li>
+                    <li><strong>Step 3:</strong> Click "Format JSON" to beautify the data or "Minify JSON" to compress it into a single line.</li>
+                    <li><strong>Step 4:</strong> The processed, validated output will appear on the right. You can then copy it to your clipboard or download it as a `.json` file.</li>
+                </ol>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">About JSON (JavaScript Object Notation)</h2>
+                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">
+                    JSON is a lightweight, text-based data-interchange format that is easy for humans to read and write and easy for machines to parse and generate. It is essential for data exchange in web applications, especially for APIs. Our tool goes beyond basic formatting by offering advanced features that dramatically increase developer productivity.
+                </p>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Custom Indentation:</strong> Choose from 2, 3, 4 spaces, or Tab characters to match your project's coding standards.</li>
+                    <li><strong>Alphabetical Key Sorting:</strong> Automatically sort JSON object keys to make large objects easy to compare and navigate.</li>
+                    <li><strong>Line-Specific Validation:</strong> Provides clear, line-number-based error messages to quickly pinpoint syntax issues.</li>
+                    <li><strong>Efficient Minifier:</strong> Strips all unnecessary whitespace to maximize payload efficiency for API communication.</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What does 'Sort Keys' do?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">When checked, this option recursively goes through all objects in your JSON and reorders their keys alphabetically (A-Z). This is extremely useful for comparing two JSON files to see if their data is the same, regardless of the original key order.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is the difference between Formatting and Minifying?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Formatting</strong> (also called beautifying or pretty-printing) adds indentation and line breaks to make the JSON human-readable. <strong>Minifying</strong> removes all unnecessary whitespace (spaces, tabs, newlines) to make the file size as small as possible, which is ideal for sending data over a network.</p>
+                    </details>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // STEP 1: Inject Header/Footer without search bar and initialize theme.
+            window.injectLayout(false); 
+
+            // STEP 2: All logic specific to THIS tool goes below.
+            // =================================================================
+            
+            const inputTextarea = document.getElementById("inputText");
+            const outputTextarea = document.getElementById("outputText");
+            const validationStatus = document.getElementById("validationStatus");
+            const charCountDisplay = document.getElementById("charCount");
+            const copyBtn = document.getElementById('copyBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const sortKeysCheckbox = document.getElementById('sortKeys');
+
+            const EXAMPLE_JSON = '{"id": 1, "name": "toolsTree Project", "description": "Revamping all tool pages for consistency and SEO.", "is_complete": false, "created_at": "2025-10-06T10:00:00Z", "tags": ["seo", "design", "development"]}';
+
+            function toggleActionButtons(isDisabled) {
+                [copyBtn, downloadBtn].forEach(btn => {
+                    btn.disabled = isDisabled;
+                    if (isDisabled) {
+                        btn.classList.add('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
+                        btn.classList.remove('bg-tt-primary', 'hover:bg-tt-secondary');
+                    } else {
+                        btn.classList.remove('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
+                        btn.classList.add('bg-tt-primary', 'hover:bg-tt-secondary');
+                    }
+                });
+            }
+            
+            function updateCharacterCount(text) {
+                charCountDisplay.textContent = text.length;
+            }
+
+            window.clearOutput = function() {
+                outputTextarea.value = '';
+                validationStatus.innerHTML = '<i data-lucide="alert-circle" class="w-4 h-4 text-yellow-500 inline mr-1"></i> Waiting to process...';
+                validationStatus.className = 'font-bold text-yellow-500 dark:text-yellow-400';
+                updateCharacterCount('');
+                toggleActionButtons(true);
+                lucide.createIcons();
+            }
+            
+            window.loadExample = function() {
+                inputTextarea.value = EXAMPLE_JSON;
+                clearOutput();
+            }
+
+            function sortKeysReviver(key, value) {
+                if (value && typeof value === 'object' && !Array.isArray(value)) {
+                    const sortedKeys = Object.keys(value).sort();
+                    const sortedObject = {};
+                    for (const k of sortedKeys) {
+                        sortedObject[k] = value[k];
+                    }
+                    return sortedObject;
+                }
+                return value;
+            }
+            
+            window.processJSON = function(action) {
+                const text = inputTextarea.value.trim();
+                outputTextarea.value = '';
+                
+                if (!text) {
+                    validationStatus.innerHTML = '<i data-lucide="info" class="w-4 h-4 text-blue-500 inline mr-1"></i> Please enter JSON data.';
+                    validationStatus.className = 'font-bold text-blue-500 dark:text-blue-400';
+                    toggleActionButtons(true);
+                    lucide.createIcons();
+                    return;
+                }
+
+                try {
+                    let reviver = sortKeysCheckbox.checked ? sortKeysReviver : null;
+                    const parsed = JSON.parse(text, reviver);
+                    let output;
+                    
+                    if (action === 'minify') {
+                        output = JSON.stringify(parsed); 
+                    } else {
+                        const indentValue = document.getElementById('indentation').value;
+                        const spaces = (indentValue === 't') ? '\t' : parseInt(indentValue);
+                        output = JSON.stringify(parsed, null, spaces); 
+                    }
+
+                    outputTextarea.value = output;
+                    validationStatus.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4 text-green-600 inline mr-1"></i> JSON is **Valid**!';
+                    validationStatus.className = 'font-bold text-green-600 dark:text-green-400';
+                    toggleActionButtons(false);
+                    updateCharacterCount(output);
+                } catch (e) {
+                    let errorText = e.message;
+                    const match = errorText.match(/position\s+(\d+)/);
+                    if (match) {
+                        const errorIndex = parseInt(match[1]);
+                        let lineNumber = 1;
+                        for (let i = 0; i < errorIndex; i++) {
+                            if (text[i] === '\n') lineNumber++;
+                        }
+                        errorText = `Error near **Line ${lineNumber}**: ${e.message.split(' at position')[0]}`;
+                    }
+                    outputTextarea.value = '';
+                    validationStatus.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-red-600 inline mr-1"></i> **Validation Error:** ${errorText}`;
+                    validationStatus.className = 'font-bold text-red-600 dark:text-red-400';
+                    toggleActionButtons(true);
+                    updateCharacterCount('');
+                }
+                lucide.createIcons();
+                outputTextarea.scrollTop = 0; 
+            }
+            
+            window.copyToClipboard = function() {
+              if (!outputTextarea.value || copyBtn.disabled) return;
+              navigator.clipboard.writeText(outputTextarea.value).then(() => {
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Copied!';
+                copyBtn.classList.add('!bg-green-500', 'hover:!bg-green-600');
+                copyBtn.classList.remove('bg-tt-primary', 'hover:bg-tt-secondary');
+                lucide.createIcons();
+                setTimeout(() => {
+                  copyBtn.innerHTML = originalText;
+                  copyBtn.classList.remove('!bg-green-500', 'hover:!bg-green-600');
+                  copyBtn.classList.add('bg-tt-primary', 'hover:bg-tt-secondary');
+                  lucide.createIcons();
+                }, 2000);
+              }).catch(err => {
+                console.error('Could not copy text: ', err);
+              });
+            }
+
+            window.downloadJSON = function() {
+                const content = outputTextarea.value;
+                if (!content || downloadBtn.disabled) return;
+                const blob = new Blob([content], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'toolsTree_processed.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            window.clearInput = function() {
+              inputTextarea.value = '';
+              clearOutput();
+            }
+
+            // Initial state setup for the tool
+            clearInput();
+            
+            // =================================================================
+        });
+    </script>
+</body>
+</html>

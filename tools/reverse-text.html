@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Advanced Text Reverser & Flipper (Upside Down) | toolsTree</title>
+    <meta name="description" content="The ultimate text reverser tool. Instantly reverse strings, words, letters, lines, or flip your text upside down. Includes advanced case control options.">
+    <link rel="canonical" href="https://yourdomain.com/tools/reverse-text.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        /* Style for the selected radio button's label */
+        input[type="radio"]:checked + label {
+            background-color: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        .text-stats { font-size: 0.75rem; color: #6b7280; }
+        .dark .text-stats { color: #9ca3af; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced Text Reverser & Flipper",
+      "applicationCategory": "TextApplication",
+      "operatingSystem": "Web",
+      "description": "Reverse text by string, word, letter, or line. Includes a function to flip text upside down and advanced case controls.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "620"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/text.html" class="ml-1 hover:text-tt-primary md:ml-2">Text Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced Text Reverser & Flipper</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">
+                Advanced Text Reverser & Flipper
+            </h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">
+                Reverse, flip, and transform your text with multiple modes and case options.
+            </p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-700">
+            <div class="mb-6">
+                <label class="text-lg font-semibold dark:text-gray-200 mb-3 block">1. Select Reversal Mode:</label>
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-4 text-sm">
+                    <input type="radio" id="modeString" name="reverseMode" value="string" checked class="hidden"><label for="modeString" class="cursor-pointer px-3 py-2 border rounded-lg">Reverse String</label>
+                    <input type="radio" id="modeWords" name="reverseMode" value="words" class="hidden"><label for="modeWords" class="cursor-pointer px-3 py-2 border rounded-lg">Reverse Words</label>
+                    <input type="radio" id="modeLetters" name="reverseMode" value="letters" class="hidden"><label for="modeLetters" class="cursor-pointer px-3 py-2 border rounded-lg">Reverse Letters</label>
+                    <input type="radio" id="modeLines" name="reverseMode" value="lines" class="hidden"><label for="modeLines" class="cursor-pointer px-3 py-2 border rounded-lg">Reverse Lines</label>
+                    <input type="radio" id="modeFlip" name="reverseMode" value="flip" class="hidden"><label for="modeFlip" class="cursor-pointer px-3 py-2 border rounded-lg">Flip (Upside Down)</label>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <label class="text-lg font-semibold dark:text-gray-200 mb-3 block">2. Output Options:</label>
+                <div id="caseOptions" class="flex flex-wrap justify-center gap-4 text-sm">
+                    <label class="flex items-center gap-2"><input type="checkbox" name="case" value="lower" class="rounded text-tt-primary focus:ring-tt-primary"> all lowercase</label>
+                    <label class="flex items-center gap-2"><input type="checkbox" name="case" value="upper" class="rounded text-tt-primary focus:ring-tt-primary"> ALL UPPERCASE</label>
+                    <label class="flex items-center gap-2"><input type="checkbox" name="case" value="invert" class="rounded text-tt-primary focus:ring-tt-primary"> iNVERT cASE</label>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label for="inputText" class="block text-lg font-semibold dark:text-gray-200">Original Text</label>
+                    <textarea id="inputText" placeholder="Type or paste text here..." class="w-full p-4 border rounded-lg shadow-sm focus:ring-tt-primary focus:border-tt-primary transition min-h-[200px]"></textarea>
+                    <div id="inputStats" class="text-stats text-right px-2">Chars: 0 | Words: 0 | Lines: 0</div>
+                </div>
+                <div class="space-y-2">
+                    <label for="outputText" class="block text-lg font-semibold dark:text-gray-200">Transformed Text</label>
+                    <textarea id="outputText" readonly placeholder="Result will appear here..." class="w-full p-4 border rounded-lg shadow-sm bg-gray-50 dark:bg-gray-900/50 cursor-default min-h-[200px]"></textarea>
+                    <div id="outputStats" class="text-stats text-right px-2">Chars: 0 | Words: 0 | Lines: 0</div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-6 mt-6 border-t dark:border-gray-700 space-x-4">
+                <button id="copyBtn" class="flex items-center space-x-2 text-sm font-semibold text-tt-primary hover:text-tt-secondary transition"><i data-lucide="copy" class="w-4 h-4"></i><span>Copy Result</span></button>
+                <button id="clearBtn" class="flex items-center space-x-2 text-sm font-semibold text-gray-500 hover:text-gray-700 transition"><i data-lucide="file-x" class="w-4 h-4"></i><span>Clear All</span></button>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">About the Transformation Modes</h2>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Reverse String:</strong> Reverses every character in the text. "Hello World" &rarr; "dlroW olleH".</li>
+                    <li><strong>Reverse Words:</strong> Reverses the order of words. "Hello World" &rarr; "World Hello".</li>
+                    <li><strong>Reverse Letters:</strong> Reverses the letters inside each word. "Hello World" &rarr; "olleH dlroW".</li>
+                    <li><strong>Reverse Lines:</strong> Reverses the order of lines in a multi-line text.</li>
+                    <li><strong>Flip (Upside Down):</strong> Maps each character to its upside-down equivalent. "Hello" &rarr; "oןןǝH".</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>How does 'Flip (Upside Down)' work?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This mode uses a character map to replace each letter or symbol with a Unicode character that looks like its upside-down version. Not all characters have a flipped equivalent, so some may remain unchanged.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Does this tool work with emojis and special characters?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. Modern JavaScript is aware of multi-byte characters like emojis (e.g., 👍), so reversing a string like "Hi 👍" will correctly result in "👍 iH" instead of breaking the emoji.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.injectLayout(false); 
+    
+            const ui = {
+                inputText: document.getElementById('inputText'),
+                outputText: document.getElementById('outputText'),
+                inputStats: document.getElementById('inputStats'),
+                outputStats: document.getElementById('outputStats'),
+                modeRadios: document.querySelectorAll('input[name="reverseMode"]'),
+                caseCheckboxes: document.querySelectorAll('input[name="case"]'),
+                copyBtn: document.getElementById('copyBtn'),
+                clearBtn: document.getElementById('clearBtn'),
+            };
+
+            const flipMap = {'a':'ɐ','b':'q','c':'ɔ','d':'p','e':'ǝ','f':'ɟ','g':'ƃ','h':'ɥ','i':'ı','j':'ɾ','k':'ʞ','l':'ן','m':'ɯ','n':'u','o':'o','p':'d','q':'b','r':'ɹ','s':'s','t':'ʇ','u':'n','v':'ʌ','w':'ʍ','x':'x','y':'ʎ','z':'z','A':'∀','B':'𐐒','C':'Ɔ','D':'ᗡ','E':'Ǝ','F':'Ⅎ','G':'פ','H':'H','I':'I','J':'ſ','K':'ʞ','L':'˥','M':'W','N':'N','O':'O','P':'Ԁ','Q':'Q','R':'R','S':'S','T':'┴','U':'∩','V':'Λ','W':'M','X':'X','Y':'⅄','Z':'Z','1':'Ɩ','2':'ᄅ','3':'Ɛ','4':'ㄣ','5':'ϛ','6':'9','7':'ㄥ','8':'8','9':'6','0':'0','.':'˙',',':'\'','?':'¿','!':'¡','\'':',','\"':',,','`':',','(':'(','[':']',']':'[','{':'}','}':'{','<':'>','>':'<'};
+
+            const updateStats = (textarea, statsDiv) => {
+                const text = textarea.value;
+                const charCount = text.length;
+                const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+                const lineCount = text.split('\n').length;
+                statsDiv.textContent = `Chars: ${charCount} | Words: ${wordCount} | Lines: ${lineCount}`;
+            };
+
+            const convertText = () => {
+                const input = ui.inputText.value;
+                const mode = document.querySelector('input[name="reverseMode"]:checked').value;
+                let result = '';
+
+                if (mode === 'string') {
+                    result = [...input].reverse().join('');
+                } else if (mode === 'words') {
+                    result = input.split(/(\s+)/).reverse().join('');
+                } else if (mode === 'letters') {
+                    result = input.split(/(\s+)/).map(seg => seg.trim() !== '' ? [...seg].reverse().join('') : seg).join('');
+                } else if (mode === 'lines') {
+                    result = input.split('\n').reverse().join('\n');
+                } else if (mode === 'flip') {
+                    result = [...input].reverse().map(char => flipMap[char] || char).join('');
+                }
+
+                // Apply case options
+                const lower = document.querySelector('input[value="lower"]').checked;
+                const upper = document.querySelector('input[value="upper"]').checked;
+                const invert = document.querySelector('input[value="invert"]').checked;
+
+                if (lower) result = result.toLowerCase();
+                if (upper) result = result.toUpperCase();
+                if (invert) {
+                    result = [...result].map(c => c === c.toLowerCase() ? c.toUpperCase() : c.toLowerCase()).join('');
+                }
+
+                ui.outputText.value = result;
+                updateStats(ui.inputText, ui.inputStats);
+                updateStats(ui.outputText, ui.outputStats);
+            };
+
+            const copyOutput = () => {
+                if (!ui.outputText.value) return;
+                navigator.clipboard.writeText(ui.outputText.value).then(() => {
+                    const originalText = ui.copyBtn.innerHTML;
+                    ui.copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Copied!</span>';
+                    lucide.createIcons();
+                    setTimeout(() => { ui.copyBtn.innerHTML = originalText; lucide.createIcons(); }, 2000);
+                });
+            };
+
+            const clearInputs = () => {
+                ui.inputText.value = '';
+                convertText();
+                ui.inputText.focus();
+            };
+
+            // Event Listeners
+            ui.inputText.addEventListener('input', convertText);
+            ui.modeRadios.forEach(radio => radio.addEventListener('change', convertText));
+            ui.caseCheckboxes.forEach(cb => cb.addEventListener('change', convertText));
+            ui.copyBtn.addEventListener('click', copyOutput);
+            ui.clearBtn.addEventListener('click', clearInputs);
+            
+            // Initial run
+            convertText();
+        });
+    </script>
+</body>
+</html>

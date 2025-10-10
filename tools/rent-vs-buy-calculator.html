@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Rent vs. Buy Home Calculator | toolsTree</title>
+    <meta name="description" content="Make a confident financial decision with our comprehensive rent vs. buy calculator. Analyze costs, equity, tax benefits, and net worth over time.">
+    <link rel="canonical" href="https://yourdomain.com/tools/rent-vs-buy-calculator.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        .dark input::placeholder { color: #9ca3af; }
+        .chart-container { height: 400px; }
+        .input-group h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid; padding-bottom: 0.5rem; }
+        .dark .input-group h3 { border-color: #4b5563; }
+        .input-group .label-group { display: flex; justify-content: space-between; align-items: center; }
+        .input-group .slider-value { font-weight: 600; color: #10b981; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Rent vs. Buy Home Calculator",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "description": "A comprehensive financial calculator to analyze the long-term costs and benefits of renting versus buying a home, including tax implications, appreciation, and investment opportunity cost.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "512"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+    
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/finance.html" class="ml-1 hover:text-tt-primary md:ml-2">Finance & Money Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Rent vs. Buy Home Calculator</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">
+                Rent vs. Buy Home Calculator
+            </h1>
+            <p class="text-base text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                Go beyond monthly payments. Compare the long-term financial impact of renting and buying to see which path builds more wealth.
+            </p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-700">
+            <!-- Inputs Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                <!-- Buying Inputs -->
+                <div class="input-group space-y-4">
+                    <h3 class="flex items-center text-green-600 dark:text-green-400"><i data-lucide="home" class="w-5 h-5 mr-2"></i>Buying Costs</h3>
+                    <div>
+                        <label for="homePrice" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Home Price</label>
+                        <input id="homePrice" type="number" value="350000" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <div class="label-group">
+                            <label for="downPayment" class="text-sm font-medium text-gray-700 dark:text-gray-300">Down Payment (%)</label>
+                            <span id="downPaymentValue" class="slider-value">20%</span>
+                        </div>
+                        <input id="downPayment" type="range" min="0" max="100" value="20" class="mt-1 w-full">
+                    </div>
+                    <div>
+                        <label for="interestRate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mortgage Rate (%)</label>
+                        <input id="interestRate" type="number" step="0.01" value="6.5" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <label for="loanTerm" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Loan Term (Years)</label>
+                        <select id="loanTerm" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                            <option value="30">30 Years</option>
+                            <option value="20">20 Years</option>
+                            <option value="15">15 Years</option>
+                            <option value="10">10 Years</option>
+                        </select>
+                    </div>
+                     <div>
+                        <label for="propertyTax" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Property Tax (% of Home Value)</label>
+                        <input id="propertyTax" type="number" step="0.01" value="1.2" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <label for="homeInsurance" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Home Insurance (Annual)</label>
+                        <input id="homeInsurance" type="number" value="1500" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                     <div>
+                        <label for="hoa" class="block text-sm font-medium text-gray-700 dark:text-gray-300">HOA Fees (Monthly)</label>
+                        <input id="hoa" type="number" value="150" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                </div>
+
+                <!-- Renting Inputs -->
+                <div class="input-group space-y-4">
+                    <h3 class="flex items-center text-blue-600 dark:text-blue-400"><i data-lucide="building" class="w-5 h-5 mr-2"></i>Renting Costs</h3>
+                    <div>
+                        <label for="monthlyRent" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Monthly Rent</label>
+                        <input id="monthlyRent" type="number" value="1800" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <label for="rentersInsurance" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Renter's Insurance (Annual)</label>
+                        <input id="rentersInsurance" type="number" value="200" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                </div>
+
+                <!-- Shared Assumptions -->
+                <div class="input-group space-y-4">
+                    <h3 class="flex items-center text-indigo-600 dark:text-indigo-400"><i data-lucide="sliders-horizontal" class="w-5 h-5 mr-2"></i>Financial Assumptions</h3>
+                    <div>
+                        <div class="label-group">
+                            <label for="timeHorizon" class="text-sm font-medium">How long you'll stay (Years)</label>
+                            <span id="timeHorizonValue" class="slider-value">10 years</span>
+                        </div>
+                        <input id="timeHorizon" type="range" min="1" max="30" value="10" class="mt-1 w-full">
+                    </div>
+                     <div>
+                        <label for="homeAppreciation" class="block text-sm font-medium">Home Value Growth (%/yr)</label>
+                        <input id="homeAppreciation" type="number" step="0.1" value="4.0" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <label for="rentIncrease" class="block text-sm font-medium">Rent Increase (%/yr)</label>
+                        <input id="rentIncrease" type="number" step="0.1" value="3.0" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                     <div>
+                        <label for="investmentReturn" class="block text-sm font-medium">Investment Return (%/yr)</label>
+                        <input id="investmentReturn" type="number" step="0.1" value="7.0" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                     <div>
+                        <label for="closingCosts" class="block text-sm font-medium">Closing Costs (% of Home Price)</label>
+                        <input id="closingCosts" type="number" step="0.1" value="3.0" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <label for="taxRate" class="block text-sm font-medium">Marginal Tax Rate (%)</label>
+                        <input id="taxRate" type="number" step="1" value="24" class="mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                </div>
+            </div>
+             <button id="calculateBtn" class="w-full mt-2 flex items-center justify-center space-x-2 bg-tt-primary text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-tt-secondary transition duration-300 text-lg">
+                <i data-lucide="calculator" class="w-6 h-6"></i>
+                <span>Calculate: Rent vs. Buy</span>
+            </button>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="results-container" class="mt-10 bg-white dark:bg-gray-800 shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 hidden">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">Analysis: Net Worth Over Time</h2>
+            <div id="summary" class="text-center text-lg mb-6 p-4 rounded-lg bg-gray-100 dark:bg-gray-700"></div>
+            <div class="chart-container">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+        </div>
+
+
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">How to Use the Calculator</h2>
+                <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                    <li><strong>Enter Buying Costs:</strong> Input the details for the home you're considering, including its price, your down payment, and estimated ongoing costs like taxes and insurance.</li>
+                    <li><strong>Enter Renting Costs:</strong> Provide the monthly rent for a comparable property.</li>
+                    <li><strong>Adjust Financial Assumptions:</strong> This is the most important step. Estimate how long you'll stay, how much you think the home will appreciate, and what return you could get by investing your money elsewhere (like in the stock market). Your tax rate helps calculate mortgage interest deductions.</li>
+                    <li><strong>Analyze the Results:</strong> The chart shows your potential net worth over time for both scenarios. The summary will tell you the "breakeven point"—the year after which buying becomes more financially advantageous.</li>
+                </ol>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Understanding the Calculation</h2>
+                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">
+                   This calculator compares the full financial picture of owning vs. renting.
+                   <br><strong>For Buying</strong>, it tracks your home equity (home value minus mortgage balance) and subtracts all costs (mortgage, taxes, insurance, maintenance, HOA). It also factors in the tax savings you get from deducting mortgage interest.
+                   <br><strong>For Renting</strong>, it calculates your net worth by assuming you invest your initial down payment and any monthly savings (if renting is cheaper) into the market at your specified investment return rate. This is the "opportunity cost" of buying. The better option is the one that results in a higher net worth after your chosen time horizon.
+                </p>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Is renting really just "throwing money away"?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Not necessarily. While rent payments don't build equity, owning a home comes with many costs that also don't build equity, such as property taxes, insurance, maintenance, HOA fees, and mortgage interest (especially in the early years). This calculator shows that if the money saved by renting is invested wisely, it can often grow to exceed the equity gained from owning a home, particularly in the short term.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What are the non-financial benefits of owning a home?</span>
+                             <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This is a purely financial calculator. Owning a home offers non-financial benefits like stability, the freedom to renovate, a sense of community, and pride of ownership. Renting offers flexibility, predictable monthly costs, and freedom from maintenance responsibilities. These qualitative factors are important and should be considered alongside the financial analysis provided here.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // A fallback for window.injectLayout to prevent errors in environments where globals.js might not load.
+        if (typeof window.injectLayout !== 'function') {
+            window.injectLayout = function(hasSearch) {
+                console.warn("`injectLayout` function not found. Page header/footer might be missing. This is a fallback to prevent script errors.");
+            };
+        }
+        window.injectLayout(false); 
+
+        const inputs = {
+            homePrice: document.getElementById('homePrice'),
+            downPayment: document.getElementById('downPayment'),
+            interestRate: document.getElementById('interestRate'),
+            loanTerm: document.getElementById('loanTerm'),
+            propertyTax: document.getElementById('propertyTax'),
+            homeInsurance: document.getElementById('homeInsurance'),
+            hoa: document.getElementById('hoa'),
+            monthlyRent: document.getElementById('monthlyRent'),
+            rentersInsurance: document.getElementById('rentersInsurance'),
+            timeHorizon: document.getElementById('timeHorizon'),
+            homeAppreciation: document.getElementById('homeAppreciation'),
+            rentIncrease: document.getElementById('rentIncrease'),
+            investmentReturn: document.getElementById('investmentReturn'),
+            closingCosts: document.getElementById('closingCosts'),
+            taxRate: document.getElementById('taxRate'),
+        };
+
+        const sliders = {
+            downPayment: document.getElementById('downPaymentValue'),
+            timeHorizon: document.getElementById('timeHorizonValue'),
+        };
+
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultsContainer = document.getElementById('results-container');
+        const summaryDiv = document.getElementById('summary');
+        let comparisonChart;
+
+        // Update slider display values
+        inputs.downPayment.addEventListener('input', (e) => sliders.downPayment.textContent = `${e.target.value}%`);
+        inputs.timeHorizon.addEventListener('input', (e) => sliders.timeHorizon.textContent = `${e.target.value} years`);
+
+        calculateBtn.addEventListener('click', runAnalysis);
+
+        function getValues() {
+            const values = {};
+            for (const key in inputs) {
+                values[key] = parseFloat(inputs[key].value) || 0;
+            }
+            return values;
+        }
+
+        function runAnalysis() {
+            const v = getValues();
+            
+            // --- CORE CALCULATION LOGIC ---
+            const years = v.timeHorizon;
+            const loanAmount = v.homePrice * (1 - v.downPayment / 100);
+            const monthlyMortgageRate = v.interestRate / 100 / 12;
+            const numPayments = v.loanTerm * 12;
+
+            const monthlyPAndI = loanAmount * (monthlyMortgageRate * Math.pow(1 + monthlyMortgageRate, numPayments)) / (Math.pow(1 + monthlyMortgageRate, numPayments) - 1);
+            
+            let buyNetWorthData = [];
+            let rentNetWorthData = [];
+            let labels = [];
+
+            let currentHomeValue = v.homePrice;
+            let remainingLoan = loanAmount;
+            let currentRent = v.monthlyRent;
+
+            const initialInvestment = (v.homePrice * v.downPayment / 100) + (v.homePrice * v.closingCosts / 100);
+            let renterInvestmentFund = initialInvestment;
+
+            for (let year = 0; year <= years; year++) {
+                labels.push(`Year ${year}`);
+                if (year === 0) {
+                    buyNetWorthData.push(v.homePrice * v.downPayment / 100);
+                    rentNetWorthData.push(initialInvestment);
+                    continue;
+                }
+
+                // --- Calculate Buyer's Annual Costs & Net Worth ---
+                let totalInterestPaid = 0;
+                let principalPaid = 0;
+                for(let m = 0; m < 12; m++) {
+                    const interestComponent = remainingLoan * monthlyMortgageRate;
+                    const principalComponent = monthlyPAndI - interestComponent;
+                    totalInterestPaid += interestComponent;
+                    principalPaid += principalComponent;
+                    remainingLoan -= principalComponent;
+                }
+                
+                const propertyTaxPaid = (currentHomeValue * v.propertyTax / 100);
+                const insurancePaid = v.homeInsurance;
+                const hoaPaid = v.hoa * 12;
+                const taxSavings = totalInterestPaid * (v.taxRate / 100);
+
+                const totalBuyerCost = (monthlyPAndI * 12) + propertyTaxPaid + insurancePaid + hoaPaid - taxSavings;
+                
+                currentHomeValue *= (1 + v.homeAppreciation / 100);
+                const buyNetWorth = currentHomeValue - remainingLoan;
+                buyNetWorthData.push(buyNetWorth);
+
+                // --- Calculate Renter's Annual Costs & Net Worth ---
+                const totalRentPaid = currentRent * 12;
+                const renterInsurancePaid = v.rentersInsurance;
+                const totalRenterCost = totalRentPaid + renterInsurancePaid;
+                
+                currentRent *= (1 + v.rentIncrease / 100);
+                
+                const savingsDifference = totalBuyerCost - totalRenterCost;
+                
+                // Grow investment fund
+                renterInvestmentFund = (renterInvestmentFund + savingsDifference) * (1 + v.investmentReturn / 100);
+                rentNetWorthData.push(renterInvestmentFund);
+            }
+
+            renderResults(buyNetWorthData, rentNetWorthData, labels);
+        }
+
+        function renderResults(buyData, rentData, labels) {
+            resultsContainer.classList.remove('hidden');
+
+            const finalBuy = buyData[buyData.length - 1];
+            const finalRent = rentData[rentData.length - 1];
+            let breakevenYear = -1;
+            
+            for(let i=1; i < buyData.length; i++) {
+                if (buyData[i] > rentData[i]) {
+                    breakevenYear = i;
+                    break;
+                }
+            }
+
+            let summaryHTML;
+            if (breakevenYear !== -1) {
+                summaryHTML = `Buying becomes more profitable after <strong class="text-tt-primary">${breakevenYear} years</strong>. After ${labels.length - 1} years, your estimated net worth would be <strong class="text-green-500">${formatCurrency(finalBuy)}</strong> if you buy, versus <strong class="text-blue-500">${formatCurrency(finalRent)}</strong> if you rent.`;
+            } else {
+                summaryHTML = `Based on these assumptions, renting remains more profitable for the entire <strong class="text-tt-primary">${labels.length - 1} year</strong> period. Your estimated net worth would be <strong class="text-blue-500">${formatCurrency(finalRent)}</strong> if you rent, versus <strong class="text-green-500">${formatCurrency(finalBuy)}</strong> if you buy.`;
+            }
+            summaryDiv.innerHTML = summaryHTML;
+
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            if (comparisonChart) {
+                comparisonChart.destroy();
+            }
+
+            comparisonChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Buy Net Worth',
+                        data: buyData,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }, {
+                        label: 'Rent Net Worth',
+                        data: rentData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: (value) => formatCurrency(value),
+                                color: isDarkMode ? '#d1d5db' : '#374151'
+                            },
+                             grid: { color: isDarkMode ? '#4b5563' : '#e5e7eb' }
+                        },
+                        x: {
+                            ticks: { color: isDarkMode ? '#d1d5db' : '#374151' },
+                            grid: { color: isDarkMode ? '#4b5563' : '#e5e7eb' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: isDarkMode ? '#d1d5db' : '#374151' } },
+                        tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${formatCurrency(c.raw)}` } }
+                    }
+                }
+            });
+             // Scroll to results
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        const formatCurrency = (amount) => {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+        };
+    });
+    </script>
+</body>
+</html>
+

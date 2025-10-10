@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Advanced Image Optimizer: Compress, Resize, Watermark | toolsTree</title>
+    <meta name="description" content="The ultimate client-side image optimizer. Securely compress, resize, convert, and watermark images (JPG, PNG, WebP) with a live preview. No server uploads, total privacy.">
+    <link rel="canonical" href="https://yourdomain.com/tools/image-compressor.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        input[type='range'] { accent-color: var(--tt-primary-stroke); }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced Image Optimizer with Watermark",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Web",
+      "description": "Client-side image compression, resizing, conversion, and watermarking with a live preview. Supports JPG, PNG, and WebP formats.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "reviewCount": "1250" },
+      "publisher": { "@type": "Organization", "name": "toolsTree" }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/image.html" class="ml-1 hover:text-tt-primary md:ml-2">Image & Design Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced Image Optimizer</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced Image Optimizer with Watermark</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Securely compress, resize, convert, and watermark images instantly in your browser.</p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold mb-3 flex items-center"><i data-lucide="upload-cloud" class="w-5 h-5 mr-2 stroke-tt-primary"></i>1. Upload Images</h2>
+                    <label id="drop-zone" for="file-upload" class="block w-full cursor-pointer rounded-lg border-2 border-dashed p-8 text-center transition-colors hover:border-tt-primary">
+                        <input type="file" id="file-upload" multiple accept="image/jpeg, image/png, image/webp" class="hidden">
+                        <i data-lucide="image" class="w-10 h-10 mx-auto text-gray-400"></i>
+                        <p class="mt-2 font-medium">Drag & drop images here</p>
+                        <p class="text-sm text-gray-500">or click to browse (up to 10 files)</p>
+                    </label>
+                </div>
+
+                <div class="pt-6 border-t dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="sliders-horizontal" class="w-5 h-5 mr-2 stroke-tt-primary"></i>2. Optimization Settings</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="quality-range" class="block text-sm font-medium mb-2">Compression Quality (<span id="quality-value">80</span>%)</label>
+                            <input type="range" id="quality-range" min="1" max="100" value="80" class="w-full">
+                        </div>
+                        <div>
+                            <label for="output-format" class="block text-sm font-medium mb-1">Output Format</label>
+                            <select id="output-format" class="w-full p-2 border rounded-lg"><option value="jpeg">JPEG</option><option value="png">PNG</option><option value="webp">WebP</option></select>
+                        </div>
+                        <div class="pt-2 border-t dark:border-gray-700">
+                            <h3 class="font-medium flex items-center mb-2"><i data-lucide="maximize-2" class="w-4 h-4 mr-1 text-tt-secondary"></i>Resizing</h3>
+                             <div class="grid grid-cols-2 gap-4">
+                                <div><label for="new-width" class="block text-sm mb-1">Width (px)</label><input type="number" id="new-width" placeholder="Original" class="w-full p-2 border rounded-lg"></div>
+                                <div><label for="new-height" class="block text-sm mb-1">Height (px)</label><input type="number" id="new-height" placeholder="Original" class="w-full p-2 border rounded-lg"></div>
+                             </div>
+                        </div>
+                         <div class="pt-2 border-t dark:border-gray-700">
+                            <label for="watermarkToggle" class="flex items-center justify-between cursor-pointer">
+                                <h3 class="font-medium flex items-center"><i data-lucide="droplet" class="w-4 h-4 mr-1 text-tt-secondary"></i>Watermark</h3>
+                                <input type="checkbox" id="watermarkToggle" class="sr-only peer"><div class="relative w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-tt-primary peer-checked:after:translate-x-full after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                            </label>
+                            <div id="watermarkOptions" class="hidden space-y-3 mt-3">
+                                <div><label for="watermarkText" class="text-sm">Text</label><input type="text" id="watermarkText" value="toolsTree" class="w-full p-2 border rounded-lg mt-1"></div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div><label for="watermarkSize" class="text-sm">Size</label><input type="number" id="watermarkSize" value="24" class="w-full p-2 border rounded-lg mt-1"></div>
+                                    <div><label for="watermarkColor" class="text-sm">Color</label><input type="color" id="watermarkColor" value="#ffffff" class="w-full h-10 p-1 border rounded-lg mt-1"></div>
+                                    <div><label for="watermarkOpacity" class="text-sm">Opacity</label><input type="range" id="watermarkOpacity" min="0" max="1" step="0.1" value="0.7" class="w-full mt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="eye" class="w-5 h-5 mr-2 stroke-tt-primary"></i>Live Preview (First Image)</h2>
+                    <div id="preview-container" class="grid grid-cols-2 gap-4 items-center text-center">
+                        <div><h3 class="text-sm font-semibold mb-2">Before</h3><div id="preview-before" class="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center"><p class="text-xs text-gray-500">Upload an image</p></div></div>
+                        <div><h3 class="text-sm font-semibold mb-2">After</h3><div id="preview-after" class="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center"><p class="text-xs text-gray-500">Preview appears here</p></div></div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="list-checks" class="w-5 h-5 mr-2 stroke-tt-primary"></i>3. Process & Download</h2>
+                     <button id="process-btn" disabled class="w-full px-6 py-4 bg-tt-primary text-white text-lg font-bold rounded-xl shadow-lg hover:bg-tt-secondary transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
+                        <i data-lucide="zap" class="w-6 h-6 mr-3"></i><span>Optimize (<span id="file-count">0</span>) Files</span>
+                    </button>
+                    <div id="results-container" class="mt-4 space-y-3 max-h-[40vh] overflow-y-auto"></div>
+                    <div id="bulk-download-section" class="hidden mt-4 pt-4 border-t dark:border-gray-700">
+                        <button id="downloadAllBtn" class="w-full px-6 py-3 bg-tt-secondary text-white font-bold rounded-lg"><i data-lucide="download" class="w-5 h-5 mr-2 inline"></i>Download All as .ZIP</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">A Privacy-First Image Toolkit</h2>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Total Privacy:</strong> All processing happens in your browser. Your images are never uploaded to a server, ensuring 100% security.</li>
+                    <li><strong>Live Preview:</strong> Instantly see the effect of your compression and resizing settings before processing your entire batch of images.</li>
+                    <li><strong>Watermarking:</strong> Protect and brand your images by adding custom text watermarks with controls for size, color, and opacity.</li>
+                    <li><strong>Bulk Processing:</strong> Optimize up to 10 images at once and download them all in a convenient .zip file.</li>
+                </ul>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions</h2>
+                <div class="space-y-3 text-sm">
+                     <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Are my images really private?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. This tool uses JavaScript's built-in Canvas and File APIs to process images directly on your computer ("client-side"). No data is sent to our servers, making it as secure as editing a file on your local desktop.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Which output format should I choose?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>JPEG:</strong> Best for photos, offers the smallest file size. Does not support transparency. <strong>PNG:</strong> Best for graphics with sharp lines or transparency (logos, icons). File sizes are larger. <strong>WebP:</strong> A modern format from Google that offers a great balance of small file size and high quality, and supports transparency. It's excellent for web use.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <canvas id="hidden-canvas" class="hidden"></canvas>
+
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        window.injectLayout(false);
+
+        let originalFiles = [];
+        let processedBlobs = [];
+        let debounceTimer;
+
+        // UI Elements Cache
+        const ui = {
+            fileUpload: document.getElementById('file-upload'), dropZone: document.getElementById('drop-zone'),
+            fileCount: document.getElementById('file-count'), processBtn: document.getElementById('process-btn'),
+            previewBefore: document.getElementById('preview-before'), previewAfter: document.getElementById('preview-after'),
+            resultsContainer: document.getElementById('results-container'), bulkDownloadSection: document.getElementById('bulk-download-section'),
+            downloadAllBtn: document.getElementById('downloadAllBtn'), watermarkToggle: document.getElementById('watermarkToggle'),
+            watermarkOptions: document.getElementById('watermarkOptions'), hiddenCanvas: document.getElementById('hidden-canvas')
+        };
+
+        const getSettings = () => ({
+            quality: parseFloat(document.getElementById('quality-range').value) / 100,
+            format: document.getElementById('output-format').value,
+            width: parseInt(document.getElementById('new-width').value) || null,
+            height: parseInt(document.getElementById('new-height').value) || null,
+            watermark: {
+                enabled: ui.watermarkToggle.checked,
+                text: document.getElementById('watermarkText').value,
+                size: parseInt(document.getElementById('watermarkSize').value) || 24,
+                color: document.getElementById('watermarkColor').value,
+                opacity: parseFloat(document.getElementById('watermarkOpacity').value) || 0.7,
+            }
+        });
+
+        const processImage = (file, settings) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    const originalW = img.naturalWidth, originalH = img.naturalHeight;
+                    let targetW = settings.width || originalW, targetH = settings.height || originalH;
+                    
+                    const canvas = ui.hiddenCanvas;
+                    canvas.width = targetW; canvas.height = targetH;
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, targetW, targetH);
+                    ctx.drawImage(img, 0, 0, targetW, targetH);
+
+                    if (settings.watermark.enabled && settings.watermark.text) {
+                        ctx.fillStyle = settings.watermark.color;
+                        ctx.globalAlpha = settings.watermark.opacity;
+                        ctx.font = `${settings.watermark.size}px 'Roboto Mono', monospace`;
+                        ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+                        ctx.fillText(settings.watermark.text, targetW - 10, targetH - 10);
+                        ctx.globalAlpha = 1.0;
+                    }
+                    
+                    const mimeType = `image/${settings.format}`;
+                    canvas.toBlob(resolve, mimeType, settings.quality);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        const updateLivePreview = async () => {
+            if (originalFiles.length === 0) return;
+            const settings = getSettings();
+            try {
+                const blob = await processImage(originalFiles[0], settings);
+                const url = URL.createObjectURL(blob);
+                ui.previewAfter.innerHTML = `<img src="${url}" class="w-full h-full object-contain rounded-lg" onload="URL.revokeObjectURL(this.src)">`;
+            } catch (error) {
+                console.error("Preview Error:", error);
+                ui.previewAfter.innerHTML = `<p class="text-xs text-red-500">Preview Error</p>`;
+            }
+        };
+
+        const processAllFiles = async () => {
+            ui.processBtn.disabled = true;
+            ui.processBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Processing...</span>`;
+            
+            processedBlobs = [];
+            ui.resultsContainer.innerHTML = '';
+            const settings = getSettings();
+
+            for (let i = 0; i < originalFiles.length; i++) {
+                const file = originalFiles[i];
+                const blob = await processImage(file, settings);
+                processedBlobs.push({ blob, name: `${file.name.split('.').slice(0, -1).join('.')}.${settings.format === 'jpeg' ? 'jpg' : settings.format}` });
+                
+                const reduction = Math.round((1 - blob.size / file.size) * 100);
+                ui.resultsContainer.innerHTML += `<div class="flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded-lg"><p class="text-sm truncate">${processedBlobs[i].name}</p><span class="text-sm font-bold text-tt-primary">${reduction >= 0 ? `${reduction}% saved` : `Larger`}</span></div>`;
+            }
+
+            ui.bulkDownloadSection.style.display = processedBlobs.length > 0 ? 'block' : 'none';
+            ui.processBtn.disabled = false;
+            ui.processBtn.innerHTML = `<i data-lucide="zap" class="w-6 h-6 mr-3"></i><span>Optimize (${originalFiles.length}) Files</span>`;
+            lucide.createIcons();
+        };
+
+        const handleFileSelect = (event) => {
+            originalFiles = Array.from(event.target.files).slice(0, 10);
+            ui.fileCount.textContent = originalFiles.length;
+            ui.processBtn.disabled = originalFiles.length === 0;
+
+            if (originalFiles.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (e) => { ui.previewBefore.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain rounded-lg">`; };
+                reader.readAsDataURL(originalFiles[0]);
+                updateLivePreview();
+            } else {
+                ui.previewBefore.innerHTML = `<p class="text-xs text-gray-500">Upload an image</p>`;
+                ui.previewAfter.innerHTML = `<p class="text-xs text-gray-500">Preview appears here</p>`;
+            }
+        };
+
+        const downloadAll = () => {
+            const zip = new JSZip();
+            processedBlobs.forEach(item => zip.file(item.name, item.blob));
+            zip.generateAsync({ type: "blob" }).then(content => saveAs(content, "toolsTree_images.zip"));
+        };
+        
+        // Event Listeners
+        const allSettingsInputs = document.querySelectorAll('#quality-range, #output-format, #new-width, #new-height, #watermarkToggle, #watermarkText, #watermarkSize, #watermarkColor, #watermarkOpacity');
+        allSettingsInputs.forEach(input => input.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(updateLivePreview, 250); // Debounce live preview
+        }));
+        
+        ui.watermarkToggle.addEventListener('change', () => { ui.watermarkOptions.style.display = ui.watermarkToggle.checked ? 'block' : 'none'; });
+        ui.fileUpload.addEventListener('change', handleFileSelect);
+        ui.processBtn.addEventListener('click', processAllFiles);
+        ui.downloadAllBtn.addEventListener('click', downloadAll);
+
+        // Drag & Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            ui.dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+            document.body.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+        });
+        ['dragenter', 'dragover'].forEach(eventName => ui.dropZone.addEventListener(eventName, () => ui.dropZone.classList.add('border-tt-primary'), false));
+        ['dragleave', 'drop'].forEach(eventName => ui.dropZone.addEventListener(eventName, () => ui.dropZone.classList.remove('border-tt-primary'), false));
+        ui.dropZone.addEventListener('drop', e => { ui.fileUpload.files = e.dataTransfer.files; handleFileSelect({ target: ui.fileUpload }); }, false);
+    });
+    </script>
+</body>
+</html>

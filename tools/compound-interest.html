@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+    (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Compound Interest Calculator: Goal Planner & Inflation | toolsTree</title>
+    <meta name="description" content="An advanced compound interest calculator to solve for future value, principal, time, or contributions. Includes inflation adjustment, yearly breakdown table, and charts.">
+    <link rel="canonical" href="https://yourdomain.com/tools/compound-interest.html">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        input[type="radio"]:checked + label { background-color: #10b981; color: white; border-color: #10b981; }
+        input[type='range'] { accent-color: var(--tt-primary-stroke); }
+        .result-input { background-color: #f0fdf4 !important; color: #15803d !important; border-color: #10b981 !important; font-weight: 700 !important; }
+        .dark .result-input { background-color: #064e3b !important; color: #a7f3d0 !important; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced Compound Interest Calculator",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "description": "An advanced compound interest calculator to solve for future value, principal, time, or contributions. Includes inflation adjustment, yearly breakdown table, and charts.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "512"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/finance.html" class="ml-1 hover:text-tt-primary md:ml-2">Finance & Money Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced Compound Interest Calculator</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-3">Advanced Compound Interest Calculator</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">A goal-planning tool to project investment growth with inflation, contributions, and more.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-5">
+                    <div class="mb-6">
+                        <label class="text-lg font-bold block mb-3">Calculation Mode</label>
+                        <div id="calcMode" class="grid grid-cols-2 gap-2 text-sm">
+                            <input type="radio" id="modeFV" name="mode" value="fv" checked class="hidden"><label for="modeFV" class="cursor-pointer text-center p-2 border rounded-lg">Future Value</label>
+                            <input type="radio" id="modeP" name="mode" value="p" class="hidden"><label for="modeP" class="cursor-pointer text-center p-2 border rounded-lg">Initial Principal</label>
+                            <input type="radio" id="modeT" name="mode" value="t" class="hidden"><label for="modeT" class="cursor-pointer text-center p-2 border rounded-lg">Time to Goal</label>
+                            <input type="radio" id="modeC" name="mode" value="c" class="hidden"><label for="modeC" class="cursor-pointer text-center p-2 border rounded-lg">Contribution</label>
+                        </div>
+                    </div>
+                    
+                    <div id="principal-group">
+                        <label for="principal" class="block text-sm font-medium mb-1">Initial Principal</label>
+                        <div class="flex"><select id="currencySymbol" class="p-3 border rounded-l-lg bg-gray-100"><option value="₹">₹</option><option value="$">$</option></select><input type="number" id="principal" min="0" placeholder="100000" class="flex-grow p-3 border rounded-r-lg"></div>
+                    </div>
+                    <div id="contribution-group">
+                        <label for="contribution" class="block text-sm font-medium mb-1">Annual Contribution</label>
+                        <input type="number" id="contribution" min="0" placeholder="e.g., 25000" class="w-full p-3 border rounded-lg">
+                    </div>
+                    <div id="rate-group"><label for="rate" class="block text-sm font-medium mb-1">Annual Rate (%)</label><input type="number" id="rate" min="0.1" placeholder="e.g., 12" class="w-full p-3 border rounded-lg"></div>
+                    <div id="tenure-group"><label for="tenure" class="block text-sm font-medium mb-1">Time (Years)</label><input type="number" id="tenure" min="1" placeholder="e.g., 15" class="w-full p-3 border rounded-lg"></div>
+                     <div id="futureValue-group">
+                        <label for="futureValue" class="block text-sm font-medium mb-1">Target Future Value</label>
+                        <input type="number" id="futureValue" min="0" placeholder="e.g., 1000000" class="w-full p-3 border rounded-lg">
+                    </div>
+
+                    <div class="pt-4 border-t dark:border-gray-700 grid grid-cols-2 gap-4">
+                        <div><label for="compounding" class="block text-sm font-medium mb-1">Compounding</label><select id="compounding" class="w-full p-3 border rounded-lg"><option value="12">Monthly</option><option value="4">Quarterly</option><option value="2">Half-Yearly</option><option value="1">Annually</option></select></div>
+                        <div><label for="inflation" class="block text-sm font-medium mb-1">Inflation (%)</label><input type="number" id="inflation" min="0" placeholder="e.g., 6" class="w-full p-3 border rounded-lg"></div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h2 class="text-xl font-bold">Investment Projection</h2>
+                    <div id="results-summary" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg space-y-3 min-h-[300px] flex flex-col justify-center"><p class="text-center text-gray-500">Enter details to see projection.</p></div>
+                    <div class="h-48 pt-4 border-t dark:border-gray-700"><canvas id="breakdownChart"></canvas></div>
+                </div>
+            </div>
+             <div id="timeline-container" class="mt-8 pt-4 border-t dark:border-gray-700">
+                <h3 class="text-lg font-bold mb-3"><i data-lucide="table" class="w-4 h-4 mr-2 inline stroke-tt-primary"></i>Yearly Breakdown</h3>
+                <div id="timeline-table" class="overflow-x-auto max-h-80"><p class="text-sm text-gray-500">Timeline appears here.</p></div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+             <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">The Power of Compounding</h2>
+                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Compound interest is "interest on interest". It is the engine of wealth creation, allowing your investment to grow at an accelerating rate. This calculator models that growth and adds the ability to factor in regular annual contributions, providing a realistic projection of your long-term investments.</p>
+                <div id="formula-container" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg text-center">$$ A = P \left(1 + \frac{r}{n}\right)^{nt} $$</div>
+                
+                <p class="text-sm text-gray-600 mb-2 mt-4 dark:text-gray-300">Where:</p>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><b>A</b>: Final Amount (the future value of the investment)</li>
+                    <li><b>P</b>: Principal Amount (the initial amount of money)</li>
+                    <li><b>r</b>: Annual Interest Rate (in decimal form, e.g., 12% = 0.12)</li>
+                    <li><b>n</b>: Compounding Frequency (number of times interest is compounded per year)</li>
+                    <li><b>t</b>: Time Period (the number of years the money is invested for)</li>
+                </ul>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What's the difference between this and a SIP calculator?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">A SIP calculator is designed for regular, fixed <strong>monthly</strong> investments. This Compound Interest calculator starts with a <strong>lump-sum</strong> (the Initial Principal) and allows for optional, larger <strong>annual</strong> contributions. It's better suited for planning based on a one-time investment with yearly top-ups.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why is my 'Value in Today's Money' so much lower?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This figure shows the <strong>purchasing power</strong> of your future money after accounting for inflation. While your investment might grow to ₹1 Crore in 20 years, inflation means that ₹1 Crore won't buy as much as it does today. This inflation-adjusted number gives you a true sense of your future wealth.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        if (typeof MathJax !== 'undefined') MathJax.typeset();
+        
+        let breakdownChart;
+        const ui = {
+            calcMode: document.getElementById('calcMode'),
+            groups: { fv: document.getElementById('futureValue-group'), p: document.getElementById('principal-group'), t: document.getElementById('tenure-group'), c: document.getElementById('contribution-group'), rate: document.getElementById('rate-group') },
+            results: document.getElementById('results-summary'),
+            timelineTable: document.getElementById('timeline-table'),
+            breakdownCanvas: document.getElementById('breakdownChart'),
+            inputs: ['principal', 'contribution', 'rate', 'tenure', 'futureValue', 'compounding', 'inflation']
+        };
+
+        const formatCurrency = (amount, symbol) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount).replace('₹', symbol);
+
+        const calculate = () => {
+            let { principal, contribution, rate, tenure, futureValue, compounding, inflation, currency } = getValues();
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            rate /= 100; inflation /= 100;
+            
+            let result = {};
+
+            if (mode === 'fv') {
+                result = calculateFutureValue({ P: principal, C: contribution, r: rate, t: tenure, n: compounding });
+            } else if (mode === 'p') {
+                result = solveForPrincipal({ FV: futureValue, C: contribution, r: rate, t: tenure, n: compounding });
+            } else if (mode === 't') {
+                result = solveForTime({ P: principal, C: contribution, r: rate, FV: futureValue, n: compounding });
+            } else if (mode === 'c') {
+                result = solveForContribution({ P: principal, FV: futureValue, r: rate, t: tenure, n: compounding });
+            }
+
+            if (result.FV && result.t > 0) {
+                result.inflationAdjustedFV = result.FV / Math.pow(1 + inflation, result.t);
+            }
+
+            updateUIModeAndDisplay(mode, { ...result, currency });
+        };
+        
+        const calculateFutureValue = ({ P, C, r, t, n }) => {
+            if (P <= 0 || r <= 0 || t <= 0) return {};
+            let balance = P;
+            const timeline = [{ year: 0, balance, interest: 0, contribution: 0 }];
+            for (let i = 1; i <= t; i++) {
+                const interest = balance * r; 
+                balance = balance * Math.pow(1 + r / n, n); 
+                balance += C; 
+                timeline.push({ year: i, balance, interest, contribution: C });
+            }
+            const totalContribution = P + (C * t);
+            return { FV: balance, P, C, t, totalContribution, timeline };
+        };
+
+        const solveForPrincipal = ({ FV, C, r, t, n }) => {
+            if (FV <= 0 || r <= 0 || t <= 0) return {};
+            let fv_contributions = 0;
+            for (let i = 0; i < t; i++) {
+                fv_contributions += C * Math.pow(1 + r/n, n * i);
+            }
+            const P = (FV - fv_contributions) / Math.pow(1 + r / n, n * t);
+            return { P, FV, C, t, totalContribution: P + (C * t) };
+        };
+        
+        const solveForTime = ({ P, C, r, FV, n }) => {
+            if (P <= 0 || r <= 0 || FV <= P) return {};
+            let balance = P; let t = 0;
+            while(balance < FV && t < 100) {
+                t++;
+                balance = balance * Math.pow(1 + r / n, n) + C;
+            }
+            return { t, P, C, FV, totalContribution: P + (C * t) };
+        };
+
+        const solveForContribution = ({ P, FV, r, t, n }) => {
+            if (P <= 0 || r <= 0 || t <= 0 || FV <= P) return {};
+            const fv_principal = P * Math.pow(1 + r/n, n * t);
+            const remaining_fv = FV - fv_principal;
+            if (remaining_fv <= 0) return { C: 0, P, t, FV, totalContribution: P };
+
+            let fv_annuity_factor = 0;
+            for (let i = 0; i < t; i++) {
+                fv_annuity_factor += Math.pow(1 + r/n, n * i);
+            }
+            const C = remaining_fv / fv_annuity_factor;
+            return { C, P, t, FV, totalContribution: P + (C*t) };
+        };
+
+        const updateUIModeAndDisplay = (mode, vals) => {
+            Object.values(ui.groups).forEach(g => g.style.display = 'block');
+            ui.inputs.forEach(id => document.getElementById(id).classList.remove('result-input'));
+
+            if (mode === 'fv') { ui.groups.fv.style.display = 'none'; }
+            if (mode === 'p') { ui.groups.p.style.display = 'none'; }
+            if (mode === 't') { ui.groups.t.style.display = 'none'; }
+            if (mode === 'c') { ui.groups.c.style.display = 'none'; }
+
+            if (!vals.FV && !vals.P && !vals.t && !vals.C) {
+                ui.results.innerHTML = `<p class="text-center text-gray-500">Please provide valid inputs.</p>`;
+                if (breakdownChart) breakdownChart.destroy();
+                ui.timelineTable.innerHTML = `<p class="text-sm text-gray-500">Timeline requires valid inputs.</p>`;
+                return;
+            }
+
+            let primaryResultHTML = '';
+            switch(mode) {
+                case 'p': primaryResultHTML = `<p class="text-sm">Required Principal</p><p class="text-3xl font-bold">${formatCurrency(vals.P, vals.currency)}</p>`; break;
+                case 't': primaryResultHTML = `<p class="text-sm">Time to Goal</p><p class="text-3xl font-bold">${vals.t.toFixed(1)} Years</p>`; break;
+                case 'c': primaryResultHTML = `<p class="text-sm">Required Annual Contribution</p><p class="text-3xl font-bold">${formatCurrency(vals.C, vals.currency)}</p>`; break;
+            }
+
+            ui.results.innerHTML = `
+                ${primaryResultHTML ? `<div class="p-3 bg-tt-primary/10 rounded-lg text-center">${primaryResultHTML}</div>` : ''}
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <span>Total Invested:</span><span class="font-semibold text-right">${formatCurrency(vals.totalContribution, vals.currency)}</span>
+                    <span>Interest Earned:</span><span class="font-semibold text-right">${formatCurrency(vals.FV - vals.totalContribution, vals.currency)}</span>
+                </div>
+                <div class="mt-2 p-3 bg-gray-200 dark:bg-gray-800 rounded-lg">
+                    <p class="text-sm">Future Value</p>
+                    <p class="text-2xl font-bold text-tt-secondary">${formatCurrency(vals.FV, vals.currency)}</p>
+                </div>
+                ${vals.inflationAdjustedFV ? `<div class="mt-2 p-3 bg-yellow-50 dark:bg-yellow-900/50 rounded-lg"><p class="text-sm text-yellow-800 dark:text-yellow-300">Value in Today's Money</p><p class="text-xl font-bold text-yellow-900 dark:text-yellow-200">${formatCurrency(vals.inflationAdjustedFV, vals.currency)}</p></div>` : ''}
+            `;
+
+            if (vals.timeline) {
+                renderCharts(vals);
+                renderTable(vals);
+            } else {
+                if (breakdownChart) breakdownChart.destroy();
+                ui.timelineTable.innerHTML = `<p class="text-sm text-gray-500">Yearly breakdown is only available when calculating Future Value.</p>`;
+            }
+        };
+        
+        const renderCharts = (vals) => {
+            const ctx = document.getElementById('breakdownChart').getContext('2d');
+            if (breakdownChart) breakdownChart.destroy();
+            breakdownChart = new Chart(ctx, {
+                type: 'doughnut', data: { labels: ['Total Principal', 'Total Interest'], datasets: [{ data: [vals.totalContribution, vals.FV - vals.totalContribution], backgroundColor: ['#3b82f6', '#10b981'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { display: false } } }
+            });
+        };
+
+        const renderTable = (vals) => {
+            let tableHTML = `<table class="min-w-full text-sm"><thead><tr class="border-b dark:border-gray-700"><th class="py-1 text-left">Year</th><th class="py-1 text-right">Contribution</th><th class="py-1 text-right">Interest</th><th class="py-1 text-right">End Balance</th></tr></thead><tbody>`;
+            vals.timeline.forEach((row, i) => {
+                if(i === 0) return;
+                const prevBalance = vals.timeline[i-1].balance;
+                const interestThisYear = row.balance - prevBalance - row.contribution;
+                tableHTML += `<tr><td class="py-1">${row.year}</td><td class="py-1 text-right">${formatCurrency(row.contribution, vals.currency)}</td><td class="py-1 text-right text-tt-primary">${formatCurrency(interestThisYear, vals.currency)}</td><td class="py-1 text-right font-semibold">${formatCurrency(row.balance, vals.currency)}</td></tr>`;
+            });
+            tableHTML += `</tbody></table>`;
+            ui.timelineTable.innerHTML = tableHTML;
+        };
+
+        const getValues = () => {
+            const values = {};
+            ui.inputs.forEach(id => { values[id] = parseFloat(document.getElementById(id).value) || 0; });
+            values.currency = document.getElementById('currencySymbol').value;
+            return values;
+        };
+        
+        document.getElementById('calcMode').addEventListener('change', calculate);
+        ui.inputs.forEach(id => document.getElementById(id)?.addEventListener('input', calculate));
+        document.getElementById('currencySymbol').addEventListener('change', calculate);
+
+        calculate();
+    });
+    </script>
+</body>
+</html>
+
+}

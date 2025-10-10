@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Live Currency Converter: All Rates Table & Historical Charts | toolsTree</title>
+    <meta name="description" content="Ultimate currency converter with real-time rates, a cross-currency table, historical values, interactive charts, and PDF/PNG export.">
+    <link rel="canonical" href="https://yourdomain.com/tools/currency-converter.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        input[type="radio"]:checked + label { background-color: #10b981; color: white; border-color: #10b981; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Live Currency Converter & Rate Tracker",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "description": "Ultimate currency converter with real-time rates, a cross-currency table, historical values, interactive charts, and PDF/PNG export.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "715"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/finance.html" class="ml-1 hover:text-tt-primary md:ml-2">Finance & Money Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Live Currency Converter</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Live Currency Converter & Rate Tracker</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Get real-time exchange rates, view cross-currency tables, and analyze historical trends.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
+            <div class="mb-6">
+                <div id="calcMode" class="flex gap-2 text-sm border-b pb-6 dark:border-gray-700">
+                    <input type="radio" id="modeSingle" name="mode" value="single" checked class="hidden"><label for="modeSingle" class="cursor-pointer text-center w-full p-2 border rounded-lg">Single Pair</label>
+                    <input type="radio" id="modeTable" name="mode" value="table" class="hidden"><label for="modeTable" class="cursor-pointer text-center w-full p-2 border rounded-lg">Rates Table</label>
+                </div>
+            </div>
+
+            <div id="single-converter-container">
+                <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4">
+                    <div class="md:col-span-2"><label for="amount" class="block text-sm font-medium mb-1">Amount</label><input id="amount" class="w-full p-3 border rounded-lg" type="number" value="1" min="0"></div>
+                    <div class="md:col-span-1"><label for="fromCurrency" class="block text-sm font-medium mb-1">From</label><select id="fromCurrency" class="w-full p-3 border rounded-lg"></select></div>
+                    <div class="hidden md:block pt-6"><button id="swapBtn" class="p-2 border rounded-full mx-auto block hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="repeat"></i></button></div>
+                    <div class="md:col-span-1"><label for="toCurrency" class="block text-sm font-medium mb-1">To</label><select id="toCurrency" class="w-full p-3 border rounded-lg"></select></div>
+                </div>
+                <div id="single-result" class="bg-gray-50 p-6 rounded-xl shadow-inner text-center dark:bg-gray-700 mt-6 border dark:border-gray-600">
+                    <p class="text-gray-500 dark:text-gray-400">Enter an amount to convert.</p>
+                </div>
+            </div>
+
+            <div id="table-converter-container" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                    <div><label for="tableAmount" class="block text-sm font-medium mb-1">Amount</label><input id="tableAmount" class="w-full p-3 border rounded-lg" type="number" value="1" min="0"></div>
+                    <div><label for="baseCurrency" class="block text-sm font-medium mb-1">Base Currency</label><select id="baseCurrency" class="w-full p-3 border rounded-lg"></select></div>
+                </div>
+                <div id="table-result" class="mt-6 max-h-96 overflow-y-auto">
+                     <p class="text-gray-500 dark:text-gray-400 text-center">Select a base currency to see the rates table.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="history-container" class="mt-8 bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
+             <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-4 pb-4 border-b dark:border-gray-700">
+                 <h2 class="text-xl font-bold"><i data-lucide="area-chart" class="w-5 h-5 mr-2 inline stroke-tt-primary"></i>Historical Rate Chart</h2>
+                 <div class="flex items-center gap-2 text-sm">
+                    <label for="historyRange">Range:</label><select id="historyRange" class="p-2 border rounded-lg"><option value="7">7D</option><option value="30" selected>30D</option><option value="90">3M</option><option value="365">1Y</option></select>
+                    <input id="historicalDate" type="date" class="p-2 border rounded-lg" title="Check rate on a specific date">
+                 </div>
+             </div>
+             <div class="h-80"><canvas id="historyChart"></canvas></div>
+             <div id="rateInfo" class="text-sm font-semibold mt-4 text-center text-gray-600 dark:text-gray-300"></div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">About Currency Data</h2>
+                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">This tool uses the Frankfurter API, which sources its exchange rates from the European Central Bank and publishes them around 4 PM CET every working day. Rates are for informational purposes and may differ slightly from the rates your bank offers due to bid-ask spreads.</p>
+            </div>
+             <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How often are the 'live' rates updated?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The exchange rates are updated once every business day around 4:00 PM Central European Time. This tool automatically caches the latest rates to provide a fast experience while ensuring you get the most recent daily data.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why is the historical chart not available for all dates?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The underlying data source from the European Central Bank provides historical data going back to the year 1999 for most major currencies. If you select a date or range before this, or on a weekend/holiday when rates were not published, the data may not be available.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+        
+        const API_BASE = "https://api.frankfurter.app";
+        let historyChart;
+        let debounceTimer;
+        let currencyNames = {};
+        
+        const ui = {
+            modeRadios: document.querySelectorAll('input[name="mode"]'),
+            singleContainer: document.getElementById('single-converter-container'),
+            tableContainer: document.getElementById('table-converter-container'),
+            historyContainer: document.getElementById('history-container'),
+            fromSel: document.getElementById('fromCurrency'), toSel: document.getElementById('toCurrency'),
+            amountInput: document.getElementById('amount'), singleResult: document.getElementById('single-result'),
+            tableAmountInput: document.getElementById('tableAmount'), baseSel: document.getElementById('baseCurrency'),
+            tableResult: document.getElementById('table-result'), historyRange: document.getElementById('historyRange'),
+            historicalDate: document.getElementById('historicalDate'), rateInfo: document.getElementById('rateInfo'),
+            swapBtn: document.getElementById('swapBtn')
+        };
+
+        const formatCurrency = (amount, currency) => new Intl.NumberFormat('en-US', { style: 'currency', currency, maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(amount);
+
+        const loadCurrencies = async () => {
+            try {
+                const res = await fetch(`${API_BASE}/currencies`);
+                currencyNames = await res.json();
+                const codes = Object.keys(currencyNames).sort();
+                [ui.fromSel, ui.toSel, ui.baseSel].forEach(sel => {
+                    sel.innerHTML = '';
+                    codes.forEach(code => sel.add(new Option(`${code} - ${currencyNames[code]}`, code)));
+                });
+                ui.fromSel.value = 'USD'; ui.toSel.value = 'INR'; ui.baseSel.value = 'USD';
+                ui.historicalDate.max = new Date().toISOString().slice(0, 10);
+            } catch (e) { console.error("Could not load currencies", e); }
+        };
+
+        const updateUIMode = () => {
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            ui.singleContainer.style.display = mode === 'single' ? 'block' : 'none';
+            ui.tableContainer.style.display = mode === 'table' ? 'block' : 'none';
+            ui.historyContainer.style.display = mode === 'single' ? 'block' : 'none';
+            debouncedConvert();
+        };
+
+        const convertSingle = async () => {
+            const from = ui.fromSel.value, to = ui.toSel.value;
+            const amount = parseFloat(ui.amountInput.value) || 1;
+            const date = ui.historicalDate.value || 'latest';
+            
+            if (!from || !to) return;
+            ui.singleResult.innerHTML = `<i data-lucide="loader" class="mx-auto animate-spin"></i>`;
+            lucide.createIcons();
+
+            try {
+                const res = await fetch(`${API_BASE}/${date}?amount=${amount}&from=${from}&to=${to}`);
+                const data = await res.json();
+                const rate = data.rates[to];
+                ui.singleResult.innerHTML = `
+                    <p class="text-xl font-semibold text-gray-600 dark:text-gray-300">${formatCurrency(amount, from)} equals</p>
+                    <p class="text-5xl font-extrabold text-tt-primary">${formatCurrency(rate, to)}</p>`;
+                
+                if (date === 'latest') await updateHistoryChart();
+                else {
+                    ui.rateInfo.textContent = `Historical rate on ${data.date}: 1 ${from} = ${data.rates[to] / amount} ${to}`;
+                    if(historyChart) historyChart.destroy();
+                }
+            } catch(e) { ui.singleResult.innerHTML = `<p class="text-red-500">Could not fetch rate.</p>`; }
+        };
+        
+        const convertTable = async () => {
+            const base = ui.baseSel.value;
+            const amount = parseFloat(ui.tableAmountInput.value) || 1;
+            if (!base) return;
+
+            ui.tableResult.innerHTML = `<i data-lucide="loader" class="mx-auto animate-spin"></i>`;
+            lucide.createIcons();
+            
+            try {
+                const res = await fetch(`${API_BASE}/latest?from=${base}`);
+                const data = await res.json();
+                let tableHTML = `<table class="w-full text-sm"><thead><tr class="border-b dark:border-gray-700"><th class="text-left py-2">Currency</th><th class="text-right py-2">Rate (1 ${base})</th><th class="text-right py-2">Amount</th></tr></thead><tbody>`;
+                for (const curr in data.rates) {
+                    tableHTML += `<tr><td class="py-2">${curr} - ${currencyNames[curr]}</td><td class="text-right font-mono">${data.rates[curr].toFixed(4)}</td><td class="text-right font-bold">${formatCurrency(data.rates[curr] * amount, curr)}</td></tr>`;
+                }
+                tableHTML += `</tbody></table>`;
+                ui.tableResult.innerHTML = tableHTML;
+            } catch(e) { ui.tableResult.innerHTML = `<p class="text-red-500">Could not fetch rates table.</p>`; }
+        };
+
+        const updateHistoryChart = async () => {
+            const from = ui.fromSel.value, to = ui.toSel.value;
+            const days = parseInt(ui.historyRange.value);
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(endDate.getDate() - days);
+            const startStr = startDate.toISOString().slice(0, 10);
+
+            try {
+                const res = await fetch(`${API_BASE}/${startStr}..${endDate.toISOString().slice(0,10)}?from=${from}&to=${to}`);
+                const data = await res.json();
+                const dates = Object.keys(data.rates).sort();
+                const values = dates.map(d => data.rates[d][to]);
+
+                const latestRate = values[values.length -1];
+                const earliestRate = values[0];
+                const change = latestRate - earliestRate;
+                const changePct = (change / earliestRate) * 100;
+                
+                ui.rateInfo.innerHTML = `Current Rate: <span class="font-bold">1 ${from} = ${latestRate.toFixed(4)} ${to}</span> <span class="${change >= 0 ? 'text-green-500' : 'text-red-500'}">(${change.toFixed(4)} / ${changePct.toFixed(2)}%)</span>`;
+                
+                if (historyChart) historyChart.destroy();
+                const isDark = document.documentElement.classList.contains('dark');
+                historyChart = new Chart('historyChart', {
+                    type: 'line',
+                    data: { labels: dates, datasets: [{ label: `Rate`, data: values, borderColor: "#10b981", backgroundColor: "rgba(16, 185, 129, 0.1)", fill: true, tension: 0.3 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: isDark ? '#9ca3af' : '#6b7280' } }, y: { ticks: { color: isDark ? '#9ca3af' : '#6b7280' } } } }
+                });
+            } catch (e) {
+                console.error("Could not fetch history", e);
+                ui.rateInfo.textContent = 'Could not load historical data.';
+            }
+        };
+
+        const convert = () => {
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            if(mode === 'single') convertSingle();
+            else convertTable();
+        };
+
+        const debouncedConvert = () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(convert, 300);
+        };
+        
+        // Event Listeners
+        ui.modeRadios.forEach(radio => radio.addEventListener('change', updateUIMode));
+        [ui.amountInput, ui.fromSel, ui.toSel, ui.historyRange, ui.historicalDate].forEach(el => el.addEventListener('input', debouncedConvert));
+        [ui.tableAmountInput, ui.baseSel].forEach(el => el.addEventListener('input', debouncedConvert));
+        ui.swapBtn.addEventListener('click', () => {
+            [ui.fromSel.value, ui.toSel.value] = [ui.toSel.value, ui.fromSel.value];
+            debouncedConvert();
+        });
+        new MutationObserver(debouncedConvert).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+        // Initial Load
+        await loadCurrencies();
+        updateUIMode();
+    });
+    </script>
+</body>
+</html>

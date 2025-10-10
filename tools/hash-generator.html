@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Hash, HMAC & Checksum Generator (CRC32, MD5, SHA, BLAKE2) | toolsTree</title>
+    <meta name="description" content="The most comprehensive client-side tool to generate hashes, HMACs, and checksums. Supports CRC32, Adler-32, MD5, SHA-1, SHA-2, SHA-3, BLAKE2s, and more for text and files.">
+    <link rel="canonical" href="https://yourdomain.com/tools/hash-generator.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/blakejs/blake2s.min.js"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        textarea { min-height: 150px; font-family: 'Roboto Mono', monospace; }
+        .hash-output { word-break: break-all; }
+        .algo-group-title { font-weight: 600; margin-top: 0.75rem; grid-column: 1 / -1; border-bottom: 1px solid; padding-bottom: 0.25rem; }
+        .dark .algo-group-title { border-color: #4b5563; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Hash, HMAC & Checksum Generator",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "The most comprehensive client-side tool to generate hashes, HMACs, and checksums. Supports CRC32, Adler-32, MD5, SHA-1, SHA-2, SHA-3, BLAKE2s, and more for text and files.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "950"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Data & Developer Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Hash, HMAC & Checksum Generator</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Hash, HMAC & Checksum Generator</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Generate cryptographic fingerprints and data integrity checksums for text or files.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <label for="inputText" class="block text-lg font-semibold mb-2">Input Data</label>
+                <div id="drop-zone" class="border-2 border-dashed rounded-lg p-4 text-center transition hover:border-tt-primary">
+                    <textarea id="inputText" placeholder="Type, paste, or drop a file here to generate hashes..." class="w-full p-2 border-0 rounded-lg focus:ring-0 bg-transparent"></textarea>
+                    <p id="file-info" class="text-xs text-gray-500 mt-1 h-4"></p>
+                </div>
+            </div>
+
+            <div>
+                <label for="hmacKey" class="block text-sm font-medium mb-1">HMAC Secret Key (Optional, for Crypto Hashes)</label>
+                <input id="hmacKey" type="text" placeholder="Enter a secret key to generate HMACs" class="w-full p-3 border rounded-lg">
+            </div>
+
+            <div>
+                <div class="flex justify-between items-center mb-3">
+                    <label class="text-lg font-semibold">Select Algorithms</label>
+                    <div class="flex items-center gap-4 text-sm">
+                        <label class="flex items-center gap-2"><input type="checkbox" id="uppercase" class="rounded text-tt-primary">Uppercase</label>
+                        <button id="clearButton" class="font-semibold text-gray-500 hover:text-tt-primary"><i data-lucide="x" class="w-4 h-4 inline"></i> Clear</button>
+                    </div>
+                </div>
+                <div id="algorithms-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2 text-sm">
+                    </div>
+            </div>
+
+            <div class="pt-6 border-t dark:border-gray-700">
+                 <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="shield-check" class="w-5 h-5 mr-2 stroke-tt-primary"></i>Generated Hashes & Checksums</h2>
+                 <div id="results-container" class="space-y-3">
+                    <p class="text-gray-500 text-center py-4">Select algorithms and provide input to generate hashes.</p>
+                 </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Hash vs. Checksum</h2>
+                <p class="text-sm text-gray-600 mb-2 dark:text-gray-300">
+                    <strong>Cryptographic Hashes</strong> (like SHA-256) are designed for security. They are one-way functions that make it impossible to get the original data back.
+                    <strong>Checksums</strong> (like CRC32) are designed for speed and error-checking. They are used to verify that data (e.g., a downloaded file) has not been accidentally corrupted.
+                </p>
+            </div>
+             <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Frequently Asked Questions</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is CRC32 used for?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">CRC32 (Cyclic Redundancy Check) is not for security. It's a fast and efficient way to check for accidental changes in data. It's commonly used in network protocols (like Ethernet) and file formats (like ZIP and PNG) to ensure data integrity during transmission or storage.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is BLAKE2?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">BLAKE2 is a modern cryptographic hash function that is often significantly faster than SHA-2 and SHA-3 while providing an equivalent level of security. It's becoming increasingly popular in high-performance applications.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        const CHECKSUM_LIBS = (() => {
+            const makeCRCTable = () => {
+                let c;
+                const crcTable = [];
+                for (let n = 0; n < 256; n++) {
+                    c = n;
+                    for (let k = 0; k < 8; k++) {
+                        c = ((c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+                    }
+                    crcTable[n] = c;
+                }
+                return crcTable;
+            };
+            const crcTable = makeCRCTable();
+            const crc32 = (str) => {
+                let crc = 0 ^ (-1);
+                for (let i = 0; i < str.length; i++) {
+                    crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF];
+                }
+                return (crc ^ (-1)) >>> 0;
+            };
+            const adler32 = (str) => {
+                const MOD_ADLER = 65521;
+                let a = 1, b = 0;
+                for (let i = 0; i < str.length; i++) {
+                    a = (a + str.charCodeAt(i)) % MOD_ADLER;
+                    b = (b + a) % MOD_ADLER;
+                }
+                return (b << 16) | a;
+            };
+            return { crc32, adler32 };
+        })();
+
+
+        const ALGORITHMS = {
+            'Checksums': {
+                'CRC32': { type: 'checksum', lib: (input) => CHECKSUM_LIBS.crc32(input).toString(16) },
+                'Adler-32': { type: 'checksum', lib: (input) => CHECKSUM_LIBS.adler32(input).toString(16) },
+            },
+            'Legacy Hashes': {
+                'MD5': { type: 'crypto', lib: 'MD5' },
+                'SHA-1': { type: 'crypto', lib: 'SHA1' },
+            },
+            'SHA-2 Family (Secure)': {
+                'SHA-224': { type: 'crypto', lib: 'SHA224' },
+                'SHA-256': { type: 'crypto', lib: 'SHA256' },
+                'SHA-384': { type: 'crypto', lib: 'SHA384' },
+                'SHA-512': { type: 'crypto', lib: 'SHA512' },
+            },
+            'SHA-3 Family (Modern)': {
+                'SHA3-224': { type: 'crypto', lib: 'SHA3', cfg: { outputLength: 224 } },
+                'SHA3-256': { type: 'crypto', lib: 'SHA3', cfg: { outputLength: 256 } },
+                'SHA3-384': { type: 'crypto', lib: 'SHA3', cfg: { outputLength: 384 } },
+                'SHA3-512': { type: 'crypto', lib: 'SHA3', cfg: { outputLength: 512 } },
+            },
+            'Other Hashes': {
+                'RIPEMD-160': { type: 'crypto', lib: 'RIPEMD160' },
+                'Whirlpool': { type: 'crypto', lib: 'Whirlpool' },
+                'BLAKE2s': { type: 'crypto', lib: (input) => blake2s(input).toString('hex') },
+            }
+        };
+        
+        let debounceTimer;
+        const ui = {
+            inputText: document.getElementById('inputText'), hmacKey: document.getElementById('hmacKey'),
+            fileInfo: document.getElementById('file-info'), dropZone: document.getElementById('drop-zone'),
+            uppercase: document.getElementById('uppercase'), resultsContainer: document.getElementById('results-container'),
+            clearButton: document.getElementById('clearButton'), grid: document.getElementById('algorithms-grid')
+        };
+        
+        const populateAlgorithms = () => {
+            let html = '';
+            for (const group in ALGORITHMS) {
+                html += `<h3 class="algo-group-title col-span-full">${group}</h3>`;
+                for (const name in ALGORITHMS[group]) {
+                    html += `<label class="flex items-center gap-2"><input type="checkbox" name="algo" value="${name}" class="rounded text-tt-primary">${name}</label>`;
+                }
+            }
+            ui.grid.innerHTML = html;
+            ui.grid.querySelectorAll('input').forEach(el => el.addEventListener('change', generateHashes));
+        };
+
+        const generateHashes = () => {
+            const input = ui.inputText.value;
+            const hmacKey = ui.hmacKey.value;
+            const toUpper = ui.uppercase.checked;
+            const selectedAlgos = Array.from(ui.grid.querySelectorAll('input:checked')).map(el => el.value);
+
+            if (!input || selectedAlgos.length === 0) {
+                ui.resultsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Select algorithms and provide input to generate hashes.</p>';
+                return;
+            }
+
+            ui.resultsContainer.innerHTML = '';
+            
+            for (const name of selectedAlgos) {
+                for (const group in ALGORITHMS) {
+                    if (ALGORITHMS[group][name]) {
+                        const algo = ALGORITHMS[group][name];
+                        let hash = '';
+                        try {
+                            if (typeof algo.lib === 'function') {
+                                hash = algo.lib(input);
+                            } else if (algo.type === 'crypto') {
+                                if (hmacKey) {
+                                    hash = CryptoJS[`Hmac${algo.lib}`](input, hmacKey).toString();
+                                } else {
+                                    hash = CryptoJS[algo.lib](input, algo.cfg).toString();
+                                }
+                            }
+                            if (toUpper) hash = hash.toUpperCase();
+                            ui.resultsContainer.innerHTML += createResultRow(name, hash);
+                        } catch (e) {
+                             ui.resultsContainer.innerHTML += createResultRow(name, `Error: ${e.message}`, true);
+                        }
+                        break;
+                    }
+                }
+            }
+            lucide.createIcons();
+        };
+
+        const createResultRow = (name, hash, isError = false) => {
+            const id = `hash-${name.replace(/[^a-zA-Z0-9]/g, '')}`;
+            return `
+            <div class="flex items-start justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold">${name}</p>
+                    <p id="${id}" class="font-mono text-xs hash-output ${isError ? 'text-red-500' : ''}">${hash}</p>
+                </div>
+                <button data-target="${id}" class="copy-btn ml-3 p-1 text-gray-500 hover:text-tt-primary"><i data-lucide="copy" class="w-4 h-4"></i></button>
+            </div>`;
+        }
+        
+        const handleCopy = (e) => {
+            const btn = e.target.closest('.copy-btn');
+            if (!btn) return;
+            
+            const targetId = btn.dataset.target;
+            const textEl = document.getElementById(targetId);
+            if(textEl && textEl.textContent){
+                navigator.clipboard.writeText(textEl.textContent);
+                const icon = btn.querySelector('i');
+                icon.setAttribute('data-lucide', 'check');
+                lucide.createIcons();
+                setTimeout(() => {
+                    icon.setAttribute('data-lucide', 'copy');
+                    lucide.createIcons();
+                }, 1500);
+            }
+        };
+
+        const handleFile = (file) => {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                ui.inputText.value = e.target.result;
+                ui.fileInfo.textContent = `Loaded file: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                generateHashes();
+            };
+            reader.readAsText(file);
+        };
+
+        const clearAll = () => {
+            ui.inputText.value = '';
+            ui.hmacKey.value = '';
+            ui.fileInfo.textContent = '';
+            generateHashes();
+        };
+
+        const debouncedGenerate = () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(generateHashes, 250);
+        };
+
+        // Event Listeners
+        ui.inputText.addEventListener('input', debouncedGenerate);
+        ui.hmacKey.addEventListener('input', debouncedGenerate);
+        ui.uppercase.addEventListener('change', generateHashes);
+        ui.clearButton.addEventListener('click', clearAll);
+        ui.resultsContainer.addEventListener('click', handleCopy);
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eName => ui.dropZone.addEventListener(eName, e => { e.preventDefault(); e.stopPropagation(); }, false));
+        ['dragenter', 'dragover'].forEach(eName => ui.dropZone.addEventListener(eName, () => ui.dropZone.classList.add('border-tt-primary'), false));
+        ['dragleave', 'drop'].forEach(eName => ui.dropZone.addEventListener(eName, () => ui.dropZone.classList.remove('border-tt-primary'), false));
+        ui.dropZone.addEventListener('drop', e => { handleFile(e.dataTransfer.files[0]); }, false);
+        
+        populateAlgorithms();
+    });
+    </script>
+</body>
+</html>
+

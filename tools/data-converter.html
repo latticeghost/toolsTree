@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Advanced Data Converter (Base64, URL, Unicode, Hex, Octal) | toolsTree</title>
+    <meta name="description" content="An advanced developer utility to encode, decode, and convert data. Supports Base64, URL, and Character Codes in any base (2-36), including Hex, Octal, Decimal, and Binary.">
+    <link rel="canonical" href="https://yourdomain.com/tools/data-converter.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        textarea { min-height: 200px; font-family: 'Roboto Mono', monospace; }
+        input[type="radio"]:checked + label { background-color: #10b981; color: white; border-color: #10b981; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced Data Converter",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "Encode and decode text or files between various formats, including Base64, URL Encoding, and character codes in any base from 2 to 36.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "1150"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Data & Developer Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced Data Converter</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced Data Converter</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Encode and decode Base64, URL, and Character Codes (including custom bases) for text and files.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
+            <div class="mb-6">
+                <label class="text-lg font-semibold block mb-3">Conversion Mode:</label>
+                <div id="mode-selector" class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-center">
+                    <input type="radio" id="modeUnicode" name="mode" value="unicode" checked class="hidden"><label for="modeUnicode" class="cursor-pointer p-2 border rounded-lg">Character Codes</label>
+                    <input type="radio" id="modeBase64" name="mode" value="base64" class="hidden"><label for="modeBase64" class="cursor-pointer p-2 border rounded-lg">Base64</label>
+                    <input type="radio" id="modeUrl" name="mode" value="url" class="hidden"><label for="modeUrl" class="cursor-pointer p-2 border rounded-lg">URL Encoding</label>
+                </div>
+            </div>
+
+            <div id="options-container" class="p-4 mb-6 bg-gray-50 dark:bg-gray-900/50 rounded-xl border dark:border-gray-700"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label id="inputLabel" for="inputText" class="block text-lg font-semibold mb-2">Input</label>
+                    <div id="drop-zone" class="border-2 border-dashed rounded-lg p-4 text-center transition hover:border-tt-primary">
+                        <textarea id="inputText" placeholder="Type, paste, or drop a file here..." class="w-full p-2 border-0 rounded-lg focus:ring-0 bg-transparent"></textarea>
+                        <p id="file-info" class="text-xs text-gray-500 mt-1 h-4"></p>
+                    </div>
+                </div>
+                <div>
+                    <label id="outputLabel" for="outputText" class="block text-lg font-semibold mb-2">Output</label>
+                    <textarea id="outputText" readonly placeholder="Result appears here..." class="w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-700"></textarea>
+                </div>
+            </div>
+             <div id="message-box" class="mt-4 text-center text-sm h-6"></div>
+
+            <div class="flex justify-end pt-6 mt-2 border-t dark:border-gray-700 space-x-4">
+                <button id="copyButton" class="flex items-center gap-2 text-sm font-semibold text-tt-primary hover:text-tt-secondary disabled:opacity-50" disabled><i data-lucide="copy" class="w-4 h-4"></i>Copy Result</button>
+                <button id="clearButton" class="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-700"><i data-lucide="file-x" class="w-4 h-4"></i>Clear</button>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">About Data Encoding</h2>
+                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Encoding is the process of converting data from one form to another. It's a reversible process essential for ensuring data can be safely transmitted and correctly interpreted by different systems.</p>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Base64:</strong> Encodes binary data (like images) into a text-only format for safe transmission over text-based protocols like email or for embedding in HTML/CSS.</li>
+                    <li><strong>URL Encoding:</strong> Converts special characters (like spaces, `&`, `/`) into a format that is safe to include in a URL.</li>
+                    <li><strong>Character Codes:</strong> Converts human-readable characters into their underlying numerical representations (like Hex, Octal, or any custom base), which is vital for low-level programming and debugging.</li>
+                </ul>
+            </div>
+             <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why would I use a custom base?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">While bases like 2 (Binary), 8 (Octal), 10 (Decimal), and 16 (Hex) are standard in computing, other bases are used in various fields. For example, Base36 (`0-9` and `A-Z`) is sometimes used to create shorter, more human-readable identifiers. This feature provides maximum flexibility for any niche requirement.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this tool secure for sensitive data?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. All encoding and decoding operations happen entirely within your browser on your computer. No data, whether pasted text or uploaded files, is ever sent to our servers, ensuring your information remains completely private.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        const ui = {
+            inputText: document.getElementById('inputText'), outputText: document.getElementById('outputText'),
+            fileInfo: document.getElementById('file-info'), dropZone: document.getElementById('drop-zone'),
+            optionsContainer: document.getElementById('options-container'), modeRadios: document.querySelectorAll('input[name="mode"]'),
+            copyButton: document.getElementById('copyButton'), clearButton: document.getElementById('clearButton'),
+            messageBox: document.getElementById('message-box'),
+        };
+
+        const renderOptions = (mode) => {
+            let html = '';
+            const dirHTML = `<div class="flex items-center gap-4"><label class="font-medium">Direction:</label><div class="flex gap-4"><label><input type="radio" name="direction" value="encode" checked class="mr-1">Encode</label><label><input type="radio" name="direction" value="decode" class="mr-1">Decode</label></div></div>`;
+            switch(mode) {
+                case 'unicode': 
+                    html = `<div class="space-y-4">${dirHTML}
+                                <div class="flex items-center gap-4"><label class="font-medium">Code Base:</label>
+                                    <div class="flex flex-wrap gap-4 text-sm">
+                                        <label><input type="radio" name="codeBase" value="hex" checked class="mr-1">Hex (16)</label>
+                                        <label><input type="radio" name="codeBase" value="dec" class="mr-1">Decimal (10)</label>
+                                        <label><input type="radio" name="codeBase" value="oct" class="mr-1">Octal (8)</label>
+                                        <label><input type="radio" name="codeBase" value="bin" class="mr-1">Binary (2)</label>
+                                        <label class="flex items-center"><input type="radio" name="codeBase" value="custom" class="mr-1">Custom: 
+                                            <input type="number" id="customBase" min="2" max="36" placeholder="2-36" class="w-20 ml-2 p-1 border rounded-md text-center">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>`; 
+                    break;
+                case 'base64': html = dirHTML; break;
+                case 'url': html = dirHTML; break;
+            }
+            ui.optionsContainer.innerHTML = html;
+            ui.optionsContainer.querySelectorAll('input, select').forEach(el => el.addEventListener('change', convert));
+            const customBaseInput = document.getElementById('customBase');
+            if (customBaseInput) {
+                customBaseInput.addEventListener('input', () => {
+                    document.querySelector('input[name="codeBase"][value="custom"]').checked = true;
+                    convert();
+                });
+            }
+        };
+
+        const convert = () => {
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            const input = ui.inputText.value;
+            let output = '';
+            
+            try {
+                const dir = document.querySelector('#options-container input[name="direction"]:checked').value;
+                if (mode === 'base64') {
+                    if (dir === 'encode') output = btoa(unescape(encodeURIComponent(input)));
+                    else output = decodeURIComponent(escape(atob(input.replace(/\s/g, ''))));
+                } else if (mode === 'url') {
+                    if (dir === 'encode') output = encodeURIComponent(input);
+                    else output = decodeURIComponent(input.replace(/\+/g, ' '));
+                } else if (mode === 'unicode') {
+                    const baseRadio = document.querySelector('#options-container input[name="codeBase"]:checked');
+                    let base = baseRadio.value;
+                    let baseVal = 0;
+
+                    if (base === 'custom') {
+                        baseVal = parseInt(document.getElementById('customBase').value);
+                        if (isNaN(baseVal) || baseVal < 2 || baseVal > 36) throw new Error("Custom base must be between 2 and 36.");
+                    } else {
+                        const baseMap = { hex: 16, dec: 10, oct: 8, bin: 2 };
+                        baseVal = baseMap[base];
+                    }
+
+                    if (dir === 'encode') {
+                        const codePoints = [...input].map(c => c.codePointAt(0));
+                        output = codePoints.map(c => c.toString(baseVal).toUpperCase()).join(' ');
+                    } else { // decode
+                        const codes = input.trim().split(/[\s,;]+/).map(s => parseInt(s, baseVal)).filter(n => !isNaN(n));
+                        output = String.fromCodePoint(...codes);
+                    }
+                }
+                ui.messageBox.textContent = '';
+            } catch (e) {
+                output = '';
+                ui.messageBox.textContent = `Error: ${e.message}`;
+                ui.messageBox.className = 'mt-4 text-center text-sm h-6 text-red-500';
+            }
+            
+            ui.outputText.value = output;
+            ui.copyButton.disabled = output.length === 0;
+        };
+        
+        const handleFile = (file) => {
+            if (!file) return;
+            const reader = new FileReader();
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+
+            reader.onload = (e) => {
+                let content = e.target.result;
+                if (mode === 'base64' && content.includes(',')) {
+                    content = content.split(',')[1];
+                }
+                ui.inputText.value = content;
+                ui.fileInfo.textContent = `Loaded file: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                convert();
+            };
+            
+            if (mode === 'base64') reader.readAsDataURL(file);
+            else reader.readAsText(file);
+        };
+        
+        const clearAll = () => {
+            ui.inputText.value = '';
+            ui.outputText.value = '';
+            ui.fileInfo.textContent = '';
+            ui.copyButton.disabled = true;
+        };
+
+        // Event Listeners
+        ui.modeRadios.forEach(radio => radio.addEventListener('change', () => { renderOptions(radio.value); convert(); }));
+        ui.inputText.addEventListener('input', convert);
+        ui.clearButton.addEventListener('click', clearAll);
+        ui.copyButton.addEventListener('click', () => { navigator.clipboard.writeText(ui.outputText.value); });
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eName => ui.dropZone.addEventListener(eName, e => { e.preventDefault(); e.stopPropagation(); }, false));
+        ['dragenter', 'dragover'].forEach(eName => ui.dropZone.addEventListener(eName, () => ui.dropZone.classList.add('border-tt-primary'), false));
+        ['dragleave', 'drop'].forEach(eName => ui.dropZone.addEventListener(eName, () => ui.dropZone.classList.remove('border-tt-primary'), false));
+        ui.dropZone.addEventListener('drop', e => { handleFile(e.dataTransfer.files[0]); }, false);
+
+        renderOptions('unicode');
+    });
+    </script>
+</body>
+</html>

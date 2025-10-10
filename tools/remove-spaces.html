@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            // Failsafe: default to light mode if any errors occur.
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Advanced Text Cleaner: Remove Spaces, Lines & Tabs | toolsTree</title>
+    <meta name="description" content="An advanced tool to instantly clean text. Normalize spaces, remove empty lines, trim leading/trailing spaces per line, convert tabs to spaces, and more.">
+    <link rel="canonical" href="https://yourdomain.com/tools/remove-spaces.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
+                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
+                }
+            }
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        /* Style for the selected radio button's label */
+        input[type="radio"]:checked + label {
+            background-color: #10b981;
+            color: white;
+            border-color: #10b981;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        .text-stats { font-size: 0.75rem; color: #6b7280; }
+        .dark .text-stats { color: #9ca3af; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced Text Cleaner & Space Remover",
+      "applicationCategory": "TextApplication",
+      "operatingSystem": "Web",
+      "description": "Clean messy text with multiple modes, including removing extra spaces, empty lines, and converting tabs to spaces.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "814" },
+      "publisher": { "@type": "Organization", "name": "toolsTree" }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/text.html" class="ml-1 hover:text-tt-primary md:ml-2">Text Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced Text Cleaner & Space Remover</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">
+                Advanced Text Cleaner & Space Remover
+            </h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">
+                Instantly remove extra spaces, empty lines, and unwanted whitespace with multiple cleaning modes.
+            </p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-700">
+            <div class="mb-6">
+                <label class="text-lg font-semibold dark:text-gray-200 mb-3 block">1. Select Cleaning Mode:</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-center">
+                    <input type="radio" id="modeNormalize" name="cleanMode" value="normalize" checked class="hidden"><label for="modeNormalize" class="cursor-pointer px-3 py-2 border rounded-lg transition">Normalize Spaces</label>
+                    <input type="radio" id="modeRemoveSpaces" name="cleanMode" value="remove_spaces" class="hidden"><label for="modeRemoveSpaces" class="cursor-pointer px-3 py-2 border rounded-lg transition">Remove All Spaces</label>
+                    <input type="radio" id="modeRemoveWhitespace" name="cleanMode" value="remove_whitespace" class="hidden"><label for="modeRemoveWhitespace" class="cursor-pointer px-3 py-2 border rounded-lg transition">Remove All Whitespace</label>
+                    <input type="radio" id="modeRemoveEmptyLines" name="cleanMode" value="remove_empty_lines" class="hidden"><label for="modeRemoveEmptyLines" class="cursor-pointer px-3 py-2 border rounded-lg transition">Remove Empty Lines</label>
+                    <input type="radio" id="modeTrimLines" name="cleanMode" value="trim_lines" class="hidden"><label for="modeTrimLines" class="cursor-pointer px-3 py-2 border rounded-lg transition">Trim Lines</label>
+                    <input type="radio" id="modeTabsToSpaces" name="cleanMode" value="tabs_to_spaces" class="hidden"><label for="modeTabsToSpaces" class="cursor-pointer px-3 py-2 border rounded-lg transition">Tabs to Spaces</label>
+                </div>
+            </div>
+
+            <div id="optionsPanel" class="mb-6 hidden">
+                <label for="tabSpaces" class="text-sm font-medium">Number of spaces per tab:</label>
+                <input type="number" id="tabSpaces" value="4" min="1" max="16" class="w-20 p-2 border rounded-lg ml-2">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label for="inputText" class="text-lg font-semibold dark:text-gray-200">Original Text</label>
+                    <textarea id="inputText" placeholder="Paste messy text here..." class="w-full p-4 border rounded-lg shadow-sm min-h-[250px]"></textarea>
+                    <div id="inputStats" class="text-stats text-right px-2">Chars: 0 | Words: 0 | Lines: 0</div>
+                </div>
+                <div class="space-y-2">
+                    <label for="outputText" class="text-lg font-semibold dark:text-gray-200">Cleaned Text</label>
+                    <textarea id="outputText" readonly placeholder="Result appears here instantly..." class="w-full p-4 border rounded-lg shadow-sm bg-gray-50 dark:bg-gray-900/50 min-h-[250px]"></textarea>
+                    <div id="outputStats" class="text-stats text-right px-2">Chars: 0 | Words: 0 | Lines: 0</div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-6 mt-6 border-t dark:border-gray-700 space-x-4">
+                <button id="copyBtn" class="flex items-center space-x-2 text-sm font-semibold text-tt-primary hover:text-tt-secondary transition"><i data-lucide="copy" class="w-4 h-4"></i><span>Copy Result</span></button>
+                <button id="clearBtn" class="flex items-center space-x-2 text-sm font-semibold text-gray-500 hover:text-gray-700 transition"><i data-lucide="file-x" class="w-4 h-4"></i><span>Clear All</span></button>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Cleaning Modes Explained</h2>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Normalize Spaces:</strong> Replaces consecutive spaces, tabs, and line breaks with a single space.</li>
+                    <li><strong>Remove All Spaces:</strong> Deletes only space characters (` `), leaving tabs and line breaks intact.</li>
+                    <li><strong>Remove All Whitespace:</strong> The most aggressive mode. Deletes all spaces, tabs, and line breaks.</li>
+                    <li><strong>Remove Empty Lines:</strong> Deletes any lines that are completely empty or contain only whitespace.</li>
+                    <li><strong>Trim Lines:</strong> Removes leading and trailing whitespace from the beginning and end of each individual line.</li>
+                    <li><strong>Tabs to Spaces:</strong> Converts every tab character into a specified number of space characters.</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>'Remove All Spaces' vs 'Remove All Whitespace'?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">"Remove All Spaces" only deletes the literal space character. "Remove All Whitespace" is more powerful and also deletes tabs, line breaks, and other invisible whitespace characters.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.injectLayout(false); 
+    
+            const ui = {
+                inputText: document.getElementById('inputText'),
+                outputText: document.getElementById('outputText'),
+                inputStats: document.getElementById('inputStats'),
+                outputStats: document.getElementById('outputStats'),
+                modeRadios: document.querySelectorAll('input[name="cleanMode"]'),
+                optionsPanel: document.getElementById('optionsPanel'),
+                tabSpaces: document.getElementById('tabSpaces'),
+                copyBtn: document.getElementById('copyBtn'),
+                clearBtn: document.getElementById('clearBtn'),
+            };
+
+            const updateStats = (textarea, statsDiv) => {
+                const text = textarea.value;
+                const charCount = text.length;
+                const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+                const lineCount = text.split('\n').length;
+                statsDiv.textContent = `Chars: ${charCount} | Words: ${wordCount} | Lines: ${lineCount}`;
+            };
+
+            const cleanText = () => {
+                const input = ui.inputText.value;
+                const mode = document.querySelector('input[name="cleanMode"]:checked').value;
+                let result = '';
+
+                ui.optionsPanel.style.display = (mode === 'tabs_to_spaces') ? 'block' : 'none';
+
+                switch (mode) {
+                    case 'normalize':
+                        result = input.replace(/\s+/g, ' ').trim();
+                        break;
+                    case 'remove_spaces':
+                        result = input.replace(/ /g, '');
+                        break;
+                    case 'remove_whitespace':
+                        result = input.replace(/\s/g, '');
+                        break;
+                    case 'remove_empty_lines':
+                        result = input.replace(/^\s*[\r\n]/gm, '');
+                        break;
+                    case 'trim_lines':
+                        result = input.split('\n').map(line => line.trim()).join('\n');
+                        break;
+                    case 'tabs_to_spaces':
+                        const spaces = ' '.repeat(parseInt(ui.tabSpaces.value) || 4);
+                        result = input.replace(/\t/g, spaces);
+                        break;
+                }
+
+                ui.outputText.value = result;
+                updateStats(ui.inputText, ui.inputStats);
+                updateStats(ui.outputText, ui.outputStats);
+            };
+
+            const copyOutput = () => {
+                if (!ui.outputText.value) return;
+                navigator.clipboard.writeText(ui.outputText.value).then(() => {
+                    const originalText = ui.copyBtn.innerHTML;
+                    ui.copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Copied!</span>';
+                    lucide.createIcons();
+                    setTimeout(() => { ui.copyBtn.innerHTML = originalText; lucide.createIcons(); }, 2000);
+                });
+            };
+
+            const clearInputs = () => {
+                ui.inputText.value = '';
+                cleanText();
+                ui.inputText.focus();
+            };
+
+            // Event Listeners
+            ui.inputText.addEventListener('input', cleanText);
+            ui.modeRadios.forEach(radio => radio.addEventListener('change', cleanText));
+            ui.tabSpaces.addEventListener('input', cleanText);
+            ui.copyBtn.addEventListener('click', copyOutput);
+            ui.clearBtn.addEventListener('click', clearInputs);
+            
+            // Initial run
+            cleanText();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          
+          // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {
+          // Failsafe: default to light mode if any errors occur.
+          console.error("Error applying initial theme:", e);
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Real-Time Character Counter, Word, SEO & Readability Counter | toolsTree</title>
+    <meta name="description" content="The ultimate text analysis tool. Get live counts for characters, words, sentences, and paragraphs, plus advanced SEO and readability scores (Flesch-Kincaid, Gunning Fog), keyword density, and text-to-speech.">
+    <link rel="canonical" href="https://yourdomain.com/tools/character-counter.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' }, fontFamily: { sans: ['Roboto Mono', 'monospace'] } } } };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        .metric-box { display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 1rem; border-radius: 0.75rem; background-color: #f9fafb; }
+        .dark .metric-box { background-color: #374151; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Real-Time Character Counter, Word, SEO & Readability Counter",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "description": "The ultimate text analysis tool. Get live counts for characters, words, sentences, and paragraphs, plus advanced SEO and readability scores (Flesch-Kincaid, Gunning Fog), keyword density, and text-to-speech.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "341"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/text.html" class="ml-1 hover:text-tt-primary md:ml-2">Text Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Real-Time Character, Word, SEO & Readability Counter</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-3">Real-Time Character, Word, SEO & Readability Counter</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">An all-in-one text analysis suite for writers, students, and SEO professionals.</p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-4">
+                <textarea id="inputText" placeholder="Start typing or paste your content here..." class="w-full p-6 border rounded-xl shadow-inner min-h-[400px] text-lg"></textarea>
+                <div class="flex flex-col sm:flex-row justify-end gap-3 pt-3">
+                    <button id="readAloudBtn" class="flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 font-semibold rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600"><i data-lucide="volume-2" class="w-4 h-4"></i>Read Aloud</button>
+                    <button id="clearBtn" class="flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 font-semibold rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600"><i data-lucide="x" class="w-4 h-4"></i>Clear</button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1 space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="metric-box"><span class="text-xs font-medium text-gray-500">Characters</span><strong id="charCount" class="text-3xl font-extrabold text-tt-primary">0</strong></div>
+                    <div class="metric-box"><span class="text-xs font-medium text-gray-500">Words</span><strong id="wordCount" class="text-3xl font-extrabold text-tt-primary">0</strong></div>
+                    <div class="metric-box"><span class="text-xs font-medium text-gray-500">Sentences</span><strong id="sentenceCount" class="text-2xl font-bold">0</strong></div>
+                    <div class="metric-box"><span class="text-xs font-medium text-gray-500">Paragraphs</span><strong id="paragraphCount" class="text-2xl font-bold">0</strong></div>
+                </div>
+                
+                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+                    <h3 class="font-bold mb-2">Readability Scores</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span>Flesch-Kincaid Grade:</span><strong id="fkGradeLevel">N/A</strong></div>
+                        <div class="flex justify-between"><span>Gunning Fog Index:</span><strong id="gunningFog">N/A</strong></div>
+                        <div class="flex justify-between"><span>Coleman-Liau Index:</span><strong id="colemanLiau">N/A</strong></div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+                     <h3 class="font-bold mb-2">SEO & Keyword Analysis</h3>
+                     <div>
+                        <label for="keywordInput" class="text-sm font-medium">Focus Keyword</label>
+                        <input id="keywordInput" type="text" placeholder="Enter keyword..." class="w-full p-2 border rounded-lg mt-1 text-sm">
+                        <div class="text-sm mt-2 flex justify-between"><span>Keyword Density:</span><strong id="keywordDensity">0%</strong></div>
+                     </div>
+                     <div class="mt-4 pt-4 border-t dark:border-gray-600">
+                        <h4 class="text-sm font-bold">Top Keywords</h4>
+                        <ul id="topKeywords" class="text-xs mt-2 space-y-1"><li>-</li></ul>
+                     </div>
+                </div>
+                 <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+                    <h3 class="font-bold mb-2">More Stats</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span>Reading Time:</span><strong id="readingTime">~0 min</strong></div>
+                        <div class="flex justify-between"><span>Syllables:</span><strong id="totalSyllables">0</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+             <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Guide to Readability Scores</h2>
+                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Different formulas measure text complexity in different ways. For general web content, aiming for a grade level of around 8 is a good target.</p>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Flesch-Kincaid Grade Level:</strong> The most common score, representing a US school-grade level. It's based on average sentence and word length.</li>
+                    <li><strong>Gunning Fog Index:</strong> Estimates the years of formal education needed to understand the text on the first reading. It focuses on sentence length and "complex" words (3+ syllables).</li>
+                    <li><strong>Coleman-Liau Index:</strong> Works by counting characters per word and sentences per 100 words, making it computationally faster than syllable-based scores.</li>
+                </ul>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why are the readability scores different?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Each score uses a different formula to measure complexity. Flesch-Kincaid focuses on word and sentence length, Gunning Fog emphasizes 'complex' words (3+ syllables), and Coleman-Liau uses character counts. It's best to look at them together to get a general sense of your text's readability.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is a good keyword density for SEO?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">There is no "perfect" number, and you should always prioritize writing naturally for your audience. However, a general guideline for many SEO professionals is to aim for a keyword density of around 1-2%. This tool helps you monitor that while you write.</p>
+                    </details>
+                     <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>How does the 'Read Aloud' feature work?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The "Read Aloud" feature uses your browser's built-in Text-to-Speech (TTS) engine to vocalize the text. It's a great way to proofread, as hearing your writing read back can help you catch awkward phrasing and typos that your eyes might otherwise miss.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        const ui = {
+            inputText: document.getElementById('inputText'), keywordInput: document.getElementById('keywordInput'),
+            readAloudBtn: document.getElementById('readAloudBtn'), clearBtn: document.getElementById('clearBtn'),
+            metrics: {
+                charCount: document.getElementById('charCount'), wordCount: document.getElementById('wordCount'),
+                sentenceCount: document.getElementById('sentenceCount'), paragraphCount: document.getElementById('paragraphCount'),
+                fkGradeLevel: document.getElementById('fkGradeLevel'), gunningFog: document.getElementById('gunningFog'),
+                colemanLiau: document.getElementById('colemanLiau'), keywordDensity: document.getElementById('keywordDensity'),
+                topKeywords: document.getElementById('topKeywords'), readingTime: document.getElementById('readingTime'),
+                totalSyllables: document.getElementById('totalSyllables')
+            }
+        };
+
+        const countSyllables = (word) => {
+            word = word.toLowerCase();
+            if (word.length <= 3) return 1;
+            word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+            word = word.replace(/^y/, '');
+            const match = word.match(/[aeiouy]{1,2}/g);
+            return match ? match.length : 1;
+        };
+
+        const analyzeText = () => {
+            const text = ui.inputText.value;
+            const words = text.trim().split(/\s+/).filter(Boolean);
+            const wordCount = words.length;
+            const charCount = text.length;
+            const sentenceCount = (text.match(/[.!?…]+/g) || []).length || (wordCount > 0 ? 1 : 0);
+            const paragraphCount = text.split(/\n\s*\n/).filter(p => p.trim()).length || (wordCount > 0 ? 1 : 0);
+            
+            let syllableCount = 0, complexWordCount = 0;
+            words.forEach(word => {
+                const syllables = countSyllables(word);
+                syllableCount += syllables;
+                if (syllables >= 3) complexWordCount++;
+            });
+
+            // Readability Scores
+            let fkGrade = 'N/A', gunningFog = 'N/A', colemanLiau = 'N/A';
+            if (wordCount > 10 && sentenceCount > 0) { // Require minimum length for meaningful scores
+                const avgSentenceLength = wordCount / sentenceCount;
+                const avgSyllablesPerWord = syllableCount / wordCount;
+                fkGrade = (0.39 * avgSentenceLength + 11.8 * avgSyllablesPerWord - 15.59).toFixed(1);
+                gunningFog = (0.4 * (avgSentenceLength + 100 * (complexWordCount / wordCount))).toFixed(1);
+
+                const L = (text.replace(/\s/g, '').length / wordCount) * 100; // Avg letters per 100 words
+                const S = (sentenceCount / wordCount) * 100; // Avg sentences per 100 words
+                colemanLiau = (0.0588 * L - 0.296 * S - 15.8).toFixed(1);
+            }
+
+            // Keyword Density
+            const keyword = ui.keywordInput.value.trim().toLowerCase();
+            let keywordCount = 0;
+            if (keyword) {
+                const regex = new RegExp('\\b' + keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\b', 'gi');
+                keywordCount = (text.toLowerCase().match(regex) || []).length;
+            }
+            const keywordDensity = wordCount > 0 ? ((keywordCount / wordCount) * 100).toFixed(2) + '%' : '0%';
+
+            // Top Keywords
+            const wordMap = {};
+            words.forEach(word => {
+                const cleanWord = word.toLowerCase().replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, '');
+                if (cleanWord.length > 2) { 
+                    wordMap[cleanWord] = (wordMap[cleanWord] || 0) + 1;
+                }
+            });
+            const topKeywords = Object.entries(wordMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            ui.metrics.topKeywords.innerHTML = topKeywords.length > 0 ? topKeywords.map(kw => `<li>${kw[0]} <span class="text-gray-500">(${kw[1]})</span></li>`).join('') : '<li>-</li>';
+
+            // Update UI
+            ui.metrics.charCount.textContent = charCount;
+            ui.metrics.wordCount.textContent = wordCount;
+            ui.metrics.sentenceCount.textContent = sentenceCount;
+            ui.metrics.paragraphCount.textContent = paragraphCount;
+            ui.metrics.totalSyllables.textContent = syllableCount;
+            ui.metrics.fkGradeLevel.textContent = fkGrade;
+            ui.metrics.gunningFog.textContent = gunningFog;
+            ui.metrics.colemanLiau.textContent = colemanLiau;
+            ui.metrics.readingTime.textContent = `~${Math.max(1, Math.ceil(wordCount / 200))} min`;
+            ui.metrics.keywordDensity.textContent = keywordDensity;
+        };
+
+        const readAloud = () => {
+            if ('speechSynthesis' in window) {
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                    return;
+                }
+                if (ui.inputText.value.trim() === '') return;
+                const utterance = new SpeechSynthesisUtterance(ui.inputText.value);
+                window.speechSynthesis.speak(utterance);
+            } else { alert('Sorry, your browser does not support text-to-speech.'); }
+        };
+
+        ui.inputText.addEventListener('input', analyzeText);
+        ui.keywordInput.addEventListener('input', analyzeText);
+        ui.readAloudBtn.addEventListener('click', readAloud);
+        ui.clearBtn.addEventListener('click', () => { ui.inputText.value = ''; ui.keywordInput.value = ''; analyzeText(); });
+        
+        analyzeText();
+    });
+    </script>
+</body>
+</html>

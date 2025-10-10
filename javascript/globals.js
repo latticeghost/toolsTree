@@ -44,6 +44,8 @@ const FOOTER_HTML = (rootPath) => `
         </span>
         <span class="text-gray-400 dark:text-gray-600">|</span>
         <a href="${rootPath}contact.html" class="hover:text-tt-primary">Contact Us</a>
+        <span class="text-gray-400 dark:text-gray-600">|</span>
+        <a href="${rootPath}privacy.html" class="hover:text-tt-primary">Privacy Policy</a>
     </div>
 </footer>
 `;

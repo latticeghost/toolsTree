@@ -42,6 +42,8 @@ const FOOTER_HTML = (rootPath) => `
             <span>Made with</span>
             <i data-lucide="heart" class="w-4 h-4 text-red-500 fill-current"></i> 
         </span>
+        <span class="text-gray-400 dark:text-gray-600">|</span>
+        <a href="${rootPath}contact.html" class="hover:text-tt-primary">Contact Us</a>
     </div>
 </footer>
 `;

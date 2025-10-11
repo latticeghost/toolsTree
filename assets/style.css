@@ -1,184 +1,131 @@
-/* ========= Global Reset ========= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-/* --- CRITICAL LAYOUT FIX: Ensures 100% height and flex column structure --- */
-html {
-  /* Set 100% height at the root */
-  height: 100%;
-}
 
-body {
-  font-family: system-ui, sans-serif; 
-  line-height: 1.6;
-  word-wrap: break-word;
-  overflow-x: hidden;
-  
-  /* CRITICAL: Enable Flex column layout to push the footer down */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column; 
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* ========= Headers ========= */
-h1, h2, h3 {
-  font-weight: 600;
-  color: #222;
-}
+@layer base {
+  h1, h2, h3 {
+    font-weight: 600;
 
-h1 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-h2 {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-}
-
-/* ========= Links ========= */
-a {
-  text-decoration: none;
-  color: #0077ff;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-a:hover {
-  color: #005fcc;
-}
-a:visited {
-  color: #0077ff;
-}
-
-/* ========= Navigation Links ========= */
-.nav-links {
-  margin-top: 2rem;
-  text-align: center;
-  font-size: 0.95rem;
-}
-.nav-links a {
-  color: #374151;
-  text-decoration: none;
-  margin: 0 0.5rem;
-  font-weight: 500;
-}
-.nav-links a:hover {
-  text-decoration: underline;
-}
-.nav-links a svg {
-  width: 18px;
-  height: 18px;
-  stroke: #374151;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 4px;
-}
-
-/* ========= Tool Boxes / Cards ========= */
-.tool-box, .card, .grid a {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 1rem;
-  margin: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  transition: all 0.2s ease;
-}
-.tool-box:hover, .card:hover, .grid a:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  background: #f0f8ff;
-}
-
-/* ========= Buttons ========= */
-button, .btn {
-  background-color: #2563eb;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
-  display: inline-block;
-  text-align: center;
-}
-button:hover, .btn:hover {
-  background-color: #1d4ed8;
-}
-button:active, .btn:active {
-  transform: scale(0.97);
-}
-
-/* ========= Shared result box ========= */
-.result-box {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  color: #374151;
-  font-size: 1rem;
-  line-height: 1.5;
-  overflow-wrap: break-word; /* prevent overflow from long strings */
-  white-space: pre-wrap; /* preserve formatting */
-}
-
-/* ========= Category Cards ========= */
-.category-card {
-  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
-}
-.category-card:hover {
-  background-color: #2563eb;
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-/* ========= Layout Helpers ========= */
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 2rem;
-}
-
-/* ========= Swap Button ========= */
-.swap-btn svg {
-  stroke: #374151;
-  width: 20px;
-  height: 20px;
-}
-.swap-btn {
-  background: #f9fafb;
-}
-.swap-btn:hover {
-  background: #f3f4f6;
-}
-
-/* ========= Responsive Fixes ========= */
-
-/* Ensure charts are scrollable on small devices */
-.chart-container {
-  width: 100%;
-  overflow-x: auto;
-}
-.chart-container canvas {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Ensure textareas and inputs fit mobile */
-textarea, input, select {
-  max-width: 100%;
-}
-
-/* Handle very small screens */
-@media (max-width: 400px) {
-  h1 {
-    font-size: 1.5rem;
   }
-  .btn {
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  a {
+    text-decoration: none;
+    color: #0077ff;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  a:hover {
+    color: #005fcc;
+  }
+  a:visited {
+    color: #0077ff;
+  }
+}
+
+@layer components {
+  .nav-links {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+  .nav-links a {
+    color: #374151;
+    text-decoration: none;
+    margin: 0 0.5rem;
+    font-weight: 500;
+  }
+  .nav-links a:hover {
+    text-decoration: underline;
+  }
+  .nav-links a svg {
+    width: 18px;
+    height: 18px;
+    stroke: #374151;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+  .tool-box, .card, .grid a {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+  }
+  .tool-box:hover, .card:hover, .grid a:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #f0f8ff;
+  }
+  button, .btn {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+    display: inline-block;
+    text-align: center;
+  }
+  button:hover, .btn:hover {
+    background-color: #1d4ed8;
+  }
+  button:active, .btn:active {
+    transform: scale(0.97);
+  }
+  .result-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    color: #374151;
+    font-size: 1rem;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  .category-card {
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+  }
+  .category-card:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+  .container {
+    max-width: 900px;
+    margin: auto;
+    padding: 2rem;
+  }
+  .swap-btn svg {
+    stroke: #374151;
+    width: 20px;
+    height: 20px;
+  }
+  .swap-btn {
+    background: #f9fafb;
+  }
+  .swap-btn:hover {
+    background: #f3f4f6;
+  }
+  .chart-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .chart-container canvas {
+    max-width: 100%;
+    height: auto;
   }
 }

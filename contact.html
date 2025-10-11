@@ -8,6 +8,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
@@ -30,21 +32,10 @@
         } catch (e) {}
         })();
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <script>
         window.GLOBAL_ROOT_PATH = '';
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
-                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
-                }
-            }
-        };
     </script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <style>
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
     </style>
@@ -81,7 +72,7 @@
         </div>
     </main>
     
-    <script src="javascript/globals.js"></script>
+    <script src="javascript/globals.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             window.injectLayout(false); // Injects header/footer without search

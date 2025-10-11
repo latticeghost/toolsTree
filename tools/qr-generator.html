@@ -9,6 +9,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.netlify.app/tools/qr-generator.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
@@ -37,22 +40,10 @@
         }
         })();
     </script>
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/qr-generator.html">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <script>
         window.GLOBAL_ROOT_PATH = '../';
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
-                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
-                }
-            }
-        };
     </script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
     <style>
         :root { --tt-primary-stroke: #10b981; }
@@ -139,7 +130,9 @@
                 <div class="lg:sticky lg:top-24 h-fit space-y-6">
                     <h2 class="text-xl font-bold text-center flex items-center justify-center"><i data-lucide="scan" class="w-5 h-5 mr-2 stroke-tt-primary"></i>3. Your QR Code</h2>
                     <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border dark:border-gray-700 flex justify-center items-center w-full aspect-square">
-                        <div id="qrcode"><p class="text-sm text-center text-gray-500 dark:text-gray-400">Your QR code will appear here.</p></div>
+                        <div id="qrcode" class="w-full h-full flex justify-center items-center">
+                            <p class="text-sm text-center text-gray-500 dark:text-gray-400">Your QR code will appear here.</p>
+                        </div>
                     </div>
                     <div id="downloadButtons" class="space-y-3 opacity-50 pointer-events-none">
                         <button id="downloadPNG" class="w-full flex items-center justify-center gap-2 bg-tt-primary text-white font-semibold py-3 rounded-lg"><i data-lucide="download" class="w-4 h-4"></i>Download PNG</button>
@@ -179,7 +172,7 @@
         </section>
     </main>
     
-    <script src="../javascript/globals.js"></script>
+    <script src="../javascript/globals.js" defer></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         window.injectLayout(false);

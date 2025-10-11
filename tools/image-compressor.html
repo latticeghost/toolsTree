@@ -9,6 +9,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.netlify.app/tools/image-compressor.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
@@ -37,24 +40,12 @@
         }
         })();
     </script>
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/image-compressor.html">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <script>
         window.GLOBAL_ROOT_PATH = '../';
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
-                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
-                }
-            }
-        };
     </script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
     <style>
         :root { --tt-primary-stroke: #10b981; }
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
@@ -188,7 +179,7 @@
     
     <canvas id="hidden-canvas" class="hidden"></canvas>
 
-    <script src="../javascript/globals.js"></script>
+    <script src="../javascript/globals.js" defer></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         window.injectLayout(false);

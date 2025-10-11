@@ -9,6 +9,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.netlify.app/tools/headline-title-case.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
@@ -37,29 +40,12 @@
         }
         })();
     </script>
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/headline-title-case.html">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script>
-        // Define the correct relative path for assets from the /tools/ directory
         window.GLOBAL_ROOT_PATH = '../';
-        // Standardized Tailwind Config
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
-                    fontFamily: {
-                        // Using Roboto Mono as the default monospaced/code font for the tool's feel
-                        sans: ['Roboto Mono', 'monospace'],
-                    }
-                }
-            }
-        };
     </script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" defer>
     </script> 
     <style>
         /* Tool-specific styling for the icon and success feedback */
@@ -211,37 +197,24 @@
 
     </main>
     
-    <script src="../javascript/globals.js"></script>
+    <script src="../javascript/globals.js" defer></script>
     <script>
-        // Copying the theme/layout initialization logic from the contrast-checker.html structure
         document.addEventListener('DOMContentLoaded', () => {
-            // STEP 1: Inject Header/Footer without search bar and initialize theme.
-            // Assuming window.injectLayout is defined in globals.js
             if(typeof window.injectLayout === 'function') {
                 window.injectLayout(false); 
             } else {
                 console.error("globals.js or injectLayout function not loaded.");
-                // Fallback for header/footer (if injection fails, the manual header/footer will remain)
             }
-
-            // STEP 2: All logic specific to THIS tool goes below.
-            // =================================================================
-            
             const inputText = document.getElementById('inputText');
             const outputText = document.getElementById('outputText');
             const convertButton = document.getElementById('convertButton');
             const copyButton = document.getElementById('copyButton');
             const clearButton = document.getElementById('clearButton');
 
-            // List of words to NOT capitalize in Title Case (prepositions, articles, short conjunctions)
             const MINOR_WORDS = [
                 "a", "an", "and", "as", "at", "but", "by", "for", "in", "nor", 
                 "of", "on", "or", "so", "the", "to", "up", "yet"
             ];
-
-            /**
-             * Converts text to proper Title Case following standard headline rules.
-             */
             function convertToTitleCase() {
                 const text = inputText.value.trim();
                 if (!text) {
@@ -257,9 +230,6 @@
                 for (let i = 0; i < words.length; i++) {
                     const word = words[i];
                     
-                    // Always capitalize the first word of the entire string
-                    // Always capitalize the last word of the entire string
-                    // Capitalize if it's a major word (not in MINOR_WORDS list)
                     const isMinorWord = MINOR_WORDS.includes(word);
 
                     if (
@@ -279,9 +249,6 @@
                 outputText.value = result.join(" ");
             }
 
-            /**
-             * Copies the content of the output field to the clipboard.
-             */
             function copyToClipboard() {
                 outputText.select();
                 outputText.setSelectionRange(0, 99999); // For mobile devices
@@ -308,24 +275,15 @@
                 }
             }
 
-            /**
-             * Clears both the input and output fields.
-             */
             function clearFields() {
                 inputText.value = "";
                 outputText.value = "";
                 inputText.focus();
             }
-
-            // --- EVENT LISTENERS ---
             convertButton.addEventListener('click', convertToTitleCase);
             copyButton.addEventListener('click', copyToClipboard);
             clearButton.addEventListener('click', clearFields);
-            
-            // Enable "live" conversion as the user types/pastes (good UX)
             inputText.addEventListener('input', convertToTitleCase);
-
-            // Initial run on load (useful for placeholder text)
             window.addEventListener('load', convertToTitleCase);
         });
     </script>

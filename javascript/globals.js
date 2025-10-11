@@ -9,7 +9,7 @@ const HEADER_WITH_SEARCH_HTML = (rootPath) => `
         <div class="flex items-center w-full max-w-lg ml-4 sm:ml-8 space-x-3">
             <div class="relative w-full" id="search-container">
                 <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                <input type="text" id="global-search" placeholder="Search for any tool..." class="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-tt-primary focus:border-tt-primary transition dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100">
+                <input type="text" id="global-search" placeholder="Search for any tool..." class="w-full pl-11 pr-4 py-2 ...">
                 <div id="search-results" class="absolute w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl hidden z-20 dark:bg-gray-800 dark:border-gray-700"></div>
             </div>
             <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none focus:ring-2 focus:ring-tt-primary shrink-0" aria-label="Toggle dark mode"></button>

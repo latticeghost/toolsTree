@@ -83,11 +83,6 @@
   .category-card {
     transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
   }
-  .category-card:hover {
-    background-color: #2563eb;
-    color: #ffffff;
-    transform: translateY(-2px);
-  }
   .container {
     max-width: 900px;
     margin: auto;

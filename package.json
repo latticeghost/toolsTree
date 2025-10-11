@@ -1,0 +1,11 @@
+{
+  "name": "toolstree",
+  "version": "1.0.0",
+  "description": "Free Online Tools & Utilities",
+  "devDependencies": {
+    "tailwindcss": "^3.4.3"
+  },
+  "scripts": {
+    "build": "tailwindcss -i ./assets/style.css -o ./assets/output.css --minify"
+  }
+}

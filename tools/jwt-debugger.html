@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JWT Debugger & Verifier (HS256/384/512) | toolsTree</title>
+    <title>Advanced JWT Debugger & Verifier (HS256/384/512) | toolsTree</title>
     <meta name="description" content="Decode, verify, and debug JSON Web Tokens (JWT) instantly. Paste a token to view the header and payload, and provide a secret to verify the signature against HS256, HS384, and HS512 algorithms.">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -45,13 +45,22 @@
         .token-payload { color: #8b5cf6; } /* violet-500 */
         .token-signature { color: #2563eb; } /* blue-600 */
         .token-dot { color: #9ca3af; } /* gray-400 */
+
+        /* --- BUG 1 FIX: Hide original textarea text --- */
+        #encodedJwt {
+            color: transparent; /* Make the actual text invisible */
+            caret-color: #111827; /* Keep the caret visible in light mode */
+        }
+        .dark #encodedJwt {
+            caret-color: #f3f4f6; /* Keep the caret visible in dark mode */
+        }
     </style>
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "JWT Debugger & Verifier",
+      "name": "Advanced JWT Debugger & Verifier",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
       "description": "Decode, verify, and debug JSON Web Tokens. Supports HS256, HS384, and HS512 signature verification.",
@@ -72,7 +81,7 @@
         </nav>
         
         <section class="mb-8 text-center">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">JWT Debugger & Verifier</h1>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced JWT Debugger & Verifier</h1>
             <p class="text-base text-gray-600 dark:text-gray-300">Decode and verify JSON Web Tokens in real-time.</p>
         </section>
 
@@ -107,6 +116,26 @@
                 </div>
             </div>
         </div>
+
+        <!-- BUG 2 FIX: ADDED COMMON INFORMATIONAL SECTION -->
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">About JWT (JSON Web Token)</h2>
+                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed.</p>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Header:</strong> Typically consists of two parts: the token type (`JWT`) and the signing algorithm being used, such as HMAC SHA256 or RSA.</li>
+                    <li><strong>Payload:</strong> Contains the claims. Claims are statements about an entity (typically, the user) and additional data. There are registered, public, and private claims.</li>
+                    <li><strong>Signature:</strong> To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that.</li>
+                </ul>
+            </div>
+             <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this JWT debugger secure?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. All decoding and signature verification happen entirely within your browser. The token and secret you enter are never sent to our servers, ensuring your sensitive information remains confidential.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What does "Signature Verified" mean?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">It means that the header and payload have not been tampered with. The signature is recalculated using the header, payload, and the secret you provided, and it matches the original signature on the token. If it says "Invalid Signature," it means either the token was altered or the secret is incorrect.</p></details>
+                </div>
+            </div>
+        </section>
     </main>
     
     <script src="../javascript/globals.js" defer></script>
@@ -177,7 +206,7 @@
             }
 
             const [headerB64, payloadB64, signatureB64] = parts;
-            const header = JSON.parse(atob(headerB64));
+            const header = JSON.parse(atob(headerB64.replace(/-/g, '+').replace(/_/g, '/')));
             
             const algMap = { 'HS256': CryptoJS.HmacSHA256, 'HS384': CryptoJS.HmacSHA384, 'HS512': CryptoJS.HmacSHA512 };
             const algorithm = algMap[header.alg];
@@ -189,7 +218,7 @@
             
             const dataToSign = `${headerB64}.${payloadB64}`;
             const hash = algorithm(dataToSign, secret);
-            const expectedSignature = hash.toString(CryptoJS.enc.Base64url);
+            const expectedSignature = hash.toString(CryptoJS.enc.Base64).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
             
             if (expectedSignature === signatureB64) {
                 setStatus('success', 'Signature Verified');
@@ -214,7 +243,7 @@
         };
 
         const setStatus = (type, text) => {
-            ui.signatureStatus.classList.remove('bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700', 'bg-blue-100', 'text-blue-700');
+            ui.signatureStatus.className = 'flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-bold'; // Reset classes
             let icon = 'help-circle';
             let classes = 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300';
             if (type === 'success') {
@@ -245,3 +274,4 @@
     </script>
 </body>
 </html>
+

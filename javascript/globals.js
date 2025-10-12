@@ -1,6 +1,6 @@
 // --- 1. HTML TEMPLATES ---
 const HEADER_WITH_SEARCH_HTML = (rootPath) => `
-<header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b dark:border-gray-800 shadow-sm">
+<header class="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <a href="${rootPath}index.html" class="flex items-center space-x-2 text-2xl font-bold shrink-0">
             <i data-lucide="tree-deciduous" class="w-6 h-6 stroke-tt-primary"></i> 
@@ -8,7 +8,7 @@ const HEADER_WITH_SEARCH_HTML = (rootPath) => `
         </a>
         <div class="flex items-center w-full max-w-lg ml-4 sm:ml-8 space-x-3">
             <div class="relative w-full" id="search-container">
-                <input type="text" id="global-search" placeholder="Search for any tool..." class="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-tt-primary focus:border-tt-primary transition dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100">
+                <input type="text" id="global-search" placeholder="Search any tool..." class="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-tt-primary focus:border-tt-primary transition dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100">
                 <div id="search-results" class="absolute w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl hidden z-20 dark:bg-gray-800 dark:border-gray-700"></div>
             </div>
             <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none focus:ring-2 focus:ring-tt-primary shrink-0" aria-label="Toggle dark mode"></button>
@@ -18,7 +18,7 @@ const HEADER_WITH_SEARCH_HTML = (rootPath) => `
 `;
 
 const HEADER_WITHOUT_SEARCH_HTML = (rootPath) => `
-<header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b dark:border-gray-800 shadow-sm">
+<header class="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <a href="${rootPath}index.html" class="flex items-center space-x-2 text-2xl font-bold">
             <i data-lucide="tree-deciduous" class="w-6 h-6 stroke-tt-primary"></i> 

@@ -33,7 +33,9 @@ module.exports = {
     './tools/reverse-text.html',
     './tools/simple-interest.html',
     './tools/sip-calculator.html',
-    './tools/time-zone-converter.html'
+    './tools/time-zone-converter.html',
+    './tools/favicon-generator.html',
+    './tools/jwt-debugger.html',
   ],
   darkMode: 'class',
   theme: {

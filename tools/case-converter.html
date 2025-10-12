@@ -12,7 +12,6 @@
     <link rel="canonical" href="https://toolstree.netlify.app/tools/case-converter.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -97,7 +96,12 @@
             <div>
                 <label for="inputText" class="block text-xl font-semibold mb-2">Input Text</label>
                 <textarea id="inputText" placeholder="Type or paste your text here..." class="w-full p-4 border rounded-lg shadow-inner min-h-[150px]"></textarea>
-                <div id="stats" class="text-xs text-right text-gray-500 mt-1 pr-2">Characters: 0 | Words: 0</div>
+                <div class="flex justify-between items-center">
+                    <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
+                    </button>
+                    <div id="stats" class="text-xs text-right text-gray-500 mt-1 pr-2">Characters: 0 | Words: 0</div>
+                </div>
             </div>
 
             <div class="pt-6 border-t dark:border-gray-700">
@@ -159,7 +163,7 @@
                             <span>What rules are used for 'Title Case'?</span>
                             <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
                         </summary>
-                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool uses a common set of rules for Title Case where it capitalizes the first letter of each word, except for minor words (like 'a', 'an', 'the', 'for', etc.) unless they are the first or last word in the title. This is a general-purpose style suitable for most headlines.</p>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool uses a common set of rules for Title Case where it capitalizes the first letter of each word, except for minor words (like 'a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'if', 'in', 'nor', 'of', 'on', 'or', 'the', 'to', 'up', 'with', etc.) unless they are the first or last word in the title. This is a general-purpose style suitable for most headlines.</p>
                     </details>
                 </div>
             </div>
@@ -178,7 +182,8 @@
         const ui = {
             inputText: document.getElementById('inputText'),
             outputsGrid: document.getElementById('outputs-grid'),
-            stats: document.getElementById('stats')
+            stats: document.getElementById('stats'),
+            clearButton: document.getElementById('clearButton') // New: Get the clear button
         };
 
         const CASES = {
@@ -258,11 +263,25 @@
                 });
             }
         };
+        
+        // New: Function to clear input, output, and stats
+        const clearAll = () => {
+            ui.inputText.value = '';
+            for (const name in CASES) {
+                const id = name.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+                const outputTextarea = document.getElementById(id);
+                if (outputTextarea) {
+                    outputTextarea.value = '';
+                }
+            }
+            ui.stats.textContent = 'Characters: 0 | Words: 0';
+        };
 
         // Initialize
         createOutputBoxes();
         ui.inputText.addEventListener('input', convertAll);
         ui.outputsGrid.addEventListener('click', copyText);
+        ui.clearButton.addEventListener('click', clearAll); // New: Add event listener for clear button
     });
     </script>
 </body>

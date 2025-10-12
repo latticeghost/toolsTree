@@ -12,7 +12,6 @@
     <link rel="canonical" href="https://toolstree.netlify.app/tools/time-zone-converter.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -128,7 +127,6 @@
                     </div>
                 </div>
             </div>
-            <div id="message-box" class="text-center text-sm font-medium transition duration-300 ease-in-out"></div>
         </div>
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
@@ -186,18 +184,8 @@
             const setNowBtn = document.getElementById('set-now-btn');
             const swapBtn = document.getElementById('swap-button');
     
-            function showMessage(message, type) {
-                const msgBox = document.getElementById("message-box");
-                msgBox.textContent = message;
-                msgBox.className = 'text-center text-sm font-medium p-2 rounded-md'; // Reset
-                if (type === 'error') {
-                    msgBox.classList.add('bg-red-100', 'text-red-700', 'dark:bg-red-900/50');
-                } else {
-                    msgBox.classList.add('bg-green-100', 'text-green-700', 'dark:bg-green-900/50');
-                }
-                setTimeout(() => msgBox.textContent = '', 3000);
-            }
-    
+            // The showMessage function and all calls were previously removed.
+            
             function populateTimezones() {
                 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 let timeZones = new Set(COMMON_TIMEZONES);
@@ -239,7 +227,6 @@
                 sourceDateInput.value = `${year}-${month}-${day}`;
                 sourceTimeInput.value = `${hours}:${minutes}`;
                 convertTime();
-                showMessage(`Source time set to your current local time.`, 'success');
             }
     
             function swapTimeZones() {
@@ -247,7 +234,6 @@
                 sourceTimezoneSelect.value = targetTimezoneSelect.value;
                 targetTimezoneSelect.value = tempValue;
                 convertTime();
-                showMessage("Time zones swapped!", 'success');
             }
     
             function convertTime() {
@@ -267,19 +253,6 @@
                     // This object is created in the *user's local* timezone by default.
                     const localDate = new Date(`${sourceDateStr}T${sourceTimeStr}`);
                     
-                    // The trick is to interpret this local time as if it were in the *source* timezone.
-                    // We can do this by formatting it to an ISO string *in that timezone*, which gives us a universal timestamp.
-                    const sourceISOFormatter = new Intl.DateTimeFormat('en-CA', {
-                        timeZone: sourceTimeZone,
-                        year: 'numeric', month: '2-digit', day: '2-digit',
-                        hour: '2-digit', minute: '2-digit', second: '2-digit',
-                        hourCycle: 'h23'
-                    });
-
-                    // This is a complex step: re-create the date string from the user's input,
-                    // but force the browser to treat it as a UTC time equivalent to the source time.
-                    // Let's simplify by directly formatting the created `localDate` object.
-                    
                     const options = { timeZone: targetTimeZone };
                     outputDateFull.textContent = new Intl.DateTimeFormat('en-US', { ...options, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(localDate);
                     outputTime12h.textContent = new Intl.DateTimeFormat('en-US', { ...options, hour: 'numeric', minute: '2-digit', hour12: true }).format(localDate);
@@ -287,7 +260,6 @@
     
                 } catch (error) {
                     console.error("Conversion error:", error);
-                    showMessage("Invalid date, time, or timezone.", 'error');
                 }
             }
     

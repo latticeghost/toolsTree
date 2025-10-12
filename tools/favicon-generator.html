@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Next-Gen Favicon Generator Kit (ICO, PNG, Webmanifest) | toolsTree</title>
-    <meta name="description" content="Create a complete favicon package from a single image. Generates ICO, PNG (16x16 to 512x512), Apple Touch Icons, and a webmanifest file for PWAs. Includes HTML code for easy implementation.">
+    <meta name="description" content="Create a complete favicon package from a single image, an emoji, or a Lucide icon. Generates ICO, PNG (16x16 to 512x512), Apple Touch Icons, and a webmanifest file for PWAs.">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -12,6 +12,15 @@
     <link rel="canonical" href="https://toolstree.netlify.app/tools/favicon-generator.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        input[type="radio"]:checked + label { background-color: #10b981; color: white; border-color: #10b981; }
+        .color-input-container input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        .color-input-container input[type="color"]::-webkit-color-swatch { border: none; border-radius: 0.5rem; }
+    </style>
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -42,7 +51,7 @@
       "name": "Next-Gen Favicon Generator Kit",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
-      "description": "Create a complete favicon package from a single image. Generates ICO, PNG (16x16 to 512x512), Apple Touch Icons, and a webmanifest file for PWAs.",
+      "description": "Create a complete favicon package from a single image, an emoji, or a Lucide icon. Generates ICO, PNG (16x16 to 512x512), Apple Touch Icons, and a webmanifest file for PWAs.",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "publisher": { "@type": "Organization", "name": "toolsTree" }
     }
@@ -55,19 +64,33 @@
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
                 <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/image.html" class="ml-1 hover:text-tt-primary md:ml-2">Image & Design Tools</a></div></li>
-                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Favicon Generator Kit</span></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Next-Gen Favicon Generator Kit</span></div></li>
             </ol>
         </nav>
         
         <section class="mb-10 text-center">
             <h1 class="text-3xl sm:text-4xl font-extrabold mb-3">Next-Gen Favicon Generator Kit</h1>
-            <p class="text-base text-gray-600 dark:text-gray-300">Upload one image, get a complete favicon package for all platforms.</p>
+            <p class="text-base text-gray-600 dark:text-gray-300">Create a complete favicon package from an <strong>Image</strong>, an <strong>Emoji</strong>, or a <strong>Lucide Icon</strong>.</p>
         </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <div class="lg:col-span-2 bg-white dark:bg-gray-800 shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+                
                 <div>
-                    <h2 class="text-xl font-bold mb-3">1. Upload Your Image</h2>
+                    <h2 class="text-xl font-bold mb-3">1. Select Source</h2>
+                    <div id="modeSelector" class="flex gap-2 text-sm border-b pb-4 dark:border-gray-700">
+                        <input type="radio" id="modeImage" name="sourceMode" value="image" checked class="hidden">
+                        <label for="modeImage" class="cursor-pointer text-center w-full p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">Upload Image</label>
+                        
+                        <input type="radio" id="modeEmoji" name="sourceMode" value="emoji" class="hidden">
+                        <label for="modeEmoji" class="cursor-pointer text-center w-full p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">Use Emoji</label>
+
+                        <input type="radio" id="modeIcon" name="sourceMode" value="icon" class="hidden">
+                        <label for="modeIcon" class="cursor-pointer text-center w-full p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">Use Lucide Icon</label>
+                    </div>
+                </div>
+
+                <div id="imageMode" class="space-y-4">
                     <label for="imageUpload" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-500">
                         <div id="uploadPrompt" class="flex flex-col items-center justify-center pt-5 pb-6">
                             <i data-lucide="upload-cloud" class="w-10 h-10 mb-3 text-gray-400"></i>
@@ -78,16 +101,44 @@
                         <input id="imageUpload" type="file" class="hidden" accept="image/png, image/jpeg, image/svg+xml">
                     </label>
                 </div>
+                
+                <div id="emojiMode" class="space-y-4 hidden">
+                    <label for="emojiInput" class="block text-sm font-medium mb-2">Paste or Type a Single Emoji (e.g., 🚀)</label>
+                    <input type="text" id="emojiInput" maxlength="2" placeholder="✨" class="text-6xl text-center w-full p-3 border rounded-lg dark:bg-gray-700" style="height: 192px;">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Using a single character ensures the best quality result.</p>
+                </div>
+
+                <div id="iconMode" class="space-y-4 hidden">
+                    <label for="iconSearch" class="block text-sm font-medium mb-2">Search Lucide Icons</label>
+                    <input type="text" id="iconSearch" placeholder="e.g., search, user, feather" class="w-full p-2 border rounded-lg dark:bg-gray-700">
+                    <div id="iconGrid" class="grid grid-cols-6 gap-2 p-3 border rounded-lg bg-gray-50 dark:bg-gray-900/50 max-h-48 overflow-y-auto">
+                        <p class="col-span-6 text-center text-gray-500">Loading icons...</p>
+                    </div>
+                    <div id="selectedIconPreview" class="text-center text-sm font-semibold h-6 mt-3">No icon selected.</div>
+                    
+                    <p class="text-xs text-gray-500 dark:text-gray-300 text-center mt-3">
+                        <i data-lucide="info" class="w-3 h-3 inline mr-1"></i> Tip: If searching fails, find the exact name at 
+                        <span id="lucideLink" class="text-tt-primary hover:underline cursor-pointer">lucide.dev</span> and paste it into the search bar.
+                    </p>
+                </div>
+
                 <div>
-                    <h2 class="text-xl font-bold mb-3">2. Customize (Optional)</h2>
+                    <h2 class="text-xl font-bold mb-3">2. Customize Colors</h2>
                      <div class="space-y-4">
-                        <label for="bgColor" class="block text-sm font-medium">Background Color (for padding)</label>
+                        <label for="fgColor" class="block text-sm font-medium" id="fgColorLabel">Icon Color / Foreground</label>
+                        <div class="flex items-center gap-3">
+                            <input type="color" id="fgColor" value="#000000" class="p-1 h-10 w-10 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700">
+                            <input type="text" id="fgColorHex" value="#000000" class="p-2 w-full border rounded-lg font-mono dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+
+                        <label for="bgColor" class="block text-sm font-medium">Background Color (Padding)</label>
                         <div class="flex items-center gap-3">
                             <input type="color" id="bgColor" value="#FFFFFF" class="p-1 h-10 w-10 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700">
                             <input type="text" id="bgColorHex" value="#FFFFFF" class="p-2 w-full border rounded-lg font-mono dark:bg-gray-700 dark:border-gray-600">
                         </div>
                     </div>
                 </div>
+
                  <div>
                     <h2 class="text-xl font-bold mb-3">3. Generate Your Kit</h2>
                     <button id="generateBtn" disabled class="w-full flex items-center justify-center gap-2 bg-tt-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
@@ -132,48 +183,158 @@
             </div>
         </div>
         
-        <section class="mt-10 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
-            <h2 class="text-2xl font-bold mb-4 border-b pb-2 dark:border-gray-700">Why a Full Favicon Kit?</h2>
-            <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
-                <p>A single `favicon.ico` is no longer enough. Modern websites need to support a wide range of devices and platforms, from browser tabs to mobile home screens. A complete kit ensures your brand looks crisp and professional everywhere.</p>
-                <ul class="list-disc list-inside space-y-1 pl-2">
-                    <li><strong>Apple Touch Icon:</strong> For when users add your site to their iPhone or iPad home screen.</li>
-                    <li><strong>Android/Chrome Icons:</strong> Used for home screen shortcuts and Progressive Web Apps (PWAs).</li>
-                    <li><strong>Web App Manifest:</strong> A simple JSON file that gives the browser information about your web app.</li>
+        <section class="mt-10 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">How to Use the Favicon Generator</h2>
+                <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                    <li><b>Select Source:</b> Choose between uploading a high-res image, typing a single emoji, or searching for a Lucide icon.</li>
+                    <li><b>Customize Colors:</b> Set the foreground color (for icons/emojis) and the background color (for padding/manifest).</li>
+                    <li><b>Generate Kit:</b> Click the "Generate & Download Kit" button. A `.zip` file containing all your icons and the manifest file will be downloaded.</li>
+                    <li><b>Implement:</b> Unzip the file and place the contents in the root directory of your website. Copy the provided HTML code and paste it into the `<head>` section of your website's pages.</li>
+                </ol>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Why a Full Favicon Kit Matters</h2>
+                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">A single `favicon.ico` is no longer enough for the modern web. To ensure your brand looks crisp and professional everywhere, you need a comprehensive set of icons for different platforms, browsers, and devices.</p>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><b>Browser Tabs:</b> Standard 16x16 and 32x32 icons for crystal-clear display on all screens.</li>
+                    <li><b>Apple Devices:</b> An `apple-touch-icon.png` is essential for users who add your website to their iPhone or iPad home screen.</li>
+                    <li><b>Android & Chrome:</b> High-resolution icons and a `site.webmanifest` file are crucial for home screen shortcuts and creating a native-like Progressive Web App (PWA) experience.</li>
+                    <li><b>Windows Tiles:</b> While not generated in this basic kit, a full setup often includes icons for Windows Start Menu pinning.</li>
                 </ul>
+            </div>
+             <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is the best format for the source image?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">For the best results, use a vector format like <strong>SVG</strong>. If you don't have an SVG, a high-resolution <strong>PNG</strong> (at least 512x512 pixels) with a transparent background is the next best choice. This allows the generator to scale the image down without losing quality.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is a `site.webmanifest` file?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The `site.webmanifest` is a JSON file that tells the browser about your web application and how it should behave when 'installed' on a user's mobile or desktop device. It includes information like the app's name, icons, start URL, and theme colors, which are essential for Progressive Web Apps (PWAs).</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Where do I upload the generated files?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">For best practice, all the generated files (e.g., `favicon.ico`, `apple-touch-icon.png`, `site.webmanifest`, etc.) should be placed in the <strong>root directory</strong> of your website. This is the main folder, the same place your `index.html` file usually lives.</p></details>
+                </div>
             </div>
         </section>
     </main>
     
+    <canvas id="hidden-canvas" class="hidden"></canvas>
+    
     <script src="../javascript/globals.js" defer></script>
     <script>
+    // Debounce timer for the icon search listener
+    let debounceTimer;
+
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof window.injectLayout === 'function') {
             window.injectLayout(false);
         }
 
-        // UI Elements
-        const imageUpload = document.getElementById('imageUpload');
-        const uploadPrompt = document.getElementById('uploadPrompt');
-        const imagePreview = document.getElementById('imagePreview');
-        const bgColorPicker = document.getElementById('bgColor');
-        const bgColorHex = document.getElementById('bgColorHex');
-        const generateBtn = document.getElementById('generateBtn');
-        const resultsPanel = document.getElementById('resultsPanel');
-        const htmlCodeBlock = document.getElementById('htmlCodeBlock');
-        const copyBtn = document.getElementById('copyBtn');
-        const copyBtnText = document.getElementById('copyBtnText');
-        const statusText = document.getElementById('statusText');
-        const preview16 = document.getElementById('preview16').getContext('2d');
-        const preview32 = document.getElementById('preview32').getContext('2d');
-        let sourceImage = null;
+        // --- UI Elements ---
+        const ui = {
+            imageUpload: document.getElementById('imageUpload'), uploadPrompt: document.getElementById('uploadPrompt'),
+            imagePreview: document.getElementById('imagePreview'),
+            bgColorPicker: document.getElementById('bgColor'), bgColorHex: document.getElementById('bgColorHex'),
+            fgColorPicker: document.getElementById('fgColor'), fgColorHex: document.getElementById('fgColorHex'),
+            generateBtn: document.getElementById('generateBtn'), resultsPanel: document.getElementById('resultsPanel'),
+            htmlCodeBlock: document.getElementById('htmlCodeBlock'), copyBtn: document.getElementById('copyBtn'),
+            copyBtnText: document.getElementById('copyBtnText'), statusText: document.getElementById('statusText'),
+            preview16: document.getElementById('preview16').getContext('2d'),
+            preview32: document.getElementById('preview32').getContext('2d'),
+            
+            // New UI elements
+            modeRadios: document.querySelectorAll('input[name="sourceMode"]'),
+            imageMode: document.getElementById('imageMode'), emojiMode: document.getElementById('emojiMode'), iconMode: document.getElementById('iconMode'),
+            emojiInput: document.getElementById('emojiInput'), iconSearch: document.getElementById('iconSearch'),
+            iconGrid: document.getElementById('iconGrid'), selectedIconPreview: document.getElementById('selectedIconPreview'),
+            lucideLink: document.getElementById('lucideLink') // Get the new span element
+        };
+        const hiddenCanvas = document.createElement('canvas');
+        
+        let sourceImage = null; // Used for image mode
+        let selectedIcon = null; // Used for icon mode
+        let activeMode = 'image';
 
-        // Event Listeners
-        imageUpload.addEventListener('change', handleImageUpload);
-        bgColorPicker.addEventListener('input', () => { bgColorHex.value = bgColorPicker.value.toUpperCase(); });
-        bgColorHex.addEventListener('input', () => { bgColorPicker.value = bgColorHex.value; });
-        generateBtn.addEventListener('click', generateFaviconKit);
-        copyBtn.addEventListener('click', copyHtmlCode);
+        // --- Core Drawing Functions (Unchanged) ---
+
+        /**
+         * Draws the selected source content (Image, Emoji, or Icon) onto the given canvas context.
+         * This function is the core logic for all favicon generation steps.
+         */
+        function drawSourceToCanvas(ctx, size) {
+            const bgColor = ui.bgColorPicker.value;
+            const fgColor = ui.fgColorPicker.value;
+
+            // 1. Draw Background
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, size, size);
+
+            if (activeMode === 'image' && sourceImage) {
+                // 2. Image Mode: Draw the image, scaled to the canvas size
+                // This mode assumes the uploaded image is the source.
+                ctx.drawImage(sourceImage, 0, 0, size, size);
+            } 
+            
+            else if (activeMode === 'emoji' && ui.emojiInput.value) {
+                // 3. Emoji Mode: Draw the emoji in the center
+                const emoji = ui.emojiInput.value.trim();
+                ctx.font = `${size * 0.8}px sans-serif`; // Font size relative to canvas size
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(emoji, size / 2, size / 2);
+            } 
+            
+            else if (activeMode === 'icon' && selectedIcon) {
+                // 4. Icon Mode: Draw the Lucide icon
+                // Lucide icons are SVGs. We'll convert the SVG to a Data URL and draw it.
+                // NOTE: This relies on lucide.createIcons being available globally.
+                const iconSVG = lucide.icons[selectedIcon].toSvg({'width': size * 0.8, 'height': size * 0.8, 'stroke': fgColor});
+                
+                const img = new Image();
+                const svgBlob = new Blob([iconSVG], {type: 'image/svg+xml;charset=utf-8'});
+                const url = URL.createObjectURL(svgBlob);
+
+                // Use a nested approach to ensure the image is loaded before drawing
+                return new Promise(resolve => {
+                    img.onload = () => {
+                        // Draw the icon centered
+                        const padding = size * 0.1;
+                        ctx.drawImage(img, padding, padding, size * 0.8, size * 0.8);
+                        URL.revokeObjectURL(url);
+                        resolve();
+                    };
+                    img.src = url;
+                });
+            }
+            // Return resolved promise if it's not the icon mode (synchronous drawing)
+            return Promise.resolve(); 
+        }
+
+        /**
+         * Updates the small live preview canvases.
+         */
+        async function updatePreviews() {
+            // Clear existing previews
+            ui.preview16.clearRect(0, 0, 16, 16);
+            ui.preview32.clearRect(0, 0, 16, 16); // Only draw on 16x16 area
+            
+            // Draw on hidden canvas first, then copy to previews
+            hiddenCanvas.width = 32;
+            hiddenCanvas.height = 32;
+            const ctx = hiddenCanvas.getContext('2d');
+
+            // Wait for the asynchronous icon drawing if needed
+            await drawSourceToCanvas(ctx, 32); 
+
+            // Copy to the smaller preview contexts
+            ui.preview16.drawImage(hiddenCanvas, 0, 0, 16, 16);
+            ui.preview32.drawImage(hiddenCanvas, 0, 0, 16, 16);
+
+            // Re-enable/disable button based on current source availability
+            let canGenerate = false;
+            if (activeMode === 'image') canGenerate = !!sourceImage;
+            else if (activeMode === 'emoji') canGenerate = !!ui.emojiInput.value.trim();
+            else if (activeMode === 'icon') canGenerate = !!selectedIcon;
+            ui.generateBtn.disabled = !canGenerate;
+        }
+
+        // --- Handlers (Unchanged) ---
 
         function handleImageUpload(event) {
             const file = event.target.files[0];
@@ -182,12 +343,10 @@
                 reader.onload = (e) => {
                     sourceImage = new Image();
                     sourceImage.onload = () => {
-                        imagePreview.src = e.target.result;
-                        imagePreview.classList.remove('hidden');
-                        uploadPrompt.classList.add('hidden');
-                        generateBtn.disabled = false;
-                        drawPreview(sourceImage, preview16, 16);
-                        drawPreview(sourceImage, preview32, 16);
+                        ui.imagePreview.src = e.target.result;
+                        ui.imagePreview.classList.remove('hidden');
+                        ui.uploadPrompt.classList.add('hidden');
+                        updatePreviews();
                     };
                     sourceImage.src = e.target.result;
                 };
@@ -195,33 +354,84 @@
             }
         }
         
-        function drawPreview(img, ctx, size) {
-            const bgColor = bgColorPicker.value;
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(0, 0, size, size);
-            ctx.drawImage(img, 0, 0, size, size);
+        /**
+         * UPDATED: Robust loading and searching logic.
+         */
+        function updateIconGrid(query = '') {
+            if (!window.lucide || !lucide.icons) {
+                // If lucide isn't loaded yet, retry logic
+                setTimeout(() => updateIconGrid(query), 100);
+                return;
+            }
+
+            ui.iconGrid.innerHTML = '';
+            let count = 0;
+            const fgColor = ui.fgColorPicker.value;
+            const lowerQuery = query.toLowerCase();
+
+            for (const name in lucide.icons) {
+                // Check if the icon name contains the lowercase query
+                if (query === '' || name.includes(lowerQuery)) { 
+                    if (count++ > 50) break; // Limit grid size
+                    const iconEl = document.createElement('div');
+                    iconEl.className = 'p-1 rounded-md cursor-pointer hover:bg-tt-primary/20 transition text-center';
+                    
+                    // Create the Lucide icon SVG element
+                    const iconSVG = lucide.icons[name].toSvg({'width': 24, 'height': 24, 'stroke': fgColor});
+                    
+                    iconEl.innerHTML = iconSVG;
+                    iconEl.onclick = () => selectIcon(name);
+                    ui.iconGrid.appendChild(iconEl);
+                }
+            }
+            if (count === 0) ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">No icons found for "${query}".</p>`;
+        }
+
+        function selectIcon(name) {
+            selectedIcon = name;
+            ui.selectedIconPreview.innerHTML = `Selected: <strong>${name}</strong>`;
+            updatePreviews();
+            ui.iconGrid.scrollTop = 0; 
+        }
+
+        function switchMode(mode) {
+            activeMode = mode;
+            [ui.imageMode, ui.emojiMode, ui.iconMode].forEach(el => el.classList.add('hidden'));
+
+            // Reset image visibility (only needed for image mode)
+            ui.imagePreview.classList.add('hidden');
+            ui.uploadPrompt.classList.remove('hidden');
+
+            if (mode === 'image') {
+                ui.imageMode.classList.remove('hidden');
+            } else if (mode === 'emoji') {
+                ui.emojiMode.classList.remove('hidden');
+            } else if (mode === 'icon') {
+                ui.iconMode.classList.remove('hidden');
+                updateIconGrid(ui.iconSearch.value); // Re-render grid when switching to icon mode
+            }
+            updatePreviews();
         }
 
         async function generateFaviconKit() {
-            if (!sourceImage) {
-                alert('Please upload an image first.');
-                return;
-            }
-            statusText.textContent = 'Generating... this may take a moment.';
-            generateBtn.disabled = true;
+            if (ui.generateBtn.disabled) return;
+            
+            ui.statusText.textContent = 'Generating... this may take a moment.';
+            ui.generateBtn.disabled = true;
 
             const zip = new JSZip();
             const sizes = [16, 32, 48, 180, 192, 512];
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            const bgColor = bgColorPicker.value;
+            const bgColor = ui.bgColorPicker.value;
 
             for (const size of sizes) {
                 canvas.width = size;
                 canvas.height = size;
-                ctx.fillStyle = bgColor;
-                ctx.fillRect(0, 0, size, size);
-                ctx.drawImage(sourceImage, 0, 0, size, size);
+                
+                // Draw source content onto the canvas
+                await drawSourceToCanvas(ctx, size); 
+
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
                 
                 let filename;
@@ -233,11 +443,8 @@
             }
             
             // Generate favicon.ico (simple version with just 32x32)
-            // Note: True multi-size .ico generation is complex in browser JS.
-            // This provides a functional fallback.
             canvas.width = 32; canvas.height = 32;
-            ctx.fillStyle = bgColor; ctx.fillRect(0, 0, 32, 32);
-            ctx.drawImage(sourceImage, 0, 0, 32, 32);
+            await drawSourceToCanvas(ctx, 32);
             const icoBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
             zip.file('favicon.ico', icoBlob);
 
@@ -250,15 +457,15 @@
                     { src: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
                     { src: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" }
                 ],
-                theme_color: "#ffffff",
-                background_color: "#ffffff",
+                theme_color: bgColor,
+                background_color: bgColor,
                 display: "standalone"
             };
             zip.file('site.webmanifest', JSON.stringify(manifest, null, 2));
 
             // Update UI and trigger download
             updateHtmlCodeBlock();
-            resultsPanel.classList.remove('hidden');
+            ui.resultsPanel.classList.remove('hidden');
             
             const zipBlob = await zip.generateAsync({ type: 'blob' });
             const link = document.createElement('a');
@@ -266,8 +473,8 @@
             link.download = 'favicon_kit.zip';
             link.click();
 
-            statusText.textContent = 'Download started!';
-            generateBtn.disabled = false;
+            ui.statusText.textContent = 'Download started! Files added to zip.';
+            ui.generateBtn.disabled = false;
         }
         
         function updateHtmlCodeBlock() {
@@ -275,16 +482,60 @@
 &lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"&gt;
 &lt;link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"&gt;
 &lt;link rel="manifest" href="/site.webmanifest"&gt;`;
-            htmlCodeBlock.innerHTML = code;
+            ui.htmlCodeBlock.innerHTML = code;
         }
 
         function copyHtmlCode() {
-            const codeToCopy = htmlCodeBlock.innerText;
-            navigator.clipboard.writeText(codeToCopy).then(() => {
-                copyBtnText.textContent = 'Copied!';
-                setTimeout(() => { copyBtnText.textContent = 'Copy'; }, 2000);
+            navigator.clipboard.writeText(ui.htmlCodeBlock.innerText).then(() => {
+                ui.copyBtnText.textContent = 'Copied!';
+                setTimeout(() => { ui.copyBtnText.textContent = 'Copy'; }, 2000);
             });
         }
+        
+        // --- Event Listeners and Initialization ---
+
+        // Local variable to hold the debounce timeout ID
+        let inputDebounceTimer;
+
+        // Click handler for the custom link span
+        ui.lucideLink.addEventListener('click', () => {
+            window.open('https://lucide.dev', '_blank');
+        });
+
+
+        // Input Listeners
+        ui.imageUpload.addEventListener('change', handleImageUpload);
+        ui.emojiInput.addEventListener('input', () => {
+            clearTimeout(inputDebounceTimer);
+            inputDebounceTimer = setTimeout(updatePreviews, 200);
+        });
+        
+        // NEW ROBUST DEBOUNCE FOR ICON SEARCH
+        ui.iconSearch.addEventListener('input', () => {
+            clearTimeout(inputDebounceTimer);
+            inputDebounceTimer = setTimeout(() => {
+                updateIconGrid(ui.iconSearch.value);
+            }, 300);
+        });
+        
+        // Color Listeners (Fast updates for preview)
+        const colorUpdateHandler = () => {
+            clearTimeout(inputDebounceTimer);
+            inputDebounceTimer = setTimeout(updatePreviews, 50);
+        }
+        ui.bgColorPicker.addEventListener('input', () => { ui.bgColorHex.value = ui.bgColorPicker.value.toUpperCase(); colorUpdateHandler(); });
+        ui.bgColorHex.addEventListener('input', () => { ui.bgColorPicker.value = ui.bgColorHex.value; colorUpdateHandler(); });
+        ui.fgColorPicker.addEventListener('input', () => { ui.fgColorHex.value = ui.fgColorPicker.value.toUpperCase(); colorUpdateHandler(); });
+        ui.fgColorHex.addEventListener('input', () => { ui.fgColorPicker.value = ui.fgColorHex.value; colorUpdateHandler(); });
+
+        // Mode and Button Listeners
+        ui.modeRadios.forEach(radio => radio.addEventListener('change', () => switchMode(radio.value)));
+        ui.generateBtn.addEventListener('click', generateFaviconKit);
+        ui.copyBtn.addEventListener('click', copyHtmlCode);
+        
+        // Initial setup
+        switchMode('image');
+        updateIconGrid('star');
     });
     </script>
 </body>

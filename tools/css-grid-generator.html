@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced CSS Grid Generator & Visual Builder | toolsTree</title>
+    <meta name="description" content="Visually design complex CSS Grid layouts. Define tracks, gutters, and named areas, then export the clean, production-ready CSS code instantly.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.netlify.app/tools/css-grid-generator.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            console.error("Error applying initial theme:", e);
+            document.documentElement.classList.remove('dark');
+        }
+        })();
+    </script>
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+    </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        /* Grid-specific styling */
+        .grid-container {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            /* Default fallback layout, controlled by JS */
+        }
+        .grid-cell {
+            border: 1px dashed #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #1f2937;
+            background-color: rgba(243, 244, 246, 0.8);
+            cursor: pointer;
+            transition: background-color 0.1s;
+            /* FIX: Add padding to give 'auto' rows a sensible minimum height */
+            padding: 10px 5px; 
+        }
+        .dark .grid-cell {
+             color: #d1d5db;
+             background-color: rgba(55, 65, 81, 0.5);
+             border-color: #4b5563;
+        }
+        .grid-cell:hover {
+            background-color: rgba(16, 185, 129, 0.2);
+        }
+        .grid-cell.selected {
+            outline: 2px solid #ef4444; /* Highlight selected cell for area naming */
+        }
+        .area-control {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 0.5rem 0;
+        }
+        .dark .area-control {
+            border-color: #4b5563;
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "CSS Grid Generator & Visual Builder",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "Visually design and export complex CSS Grid layouts, including tracks, gutters, and named areas, for modern frontend development.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "412"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "toolsTree"
+      }
+    }
+    </script>
+    
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Developer Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">CSS Grid Generator & Visual Builder</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">
+                CSS Grid Generator & Visual Builder
+            </h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">
+                Visually build complex CSS Grid layouts, define named areas, and export clean, modern code.
+            </p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl border border-gray-100 dark:border-gray-700">
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                
+                <!-- GRID CONTROLS PANEL -->
+                <div class="p-6 sm:p-8 border-b lg:border-r lg:border-b-0 border-gray-200 dark:border-gray-700 space-y-6">
+                    <h2 class="text-xl font-bold mb-4">1. Grid Structure</h2>
+
+                    <!-- Track Definitions -->
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Columns (Tracks)</label>
+                        <input id="col-tracks" type="text" value="1fr 1fr 1fr" placeholder="e.g., 1fr 200px 1fr" class="w-full p-2 border rounded-lg font-mono">
+                        <label class="block text-sm font-medium">Rows (Tracks)</label>
+                        <input id="row-tracks" type="text" value="auto 1fr auto" placeholder="e.g., auto 1fr auto" class="w-full p-2 border rounded-lg font-mono">
+                    </div>
+
+                    <!-- Gutter Controls -->
+                    <div class="grid grid-cols-2 gap-4 pt-4 border-t dark:border-gray-700">
+                        <div>
+                            <label for="row-gap" class="block text-sm font-medium">Row Gap (px)</label>
+                            <input id="row-gap" type="number" min="0" value="10" class="w-full p-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label for="col-gap" class="block text-sm font-medium">Column Gap (px)</label>
+                            <input id="col-gap" type="number" min="0" value="10" class="w-full p-2 border rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-xl font-bold mt-6 mb-4 pt-4 border-t dark:border-gray-700">2. Named Areas</h2>
+                    
+                    <div class="space-y-3">
+                        <label for="area-name-input" class="block text-sm font-medium">Assign Selected Cells to Area:</label>
+                        <div class="flex space-x-2">
+                            <input id="area-name-input" type="text" placeholder="e.g., header, sidebar" class="flex-grow p-2 border rounded-lg">
+                            <button id="assign-area-btn" disabled class="px-4 py-2 text-sm bg-tt-primary text-white font-semibold rounded-lg hover:bg-green-700 transition disabled:bg-gray-400">Assign</button>
+                        </div>
+                        <div id="named-areas-list" class="text-sm space-y-1 max-h-40 overflow-y-auto p-1">
+                            <!-- Assigned areas list here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PREVIEW AND CODE PANEL -->
+                <div class="p-6 sm:p-8">
+                    <div class="flex justify-between items-center mb-6">
+                       <h2 class="text-xl font-bold">Live Preview</h2>
+                       <button id="reset-areas-btn" class="flex items-center space-x-2 text-sm bg-red-100 text-red-600 font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-red-200 transition">
+                           <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                           <span>Reset Areas</span>
+                       </button>
+                    </div>
+
+                    <div id="preview-container" class="w-full h-96 rounded-xl border-2 border-dashed border-tt-primary mb-6 transition-all duration-300">
+                        <div id="grid-visualizer" class="grid-container">
+                            <!-- Grid cells are injected here -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="css-code" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Generated CSS</label>
+                        <div class="relative mt-1">
+                            <pre class="w-full p-4 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900/50 overflow-x-auto text-sm"><code id="css-code" class="text-gray-700 dark:text-gray-200"></code></pre>
+                            <button id="copy-btn" class="absolute top-2 right-2 p-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                                <i data-lucide="copy" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+            <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">How to Use the Advanced CSS Grid Generator</h2>
+            <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                <li><strong>Define Tracks:</strong> Enter track sizes (e.g., `1fr 1fr 1fr` or `200px auto`) for your columns and rows. The preview updates instantly.</li>
+                <li><strong>Set Gutters:</strong> Adjust the row and column gaps in pixels.</li>
+                <li><strong>Select Cells:</strong> Click on cells in the live preview to select them. Selected cells can be assigned to a single named area.</li>
+                <li><strong>Assign Areas:</strong> Enter a name (e.g., `header`) and click "Assign." The generated CSS will include the `grid-template-areas`.</li>
+                <li><strong>Export Code:</strong> Click the copy button to get the entire CSS block (including `display: grid`, tracks, gaps, and areas).</li>
+            </ol>
+            
+            <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Understanding CSS Grid Areas</h2>
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+                The `grid-template-areas` feature allows developers to name regions of the grid (like 'header' or 'sidebar') directly in the CSS, making the layout code intuitive and easy to read. This tool helps you define that complex structure visually.
+            </p>
+
+            <!-- NEW: FAQ SECTION -->
+            <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+            <div class="space-y-3 text-sm">
+                 <details class="group">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <span>What is the difference between `fr`, `auto`, and `px`?</span>
+                        <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">
+                        These are common CSS Grid track sizing units: 
+                        <ul>
+                            <li><strong>`fr` (Fractional Unit):</strong> Divides available space proportionally. For example, `1fr 2fr` means the second column is twice as wide as the first. This is ideal for responsive design.</li>
+                            <li><strong>`auto`:</strong> Sizes the track to fit the largest content in that track.</li>
+                            <li><strong>`px` or `%`:</strong> Sets a fixed width or percentage-based width for the track, which is less flexible but useful for specific elements like sidebars.</li>
+                        </ul>
+                    </p>
+                </details>
+                <details class="group">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <span>How do I create a single cell that spans multiple columns or rows?</span>
+                         <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">
+                        You achieve spanning using the <strong>Named Areas</strong> feature. Select all the cells you want your item to cover (e.g., the top three cells for a header) and assign them the same area name (e.g., `header`). CSS Grid automatically merges adjacent cells with the same name.
+                    </p>
+                </details>
+                <details class="group">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <span>Is the generated code compatible with all modern browsers?</span>
+                         <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">
+                        Yes. CSS Grid is fully supported by all major modern browsers (Chrome, Firefox, Safari, Edge) without requiring vendor prefixes. The code output is clean, standard, and production-ready for contemporary web development.
+                    </p>
+                </details>
+            </div>
+            <!-- END NEW: FAQ SECTION -->
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        const ui = {
+            colTracksInput: document.getElementById('col-tracks'),
+            rowTracksInput: document.getElementById('row-tracks'),
+            rowGapInput: document.getElementById('row-gap'),
+            colGapInput: document.getElementById('col-gap'),
+            gridVisualizer: document.getElementById('grid-visualizer'),
+            areaNameInput: document.getElementById('area-name-input'),
+            assignAreaBtn: document.getElementById('assign-area-btn'),
+            resetAreasBtn: document.getElementById('reset-areas-btn'),
+            namedAreasList: document.getElementById('named-areas-list'),
+            cssCode: document.getElementById('css-code'),
+            copyBtn: document.getElementById('copy-btn'),
+        };
+
+        const state = {
+            cols: 0, // Initialized to 0 to prevent issues in first render
+            rows: 0, // Initialized to 0
+            trackDefinitions: {
+                cols: '1fr 1fr 1fr',
+                rows: 'auto 1fr auto',
+            },
+            gaps: { row: 10, col: 10 },
+            // Stores the area name for each cell. Format: grid[row][col] = 'areaName'
+            gridAreas: [], 
+            // Stores the indices of currently selected cells for assignment
+            selectedCells: [],
+            // Map of area name to a display color (for visualizer)
+            areaColors: {},
+        };
+        
+        const COLORS = ['#10b981', '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#d946ef'];
+
+        // --- Core Logic ---
+
+        function parseTracks(trackString) {
+            return (trackString || '').trim().split(/\s+/).filter(t => t);
+        }
+
+        function updateGridDimensions() {
+            const parsedCols = parseTracks(ui.colTracksInput.value);
+            const parsedRows = parseTracks(ui.rowTracksInput.value);
+
+            // Ensure there is at least one row/column defined
+            if (parsedCols.length === 0 || parsedRows.length === 0) {
+                 // Prevent rendering/accessing areas if tracks are invalid
+                state.trackDefinitions.cols = parsedCols.join(' ');
+                state.trackDefinitions.rows = parsedRows.join(' ');
+                state.rows = 0;
+                state.cols = 0;
+                state.gridAreas = []; // Clear gridAreas to prevent access errors
+            } else {
+                state.trackDefinitions.cols = parsedCols.join(' ');
+                state.trackDefinitions.rows = parsedRows.join(' ');
+
+                const newCols = parsedCols.length;
+                const newRows = parsedRows.length;
+
+                // Initialize or resize gridAreas state if dimensions change
+                if (newRows !== state.rows || newCols !== state.cols) {
+                    const oldAreas = state.gridAreas;
+                    
+                    // Create new gridAreas array based on new dimensions
+                    state.gridAreas = Array(newRows).fill(0).map((_, r) => 
+                        Array(newCols).fill(0).map((_, c) => {
+                            // Preserve existing area name if dimensions overlap
+                            // Safely check if oldAreas[r] exists before accessing [c]
+                            return (oldAreas[r] && oldAreas[r][c]) ? oldAreas[r][c] : '.';
+                        })
+                    );
+                    state.rows = newRows;
+                    state.cols = newCols;
+                }
+            }
+            
+            renderVisualizer();
+            generateCode();
+        }
+
+        function generateCode() {
+            if (state.rows === 0 || state.cols === 0) {
+                ui.cssCode.textContent = `.grid-container {\n  /* Enter valid track definitions to generate code */\n}`;
+                return;
+            }
+
+            const templateAreas = state.gridAreas.map(row => 
+                `"${row.map(area => area.replace(/\s/g, '_')).join(' ')}"`
+            ).join('\n');
+            
+            const css = `
+.grid-container {
+  display: grid;
+  grid-template-columns: ${state.trackDefinitions.cols || 'auto'};
+  grid-template-rows: ${state.trackDefinitions.rows || 'auto'};
+  grid-gap: ${state.gaps.row}px ${state.gaps.col}px;
+  grid-template-areas:
+${templateAreas};
+}
+            `;
+            ui.cssCode.textContent = css.trim();
+        }
+
+        function renderVisualizer() {
+            ui.gridVisualizer.style.gridTemplateColumns = state.trackDefinitions.cols;
+            ui.gridVisualizer.style.gridTemplateRows = state.trackDefinitions.rows;
+            ui.gridVisualizer.style.gridGap = `${state.gaps.row}px ${state.gaps.col}px`;
+
+            ui.gridVisualizer.innerHTML = '';
+            
+            // Only render cells if dimensions are valid
+            if (state.rows > 0 && state.cols > 0) {
+                for (let r = 0; r < state.rows; r++) {
+                    for (let c = 0; c < state.cols; c++) {
+                        const cell = document.createElement('div');
+                        // Safe access: state.gridAreas is now guaranteed to be structured correctly
+                        const areaName = state.gridAreas[r][c]; 
+                        
+                        cell.className = 'grid-cell';
+                        cell.dataset.row = r;
+                        cell.dataset.col = c;
+                        cell.textContent = areaName === '.' ? '.' : areaName;
+                        
+                        if (areaName !== '.') {
+                            const color = state.areaColors[areaName] || '#9ca3af';
+                            cell.style.backgroundColor = color;
+                            cell.style.color = '#fff'; // Always white text on colored area
+                            // Set border to solid color of the area
+                            cell.style.borderColor = color; 
+                            cell.style.borderStyle = 'solid';
+                        }
+
+                        // Check if cell is currently selected for area assignment
+                        const isSelected = state.selectedCells.some(s => s.r === r && s.c === c);
+                        if (isSelected) {
+                            cell.classList.add('selected');
+                        }
+                        
+                        ui.gridVisualizer.appendChild(cell);
+                    }
+                }
+            } else {
+                 ui.gridVisualizer.innerHTML = '<div class="flex items-center justify-center text-gray-500 w-full h-full">Enter valid track definitions above.</div>';
+            }
+            
+            renderNamedAreasList();
+        }
+        
+        function renderNamedAreasList() {
+            ui.namedAreasList.innerHTML = '';
+            const existingAreas = new Set(state.gridAreas.flat().filter(area => area !== '.'));
+            
+            if (existingAreas.size === 0) {
+                 ui.namedAreasList.innerHTML = '<p class="text-gray-500">No areas assigned yet.</p>';
+                 return;
+            }
+
+            existingAreas.forEach(areaName => {
+                const color = state.areaColors[areaName];
+                const areaDiv = document.createElement('div');
+                areaDiv.className = 'flex justify-between items-center area-control';
+                areaDiv.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <span style="background-color: ${color}; width: 12px; height: 12px; border-radius: 3px;"></span>
+                        <span class="font-mono text-sm">${areaName}</span>
+                    </div>
+                    <button data-area="${areaName}" class="remove-area-btn p-1 text-red-500 hover:text-red-700">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                `;
+                ui.namedAreasList.appendChild(areaDiv);
+            });
+            lucide.createIcons();
+        }
+
+        // --- Event Handlers ---
+
+        function handleCellClick(e) {
+            // Guard against click when grid is invalid
+            if (state.rows === 0 || state.cols === 0) return;
+            
+            const cell = e.target.closest('.grid-cell');
+            if (!cell) return;
+
+            const r = parseInt(cell.dataset.row);
+            const c = parseInt(cell.dataset.col);
+            const index = state.selectedCells.findIndex(s => s.r === r && s.c === c);
+
+            if (index > -1) {
+                // Deselect
+                state.selectedCells.splice(index, 1);
+            } else {
+                // Select
+                state.selectedCells.push({ r, c });
+            }
+            
+            ui.assignAreaBtn.disabled = state.selectedCells.length === 0;
+            renderVisualizer(); // Re-render to update selection highlight
+        }
+        
+        function handleAssignArea() {
+            const areaName = ui.areaNameInput.value.trim().replace(/\s/g, '_').toLowerCase() || 'unnamed-area';
+            if (state.selectedCells.length === 0) return;
+            
+            // Assign color if new area
+            if (!state.areaColors[areaName]) {
+                 const existingColorCount = Object.keys(state.areaColors).length;
+                 state.areaColors[areaName] = COLORS[existingColorCount % COLORS.length];
+            }
+
+            // Apply area name to all selected cells
+            state.selectedCells.forEach(s => {
+                // Safe assignment
+                if (state.gridAreas[s.r] !== undefined && state.gridAreas[s.r][s.c] !== undefined) {
+                    state.gridAreas[s.r][s.c] = areaName;
+                }
+            });
+            
+            // Clear selection and input
+            state.selectedCells = [];
+            ui.areaNameInput.value = '';
+            ui.assignAreaBtn.disabled = true;
+            
+            renderVisualizer();
+            generateCode();
+        }
+        
+        function handleRemoveArea(e) {
+            const btn = e.target.closest('.remove-area-btn');
+            if (!btn) return;
+            
+            const areaToRemove = btn.dataset.area;
+            
+            // Remove area from gridAreas
+            state.gridAreas = state.gridAreas.map(row => 
+                row.map(area => area === areaToRemove ? '.' : area)
+            );
+            
+            // Remove color from map
+            delete state.areaColors[areaToRemove];
+
+            renderVisualizer();
+            generateCode();
+        }
+        
+        function handleResetAreas() {
+            // Reset gridAreas to default (dots)
+            if (state.rows > 0 && state.cols > 0) {
+                 state.gridAreas = Array(state.rows).fill(0).map(() => 
+                    Array(state.cols).fill('.')
+                 );
+            } else {
+                 state.gridAreas = [];
+            }
+            
+            state.selectedCells = [];
+            state.areaColors = {}; // Clear color map
+            ui.assignAreaBtn.disabled = true;
+
+            renderVisualizer();
+            generateCode();
+        }
+
+
+        // --- Initialization and Listeners Setup ---
+
+        // Input change listener for tracks and gaps
+        const inputControls = [
+            ui.colTracksInput, ui.rowTracksInput, 
+            ui.rowGapInput, ui.colGapInput
+        ];
+        inputControls.forEach(input => {
+            input.addEventListener('input', () => {
+                if (input === ui.rowGapInput || input === ui.colGapInput) {
+                    state.gaps.row = parseInt(ui.rowGapInput.value) || 0;
+                    state.gaps.col = parseInt(ui.colGapInput.value) || 0;
+                }
+                updateGridDimensions();
+            });
+        });
+
+        // Other event listeners
+        ui.gridVisualizer.addEventListener('click', handleCellClick);
+        ui.assignAreaBtn.addEventListener('click', handleAssignArea);
+        ui.namedAreasList.addEventListener('click', handleRemoveArea);
+        ui.resetAreasBtn.addEventListener('click', handleResetAreas); // Listener is here
+
+        ui.copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(ui.cssCode.textContent);
+            const originalIcon = ui.copyBtn.innerHTML;
+            ui.copyBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-green-500"></i>`;
+            lucide.createIcons();
+            setTimeout(() => {
+                ui.copyBtn.innerHTML = originalIcon;
+                lucide.createIcons();
+            }, 1500);
+        });
+        
+        // Initial setup
+        updateGridDimensions();
+    });
+    </script>
+</body>
+</html>

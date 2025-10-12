@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced JWT Debugger & Verifier (HS256/384/512) | toolsTree</title>
+    <title>JWT Debugger & Verifier (HS256/384/512) | toolsTree</title>
     <meta name="description" content="Decode, verify, and debug JSON Web Tokens (JWT) instantly. Paste a token to view the header and payload, and provide a secret to verify the signature against HS256, HS384, and HS512 algorithms.">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -12,7 +12,6 @@
     <link rel="canonical" href="https://toolstree.netlify.app/tools/jwt-debugger.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -33,7 +32,6 @@
     </script>
     <script> window.GLOBAL_ROOT_PATH = '../'; </script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
-    <!-- Crypto library for signature verification -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     
     <style>
@@ -41,26 +39,13 @@
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
         .dark textarea, .dark input { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
         #encodedJwt { font-family: 'Roboto Mono', monospace; min-height: 250px; }
-        .token-header { color: #db2777; } /* pink-600 */
-        .token-payload { color: #8b5cf6; } /* violet-500 */
-        .token-signature { color: #2563eb; } /* blue-600 */
-        .token-dot { color: #9ca3af; } /* gray-400 */
-
-        /* --- BUG 1 FIX: Hide original textarea text --- */
-        #encodedJwt {
-            color: transparent; /* Make the actual text invisible */
-            caret-color: #111827; /* Keep the caret visible in light mode */
-        }
-        .dark #encodedJwt {
-            caret-color: #f3f4f6; /* Keep the caret visible in dark mode */
-        }
     </style>
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "Advanced JWT Debugger & Verifier",
+      "name": "JWT Debugger & Verifier",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
       "description": "Decode, verify, and debug JSON Web Tokens. Supports HS256, HS384, and HS512 signature verification.",
@@ -81,20 +66,23 @@
         </nav>
         
         <section class="mb-8 text-center">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced JWT Debugger & Verifier</h1>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">JWT Debugger & Verifier</h1>
             <p class="text-base text-gray-600 dark:text-gray-300">Decode and verify JSON Web Tokens in real-time.</p>
         </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Left Panel: Encoded Token -->
             <div class="space-y-4">
                  <label for="encodedJwt" class="block text-lg font-semibold">Encoded Token</label>
-                 <div id="jwt-container" class="relative">
-                    <textarea id="encodedJwt" placeholder="Paste your JWT here..." class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-tt-primary transition leading-relaxed"></textarea>
-                    <div id="jwt-overlay" class="absolute top-0 left-0 w-full h-full p-4 pointer-events-none whitespace-pre-wrap overflow-hidden leading-relaxed font-mono"></div>
-                 </div>
+                 <textarea id="encodedJwt" placeholder="Paste your JWT here..." class="w-full p-4 border rounded-lg transition leading-relaxed font-mono"></textarea>
+                 <div class="mt-4 flex flex-wrap gap-3">
+                    <button id="loadExampleBtn" class="flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-300 flex-grow sm:flex-grow-0">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i><span>Load Example</span>
+                    </button>
+                    <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
+                    </button>
+                </div>
             </div>
-            <!-- Right Panel: Decoded Data & Verification -->
             <div class="space-y-6">
                 <div>
                     <label class="block text-lg font-semibold mb-2">Decoded Header</label>
@@ -117,7 +105,6 @@
             </div>
         </div>
 
-        <!-- BUG 2 FIX: ADDED COMMON INFORMATIONAL SECTION -->
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">About JWT (JSON Web Token)</h2>
@@ -147,21 +134,20 @@
 
         const ui = {
             encodedJwt: document.getElementById('encodedJwt'),
-            jwtOverlay: document.getElementById('jwt-overlay'),
             decodedHeader: document.getElementById('decodedHeader'),
             decodedPayload: document.getElementById('decodedPayload'),
             secret: document.getElementById('secret'),
             signatureStatus: document.getElementById('signatureStatus'),
             statusIcon: document.getElementById('statusIcon'),
             statusText: document.getElementById('statusText'),
+            loadExampleBtn: document.getElementById('loadExampleBtn'),
+            clearInputBtn: document.getElementById('clearInputBtn'),
         };
 
         const exampleJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-        ui.encodedJwt.value = exampleJwt;
         
         const decodeAndVerify = () => {
             const token = ui.encodedJwt.value.trim();
-            colorizeToken(token);
             
             if (!token) {
                 clearOutputs();
@@ -227,18 +213,12 @@
             }
         };
 
-        const colorizeToken = (token) => {
-            const parts = token.split('.');
-            if (parts.length === 3) {
-                ui.jwtOverlay.innerHTML = `<span class="token-header">${parts[0]}</span><span class="token-dot">.</span><span class="token-payload">${parts[1]}</span><span class="token-dot">.</span><span class="token-signature">${parts[2]}</span>`;
-            } else {
-                 ui.jwtOverlay.innerHTML = `<span class="text-gray-500">${token}</span>`;
-            }
-        };
-
         const setError = (message, part = 'all') => {
-            ui.decodedHeader.textContent = (part === 'header' || part === 'all') ? message : ui.decodedHeader.textContent;
-            ui.decodedPayload.textContent = (part === 'payload' || part === 'all') ? message : ui.decodedPayload.textContent;
+            ui.decodedHeader.textContent = (part === 'header' || part === 'all') ? message : '';
+            ui.decodedPayload.textContent = (part === 'payload' || part === 'all') ? message : '';
+            if (part === 'header') ui.decodedPayload.textContent = '';
+            if (part === 'payload') ui.decodedHeader.textContent = JSON.parse(atob(ui.encodedJwt.value.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')));
+
             setStatus('error', 'Invalid Token Structure');
         };
 
@@ -265,13 +245,26 @@
              setStatus('info', 'Enter a secret to verify');
         };
 
+        const loadExample = () => {
+            ui.encodedJwt.value = exampleJwt;
+            decodeAndVerify();
+        };
+
+        const initializeTool = () => {
+            ui.encodedJwt.value = '';
+            ui.secret.value = '';
+            clearOutputs();
+            ui.encodedJwt.focus();
+        };
+
         ui.encodedJwt.addEventListener('input', decodeAndVerify);
         ui.secret.addEventListener('input', verifySignature);
+        ui.loadExampleBtn.addEventListener('click', loadExample);
+        ui.clearInputBtn.addEventListener('click', initializeTool);
         
-        // Initial run
-        decodeAndVerify();
+        // Initialize the tool to a clean state
+        initializeTool();
     });
     </script>
 </body>
 </html>
-

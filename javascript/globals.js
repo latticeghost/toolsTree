@@ -73,6 +73,7 @@ const ALL_TOOLS = [
     { name: "Advanced CSS Gradient Generator", url: "tools/css-gradient-generator.html", category: "Data & Developer", icon: "palette", color: "text-purple-600", description: "Visually create and customize stunning CSS gradients." },
     { name: "Next-Gen Favicon Generator Kit", url: "../tools/favicon-generator.html", category: "Image", icon: "gem", color: "text-blue-500", description: "Create a complete favicon package (ICO, PNG, manifest) from a single image." },
     { name: "JWT Debugger & Verifier", url: "../tools/jwt-debugger.html", category: "Data&Developer", icon: "key-round", color: "text-rose-600", description: "Decode and verify JWTs with HS256/384/512 signature checks." },
+    { name: "CSS Grid Generator & Visual Builder", url: "../tools/css-grid-generator.html", category: "Data&Developer", icon: "layout-grid", color: "text-tt-primary", description: "Visually build complex CSS Grid layouts, named areas, and track definitions." },
 ];
 
 // --- 3. THEME MANAGEMENT LOGIC (FUTURE-PROOF) ---

@@ -12,7 +12,6 @@
     <link rel="canonical" href="https://toolstree.netlify.app/tools/currency-converter.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -108,7 +107,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4">
                     <div class="md:col-span-2"><label for="amount" class="block text-sm font-medium mb-1">Amount</label><input id="amount" class="w-full p-3 border rounded-lg" type="number" value="1" min="0"></div>
                     <div class="md:col-span-1"><label for="fromCurrency" class="block text-sm font-medium mb-1">From</label><select id="fromCurrency" class="w-full p-3 border rounded-lg"></select></div>
-                    <div class="hidden md:block pt-6"><button id="swapBtn" class="p-2 border rounded-full mx-auto block hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="repeat"></i></button></div>
+                    
+                    <div class="hidden md:block pt-6 flex justify-center items-center">
+                        <button id="swapBtn" class="p-4 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-tt-primary/20 transition shadow-lg">
+                            <i data-lucide="arrow-left-right" class="w-6 h-6 stroke-tt-primary"></i>
+                        </button>
+                    </div>
                     <div class="md:col-span-1"><label for="toCurrency" class="block text-sm font-medium mb-1">To</label><select id="toCurrency" class="w-full p-3 border rounded-lg"></select></div>
                 </div>
                 <div id="single-result" class="bg-gray-50 p-6 rounded-xl shadow-inner text-center dark:bg-gray-700 mt-6 border dark:border-gray-600">

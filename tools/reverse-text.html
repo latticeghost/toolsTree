@@ -127,8 +127,12 @@
             </div>
 
             <div class="flex justify-end pt-6 mt-6 border-t dark:border-gray-700 space-x-4">
-                <button id="copyBtn" class="flex items-center space-x-2 text-sm font-semibold text-tt-primary hover:text-tt-secondary transition"><i data-lucide="copy" class="w-4 h-4"></i><span>Copy Result</span></button>
-                <button id="clearBtn" class="flex items-center space-x-2 text-sm font-semibold text-gray-500 hover:text-gray-700 transition"><i data-lucide="file-x" class="w-4 h-4"></i><span>Clear All</span></button>
+                <button id="copyBtn" disabled class="flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg cursor-not-allowed shadow-sm transition">
+                    <i data-lucide="copy" class="w-4 h-4"></i><span>Copy Result</span>
+                </button>
+                <button id="clearBtn" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
+                </button>
             </div>
         </div>
         

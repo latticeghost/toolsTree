@@ -12,7 +12,6 @@
     <link rel="canonical" href="https://toolstree.netlify.app/tools/remove-spaces.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -125,8 +124,12 @@
             </div>
 
             <div class="flex justify-end pt-6 mt-6 border-t dark:border-gray-700 space-x-4">
-                <button id="copyBtn" class="flex items-center space-x-2 text-sm font-semibold text-tt-primary hover:text-tt-secondary transition"><i data-lucide="copy" class="w-4 h-4"></i><span>Copy Result</span></button>
-                <button id="clearBtn" class="flex items-center space-x-2 text-sm font-semibold text-gray-500 hover:text-gray-700 transition"><i data-lucide="file-x" class="w-4 h-4"></i><span>Clear All</span></button>
+                <button id="copyBtn" disabled class="flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg cursor-not-allowed shadow-sm transition">
+                    <i data-lucide="copy" class="w-4 h-4"></i><span>Copy Result</span>
+                </button>
+                <button id="clearBtn" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
+                </button>
             </div>
         </div>
         
@@ -174,6 +177,17 @@
                 clearBtn: document.getElementById('clearBtn'),
             };
 
+            const toggleCopyButton = (enabled) => {
+                ui.copyBtn.disabled = !enabled;
+                if (enabled) {
+                    ui.copyBtn.classList.remove('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
+                    ui.copyBtn.classList.add('bg-tt-primary', 'text-white', 'hover:bg-tt-secondary');
+                } else {
+                    ui.copyBtn.classList.add('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
+                    ui.copyBtn.classList.remove('bg-tt-primary', 'text-white', 'hover:bg-tt-secondary');
+                }
+            };
+
             const updateStats = (textarea, statsDiv) => {
                 const text = textarea.value;
                 const charCount = text.length;
@@ -214,15 +228,26 @@
                 ui.outputText.value = result;
                 updateStats(ui.inputText, ui.inputStats);
                 updateStats(ui.outputText, ui.outputStats);
+                toggleCopyButton(result.length > 0); // New: Enable/Disable copy button
             };
 
             const copyOutput = () => {
+                if (ui.copyBtn.disabled) return; // New: Check if disabled
                 if (!ui.outputText.value) return;
+                
                 navigator.clipboard.writeText(ui.outputText.value).then(() => {
-                    const originalText = ui.copyBtn.innerHTML;
-                    ui.copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Copied!</span>';
+                    const originalHTML = ui.copyBtn.innerHTML;
+                    
+                    // New: Visual feedback from data-converter.html
+                    ui.copyBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Copied!`;
+                    ui.copyBtn.classList.add('!bg-green-500');
                     lucide.createIcons();
-                    setTimeout(() => { ui.copyBtn.innerHTML = originalText; lucide.createIcons(); }, 2000);
+                    
+                    setTimeout(() => { 
+                        ui.copyBtn.innerHTML = originalHTML; 
+                        ui.copyBtn.classList.remove('!bg-green-500');
+                        lucide.createIcons();
+                    }, 2000);
                 });
             };
 
@@ -230,6 +255,7 @@
                 ui.inputText.value = '';
                 cleanText();
                 ui.inputText.focus();
+                toggleCopyButton(false); // New: Ensure button is disabled
             };
 
             // Event Listeners
@@ -241,6 +267,7 @@
             
             // Initial run
             cleanText();
+            toggleCopyButton(false); // Ensure initial state is disabled
         });
     </script>
 </body>

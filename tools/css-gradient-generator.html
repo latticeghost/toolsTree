@@ -12,7 +12,6 @@
     <link rel="canonical" href="https://toolstree.netlify.app/tools/css-gradient-generator.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -272,19 +271,33 @@
 
         function handleColorChange(e) {
             const index = parseInt(e.target.dataset.index);
-            let newColor = e.target.value;
-            // Basic hex validation
-            if (/^#([0-9A-F]{3}){1,2}$/i.test(newColor)) {
-                 state.colors[index].color = newColor;
-                 renderColorStops();
-                 updateGradient();
+            const newColor = e.target.value;
+            const stopDiv = e.target.closest('.flex.items-center');
+
+            if (e.target.matches('.hex-input')) {
+                // Only update if the hex code is valid
+                if (!/^#([0-9A-F]{3}){1,2}$/i.test(newColor)) return; 
+                stopDiv.querySelector('.color-picker').value = newColor;
+            } else { // The change came from the color picker
+                stopDiv.querySelector('.hex-input').value = newColor.toUpperCase();
             }
+
+            state.colors[index].color = newColor;
+            updateGradient();
         }
         
         function handlePositionChange(e) {
             const index = parseInt(e.target.dataset.index);
-            state.colors[index].position = parseInt(e.target.value);
-            renderColorStops();
+            const newPosition = parseInt(e.target.value);
+            
+            state.colors[index].position = newPosition;
+
+            // Update the percentage text next to the slider without re-rendering everything
+            const stopDiv = e.target.closest('.flex.items-center');
+            if (stopDiv) {
+                stopDiv.querySelector('span').textContent = `${newPosition}%`;
+            }
+
             updateGradient();
         }
 

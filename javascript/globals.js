@@ -1,6 +1,6 @@
 // --- 1. HTML TEMPLATES ---
 const HEADER_WITH_SEARCH_HTML = (rootPath) => `
-<header class="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-sm">
+<header class="bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <a href="${rootPath}index.html" class="flex items-center space-x-2 text-2xl font-bold shrink-0">
             <i data-lucide="tree-deciduous" class="w-6 h-6 stroke-tt-primary"></i> 
@@ -18,7 +18,7 @@ const HEADER_WITH_SEARCH_HTML = (rootPath) => `
 `;
 
 const HEADER_WITHOUT_SEARCH_HTML = (rootPath) => `
-<header class="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-sm">
+<header class="bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <a href="${rootPath}index.html" class="flex items-center space-x-2 text-2xl font-bold">
             <i data-lucide="tree-deciduous" class="w-6 h-6 stroke-tt-primary"></i> 

@@ -103,10 +103,10 @@
         const renderTools = (tools, containerId) => {
             const container = document.getElementById(containerId);
             container.innerHTML = tools.map(tool => `
-                <a href="${tool.url}" class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 space-y-2 dark:bg-gray-800 dark:border-gray-700 hover:scale-[1.01] transform">
-                    <i data-lucide="${tool.icon}" class="w-7 h-7 mb-2 ${tool.color} transition group-hover:text-tt-secondary"></i>
-                    <h2 class="text-base font-semibold text-gray-800 dark:text-gray-100">${tool.name}</h2>
-                    <p class="text-gray-500 text-sm dark:text-gray-400">${tool.description || 'Quick access tool.'}</p>
+                <a href="${tool.url}" class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 space-y-2 dark:bg-gray-800 dark:border-gray-700 hover:scale-[1.01] transform hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <i data-lucide="${tool.icon}" class="w-7 h-7 mb-2 ${tool.color} transition group-hover:text-tt-secondary"></i>
+                  <h2 class="text-base font-semibold text-gray-800 dark:text-gray-100">${tool.name}</h2>
+                  <p class="text-gray-500 text-sm dark:text-gray-400">${tool.description || 'Quick access tool.'}</p>
                 </a>`).join('');
             window.lucide.createIcons();
         };

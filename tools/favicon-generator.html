@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next-Gen Favicon Generator Kit (ICO, PNG, Webmanifest) | toolsTree</title>
+    <meta name="description" content="Create a complete favicon package from a single image. Generates ICO, PNG (16x16 to 512x512), Apple Touch Icons, and a webmanifest file for PWAs. Includes HTML code for easy implementation.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.netlify.app/tools/favicon-generator.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+    (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (!theme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+    })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Next-Gen Favicon Generator Kit",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "Create a complete favicon package from a single image. Generates ICO, PNG (16x16 to 512x512), Apple Touch Icons, and a webmanifest file for PWAs.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": { "@type": "Organization", "name": "toolsTree" }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/image.html" class="ml-1 hover:text-tt-primary md:ml-2">Image & Design Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Favicon Generator Kit</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-3">Next-Gen Favicon Generator Kit</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Upload one image, get a complete favicon package for all platforms.</p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div class="lg:col-span-2 bg-white dark:bg-gray-800 shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold mb-3">1. Upload Your Image</h2>
+                    <label for="imageUpload" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-500">
+                        <div id="uploadPrompt" class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <i data-lucide="upload-cloud" class="w-10 h-10 mb-3 text-gray-400"></i>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG (min 512x512 recommended)</p>
+                        </div>
+                        <img id="imagePreview" src="#" alt="Image Preview" class="hidden w-32 h-32 object-contain"/>
+                        <input id="imageUpload" type="file" class="hidden" accept="image/png, image/jpeg, image/svg+xml">
+                    </label>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold mb-3">2. Customize (Optional)</h2>
+                     <div class="space-y-4">
+                        <label for="bgColor" class="block text-sm font-medium">Background Color (for padding)</label>
+                        <div class="flex items-center gap-3">
+                            <input type="color" id="bgColor" value="#FFFFFF" class="p-1 h-10 w-10 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700">
+                            <input type="text" id="bgColorHex" value="#FFFFFF" class="p-2 w-full border rounded-lg font-mono dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+                    </div>
+                </div>
+                 <div>
+                    <h2 class="text-xl font-bold mb-3">3. Generate Your Kit</h2>
+                    <button id="generateBtn" disabled class="w-full flex items-center justify-center gap-2 bg-tt-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        <i data-lucide="package-check" class="w-5 h-5"></i>
+                        <span>Generate & Download Kit</span>
+                    </button>
+                    <p id="statusText" class="text-center text-sm mt-3 text-gray-500"></p>
+                </div>
+            </div>
+
+            <div id="resultsPanel" class="lg:col-span-3 space-y-6 hidden">
+                 <div class="bg-white p-6 rounded-xl shadow-xl dark:bg-gray-800 border dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-4">Live Previews</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
+                            <p class="text-sm font-semibold mb-2">Browser Tab (Light)</p>
+                            <div class="flex items-center p-2 bg-white rounded-md shadow-inner">
+                                <canvas id="preview16" width="16" height="16" class="mr-2"></canvas>
+                                <span class="text-xs text-gray-700">toolsTree | Your Title Here</span>
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
+                            <p class="text-sm font-semibold mb-2 text-white">Browser Tab (Dark)</p>
+                            <div class="flex items-center p-2 bg-gray-800 rounded-md shadow-inner">
+                                <canvas id="preview32" width="16" height="16" class="mr-2"></canvas>
+                                <span class="text-xs text-gray-200">toolsTree | Your Title Here</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-xl dark:bg-gray-800 border dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="text-xl font-bold">Your HTML Code</h2>
+                        <button id="copyBtn" class="flex items-center gap-2 text-sm bg-gray-200 dark:bg-gray-600 px-3 py-1 rounded-md hover:bg-gray-300">
+                            <i data-lucide="copy" class="w-4 h-4"></i><span id="copyBtnText">Copy</span>
+                        </button>
+                    </div>
+                    <pre class="bg-gray-100 dark:bg-gray-900/50 p-4 rounded-lg text-xs overflow-x-auto"><code id="htmlCodeBlock" class="language-html text-gray-700 dark:text-gray-200">
+&lt;!-- Generate your kit to see the code here --&gt;
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-10 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 dark:border-gray-700">Why a Full Favicon Kit?</h2>
+            <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
+                <p>A single `favicon.ico` is no longer enough. Modern websites need to support a wide range of devices and platforms, from browser tabs to mobile home screens. A complete kit ensures your brand looks crisp and professional everywhere.</p>
+                <ul class="list-disc list-inside space-y-1 pl-2">
+                    <li><strong>Apple Touch Icon:</strong> For when users add your site to their iPhone or iPad home screen.</li>
+                    <li><strong>Android/Chrome Icons:</strong> Used for home screen shortcuts and Progressive Web Apps (PWAs).</li>
+                    <li><strong>Web App Manifest:</strong> A simple JSON file that gives the browser information about your web app.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        }
+
+        // UI Elements
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const imagePreview = document.getElementById('imagePreview');
+        const bgColorPicker = document.getElementById('bgColor');
+        const bgColorHex = document.getElementById('bgColorHex');
+        const generateBtn = document.getElementById('generateBtn');
+        const resultsPanel = document.getElementById('resultsPanel');
+        const htmlCodeBlock = document.getElementById('htmlCodeBlock');
+        const copyBtn = document.getElementById('copyBtn');
+        const copyBtnText = document.getElementById('copyBtnText');
+        const statusText = document.getElementById('statusText');
+        const preview16 = document.getElementById('preview16').getContext('2d');
+        const preview32 = document.getElementById('preview32').getContext('2d');
+        let sourceImage = null;
+
+        // Event Listeners
+        imageUpload.addEventListener('change', handleImageUpload);
+        bgColorPicker.addEventListener('input', () => { bgColorHex.value = bgColorPicker.value.toUpperCase(); });
+        bgColorHex.addEventListener('input', () => { bgColorPicker.value = bgColorHex.value; });
+        generateBtn.addEventListener('click', generateFaviconKit);
+        copyBtn.addEventListener('click', copyHtmlCode);
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    sourceImage = new Image();
+                    sourceImage.onload = () => {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                        uploadPrompt.classList.add('hidden');
+                        generateBtn.disabled = false;
+                        drawPreview(sourceImage, preview16, 16);
+                        drawPreview(sourceImage, preview32, 16);
+                    };
+                    sourceImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function drawPreview(img, ctx, size) {
+            const bgColor = bgColorPicker.value;
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, size, size);
+            ctx.drawImage(img, 0, 0, size, size);
+        }
+
+        async function generateFaviconKit() {
+            if (!sourceImage) {
+                alert('Please upload an image first.');
+                return;
+            }
+            statusText.textContent = 'Generating... this may take a moment.';
+            generateBtn.disabled = true;
+
+            const zip = new JSZip();
+            const sizes = [16, 32, 48, 180, 192, 512];
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const bgColor = bgColorPicker.value;
+
+            for (const size of sizes) {
+                canvas.width = size;
+                canvas.height = size;
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, size, size);
+                ctx.drawImage(sourceImage, 0, 0, size, size);
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                
+                let filename;
+                if (size === 180) filename = 'apple-touch-icon.png';
+                else if (size === 192) filename = 'android-chrome-192x192.png';
+                else if (size === 512) filename = 'android-chrome-512x512.png';
+                else filename = `favicon-${size}x${size}.png`;
+                zip.file(filename, blob);
+            }
+            
+            // Generate favicon.ico (simple version with just 32x32)
+            // Note: True multi-size .ico generation is complex in browser JS.
+            // This provides a functional fallback.
+            canvas.width = 32; canvas.height = 32;
+            ctx.fillStyle = bgColor; ctx.fillRect(0, 0, 32, 32);
+            ctx.drawImage(sourceImage, 0, 0, 32, 32);
+            const icoBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            zip.file('favicon.ico', icoBlob);
+
+
+            // Generate webmanifest
+            const manifest = {
+                name: "Your App Name",
+                short_name: "App",
+                icons: [
+                    { src: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+                    { src: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" }
+                ],
+                theme_color: "#ffffff",
+                background_color: "#ffffff",
+                display: "standalone"
+            };
+            zip.file('site.webmanifest', JSON.stringify(manifest, null, 2));
+
+            // Update UI and trigger download
+            updateHtmlCodeBlock();
+            resultsPanel.classList.remove('hidden');
+            
+            const zipBlob = await zip.generateAsync({ type: 'blob' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(zipBlob);
+            link.download = 'favicon_kit.zip';
+            link.click();
+
+            statusText.textContent = 'Download started!';
+            generateBtn.disabled = false;
+        }
+        
+        function updateHtmlCodeBlock() {
+            const code = `&lt;link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"&gt;
+&lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"&gt;
+&lt;link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"&gt;
+&lt;link rel="manifest" href="/site.webmanifest"&gt;`;
+            htmlCodeBlock.innerHTML = code;
+        }
+
+        function copyHtmlCode() {
+            const codeToCopy = htmlCodeBlock.innerText;
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+                copyBtnText.textContent = 'Copied!';
+                setTimeout(() => { copyBtnText.textContent = 'Copy'; }, 2000);
+            });
+        }
+    });
+    </script>
+</body>
+</html>

@@ -71,6 +71,8 @@ const ALL_TOOLS = [
     { name: "Headline Title Case Converter", url: "tools/headline-title-case.html", category: "Text", icon: "subtitles", color: "text-purple-600", description: "Formats headlines and titles using proper rules." },
     { name: "Rent vs. Buy Home Calculator", url: "tools/rent-vs-buy-calculator.html", category: "Finance", icon: "scale", color: "text-blue-600", description: "Analyze the financial costs and benefits of renting versus buying." },
     { name: "Advanced CSS Gradient Generator", url: "tools/css-gradient-generator.html", category: "Data & Developer", icon: "palette", color: "text-purple-600", description: "Visually create and customize stunning CSS gradients." },
+    { name: "Next-Gen Favicon Generator Kit", url: "../tools/favicon-generator.html", category: "Image", icon: "gem", color: "text-blue-500", description: "Create a complete favicon package (ICO, PNG, manifest) from a single image." },
+    { name: "JWT Debugger & Verifier", url: "../tools/jwt-debugger.html", category: "Data&Developer", icon: "key-round", color: "text-rose-600", description: "Decode and verify JWTs with HS256/384/512 signature checks." },
 ];
 
 // --- 3. THEME MANAGEMENT LOGIC (FUTURE-PROOF) ---

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Debugger & Verifier (HS256/384/512) | toolsTree</title>
+    <meta name="description" content="Decode, verify, and debug JSON Web Tokens (JWT) instantly. Paste a token to view the header and payload, and provide a secret to verify the signature against HS256, HS384, and HS512 algorithms.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.netlify.app/tools/jwt-debugger.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+        (function() {
+            try {
+                const theme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (theme === 'dark' || (!theme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (e) { console.error("Error applying initial theme:", e); }
+        })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <!-- Crypto library for signature verification -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark textarea, .dark input { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        #encodedJwt { font-family: 'Roboto Mono', monospace; min-height: 250px; }
+        .token-header { color: #db2777; } /* pink-600 */
+        .token-payload { color: #8b5cf6; } /* violet-500 */
+        .token-signature { color: #2563eb; } /* blue-600 */
+        .token-dot { color: #9ca3af; } /* gray-400 */
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "JWT Debugger & Verifier",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "Decode, verify, and debug JSON Web Tokens. Supports HS256, HS384, and HS512 signature verification.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": { "@type": "Organization", "name": "toolsTree" }
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Data & Developer Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">JWT Debugger</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">JWT Debugger & Verifier</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Decode and verify JSON Web Tokens in real-time.</p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Left Panel: Encoded Token -->
+            <div class="space-y-4">
+                 <label for="encodedJwt" class="block text-lg font-semibold">Encoded Token</label>
+                 <div id="jwt-container" class="relative">
+                    <textarea id="encodedJwt" placeholder="Paste your JWT here..." class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-tt-primary transition leading-relaxed"></textarea>
+                    <div id="jwt-overlay" class="absolute top-0 left-0 w-full h-full p-4 pointer-events-none whitespace-pre-wrap overflow-hidden leading-relaxed font-mono"></div>
+                 </div>
+            </div>
+            <!-- Right Panel: Decoded Data & Verification -->
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-lg font-semibold mb-2">Decoded Header</label>
+                    <pre><code id="decodedHeader" class="block w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-800 text-sm whitespace-pre-wrap break-all min-h-[100px]"></code></pre>
+                </div>
+                 <div>
+                    <label class="block text-lg font-semibold mb-2">Decoded Payload</label>
+                    <pre><code id="decodedPayload" class="block w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-800 text-sm whitespace-pre-wrap break-all min-h-[150px]"></code></pre>
+                </div>
+                 <div>
+                    <h3 class="block text-lg font-semibold mb-2">Verify Signature</h3>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border dark:border-gray-700 space-y-3">
+                        <textarea id="secret" placeholder="Your-256-bit-secret" class="w-full p-2 border rounded-lg font-mono text-sm h-24"></textarea>
+                        <div id="signatureStatus" class="flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-bold">
+                            <i id="statusIcon" data-lucide="help-circle" class="w-5 h-5"></i>
+                            <span id="statusText">Enter a secret to verify</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        }
+
+        const ui = {
+            encodedJwt: document.getElementById('encodedJwt'),
+            jwtOverlay: document.getElementById('jwt-overlay'),
+            decodedHeader: document.getElementById('decodedHeader'),
+            decodedPayload: document.getElementById('decodedPayload'),
+            secret: document.getElementById('secret'),
+            signatureStatus: document.getElementById('signatureStatus'),
+            statusIcon: document.getElementById('statusIcon'),
+            statusText: document.getElementById('statusText'),
+        };
+
+        const exampleJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        ui.encodedJwt.value = exampleJwt;
+        
+        const decodeAndVerify = () => {
+            const token = ui.encodedJwt.value.trim();
+            colorizeToken(token);
+            
+            if (!token) {
+                clearOutputs();
+                return;
+            }
+
+            const parts = token.split('.');
+            if (parts.length !== 3) {
+                setError('Invalid Token: A JWT must have three parts separated by dots.');
+                return;
+            }
+            
+            const [header, payload, signature] = parts;
+
+            try {
+                const decodedHeader = JSON.parse(atob(header.replace(/-/g, '+').replace(/_/g, '/')));
+                ui.decodedHeader.textContent = JSON.stringify(decodedHeader, null, 2);
+            } catch (e) {
+                setError('Invalid Header: Could not decode or parse the header.', 'header');
+                return;
+            }
+            
+            try {
+                const decodedPayload = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+                ui.decodedPayload.textContent = JSON.stringify(decodedPayload, null, 2);
+            } catch (e) {
+                setError('Invalid Payload: Could not decode or parse the payload.', 'payload');
+                return;
+            }
+
+            verifySignature();
+        };
+
+        const verifySignature = () => {
+            const token = ui.encodedJwt.value.trim();
+            const secret = ui.secret.value;
+            const parts = token.split('.');
+
+            if (parts.length !== 3 || !secret) {
+                setStatus('info', 'Enter a secret to verify');
+                return;
+            }
+
+            const [headerB64, payloadB64, signatureB64] = parts;
+            const header = JSON.parse(atob(headerB64));
+            
+            const algMap = { 'HS256': CryptoJS.HmacSHA256, 'HS384': CryptoJS.HmacSHA384, 'HS512': CryptoJS.HmacSHA512 };
+            const algorithm = algMap[header.alg];
+            
+            if (!algorithm) {
+                setStatus('error', `Unsupported algorithm: ${header.alg}`);
+                return;
+            }
+            
+            const dataToSign = `${headerB64}.${payloadB64}`;
+            const hash = algorithm(dataToSign, secret);
+            const expectedSignature = hash.toString(CryptoJS.enc.Base64url);
+            
+            if (expectedSignature === signatureB64) {
+                setStatus('success', 'Signature Verified');
+            } else {
+                setStatus('error', 'Invalid Signature');
+            }
+        };
+
+        const colorizeToken = (token) => {
+            const parts = token.split('.');
+            if (parts.length === 3) {
+                ui.jwtOverlay.innerHTML = `<span class="token-header">${parts[0]}</span><span class="token-dot">.</span><span class="token-payload">${parts[1]}</span><span class="token-dot">.</span><span class="token-signature">${parts[2]}</span>`;
+            } else {
+                 ui.jwtOverlay.innerHTML = `<span class="text-gray-500">${token}</span>`;
+            }
+        };
+
+        const setError = (message, part = 'all') => {
+            ui.decodedHeader.textContent = (part === 'header' || part === 'all') ? message : ui.decodedHeader.textContent;
+            ui.decodedPayload.textContent = (part === 'payload' || part === 'all') ? message : ui.decodedPayload.textContent;
+            setStatus('error', 'Invalid Token Structure');
+        };
+
+        const setStatus = (type, text) => {
+            ui.signatureStatus.classList.remove('bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700', 'bg-blue-100', 'text-blue-700');
+            let icon = 'help-circle';
+            let classes = 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300';
+            if (type === 'success') {
+                icon = 'check-circle';
+                classes = 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300';
+            } else if (type === 'error') {
+                icon = 'x-circle';
+                classes = 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300';
+            }
+            ui.statusIcon.setAttribute('data-lucide', icon);
+            lucide.createIcons();
+            ui.signatureStatus.classList.add(...classes.split(' '));
+            ui.statusText.textContent = text;
+        };
+        
+        const clearOutputs = () => {
+             ui.decodedHeader.textContent = '';
+             ui.decodedPayload.textContent = '';
+             setStatus('info', 'Enter a secret to verify');
+        };
+
+        ui.encodedJwt.addEventListener('input', decodeAndVerify);
+        ui.secret.addEventListener('input', verifySignature);
+        
+        // Initial run
+        decodeAndVerify();
+    });
+    </script>
+</body>
+</html>

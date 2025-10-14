@@ -36,7 +36,8 @@ module.exports = {
     './tools/time-zone-converter.html',
     './tools/favicon-generator.html',
     './tools/jwt-debugger.html',
-    './tools/css-grid-generator.html'
+    './tools/css-grid-generator.html',
+    './tools/mermaid-editor.html',
   ],
   darkMode: 'class',
   theme: {

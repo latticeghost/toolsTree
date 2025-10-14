@@ -8,39 +8,44 @@
 
 
 <url>
-  <loc>https://toolstree.netlify.app/</loc>
-  <lastmod>2025-10-10T16:23:03+00:00</lastmod>
+  <loc>https://toolstree.vercel.app/</loc>
+  <lastmod>2025-10-13T05:29:59+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://toolstree.netlify.app/categories/data-dev</loc>
-  <lastmod>2025-10-10T16:23:03+00:00</lastmod>
+  <loc>https://toolstree.vercel.app/categories/data-dev.html</loc>
+  <lastmod>2025-10-13T05:30:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://toolstree.netlify.app/categories/text</loc>
-  <lastmod>2025-10-10T16:23:03+00:00</lastmod>
+  <loc>https://toolstree.vercel.app/categories/text.html</loc>
+  <lastmod>2025-10-13T05:30:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://toolstree.netlify.app/categories/clock</loc>
-  <lastmod>2025-10-10T16:23:03+00:00</lastmod>
+  <loc>https://toolstree.vercel.app/categories/clock.html</loc>
+  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://toolstree.netlify.app/categories/finance</loc>
-  <lastmod>2025-10-10T16:23:03+00:00</lastmod>
+  <loc>https://toolstree.vercel.app/categories/finance.html</loc>
+  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://toolstree.netlify.app/categories/image</loc>
-  <lastmod>2025-10-10T16:23:03+00:00</lastmod>
+  <loc>https://toolstree.vercel.app/categories/image.html</loc>
+  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://toolstree.netlify.app/categories/misc</loc>
-  <lastmod>2025-10-10T16:23:03+00:00</lastmod>
+  <loc>https://toolstree.vercel.app/categories/misc.html</loc>
+  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
   <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://toolstree.vercel.app/index.html</loc>
+  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 
 

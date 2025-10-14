@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/image-compressor.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/image-compressor.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -26,14 +26,12 @@
             const theme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             
-            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
             if (theme === 'dark' || (!theme && prefersDark)) {
             document.documentElement.classList.add('dark');
             } else {
             document.documentElement.classList.remove('dark');
             }
         } catch (e) {
-            // Failsafe: default to light mode if any errors occur.
             console.error("Error applying initial theme:", e);
             document.documentElement.classList.remove('dark');
         }
@@ -65,7 +63,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
@@ -82,7 +80,7 @@
         </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
                 <div>
                     <h2 class="text-xl font-bold mb-3 flex items-center"><i data-lucide="upload-cloud" class="w-5 h-5 mr-2 stroke-tt-primary"></i>1. Upload Images</h2>
                     <label id="drop-zone" for="file-upload" class="block w-full cursor-pointer rounded-lg border-2 border-dashed p-8 text-center transition-colors hover:border-tt-primary">
@@ -93,7 +91,7 @@
                     </label>
                 </div>
 
-                <div class="pt-6 border-t dark:border-gray-700">
+                <div class="pt-6 border-t dark:border-gray-800">
                     <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="sliders-horizontal" class="w-5 h-5 mr-2 stroke-tt-primary"></i>2. Optimization Settings</h2>
                     <div class="space-y-4">
                         <div>
@@ -104,14 +102,14 @@
                             <label for="output-format" class="block text-sm font-medium mb-1">Output Format</label>
                             <select id="output-format" class="w-full p-2 border rounded-lg"><option value="jpeg">JPEG</option><option value="png">PNG</option><option value="webp">WebP</option></select>
                         </div>
-                        <div class="pt-2 border-t dark:border-gray-700">
+                        <div class="pt-2 border-t dark:border-gray-800">
                             <h3 class="font-medium flex items-center mb-2"><i data-lucide="maximize-2" class="w-4 h-4 mr-1 text-tt-secondary"></i>Resizing</h3>
                              <div class="grid grid-cols-2 gap-4">
                                 <div><label for="new-width" class="block text-sm mb-1">Width (px)</label><input type="number" id="new-width" placeholder="Original" class="w-full p-2 border rounded-lg"></div>
                                 <div><label for="new-height" class="block text-sm mb-1">Height (px)</label><input type="number" id="new-height" placeholder="Original" class="w-full p-2 border rounded-lg"></div>
                              </div>
                         </div>
-                         <div class="pt-2 border-t dark:border-gray-700">
+                         <div class="pt-2 border-t dark:border-gray-800">
                             <label for="watermarkToggle" class="flex items-center justify-between cursor-pointer">
                                 <h3 class="font-medium flex items-center"><i data-lucide="droplet" class="w-4 h-4 mr-1 text-tt-secondary"></i>Watermark</h3>
                                 <input type="checkbox" id="watermarkToggle" class="sr-only peer">
@@ -130,7 +128,7 @@
             </div>
 
             <div class="space-y-8">
-                <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 border border-gray-100 dark:border-gray-800">
                     <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="eye" class="w-5 h-5 mr-2 stroke-tt-primary"></i>Live Preview (First Image)</h2>
                     <div id="preview-container" class="grid grid-cols-2 gap-4 items-center text-center">
                         <div><h3 class="text-sm font-semibold mb-2">Before</h3><div id="preview-before" class="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center"><p class="text-xs text-gray-500">Upload an image</p></div></div>
@@ -138,22 +136,22 @@
                     </div>
                 </div>
                 
-                <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 border border-gray-100 dark:border-gray-800">
                     <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="list-checks" class="w-5 h-5 mr-2 stroke-tt-primary"></i>3. Process & Download</h2>
                      <button id="process-btn" disabled class="w-full px-6 py-4 bg-tt-primary text-white text-lg font-bold rounded-xl shadow-lg hover:bg-tt-secondary transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
                         <i data-lucide="zap" class="w-6 h-6 mr-3"></i><span>Optimize (<span id="file-count">0</span>) Files</span>
                     </button>
                     <div id="results-container" class="mt-4 space-y-3 max-h-[40vh] overflow-y-auto"></div>
-                    <div id="bulk-download-section" class="hidden mt-4 pt-4 border-t dark:border-gray-700">
+                    <div id="bulk-download-section" class="hidden mt-4 pt-4 border-t dark:border-gray-800">
                         <button id="downloadAllBtn" class="w-full px-6 py-3 bg-tt-secondary text-white font-bold rounded-lg"><i data-lucide="download" class="w-5 h-5 mr-2 inline"></i>Download All as .ZIP</button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">A Privacy-First Image Toolkit</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">A Privacy-First Image Toolkit</h2>
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><strong>Total Privacy:</strong> All processing happens in your browser. Your images are never uploaded to a server, ensuring 100% security.</li>
                     <li><strong>Live Preview:</strong> Instantly see the effect of your compression and resizing settings before processing your entire batch of images.</li>
@@ -162,7 +160,7 @@
                 </ul>
             </div>
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions</h2>
                 <div class="space-y-3 text-sm">
                      <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Are my images really private?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary>
@@ -195,11 +193,13 @@
             previewBefore: document.getElementById('preview-before'), previewAfter: document.getElementById('preview-after'),
             resultsContainer: document.getElementById('results-container'), bulkDownloadSection: document.getElementById('bulk-download-section'),
             downloadAllBtn: document.getElementById('downloadAllBtn'), watermarkToggle: document.getElementById('watermarkToggle'),
-            watermarkOptions: document.getElementById('watermarkOptions'), hiddenCanvas: document.getElementById('hidden-canvas')
+            watermarkOptions: document.getElementById('watermarkOptions'), hiddenCanvas: document.getElementById('hidden-canvas'),
+            qualityValue: document.getElementById('quality-value'), // Added for easy access
+            qualityRange: document.getElementById('quality-range')  // Added for easy access
         };
 
         const getSettings = () => ({
-            quality: parseFloat(document.getElementById('quality-range').value) / 100,
+            quality: parseFloat(ui.qualityRange.value) / 100,
             format: document.getElementById('output-format').value,
             width: parseInt(document.getElementById('new-width').value) || null,
             height: parseInt(document.getElementById('new-height').value) || null,
@@ -305,8 +305,15 @@
         const allSettingsInputs = document.querySelectorAll('#quality-range, #output-format, #new-width, #new-height, #watermarkToggle, #watermarkText, #watermarkSize, #watermarkColor, #watermarkOpacity');
         allSettingsInputs.forEach(input => input.addEventListener('input', () => {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(updateLivePreview, 250); // Debounce live preview
+            debounceTimer = setTimeout(updateLivePreview, 250);
         }));
+        
+        // ======================= BUG FIX STARTS HERE =======================
+        // Add a dedicated listener to update the quality percentage text instantly.
+        ui.qualityRange.addEventListener('input', () => {
+            ui.qualityValue.textContent = ui.qualityRange.value;
+        });
+        // ======================= BUG FIX ENDS HERE =======================
         
         ui.watermarkToggle.addEventListener('change', () => { ui.watermarkOptions.style.display = ui.watermarkToggle.checked ? 'block' : 'none'; });
         ui.fileUpload.addEventListener('change', handleFileSelect);

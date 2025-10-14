@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="canonical" href="https://toolstree.netlify.app/categories/data-dev.html">
+  <link rel="canonical" href="https://toolstree.vercel.app/categories/data-dev.html">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link href="../assets/output.css" rel="stylesheet">
   <!-- Google tag (gtag.js) -->
@@ -56,7 +56,7 @@
     "@type": "CollectionPage",
     "name": "Data & Developer Tools",
     "description": "A professional suite of tools for data transformation, formatting, encoding, and development utilities.",
-    "url": "https://toolstree.netlify.app/categories/data-dev.html",
+    "url": "https://toolstree.vercel.app/categories/data-dev.html",
     "publisher": {
       "@type": "Organization",
       "name": "toolsTree"
@@ -64,18 +64,19 @@
     "mainEntity": {
       "@type": "ItemList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Advanced Data Converter", "url": "https://toolstree.netlify.app/tools/data-converter.html" },
-        { "@type": "ListItem", "position": 2, "name": "Ultimate JSON Formatter", "url": "https://toolstree.netlify.app/tools/json-formatter.html" },
-        { "@type": "ListItem", "position": 3, "name": "Hash, HMAC & Checksum Generator", "url": "https://toolstree.netlify.app/tools/hash-generator.html" },
-        { "@type": "ListItem", "position": 4, "name": "Advanced CSS Gradient Generator", "url": "https://toolstree.netlify.app/tools/css-gradient-generator.html" },
-        { "@type": "ListItem", "position": 5, "name": "JWT Debugger & Verifier", "url": "https://toolstree.netlify.app/tools/jwt-debugger.html" },
-        { "@type": "ListItem", "position": 6, "name": "CSS Grid Generator & Visual Builder", "url": "https://toolstree.netlify.app/tools/css-grid-generator.html" },
+        { "@type": "ListItem", "position": 1, "name": "Advanced Data Converter", "url": "https://toolstree.vercel.app/tools/data-converter.html" },
+        { "@type": "ListItem", "position": 2, "name": "Ultimate JSON Formatter", "url": "https://toolstree.vercel.app/tools/json-formatter.html" },
+        { "@type": "ListItem", "position": 3, "name": "Hash, HMAC & Checksum Generator", "url": "https://toolstree.vercel.app/tools/hash-generator.html" },
+        { "@type": "ListItem", "position": 4, "name": "Advanced CSS Gradient Generator", "url": "https://toolstree.vercel.app/tools/css-gradient-generator.html" },
+        { "@type": "ListItem", "position": 5, "name": "JWT Debugger & Verifier", "url": "https://toolstree.vercel.app/tools/jwt-debugger.html" },
+        { "@type": "ListItem", "position": 6, "name": "CSS Grid Generator & Visual Builder", "url": "https://toolstree.vercel.app/tools/css-grid-generator.html" },
+        { "@type": "ListItem", "position": 7, "name": "Mermaid.js Live Editor & Renderer", "url": "https://toolstree.vercel.app/tools/mermaid-editor.html" },
       ]
     }
   }
   </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
 
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
     
@@ -106,12 +107,13 @@
             { name: "Advanced CSS Gradient Generator", url: "../tools/css-gradient-generator.html", category: "Data&Developer", icon: "palette", color: "text-purple-600", description: "Visually create and customize stunning CSS gradients and export the code instantly." },
             { name: "JWT Debugger & Verifier", url: "../tools/jwt-debugger.html", category: "Data&Developer", icon: "key-round", color: "text-rose-600", description: "Decode and verify JWTs with HS256/384/512 signature checks." },
             { name: "CSS Grid Generator & Visual Builder", url: "../tools/css-grid-generator.html", category: "Data&Developer", icon: "layout-grid", color: "text-tt-primary", description: "Visually build complex CSS Grid layouts, named areas, and track definitions." },
+            { name: "Mermaid.js Live Editor & Renderer",url: "../tools/mermaid-editor.html",category: "Data&Developer",icon: "workflow", color: "text-emerald-500", description: "Visualize and render diagrams (flowcharts, sequence, class, Gantt) from Mermaid.js code in real-time." }, 
         ];
 
         const renderTools = (tools, containerId) => {
             const container = document.getElementById(containerId);
             container.innerHTML = tools.map(tool => `
-                <a href="${tool.url}" class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 space-y-2 dark:bg-gray-800 dark:border-gray-700 hover:scale-[1.01] transform hover:bg-gray-50 dark:hover:bg-gray-700">
+                <a href="${tool.url}" class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 space-y-2 dark:bg-gray-900 dark:border-gray-700 hover:scale-[1.01] transform hover:bg-gray-50 dark:hover:border-tt-primary/50">
                   <i data-lucide="${tool.icon}" class="w-7 h-7 mb-2 ${tool.color} transition group-hover:text-tt-secondary"></i>
                   <h2 class="text-base font-semibold text-gray-800 dark:text-gray-100">${tool.name}</h2>
                   <p class="text-gray-500 text-sm dark:text-gray-400">${tool.description || 'Quick access tool.'}</p>

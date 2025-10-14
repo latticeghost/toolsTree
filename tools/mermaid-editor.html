@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid.js Live Editor & Renderer | toolsTree</title>
+    <meta name="description" content="A feature-packed, real-time Mermaid.js editor. Create, preview, and export diagrams-as-code including flowcharts, sequence diagrams, and more.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/mermaid-editor.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+        // Theme initialization script
+        (function() {
+            try {
+                const theme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (theme === 'dark' || (!theme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {
+                console.error("Error applying initial theme:", e);
+            }
+        })();
+    </script>
+    <script>
+        window.GLOBAL_ROOT_PATH = '../';
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        .editor-container { min-height: 500px; }
+        #editor { font-family: 'Roboto Mono', monospace; resize: none; }
+        #preview-container { overflow: hidden; }
+        #preview-container svg, .svg-pan-zoom-container { width: 100% !important; height: 100% !important; }
+        .zoom-controls { position: absolute; bottom: 1rem; right: 1rem; display: flex; gap: 0.5rem; background-color: rgba(255, 255, 255, 0.8); padding: 0.5rem; border-radius: 0.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10; }
+        .dark .zoom-controls { background-color: rgba(31, 41, 55, 0.8); }
+        .zoom-controls button { background: none; border: 1px solid #ccc; border-radius: 4px; width: 32px; height: 32px; cursor: pointer; display:flex; align-items:center; justify-content:center; }
+        .dark .zoom-controls button { border-color: #4b5563; }
+        .loader { width: 48px; height: 48px; border: 5px solid #FFF; border-bottom-color: #10b981; border-radius: 50%; display: inline-block; box-sizing: border-box; animation: rotation 1s linear infinite; }
+        .dark .loader { border-color: #4b5563; border-bottom-color: #10b981; }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Data & Developer Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Mermaid.js Live Editor & Renderer</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Mermaid.js Live Editor & Renderer</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Create, edit, and export beautiful diagrams-as-code in real-time. The ultimate tool for developers and technical writers.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl border border-gray-100 dark:border-gray-800 flex flex-col">
+            <div class="p-4 flex flex-wrap items-center justify-between gap-4 border-b dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 flex-shrink-0">
+                <div class="flex items-center gap-4">
+                    <label for="sample-selector" class="text-sm font-medium">Load Example:</label>
+                    <select id="sample-selector" class="text-sm rounded-md border-gray-300 dark:border-gray-600 focus:ring-tt-primary focus:border-tt-primary">
+                        <option value="">Select a diagram...</option>
+                        <option value="flowchart">Flowchart</option>
+                        <option value="sequence">Sequence Diagram</option>
+                        <option value="gantt">Gantt Chart</option>
+                        <option value="pie">Pie Chart</option>
+                        <option value="class">Class Diagram</option>
+                        <option value="state">State Diagram</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-4">
+                     <label for="theme-selector" class="text-sm font-medium">Theme:</label>
+                     <select id="theme-selector" class="text-sm rounded-md border-gray-300 dark:border-gray-600 focus:ring-tt-primary focus:border-tt-primary">
+                        <option value="default">Default</option>
+                        <option value="forest">Forest</option>
+                        <option value="dark">Dark</option>
+                        <option value="neutral">Neutral</option>
+                     </select>
+                </div>
+                 <div class="flex items-center">
+                    <input type="checkbox" id="auto-sync" checked class="h-4 w-4 rounded border-gray-300 text-tt-primary focus:ring-tt-primary">
+                    <label for="auto-sync" class="ml-2 text-sm font-medium">Auto Sync</label>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 flex-grow editor-container min-h-0">
+                <div class="flex flex-col rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
+                    <div class="flex-shrink-0 flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-700 border-b dark:border-gray-600">
+                         <h2 class="text-sm font-semibold ml-2">Mermaid Code</h2>
+                         <button id="copy-code-btn" class="p-1.5 rounded-md">
+                             <i data-lucide="copy" class="w-4 h-4"></i>
+                         </button>
+                    </div>
+                    <div class="relative flex-grow bg-white dark:bg-gray-900">
+                        <textarea id="editor" class="absolute inset-0 w-full h-full p-4 border-0 focus:ring-0 bg-transparent" placeholder="Enter Mermaid syntax here..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
+                     <div class="flex-shrink-0 flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-700 border-b dark:border-gray-600">
+                         <h2 class="text-sm font-semibold ml-2">Live Preview</h2>
+                         <button id="render-btn" class="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 hidden" title="Render Diagram">
+                             <i data-lucide="play" class="w-4 h-4"></i>
+                         </button>
+                    </div>
+                    <div id="preview-container" class="relative flex-grow p-4 bg-white dark:bg-gray-900">
+                        <div id="loader" class="hidden absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-900/50"><span class="loader"></span></div>
+                        <div id="preview-output" class="w-full h-full flex items-center justify-center"></div>
+                        <p id="error-output" class="absolute inset-0 text-red-500 font-mono text-sm whitespace-pre-wrap p-4 hidden"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-shrink-0 flex flex-wrap items-center justify-end gap-3 p-4 border-t dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+                <button id="copy-svg-btn" class="btn-action flex items-center space-x-2 bg-blue-100 hover:bg-blue-200 text-blue-600 dark:bg-blue-900/50 dark:hover:bg-blue-900 dark:text-blue-300 font-semibold py-2 px-4 rounded-lg"><i data-lucide="copy" class="w-4 h-4"></i><span>Copy SVG</span></button>
+                <button id="download-svg-btn" class="btn-action flex items-center space-x-2 bg-green-100 hover:bg-green-200 text-green-600 dark:bg-green-900/50 dark:hover:bg-green-900 dark:text-green-300 font-semibold py-2 px-4 rounded-lg"><i data-lucide="download" class="w-4 h-4"></i><span>Download SVG</span></button>
+                <button id="download-png-btn" class="btn-action flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300 font-semibold py-2 px-4 rounded-lg"><i data-lucide="image" class="w-4 h-4"></i><span>Download PNG</span></button>
+                <button id="clear-btn" class="btn-action flex items-center space-x-2 bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-2 px-4 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i><span>Clear</span></button>
+            </div>
+        </div>
+
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is Mermaid.js?</h2>
+                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Mermaid is a Javascript-based diagramming and charting tool that uses Markdown-inspired text definitions to create and modify diagrams dynamically. It allows you to create complex diagrams by writing simple code, a concept known as "Diagrams as Code".</p>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Version Controlled:</strong> Because diagrams are just text, they can be tracked in Git just like source code.</li>
+                    <li><strong>Developer-Friendly:</strong> No need to switch to a graphical editor. Create and update diagrams right from your code editor.</li>
+                    <li><strong>Highly Integratable:</strong> Mermaid is supported by numerous platforms like GitHub, GitLab, Notion, and more.</li>
+                </ul>
+            </div>
+             <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How does PNG export work?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool renders the generated SVG diagram onto a hidden HTML5 canvas element in your browser. It then converts the canvas content into a PNG data URL, which is used to trigger a file download. All processing happens client-side, ensuring your data remains private.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Can I use this for very large diagrams?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. For very large or complex diagrams that might be slow to render on every keystroke, you can uncheck the "Auto Sync" box. This will reveal a "Render" button, allowing you to manually trigger a diagram update when you are ready.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../javascript/globals.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        }
+
+        const ui = {
+            editor: document.getElementById('editor'),
+            previewOutput: document.getElementById('preview-output'),
+            errorOutput: document.getElementById('error-output'),
+            loader: document.getElementById('loader'),
+            sampleSelector: document.getElementById('sample-selector'),
+            themeSelector: document.getElementById('theme-selector'),
+            autoSync: document.getElementById('auto-sync'),
+            renderBtn: document.getElementById('render-btn'),
+            copyCodeBtn: document.getElementById('copy-code-btn'),
+            copySvgBtn: document.getElementById('copy-svg-btn'),
+            downloadSvgBtn: document.getElementById('download-svg-btn'),
+            downloadPngBtn: document.getElementById('download-png-btn'),
+            clearBtn: document.getElementById('clear-btn'),
+            messagePopup: document.getElementById('message-popup'),
+        };
+
+        const samples = {
+            flowchart: `graph TD\n    A[Start] --> B{Is it?};\n    B -- Yes --> C[OK];\n    C --> D[End];\n    B -- No --> E[Find Out];\n    E --> B;`,
+            sequence: `sequenceDiagram\n    participant Alice\n    participant Bob\n    Alice->>Bob: Hello Bob, how are you?\n    Bob-->>Alice: I am good thanks!\n    Alice-)Bob: Great!`,
+            gantt: `gantt\n    title A Gantt Diagram\n    dateFormat  YYYY-MM-DD\n    section Section\n    A task           :a1, 2025-01-01, 30d\n    Another task     :after a1  , 20d\n    section Another\n    Task in sec      :2025-01-12  , 12d\n    another task      : 24d`,
+            pie: `pie\n    title Key Technologies\n    "HTML" : 45\n    "CSS" : 25\n    "JavaScript" : 30`,
+            class: `classDiagram\n    Animal <|-- Duck\n    Animal <|-- Fish\n    Animal <|-- Zebra\n    Animal : +int age\n    Animal : +String gender\n    Animal: +isMammal()\n    Animal: +mate()\n    class Duck{\n        +String beakColor\n        +swim()\n        +quack()\n    }`,
+            state: `stateDiagram-v2\n    [*] --> Still\n    Still --> [*]\n    Still --> Moving\n    Moving --> Still\n    Moving --> Crash\n    Crash --> [*]`
+        };
+
+        let panZoomInstance = null;
+
+        const initializeMermaid = () => {
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const selectedTheme = ui.themeSelector.value;
+            let theme = 'default';
+
+            if (selectedTheme === 'dark' || (selectedTheme === 'default' && isDarkMode)) {
+                theme = 'dark';
+            } else if (selectedTheme !== 'default') {
+                theme = selectedTheme;
+            }
+
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: theme,
+                securityLevel: 'loose',
+                flowchart: { useMaxWidth: true, htmlLabels: true },
+            });
+        };
+
+        const showMessage = (text) => {
+            ui.messagePopup.textContent = text;
+            ui.messagePopup.classList.remove('opacity-0', 'invisible');
+            setTimeout(() => {
+                ui.messagePopup.classList.add('opacity-0', 'invisible');
+            }, 2000);
+        };
+
+        const renderDiagram = async () => {
+            const code = ui.editor.value.trim();
+            if (!code) {
+                const existingControls = document.querySelector('.zoom-controls');
+                if(existingControls) existingControls.remove();
+                if (panZoomInstance) panZoomInstance.destroy();
+                panZoomInstance = null;
+                
+                ui.previewOutput.innerHTML = '<p class="text-gray-400">Diagram will appear here</p>';
+                ui.errorOutput.classList.add('hidden');
+                return;
+            }
+
+            ui.loader.classList.remove('hidden');
+            ui.previewOutput.classList.add('hidden');
+            ui.errorOutput.classList.add('hidden');
+            
+            const existingControls = document.querySelector('.zoom-controls');
+            if(existingControls) existingControls.remove();
+            if (panZoomInstance) panZoomInstance.destroy();
+            panZoomInstance = null;
+            
+            try {
+                initializeMermaid();
+                const { svg } = await mermaid.render('graphDiv', code);
+                ui.previewOutput.innerHTML = svg;
+                ui.previewOutput.classList.remove('hidden');
+                
+                const svgElement = ui.previewOutput.querySelector('svg');
+                if(svgElement){
+                    svgElement.setAttribute('width', '100%');
+                    svgElement.setAttribute('height', '100%');
+
+                    panZoomInstance = svgPanZoom(svgElement, {
+                        zoomEnabled: true,
+                        controlIconsEnabled: false,
+                        fit: true,
+                        center: true,
+                        contain: true,
+                    });
+
+                    const controls = document.createElement('div');
+                    controls.className = 'zoom-controls';
+                    controls.innerHTML = `
+                        <button id="zoom-in" title="Zoom In"><i data-lucide="zoom-in" class="w-4 h-4"></i></button>
+                        <button id="zoom-out" title="Zoom Out"><i data-lucide="zoom-out" class="w-4 h-4"></i></button>
+                        <button id="reset-zoom" title="Reset Zoom"><i data-lucide="expand" class="w-4 h-4"></i></button>
+                    `;
+                    ui.previewOutput.parentNode.appendChild(controls);
+                    lucide.createIcons();
+
+                    document.getElementById('zoom-in').addEventListener('click', () => panZoomInstance.zoomIn());
+                    document.getElementById('zoom-out').addEventListener('click', () => panZoomInstance.zoomOut());
+                    document.getElementById('reset-zoom').addEventListener('click', () => {
+                        panZoomInstance.reset();
+                        panZoomInstance.fit();
+                        panZoomInstance.center();
+                    });
+                }
+
+            } catch (error) {
+                ui.errorOutput.textContent = error.str || error.message;
+                ui.errorOutput.classList.remove('hidden');
+            } finally {
+                ui.loader.classList.add('hidden');
+            }
+        };
+
+        const debounceRender = (func, delay) => {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        };
+        const debouncedRender = debounceRender(renderDiagram, 500);
+
+        // --- Event Listeners ---
+        ui.editor.addEventListener('input', () => {
+            if (ui.autoSync.checked) {
+                debouncedRender();
+            }
+        });
+        
+        ui.autoSync.addEventListener('change', () => {
+            ui.renderBtn.classList.toggle('hidden', ui.autoSync.checked);
+            if(ui.autoSync.checked) renderDiagram();
+        });
+
+        ui.renderBtn.addEventListener('click', renderDiagram);
+
+        ui.sampleSelector.addEventListener('change', (e) => {
+            if (e.target.value && samples[e.target.value]) {
+                ui.editor.value = samples[e.target.value];
+                renderDiagram();
+            }
+        });
+
+        ui.themeSelector.addEventListener('change', renderDiagram);
+        
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    renderDiagram();
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+
+
+        ui.clearBtn.addEventListener('click', () => {
+            ui.editor.value = '';
+            renderDiagram();
+        });
+        
+        // --- BUTTON FUNCTIONALITY FIX STARTS HERE ---
+        const handleGenericCopy = (buttonEl, textToCopy, successCallback) => {
+             if (!textToCopy) return;
+
+             if (navigator.clipboard && window.isSecureContext) {
+                 navigator.clipboard.writeText(textToCopy)
+                    .then(successCallback)
+                    .catch(err => console.error('Copy failed:', err));
+             } else {
+                 const textArea = document.createElement("textarea");
+                 textArea.value = textToCopy;
+                 textArea.style.position = "absolute";
+                 textArea.style.left = "-9999px";
+                 document.body.appendChild(textArea);
+                 textArea.select();
+                 try {
+                     document.execCommand('copy');
+                     successCallback();
+                 } catch (err) {
+                     console.error('Fallback copy failed:', err);
+                 }
+                 document.body.removeChild(textArea);
+             }
+        };
+
+        ui.copyCodeBtn.addEventListener('click', () => {
+            const textToCopy = ui.editor.value;
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                
+                ui.copyCodeBtn.innerHTML = successIconHTML;
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    ui.copyCodeBtn.innerHTML = originalIconHTML;
+                    lucide.createIcons();
+                }, 1500);
+            };
+            handleGenericCopy(ui.copyCodeBtn, textToCopy, copySuccess);
+        });
+
+        ui.copySvgBtn.addEventListener('click', () => {
+            const svgContent = ui.previewOutput.querySelector('svg');
+            if (!svgContent) return;
+            const textToCopy = svgContent.outerHTML;
+
+            const copySuccess = () => {
+                const originalBtnHTML = '<i data-lucide="copy" class="w-4 h-4"></i><span>Copy SVG</span>';
+                const successBtnHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Copied!</span>';
+                const originalClasses = ['bg-blue-100', 'hover:bg-blue-200', 'text-blue-600', 'dark:bg-blue-900/50', 'dark:hover:bg-blue-900', 'dark:text-blue-300'];
+                const successClasses = ['bg-green-500', 'dark:bg-green-700', 'text-white'];
+
+                ui.copySvgBtn.innerHTML = successBtnHTML;
+                ui.copySvgBtn.classList.remove(...originalClasses);
+                ui.copySvgBtn.classList.add(...successClasses);
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    ui.copySvgBtn.innerHTML = originalBtnHTML;
+                    ui.copySvgBtn.classList.remove(...successClasses);
+                    ui.copySvgBtn.classList.add(...originalClasses);
+                    lucide.createIcons();
+                }, 1500);
+            };
+            handleGenericCopy(ui.copySvgBtn, textToCopy, copySuccess);
+        });
+        // --- BUTTON FUNCTIONALITY FIX ENDS HERE ---
+
+
+        ui.downloadSvgBtn.addEventListener('click', () => {
+             const svgContent = ui.previewOutput.querySelector('svg');
+             if (svgContent) {
+                const blob = new Blob([svgContent.outerHTML], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'diagram.svg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+             }
+        });
+
+        ui.downloadPngBtn.addEventListener('click', () => {
+            const svgElement = ui.previewOutput.querySelector('svg');
+            if (!svgElement) {
+                showMessage('No diagram to download.');
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const img = new Image();
+
+            const svgBase64 = btoa(unescape(encodeURIComponent(svgData)));
+            const dataUri = `data:image/svg+xml;base64,${svgBase64}`;
+
+            img.onload = () => {
+                const padding = 20;
+                const svgRect = svgElement.getBoundingClientRect();
+                canvas.width = svgRect.width + padding * 2;
+                canvas.height = svgRect.height + padding * 2;
+
+                const isDarkMode = document.documentElement.classList.contains('dark');
+                ctx.fillStyle = isDarkMode ? '#111827' : '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.drawImage(img, padding, padding, svgRect.width, svgRect.height);
+                
+                const a = document.createElement('a');
+                a.href = canvas.toDataURL('image/png');
+                a.download = 'diagram.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+            
+            img.onerror = (e) => {
+                console.error("Error loading SVG image for PNG conversion:", e);
+                showMessage('Error creating PNG image.');
+            };
+
+            img.src = dataUri;
+        });
+
+        // Initial render on page load
+        lucide.createIcons();
+        ui.editor.value = samples.flowchart;
+        renderDiagram();
+    });
+    </script>
+</body>
+</html>

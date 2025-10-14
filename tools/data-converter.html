@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/data-converter.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/data-converter.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -47,6 +47,8 @@
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
         textarea { min-height: 200px; font-family: 'Roboto Mono', monospace; }
         input[type="radio"]:checked + label { background-color: #10b981; color: white; border-color: #10b981; }
+        /* Define the color for tt-primary */
+        .text-tt-primary { color: #10b981; }
     </style>
     <script type="application/ld+json">
     {
@@ -73,7 +75,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
@@ -89,7 +91,7 @@
             <p class="text-base text-gray-600 dark:text-gray-300">Encode and decode Base64, URL, and Character Codes (including custom bases) for text and files.</p>
         </section>
 
-        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800">
             <div class="mb-6">
                 <label class="text-lg font-semibold block mb-3">Conversion Mode:</label>
                 <div id="mode-selector" class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-center">
@@ -99,34 +101,41 @@
                 </div>
             </div>
 
-            <div id="options-container" class="p-4 mb-6 bg-gray-50 dark:bg-gray-900/50 rounded-xl border dark:border-gray-700"></div>
+            <div id="options-container" class="p-4 mb-6 bg-gray-50 dark:bg-gray-900/50 rounded-xl border dark:border-gray-800"></div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label id="inputLabel" for="inputText" class="block text-lg font-semibold mb-2">Input</label>
+                    <div class="flex justify-between items-center mb-2">
+                        <label id="inputLabel" for="inputText" class="text-lg font-semibold">Input</label>
+                        <div class="w-8 h-8"></div>
+                    </div>
                     <textarea id="inputText" placeholder="Type, paste, or drop a file here..." class="w-full p-4 border rounded-lg transition hover:border-tt-primary"></textarea>
                     <p id="file-info" class="text-xs text-gray-500 mt-1 h-4"></p>
                 </div>
+
                 <div>
-                    <label id="outputLabel" for="outputText" class="block text-lg font-semibold mb-2">Output</label>
+                    <div class="flex justify-between items-center mb-2">
+                        <label id="outputLabel" for="outputText" class="text-lg font-semibold">Output</label>
+                        <div class="w-8 h-8">
+                            <button id="copyButton" class="group p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                                <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-colors group-hover:text-tt-primary"></i>
+                            </button>
+                            </div>
+                    </div>
                     <textarea id="outputText" readonly placeholder="Result appears here..." class="w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-700"></textarea>
                 </div>
             </div>
-             <div id="message-box" class="mt-4 text-center text-sm h-6"></div>
-
-            <div class="flex flex-wrap justify-end gap-3 pt-6 mt-2 border-t dark:border-gray-700">
-                <button id="copyButton" disabled class="flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg cursor-not-allowed shadow-sm transition">
-                    <i data-lucide="copy" class="w-4 h-4"></i><span>Copy Result</span>
-                </button>
+            <div id="message-box" class="mt-4 text-center text-sm h-6"></div>
+            <div class="flex flex-wrap justify-end gap-3 pt-6 mt-2 border-t dark:border-gray-800">
                 <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
                     <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
                 </button>
             </div>
         </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">About Data Encoding</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About Data Encoding</h2>
                  <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Encoding is the process of converting data from one form to another. It's a reversible process essential for ensuring data can be safely transmitted and correctly interpreted by different systems.</p>
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><strong>Base64:</strong> Encodes binary data (like images) into a text-only format for safe transmission over text-based protocols like email or for embedding in HTML/CSS.</li>
@@ -135,7 +144,7 @@
                 </ul>
             </div>
              <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why would I use a custom base?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">While bases like 2 (Binary), 8 (Octal), 10 (Decimal), and 16 (Hex) are standard in computing, other bases are used in various fields. For example, Base36 (`0-9` and `A-Z`) is sometimes used to create shorter, more human-readable identifiers. This feature provides maximum flexibility for any niche requirement.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this tool secure for sensitive data?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. All encoding and decoding operations happen entirely within your browser on your computer. No data, whether pasted text or uploaded files, is ever sent to our servers, ensuring your information remains completely private.</p></details>
@@ -200,14 +209,8 @@
         };
 
         const toggleCopyButton = (enabled) => {
-            ui.copyButton.disabled = !enabled;
-            if (enabled) {
-                ui.copyButton.classList.remove('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
-                ui.copyButton.classList.add('bg-tt-primary', 'text-white', 'hover:bg-tt-secondary');
-            } else {
-                ui.copyButton.classList.add('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
-                ui.copyButton.classList.remove('bg-tt-primary', 'text-white', 'hover:bg-tt-secondary');
-            }
+            ui.copyButton.classList.toggle('opacity-0', !enabled);
+            ui.copyButton.classList.toggle('pointer-events-none', !enabled);
         };
 
         const convert = () => {
@@ -287,18 +290,38 @@
         ui.clearButton.addEventListener('click', clearAll);
         
         ui.copyButton.addEventListener('click', () => {
-            if (ui.copyButton.disabled) return;
-            navigator.clipboard.writeText(ui.outputText.value).then(() => {
-                const originalHTML = ui.copyButton.innerHTML;
-                ui.copyButton.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Copied!`;
-                ui.copyButton.classList.add('!bg-green-500');
+            const textToCopy = ui.outputText.value;
+            if (!textToCopy) return;
+
+            const copySuccess = () => {
+                const originalIcon = '<i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-colors group-hover:text-tt-primary"></i>';
+                ui.copyButton.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
                 lucide.createIcons();
                 setTimeout(() => {
-                    ui.copyButton.innerHTML = originalHTML;
-                    ui.copyButton.classList.remove('!bg-green-500');
+                    ui.copyButton.innerHTML = originalIcon;
                     lucide.createIcons();
                 }, 2000);
-            });
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Failed to copy with modern API: ', err));
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "absolute";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+                document.body.removeChild(textArea);
+            }
         });
 
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eName => dropZone.addEventListener(eName, e => { e.preventDefault(); e.stopPropagation(); }, false));
@@ -311,3 +334,4 @@
     </script>
 </body>
 </html>
+}

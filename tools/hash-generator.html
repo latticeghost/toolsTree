@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/hash-generator.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/hash-generator.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -45,7 +45,7 @@
     <script src="https://unpkg.com/lucide@latest" defer></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/blakejs/blake2s.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/blakejs/blake2s.min.js" defer></script>
 
     <style>
         :root { --tt-primary-stroke: #10b981; }
@@ -81,7 +81,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
@@ -97,7 +97,7 @@
             <p class="text-base text-gray-600 dark:text-gray-300">Generate cryptographic fingerprints and data integrity checksums for text or files.</p>
         </section>
 
-        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <label for="inputText" class="block text-lg font-semibold mb-2">Input Data</label>
                 <textarea id="inputText" placeholder="Type, paste, or drop a file here to generate hashes..." class="w-full p-3 border rounded-lg shadow-sm focus:ring-tt-primary focus:border-tt-primary transition"></textarea>
@@ -126,7 +126,7 @@
                     </div>
             </div>
 
-            <div class="pt-6 border-t dark:border-gray-700">
+            <div class="pt-6 border-t dark:border-gray-800">
                  <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="shield-check" class="w-5 h-5 mr-2 stroke-tt-primary"></i>Generated Hashes & Checksums</h2>
                  <div id="results-container" class="space-y-3">
                     <p class="text-gray-500 text-center py-4">Select algorithms and provide input to generate hashes.</p>
@@ -134,16 +134,16 @@
             </div>
         </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Hash vs. Checksum</h2>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Hash vs. Checksum</h2>
                 <p class="text-sm text-gray-600 mb-2 dark:text-gray-300">
                     <strong>Cryptographic Hashes</strong> (like SHA-256) are designed for security. They are one-way functions that make it impossible to get the original data back.
                     <strong>Checksums</strong> (like CRC32) are designed for speed and error-checking. They are used to verify that data (e.g., a downloaded file) has not been accidentally corrupted.
                 </p>
             </div>
              <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Frequently Asked Questions</h2>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Frequently Asked Questions</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is CRC32 used for?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">CRC32 (Cyclic Redundancy Check) is not for security. It's a fast and efficient way to check for accidental changes in data. It's commonly used in network protocols (like Ethernet) and file formats (like ZIP and PNG) to ensure data integrity during transmission or storage.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is BLAKE2?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">BLAKE2 is a modern cryptographic hash function that is often significantly faster than SHA-2 and SHA-3 while providing an equivalent level of security. It's becoming increasingly popular in high-performance applications.</p></details>
@@ -289,32 +289,64 @@
         const createResultRow = (name, hash, isError = false) => {
             const id = `hash-${name.replace(/[^a-zA-Z0-9]/g, '')}`;
             return `
-            <div class="flex items-start justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-4">
+                <div class="flex-1 min-w-0 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                     <p class="text-sm font-semibold">${name}</p>
                     <p id="${id}" class="font-mono text-xs hash-output ${isError ? 'text-red-500' : ''}">${hash}</p>
                 </div>
-                <button data-target="${id}" class="copy-btn ml-3 p-1 text-gray-500 hover:text-tt-primary"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                <div class="w-8 h-8 flex-shrink-0">
+                    <button data-target="${id}" class="copy-btn p-2 rounded-md">
+                        <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>
+                    </button>
+                </div>
             </div>`;
         }
         
+        // --- FUNCTIONALITY FIX STARTS HERE ---
         const handleCopy = (e) => {
             const btn = e.target.closest('.copy-btn');
             if (!btn) return;
             
             const targetId = btn.dataset.target;
             const textEl = document.getElementById(targetId);
-            if(textEl && textEl.textContent){
-                navigator.clipboard.writeText(textEl.textContent);
-                const icon = btn.querySelector('i');
-                icon.setAttribute('data-lucide', 'check');
+            if(!textEl || !textEl.textContent) return;
+
+            const textToCopy = textEl.textContent;
+
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                
+                btn.innerHTML = successIconHTML;
                 lucide.createIcons();
+                
                 setTimeout(() => {
-                    icon.setAttribute('data-lucide', 'copy');
+                    btn.innerHTML = originalIconHTML;
                     lucide.createIcons();
                 }, 1500);
+            };
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Copy failed:', err));
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "absolute";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+                document.body.removeChild(textArea);
             }
         };
+        // --- FUNCTIONALITY FIX ENDS HERE ---
 
         const handleFile = (file) => {
             if (!file) return;

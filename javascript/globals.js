@@ -1,46 +1,43 @@
 // --- 1. HTML TEMPLATES ---
 const HEADER_WITH_SEARCH_HTML = (rootPath) => `
-<header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+<header class="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <a href="${rootPath}index.html" class="flex items-center space-x-2 text-2xl font-bold shrink-0">
             <i data-lucide="tree-deciduous" class="w-6 h-6 stroke-tt-primary"></i> 
             <span class="text-gray-800 dark:text-gray-100">tools<span class="text-tt-primary">Tree</span></span>
         </a>
-        <div class="flex items-center w-full max-w-lg ml-4 sm:ml-8 space-x-3">
+        <div class="flex items-center w-full max-w-md ml-4 sm:ml-8 space-x-3">
             <div class="relative w-full" id="search-container">
                 <input type="text" id="global-search" placeholder="Search any tool..." class="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-tt-primary focus:border-tt-primary transition dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100">
-                <div id="search-results" class="absolute w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl hidden z-20 dark:bg-gray-800 dark:border-gray-700"></div>
+                <div id="search-results" class="absolute w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl hidden z-20 dark:bg-gray-900 dark:border-gray-800"></div>
             </div>
-            <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-tt-primary shrink-0" aria-label="Toggle dark mode"></button>
+            <button id="theme-toggle" class="relative z-10 p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-tt-primary shrink-0" aria-label="Toggle dark mode"></button>
         </div>
     </div>
 </header>
 `;
 
 const HEADER_WITHOUT_SEARCH_HTML = (rootPath) => `
-<header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+<header class="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <a href="${rootPath}index.html" class="flex items-center space-x-2 text-2xl font-bold">
             <i data-lucide="tree-deciduous" class="w-6 h-6 stroke-tt-primary"></i> 
             <span class="text-gray-800 dark:text-gray-100">tools<span class="text-tt-primary">Tree</span></span>
         </a>
-        <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-tt-primary shrink-0" aria-label="Toggle dark mode"></button>
+        <button id="theme-toggle" class="relative z-10 p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-tt-primary shrink-0" aria-label="Toggle dark mode"></button>
     </div>
 </header>
 `;
 
 const FOOTER_HTML = (rootPath) => `
-<footer class="text-center text-sm py-6 mt-auto border-t bg-white dark:bg-gray-800 dark:border-gray-700">
+<footer class="text-center text-sm py-6 mt-auto border-t bg-white dark:bg-black dark:border-gray-800">
     <div class="flex items-center justify-center space-x-1 text-gray-500 dark:text-gray-400">
         <a href="${rootPath}index.html" class="flex items-center space-x-1 text-sm font-bold hover:text-tt-primary transition">
             <i data-lucide="tree-deciduous" class="w-4 h-4 stroke-tt-primary"></i>
             <span class="text-gray-800 dark:text-gray-100">tools<span class="text-tt-primary">Tree</span></span>
         </a>
         <span class="text-gray-400 dark:text-gray-600">|</span>
-        <span class="flex items-center space-x-1">
-            <span>Made with</span>
-            <i data-lucide="heart" class="w-4 h-4 text-red-500 fill-current"></i> 
-        </span>
+        <a href="${rootPath}about.html" class="hover:text-tt-primary">About Us</a>
         <span class="text-gray-400 dark:text-gray-600">|</span>
         <a href="${rootPath}contact.html" class="hover:text-tt-primary">Contact Us</a>
         <span class="text-gray-400 dark:text-gray-600">|</span>
@@ -74,44 +71,32 @@ const ALL_TOOLS = [
     { name: "Next-Gen Favicon Generator Kit", url: "../tools/favicon-generator.html", category: "Image", icon: "gem", color: "text-blue-500", description: "Create a complete favicon package (ICO, PNG, manifest) from a single image." },
     { name: "JWT Debugger & Verifier", url: "../tools/jwt-debugger.html", category: "Data&Developer", icon: "key-round", color: "text-rose-600", description: "Decode and verify JWTs with HS256/384/512 signature checks." },
     { name: "CSS Grid Generator & Visual Builder", url: "../tools/css-grid-generator.html", category: "Data&Developer", icon: "layout-grid", color: "text-tt-primary", description: "Visually build complex CSS Grid layouts, named areas, and track definitions." },
+    { name: "Mermaid.js Live Editor & Renderer",url: "../tools/mermaid-editor.html",category: "Data&Developer",icon: "workflow", color: "text-emerald-500", description: "Visualize and render diagrams (flowcharts, sequence, class, Gantt) from Mermaid.js code in real-time." },
 ];
 
 // --- 3. THEME MANAGEMENT LOGIC (FUTURE-PROOF) ---
 const ThemeManager = {
     init() {
-        // The inline script in <head> handles the initial, synchronous theme application.
-        // This `init` function sets up the interactive parts and cross-tab syncing.
         this.updateToggleIcon(document.documentElement.classList.contains('dark'));
-
-        // This listener is critical for syncing theme changes between open tabs.
         window.addEventListener('storage', (event) => {
             if (event.key === 'theme') {
-                this.applyTheme(event.newValue, false); // `false` to not re-save
+                this.applyTheme(event.newValue, false);
             }
         });
     },
-    
-    // Applies the theme and optionally saves it to localStorage.
     applyTheme(theme, save = true) {
         const isDark = theme === 'dark';
         document.documentElement.classList.toggle('dark', isDark);
-
         if (save) {
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
-        
         this.updateToggleIcon(isDark);
-        // Dispatch a custom event for other scripts (like charts) to listen to.
         window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
     },
-
-    // Handles the click on the theme toggle button.
     toggleTheme() {
         const isCurrentlyDark = document.documentElement.classList.contains('dark');
         this.applyTheme(isCurrentlyDark ? 'light' : 'dark');
     },
-
-    // Updates the sun/moon icon in the header.
     updateToggleIcon(isDark) {
         const iconContainer = document.getElementById('theme-toggle');
         if (iconContainer) {
@@ -152,7 +137,7 @@ const setupGlobalSearch = (rootPath) => {
         
         if (filteredTools.length > 0) {
             searchResults.innerHTML = filteredTools.map(tool => `
-                <a href="${rootPath}${tool.url.replace(/^\.\.\//, '')}" class="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                <a href="${rootPath}${tool.url.replace(/^\.\.\//, '')}" class="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition border-b border-gray-200 dark:border-gray-800 last:border-b-0">
                     <i data-lucide="${tool.icon}" class="w-4 h-4 ${tool.color} mr-3"></i>
                     <div class="flex flex-col overflow-hidden">
                         <div class="text-sm font-medium text-gray-800 dark:text-gray-100 whitespace-nowrap">${tool.name}</div>
@@ -204,4 +189,3 @@ window.injectLayout = (includeSearch) => {
        window.lucide.createIcons();
     }
 };
-

@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/character-counter.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/character-counter.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
@@ -78,7 +78,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
@@ -107,13 +107,13 @@
 
             <div class="lg:col-span-1 space-y-6">
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="metric-box"><span class="text-xs font-medium text-gray-500">Characters</span><strong id="charCount" class="text-3xl font-extrabold text-tt-primary">0</strong></div>
-                    <div class="metric-box"><span class="text-xs font-medium text-gray-500">Words</span><strong id="wordCount" class="text-3xl font-extrabold text-tt-primary">0</strong></div>
-                    <div class="metric-box"><span class="text-xs font-medium text-gray-500">Sentences</span><strong id="sentenceCount" class="text-2xl font-bold">0</strong></div>
-                    <div class="metric-box"><span class="text-xs font-medium text-gray-500">Paragraphs</span><strong id="paragraphCount" class="text-2xl font-bold">0</strong></div>
+                    <div class="metric-box"><span class="text-xs font-medium">Characters</span><strong id="charCount" class="text-3xl font-extrabold text-tt-primary">0</strong></div>
+                    <div class="metric-box"><span class="text-xs font-medium">Words</span><strong id="wordCount" class="text-3xl font-extrabold text-tt-primary">0</strong></div>
+                    <div class="metric-box"><span class="text-xs font-medium">Sentences</span><strong id="sentenceCount" class="text-2xl font-bold">0</strong></div>
+                    <div class="metric-box"><span class="text-xs font-medium">Paragraphs</span><strong id="paragraphCount" class="text-2xl font-bold">0</strong></div>
                 </div>
                 
-                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
                     <h3 class="font-bold mb-2">Readability Scores</h3>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between"><span>Flesch-Kincaid Grade:</span><strong id="fkGradeLevel">N/A</strong></div>
@@ -122,19 +122,19 @@
                     </div>
                 </div>
 
-                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
                      <h3 class="font-bold mb-2">SEO & Keyword Analysis</h3>
                      <div>
                         <label for="keywordInput" class="text-sm font-medium">Focus Keyword</label>
                         <input id="keywordInput" type="text" placeholder="Enter keyword..." class="w-full p-2 border rounded-lg mt-1 text-sm">
                         <div class="text-sm mt-2 flex justify-between"><span>Keyword Density:</span><strong id="keywordDensity">0%</strong></div>
                      </div>
-                     <div class="mt-4 pt-4 border-t dark:border-gray-600">
+                     <div class="mt-4 pt-4 border-t dark:border-gray-900">
                         <h4 class="text-sm font-bold">Top Keywords</h4>
                         <ul id="topKeywords" class="text-xs mt-2 space-y-1"><li>-</li></ul>
                      </div>
                 </div>
-                 <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+                 <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
                     <h3 class="font-bold mb-2">More Stats</h3>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between"><span>Reading Time:</span><strong id="readingTime">~0 min</strong></div>
@@ -144,9 +144,9 @@
             </div>
         </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
              <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Guide to Readability Scores</h2>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Guide to Readability Scores</h2>
                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Different formulas measure text complexity in different ways. For general web content, aiming for a grade level of around 8 is a good target.</p>
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><strong>Flesch-Kincaid Grade Level:</strong> The most common score, representing a US school-grade level. It's based on average sentence and word length.</li>
@@ -155,7 +155,7 @@
                 </ul>
             </div>
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">

@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/remove-spaces.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/remove-spaces.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -26,14 +26,12 @@
             const theme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             
-            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
             if (theme === 'dark' || (!theme && prefersDark)) {
             document.documentElement.classList.add('dark');
             } else {
             document.documentElement.classList.remove('dark');
             }
         } catch (e) {
-            // Failsafe: default to light mode if any errors occur.
             console.error("Error applying initial theme:", e);
             document.documentElement.classList.remove('dark');
         }
@@ -47,7 +45,6 @@
         :root { --tt-primary-stroke: #10b981; }
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
-        /* Style for the selected radio button's label */
         input[type="radio"]:checked + label {
             background-color: #10b981;
             color: white;
@@ -71,7 +68,7 @@
             }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
 
@@ -92,7 +89,7 @@
             </p>
         </section>
 
-        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-800">
             <div class="mb-6">
                 <label class="text-lg font-semibold dark:text-gray-200 mb-3 block">1. Select Cleaning Mode:</label>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-center">
@@ -112,30 +109,34 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                    <label for="inputText" class="text-lg font-semibold dark:text-gray-200">Original Text</label>
+                    <div class="flex justify-between items-center">
+                        <label for="inputText" class="text-lg font-semibold dark:text-gray-200">Original Text</label>
+                        <button id="clearBtn" class="group p-2 rounded-md hover:bg-red-100 dark:hover:bg-red-900/50">
+                           <i data-lucide="trash-2" class="w-4 h-4 text-red-500 transition-colors"></i>
+                        </button>
+                    </div>
                     <textarea id="inputText" placeholder="Paste messy text here..." class="w-full p-4 border rounded-lg shadow-sm min-h-[250px]"></textarea>
                     <div id="inputStats" class="text-stats text-right px-2">Chars: 0 | Words: 0 | Lines: 0</div>
                 </div>
                 <div class="space-y-2">
-                    <label for="outputText" class="text-lg font-semibold dark:text-gray-200">Cleaned Text</label>
+                    <div class="flex justify-between items-center">
+                        <label for="outputText" class="text-lg font-semibold dark:text-gray-200">Cleaned Text</label>
+                        <div class="w-8 h-8">
+                            <button id="copyBtn" title="Copy Result" class="group p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                                <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-colors group-hover:text-tt-primary"></i>
+                            </button>
+                        </div>
+                    </div>
                     <textarea id="outputText" readonly placeholder="Result appears here instantly..." class="w-full p-4 border rounded-lg shadow-sm bg-gray-50 dark:bg-gray-900/50 min-h-[250px]"></textarea>
                     <div id="outputStats" class="text-stats text-right px-2">Chars: 0 | Words: 0 | Lines: 0</div>
                 </div>
             </div>
 
-            <div class="flex justify-end pt-6 mt-6 border-t dark:border-gray-700 space-x-4">
-                <button id="copyBtn" disabled class="flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg cursor-not-allowed shadow-sm transition">
-                    <i data-lucide="copy" class="w-4 h-4"></i><span>Copy Result</span>
-                </button>
-                <button id="clearBtn" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
-                    <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
-                </button>
-            </div>
-        </div>
+             </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Cleaning Modes Explained</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Cleaning Modes Explained</h2>
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><strong>Normalize Spaces:</strong> Replaces consecutive spaces, tabs, and line breaks with a single space.</li>
                     <li><strong>Remove All Spaces:</strong> Deletes only space characters (` `), leaving tabs and line breaks intact.</li>
@@ -147,7 +148,7 @@
             </div>
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -178,14 +179,8 @@
             };
 
             const toggleCopyButton = (enabled) => {
-                ui.copyBtn.disabled = !enabled;
-                if (enabled) {
-                    ui.copyBtn.classList.remove('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
-                    ui.copyBtn.classList.add('bg-tt-primary', 'text-white', 'hover:bg-tt-secondary');
-                } else {
-                    ui.copyBtn.classList.add('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
-                    ui.copyBtn.classList.remove('bg-tt-primary', 'text-white', 'hover:bg-tt-secondary');
-                }
+                ui.copyBtn.classList.toggle('opacity-0', !enabled);
+                ui.copyBtn.classList.toggle('pointer-events-none', !enabled);
             };
 
             const updateStats = (textarea, statsDiv) => {
@@ -228,46 +223,59 @@
                 ui.outputText.value = result;
                 updateStats(ui.inputText, ui.inputStats);
                 updateStats(ui.outputText, ui.outputStats);
-                toggleCopyButton(result.length > 0); // New: Enable/Disable copy button
-            };
-
-            const copyOutput = () => {
-                if (ui.copyBtn.disabled) return; // New: Check if disabled
-                if (!ui.outputText.value) return;
-                
-                navigator.clipboard.writeText(ui.outputText.value).then(() => {
-                    const originalHTML = ui.copyBtn.innerHTML;
-                    
-                    // New: Visual feedback from data-converter.html
-                    ui.copyBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Copied!`;
-                    ui.copyBtn.classList.add('!bg-green-500');
-                    lucide.createIcons();
-                    
-                    setTimeout(() => { 
-                        ui.copyBtn.innerHTML = originalHTML; 
-                        ui.copyBtn.classList.remove('!bg-green-500');
-                        lucide.createIcons();
-                    }, 2000);
-                });
+                toggleCopyButton(result.length > 0);
             };
 
             const clearInputs = () => {
                 ui.inputText.value = '';
                 cleanText();
                 ui.inputText.focus();
-                toggleCopyButton(false); // New: Ensure button is disabled
             };
+
+            ui.copyBtn.addEventListener('click', () => {
+                const textToCopy = ui.outputText.value;
+                if (!textToCopy) return;
+
+                const copySuccess = () => {
+                    const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-colors group-hover:text-tt-primary"></i>';
+                    ui.copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                    lucide.createIcons();
+                    
+                    setTimeout(() => { 
+                        ui.copyBtn.innerHTML = originalIconHTML; 
+                        lucide.createIcons();
+                    }, 2000);
+                };
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(copySuccess)
+                        .catch(err => console.error('Copy failed:', err));
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = textToCopy;
+                    textArea.style.position = "absolute";
+                    textArea.style.left = "-9999px";
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        copySuccess();
+                    } catch (err) {
+                        console.error('Fallback copy command failed: ', err);
+                    }
+                    document.body.removeChild(textArea);
+                }
+            });
 
             // Event Listeners
             ui.inputText.addEventListener('input', cleanText);
             ui.modeRadios.forEach(radio => radio.addEventListener('change', cleanText));
             ui.tabSpaces.addEventListener('input', cleanText);
-            ui.copyBtn.addEventListener('click', copyOutput);
             ui.clearBtn.addEventListener('click', clearInputs);
             
             // Initial run
             cleanText();
-            toggleCopyButton(false); // Ensure initial state is disabled
         });
     </script>
 </body>

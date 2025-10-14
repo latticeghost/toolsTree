@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/compound-interest.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/compound-interest.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
@@ -82,7 +82,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
@@ -98,7 +98,7 @@
             <p class="text-base text-gray-600 dark:text-gray-300">A goal-planning tool to project investment growth with inflation, contributions, and more.</p>
         </section>
 
-        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
+        <div class="bg-white dark:bg-black shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="space-y-5">
                     <div class="mb-6">
@@ -126,7 +126,7 @@
                         <input type="number" id="futureValue" min="0" placeholder="e.g., 1000000" class="w-full p-3 border rounded-lg">
                     </div>
 
-                    <div class="pt-4 border-t dark:border-gray-700 grid grid-cols-2 gap-4">
+                    <div class="pt-4 border-t dark:border-gray-800 grid grid-cols-2 gap-4">
                         <div><label for="compounding" class="block text-sm font-medium mb-1">Compounding</label><select id="compounding" class="w-full p-3 border rounded-lg"><option value="12">Monthly</option><option value="4">Quarterly</option><option value="2">Half-Yearly</option><option value="1">Annually</option></select></div>
                         <div><label for="inflation" class="block text-sm font-medium mb-1">Inflation (%)</label><input type="number" id="inflation" min="0" placeholder="e.g., 6" class="w-full p-3 border rounded-lg"></div>
                     </div>
@@ -134,23 +134,23 @@
                 <div class="space-y-4">
                     <h2 class="text-xl font-bold">Investment Projection</h2>
                     <div id="results-summary" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg space-y-3 min-h-[300px] flex flex-col justify-center"><p class="text-center text-gray-500">Enter details to see projection.</p></div>
-                    <div class="h-48 pt-4 border-t dark:border-gray-700"><canvas id="breakdownChart"></canvas></div>
+                    <div class="h-48 pt-4 border-t dark:border-gray-800"><canvas id="breakdownChart"></canvas></div>
                 </div>
             </div>
-             <div id="timeline-container" class="mt-8 pt-4 border-t dark:border-gray-700">
+             <div id="timeline-container" class="mt-8 pt-4 border-t dark:border-gray-800">
                 <h3 class="text-lg font-bold mb-3"><i data-lucide="table" class="w-4 h-4 mr-2 inline stroke-tt-primary"></i>Yearly Breakdown</h3>
                 <div id="timeline-table" class="overflow-x-auto max-h-80"><p class="text-sm text-gray-500">Timeline appears here.</p></div>
             </div>
         </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-black border border-gray-100 dark:border-gray-800 space-y-6">
              <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">The Power of Compounding</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Compound interest is "interest on interest". It is the engine of wealth creation, allowing your investment to grow at an accelerating rate. This calculator models that growth and adds the ability to factor in regular annual contributions, providing a realistic projection of your long-term investments.</p>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">The Power of Compounding</h2>
+                <p class="text-sm mb-4">Compound interest is "interest on interest". It is the engine of wealth creation, allowing your investment to grow at an accelerating rate. This calculator models that growth and adds the ability to factor in regular annual contributions, providing a realistic projection of your long-term investments.</p>
                 <div id="formula-container" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg text-center">$$ A = P \left(1 + \frac{r}{n}\right)^{nt} $$</div>
                 
-                <p class="text-sm text-gray-600 mb-2 mt-4 dark:text-gray-300">Where:</p>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                <p class="text-sm mb-2 mt-4 dark:text-gray-300">Where:</p>
+                <ul class="list-disc list-inside text-sm space-y-2 ml-4">
                     <li><b>A</b>: Final Amount (the future value of the investment)</li>
                     <li><b>P</b>: Principal Amount (the initial amount of money)</li>
                     <li><b>r</b>: Annual Interest Rate (in decimal form, e.g., 12% = 0.12)</li>
@@ -159,10 +159,10 @@
                 </ul>
             </div>
             <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
-                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What's the difference between this and a SIP calculator?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">A SIP calculator is designed for regular, fixed <strong>monthly</strong> investments. This Compound Interest calculator starts with a <strong>lump-sum</strong> (the Initial Principal) and allows for optional, larger <strong>annual</strong> contributions. It's better suited for planning based on a one-time investment with yearly top-ups.</p></details>
-                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why is my 'Value in Today's Money' so much lower?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This figure shows the <strong>purchasing power</strong> of your future money after accounting for inflation. While your investment might grow to ₹1 Crore in 20 years, inflation means that ₹1 Crore won't buy as much as it does today. This inflation-adjusted number gives you a true sense of your future wealth.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What's the difference between this and a SIP calculator?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="mt-2 p-2">A SIP calculator is designed for regular, fixed <strong>monthly</strong> investments. This Compound Interest calculator starts with a <strong>lump-sum</strong> (the Initial Principal) and allows for optional, larger <strong>annual</strong> contributions. It's better suited for planning based on a one-time investment with yearly top-ups.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why is my 'Value in Today's Money' so much lower?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="mt-2 p-2">This figure shows the <strong>purchasing power</strong> of your future money after accounting for inflation. While your investment might grow to ₹1 Crore in 20 years, inflation means that ₹1 Crore won't buy as much as it does today. This inflation-adjusted number gives you a true sense of your future wealth.</p></details>
                 </div>
             </div>
         </section>
@@ -292,7 +292,7 @@
                     <span>Total Invested:</span><span class="font-semibold text-right">${formatCurrency(vals.totalContribution, vals.currency)}</span>
                     <span>Interest Earned:</span><span class="font-semibold text-right">${formatCurrency(vals.FV - vals.totalContribution, vals.currency)}</span>
                 </div>
-                <div class="mt-2 p-3 bg-gray-200 dark:bg-gray-800 rounded-lg">
+                <div class="mt-2 p-3 bg-gray-200 dark:bg-black rounded-lg">
                     <p class="text-sm">Future Value</p>
                     <p class="text-2xl font-bold text-tt-secondary">${formatCurrency(vals.FV, vals.currency)}</p>
                 </div>
@@ -318,7 +318,7 @@
         };
 
         const renderTable = (vals) => {
-            let tableHTML = `<table class="min-w-full text-sm"><thead><tr class="border-b dark:border-gray-700"><th class="py-1 text-left">Year</th><th class="py-1 text-right">Contribution</th><th class="py-1 text-right">Interest</th><th class="py-1 text-right">End Balance</th></tr></thead><tbody>`;
+            let tableHTML = `<table class="min-w-full text-sm"><thead><tr class="border-b dark:border-gray-800"><th class="py-1 text-left">Year</th><th class="py-1 text-right">Contribution</th><th class="py-1 text-right">Interest</th><th class="py-1 text-right">End Balance</th></tr></thead><tbody>`;
             vals.timeline.forEach((row, i) => {
                 if(i === 0) return;
                 const prevBalance = vals.timeline[i-1].balance;

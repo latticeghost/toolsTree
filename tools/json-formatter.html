@@ -9,10 +9,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/json-formatter.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/json-formatter.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -74,7 +73,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
 
@@ -95,11 +94,14 @@
             </p>
         </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800">
             <div class="lg:col-span-1">
-                <h2 class="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 flex items-center">
-                    <i data-lucide="file-json" class="w-5 h-5 mr-2 stroke-tt-primary"></i> Input Data
-                </h2>
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
+                        <i data-lucide="file-json" class="w-5 h-5 mr-2 stroke-tt-primary"></i> Input Data
+                    </h2>
+                    <div class="w-8 h-8"></div>
+                </div>
                 <textarea id="inputText" placeholder='Paste your JSON here (e.g., {"b":2, "a":1})' 
                     class="w-full p-4 border rounded-lg shadow-sm focus:ring-tt-primary focus:border-tt-primary transition"
                     oninput="clearOutput()"></textarea>
@@ -115,14 +117,21 @@
             </div>
     
             <div class="lg:col-span-1">
-                <h2 class="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 flex items-center">
-                    <i data-lucide="check-square" class="w-5 h-5 mr-2 stroke-tt-secondary"></i> Processed Output
-                </h2>
+                <div class="flex justify-between items-center mb-3">
+                     <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
+                        <i data-lucide="check-square" class="w-5 h-5 mr-2 stroke-tt-secondary"></i> Processed Output
+                    </h2>
+                    <div class="w-8 h-8">
+                        <button id="copyButton" title="Copy Result" class="p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                            <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>
+                        </button>
+                    </div>
+                </div>
                 <textarea id="outputText" readonly placeholder="The processed JSON will appear here..."
                     class="w-full p-4 border rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700"></textarea>
     
-                <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400 mt-2 mb-4">
-                    <span id="validationStatus" class="font-bold">Enter JSON to validate.</span>
+                <div class="flex justify-between items-center text-sm mt-2 mb-4">
+                    <span id="validationStatus" class="font-bold text-gray-600 dark:text-gray-400">Enter JSON to validate.</span>
                     <span>Length: <strong id="charCount" class="font-bold text-gray-800 dark:text-gray-200">0</strong></span>
                 </div>
     
@@ -153,25 +162,20 @@
                     <button class="flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition duration-300" onclick="processJSON('minify')">
                         <i data-lucide="compress" class="w-4 h-4"></i><span>Minify</span>
                     </button>
-                    <button id="copyBtn" onclick="copyToClipboard()" disabled title="Output is empty or invalid"
-                        class="flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-3 px-4 rounded-lg cursor-not-allowed">
-                        <i data-lucide="clipboard" class="w-4 h-4"></i><span>Copy</span>
-                    </button>
                     <button id="downloadBtn" onclick="downloadJSON()" disabled title="Output is empty or invalid"
-                        class="flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-3 px-4 rounded-lg cursor-not-allowed">
+                        class="col-span-2 flex items-center justify-center space-x-2 bg-gray-400 dark:bg-gray-500 text-white font-semibold py-3 px-4 rounded-lg cursor-not-allowed">
                         <i data-lucide="download" class="w-4 h-4"></i><span>Download</span>
                     </button>
                 </div>
             </div>
         </div>
-
         <div class="my-8 text-center">
             </div>
 
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">How to Use the JSON Formatter</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the JSON Formatter</h2>
                 <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
                     <li><strong>Step 1:</strong> Paste your raw JSON data into the "Input Data" text area. You can also click "Load Example" to see how it works.</li>
                     <li><strong>Step 2:</strong> Choose your desired indentation (2, 3, 4 spaces, or tabs) and check "Sort Keys" if you need keys alphabetized.</li>
@@ -181,7 +185,7 @@
             </div>
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">About JSON (JavaScript Object Notation)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About JSON (JavaScript Object Notation)</h2>
                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">
                     JSON is a lightweight, text-based data-interchange format that is easy for humans to read and write and easy for machines to parse and generate. It is essential for data exchange in web applications, especially for APIs. Our tool goes beyond basic formatting by offering advanced features that dramatically increase developer productivity.
                 </p>
@@ -194,7 +198,7 @@
             </div>
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -234,23 +238,26 @@
             const outputTextarea = document.getElementById("outputText");
             const validationStatus = document.getElementById("validationStatus");
             const charCountDisplay = document.getElementById("charCount");
-            const copyBtn = document.getElementById('copyBtn');
+            const copyButton = document.getElementById('copyButton'); 
             const downloadBtn = document.getElementById('downloadBtn');
             const sortKeysCheckbox = document.getElementById('sortKeys');
 
             const EXAMPLE_JSON = '{"id": 1, "name": "toolsTree Project", "description": "Revamping all tool pages for consistency and SEO.", "is_complete": false, "created_at": "2025-10-06T10:00:00Z", "tags": ["seo", "design", "development"]}';
 
+            function toggleCopyButton(enabled) {
+                copyButton.classList.toggle('opacity-0', !enabled);
+                copyButton.classList.toggle('pointer-events-none', !enabled);
+            }
+
             function toggleActionButtons(isDisabled) {
-                [copyBtn, downloadBtn].forEach(btn => {
-                    btn.disabled = isDisabled;
-                    if (isDisabled) {
-                        btn.classList.add('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
-                        btn.classList.remove('bg-tt-primary', 'hover:bg-tt-secondary');
-                    } else {
-                        btn.classList.remove('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
-                        btn.classList.add('bg-tt-primary', 'hover:bg-tt-secondary');
-                    }
-                });
+                downloadBtn.disabled = isDisabled;
+                if (isDisabled) {
+                    downloadBtn.classList.add('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
+                    downloadBtn.classList.remove('bg-tt-primary', 'hover:bg-tt-secondary');
+                } else {
+                    downloadBtn.classList.remove('bg-gray-400', 'dark:bg-gray-500', 'cursor-not-allowed');
+                    downloadBtn.classList.add('bg-tt-primary', 'hover:bg-tt-secondary');
+                }
             }
             
             function updateCharacterCount(text) {
@@ -263,6 +270,7 @@
                 validationStatus.className = 'font-bold text-yellow-500 dark:text-yellow-400';
                 updateCharacterCount('');
                 toggleActionButtons(true);
+                toggleCopyButton(false);
                 lucide.createIcons();
             }
             
@@ -291,6 +299,7 @@
                     validationStatus.innerHTML = '<i data-lucide="info" class="w-4 h-4 text-blue-500 inline mr-1"></i> Please enter JSON data.';
                     validationStatus.className = 'font-bold text-blue-500 dark:text-blue-400';
                     toggleActionButtons(true);
+                    toggleCopyButton(false);
                     lucide.createIcons();
                     return;
                 }
@@ -312,46 +321,65 @@
                     validationStatus.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4 text-green-600 inline mr-1"></i> JSON is **Valid**!';
                     validationStatus.className = 'font-bold text-green-600 dark:text-green-400';
                     toggleActionButtons(false);
+                    toggleCopyButton(true);
                     updateCharacterCount(output);
                 } catch (e) {
-                    let errorText = e.message;
-                    const match = errorText.match(/position\s+(\d+)/);
-                    if (match) {
-                        const errorIndex = parseInt(match[1]);
-                        let lineNumber = 1;
-                        for (let i = 0; i < errorIndex; i++) {
-                            if (text[i] === '\n') lineNumber++;
-                        }
-                        errorText = `Error near **Line ${lineNumber}**: ${e.message.split(' at position')[0]}`;
-                    }
+                    // --- UX IMPROVEMENT STARTS HERE ---
+                    // The detailed error message has been replaced with a simpler, more user-friendly one.
                     outputTextarea.value = '';
-                    validationStatus.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-red-600 inline mr-1"></i> **Validation Error:** ${errorText}`;
+                    validationStatus.innerHTML = '<i data-lucide="x-circle" class="w-4 h-4 text-red-600 inline mr-1"></i> JSON is **Invalid**!';
                     validationStatus.className = 'font-bold text-red-600 dark:text-red-400';
                     toggleActionButtons(true);
+                    toggleCopyButton(false);
                     updateCharacterCount('');
+                    // --- UX IMPROVEMENT ENDS HERE ---
                 }
                 lucide.createIcons();
                 outputTextarea.scrollTop = 0; 
             }
             
-            window.copyToClipboard = function() {
-              if (!outputTextarea.value || copyBtn.disabled) return;
-              navigator.clipboard.writeText(outputTextarea.value).then(() => {
-                const originalText = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Copied!';
-                copyBtn.classList.add('!bg-green-500', 'hover:!bg-green-600');
-                copyBtn.classList.remove('bg-tt-primary', 'hover:bg-tt-secondary');
+            // --- COPY BUTTON FIX ---
+            copyButton.addEventListener('click', () => {
+              const textToCopy = outputTextarea.value;
+              if (!textToCopy || copyButton.classList.contains('pointer-events-none')) {
+                return;
+              }
+
+              const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                
+                copyButton.innerHTML = successIconHTML;
                 lucide.createIcons();
+                
                 setTimeout(() => {
-                  copyBtn.innerHTML = originalText;
-                  copyBtn.classList.remove('!bg-green-500', 'hover:!bg-green-600');
-                  copyBtn.classList.add('bg-tt-primary', 'hover:bg-tt-secondary');
+                  copyButton.innerHTML = originalIconHTML;
                   lucide.createIcons();
                 }, 2000);
-              }).catch(err => {
-                console.error('Could not copy text: ', err);
-              });
-            }
+              };
+
+              if (navigator.clipboard && window.isSecureContext) {
+                 navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => {
+                        console.error('Failed to copy text with modern API: ', err);
+                    });
+              } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "absolute";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+                document.body.removeChild(textArea);
+              }
+            });
 
             window.downloadJSON = function() {
                 const content = outputTextarea.value;
@@ -374,7 +402,6 @@
 
             // Initial state setup for the tool
             clearInput();
-            
             // =================================================================
         });
     </script>

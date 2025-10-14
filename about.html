@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | toolsTree</title>
+    <link rel="canonical" href="https://toolstree.vercel.app/about.html">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="assets/output.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            } else {
+            document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {}
+        })();
+    </script>
+    <script>
+        window.GLOBAL_ROOT_PATH = '';
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">Our Story</h1>
+            <p class="text-lg text-gray-600 mt-2 dark:text-gray-300">Driven by a passion for better tools.</p>
+        </div>
+
+        <div class="bg-white dark:bg-black shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6 text-base">
+            
+            <section>
+                <h2 class="text-2xl font-semibold mb-3 text-tt-primary">The Mission</h2>
+                <p><strong>toolsTree</strong> was born from a simple observation: the free online tools we use every day could be so much better. They could be faster, more powerful, and offer more features without compromising on user experience. Our mission is to build that collection of smarter, feature-packed utilities that respect your privacy and help you get your work done efficiently.</p>
+            </section>
+
+            <hr class="border-gray-200 dark:border-gray-800">
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-3 text-tt-primary">The Journey</h2>
+                <p>My journey into development started as a student at the National Institute of Technology, Rourkela. While there, I found myself more passionate about building practical solutions and real-world projects than I was about completing a formal degree. I saw a gap between the basic, ad-cluttered tools available online and what was truly possible with modern web technology.</p>
+                <p class="mt-2">So, I took a leap of faith to dedicate myself full-time to creating `toolsTree`. This project is the result of that passion—a solo endeavor to build the most advanced versions of the tools you rely on.</p>
+            </section>
+
+            <hr class="border-gray-200 dark:border-gray-800">
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-3 text-tt-primary">Our Philosophy</h2>
+                <ul class="list-disc list-inside ml-4 space-y-2">
+                    <li><strong>Privacy First:</strong> We are currently focused on tools that perform all processing in your browser. This means your data never touches our servers. It's fast, secure, and completely private.</li>
+                    <li><strong>Advanced Features:</strong> We don't just replicate existing tools; we enhance them. Our goal is to offer the most feature-packed utilities you can find.</li>
+                    <li><strong>Clean & Fast:</strong> A great tool should be a pleasure to use. We prioritize a clean, intuitive interface and fast performance on all devices.</li>
+                </ul>
+            </section>
+
+            <hr class="border-gray-200 dark:border-gray-800">
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-3 text-tt-primary">Let's Build Together</h2>
+                <p>This project is a continuous work in progress, built with the help of powerful AI assistants to accelerate development and bring ideas to life. If you have an idea for a new tool, a suggestion for an existing one, or just want to say hello, please don't hesitate to reach out. Your feedback is what will make `toolsTree` truly great.</p>
+                <p class="mt-3"><a href="contact.html" class="font-bold text-tt-primary hover:underline">Get in touch &rarr;</a></p>
+            </section>
+
+        </div>
+    </main>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script> lucide.createIcons(); </script>
+    <script src="javascript/globals.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.injectLayout(false); // Injects header/footer without search
+        });
+    </script>
+</body>
+</html>

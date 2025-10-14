@@ -9,10 +9,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/headline-title-case.html">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/headline-title-case.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display-swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -27,14 +26,12 @@
             const theme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             
-            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
             if (theme === 'dark' || (!theme && prefersDark)) {
             document.documentElement.classList.add('dark');
             } else {
             document.documentElement.classList.remove('dark');
             }
         } catch (e) {
-            // Failsafe: default to light mode if any errors occur.
             console.error("Error applying initial theme:", e);
             document.documentElement.classList.remove('dark');
         }
@@ -44,15 +41,8 @@
         window.GLOBAL_ROOT_PATH = '../';
     </script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" defer>
-    </script> 
     <style>
-        /* Tool-specific styling for the icon and success feedback */
         .tool-icon { stroke: #9333ea; } 
-        .btn-copy-success { background-color: #10b981; color: white; }
-
-        /* Dark mode consistency */
         .dark input, .dark select, .dark textarea {
             background-color: #374151; border-color: #4b5563; color: #f3f4f6;
         }
@@ -83,7 +73,7 @@
     }
     </script>   
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
 
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
 
@@ -105,96 +95,74 @@
             </p>
         </section>
 
-        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-700">
-            <div class="space-y-6">
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-800">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <div>
-                    <label for="inputText" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Paste or Type Your Text Below:</label>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="inputText" class="text-lg font-semibold dark:text-gray-200">Original Text</label>
+                        <button id="clearButton" title="Clear Text" class="group p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                           <i data-lucide="trash-2" class="w-4 h-4 text-red-500 transition-colors"></i>
+                        </button>
+                    </div>
                     <textarea id="inputText" rows="8" 
-                        class="mt-1 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-tt-secondary focus:border-tt-secondary" 
-                        placeholder="Example: a comprehensive guide to search engine optimization and website traffic"></textarea>
+                        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-tt-secondary focus:border-tt-secondary" 
+                        placeholder="Example: a comprehensive guide to search engine optimization"></textarea>
                 </div>
 
-                <div class="flex flex-wrap gap-3 pt-2 justify-center sm:justify-start">
-                    <button id="convertButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-tt-secondary text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-tt-secondary/90 transition duration-300 focus:outline-none focus:ring-2 focus:ring-tt-secondary">
-                        <i data-lucide="type" class="w-5 h-5"></i>
-                        <span>Apply Title Case</span>
-                    </button>
-                    <button id="copyButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400">
-                        <i data-lucide="copy" class="w-5 h-5"></i> Copy Result
-                    </button>
-                    <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
-                        <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
-                    </button>
-                </div>
-                
                 <div>
-                    <label for="outputText" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Converted Title:</label>
-                    <textarea id="outputText" rows="5" readonly 
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="outputText" class="text-lg font-semibold dark:text-gray-200">Converted Title</label>
+                         <button id="copyButton" title="Copy Result" class="group p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                            <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-colors group-hover:text-tt-primary"></i>
+                        </button>
+                    </div>
+                    <textarea id="outputText" rows="8" readonly 
                         class="w-full p-3 border border-gray-300 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-not-allowed shadow-sm"></textarea>
                 </div>
-
             </div>
         </div>
 
-        <div class="my-8 text-center">
-            </div>
-
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">How to Use the Headline Title Case Converter</h2>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">How to Use the Converter</h2>
                 <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
-                    <li><strong>Step 1:</strong> Paste your title or text block into the input field above.</li>
-                    <li><strong>Step 2:</strong> The conversion happens automatically as you type, or you can click "Apply Title Case".</li>
-                    <li><strong>Step 3:</strong> Review the professionally formatted result in the output box.</li>
-                    <li><strong>Step 4:</strong> Click the "Copy Result" button to instantly copy the corrected title to your clipboard.</li>
+                    <li><strong>Step 1:</strong> Paste your title or text into the "Original Text" field.</li>
+                    <li><strong>Step 2:</strong> The conversion happens automatically as you type.</li>
+                    <li><strong>Step 3:</strong> Review the formatted result in the "Converted Title" box.</li>
+                    <li><strong>Step 4:</strong> Click the copy icon <i data-lucide="copy" class="inline w-3 h-3"></i> to instantly copy the corrected title.</li>
                 </ol>
             </div>
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">About Title Case Formatting</h2>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">About Title Case Formatting</h2>
                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">
-                    Title case is essential for professional documents, articles, books, and website headlines. Unlike simple "Capitalize Every Word," proper title case adheres to style guides (like The Chicago Manual of Style or AP Style) by ensuring small connecting words are kept in lowercase. This dedication to grammar and style is what makes your content look polished.
+                    Title case is essential for professional documents, articles, and headlines. Unlike simple "Capitalize Every Word," proper title case adheres to style guides by ensuring small connecting words are kept in lowercase.
                 </p>
-            </div>
-            
-            <div>
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100 pt-2">The Rules Our Tool Follows</h3>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Our converter is built with the most common journalistic and academic rules, specifically:</p>
-                <ul class="list-disc list-inside ml-4 space-y-1 text-sm text-gray-600 dark:text-gray-300">
-                    <li>The <strong>first and last word</strong> of the title are <strong>always</strong> capitalized.</li>
-                    <li>All major words (nouns, verbs, adjectives, adverbs) are capitalized.</li>
-                    <li>Small connecting words (prepositions, articles, and conjunctions of four letters or fewer) such as <strong>a, an, the, and, but, or, for, nor, of, in, with</strong> are kept in lowercase, unless they are the first or last word.</li>
+                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">The Rules Our Tool Follows</h3>
+                <ul class="list-disc list-inside ml-4 space-y-1 text-sm text-gray-600 dark:text-gray-300 mt-2">
+                    <li>The <strong>first and last word</strong> are always capitalized.</li>
+                    <li>All major words (nouns, verbs, adjectives, etc.) are capitalized.</li>
+                    <li>Small connecting words (e.g., a, an, the, and, but, for, of, with) are kept lowercase.</li>
                 </ul>
             </div>
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Frequently Asked Questions</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <span>Is this tool different from a regular "Title Case" converter?</span>
+                            <span>Is this different from a regular "Title Case" tool?</span>
                             <span class="transition group-open:rotate-180">
                                 <i data-lucide="chevron-down" class="w-4 h-4"></i>
                             </span>
                         </summary>
-                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes, it is. A regular title case tool might capitalize <strong>every</strong> word (often called "Capital Case"). Our Headline Title Case Converter uses a more advanced algorithm that knows which small words should remain lowercase to follow accepted style guides for headlines.</p>
-                    </details>
-                    <details class="group">
-                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <span>Do I need an internet connection to use the tool?</span>
-                            <span class="transition group-open:rotate-180">
-                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                            </span>
-                        </summary>
-                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">No. All of the processing logic—the actual conversion—runs entirely in your web browser using JavaScript. No text is sent to our servers, ensuring your privacy and allowing the tool to work instantly, even offline.</p>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. A regular tool might capitalize <strong>every</strong> word. Our Headline Title Case Converter uses a smarter algorithm that knows which small words should remain lowercase to follow accepted style guides.</p>
                     </details>
                 </div>
             </div>
-
         </section>
-
     </main>
     
     <script src="../javascript/globals.js" defer></script>
@@ -202,89 +170,88 @@
         document.addEventListener('DOMContentLoaded', () => {
             if(typeof window.injectLayout === 'function') {
                 window.injectLayout(false); 
-            } else {
-                console.error("globals.js or injectLayout function not loaded.");
             }
             const inputText = document.getElementById('inputText');
             const outputText = document.getElementById('outputText');
-            const convertButton = document.getElementById('convertButton');
             const copyButton = document.getElementById('copyButton');
             const clearButton = document.getElementById('clearButton');
 
-            const MINOR_WORDS = [
-                "a", "an", "and", "as", "at", "but", "by", "for", "in", "nor", 
-                "of", "on", "or", "so", "the", "to", "up", "yet"
-            ];
+            const MINOR_WORDS = ["a", "an", "and", "as", "at", "but", "by", "for", "in", "nor", "of", "on", "or", "so", "the", "to", "up", "yet"];
+            
+            const toggleActionButton = (button, enabled) => {
+                button.classList.toggle('opacity-0', !enabled);
+                button.classList.toggle('pointer-events-none', !enabled);
+            };
+
             function convertToTitleCase() {
-                const text = inputText.value.trim();
-                if (!text) {
+                const text = inputText.value;
+                if (!text.trim()) {
                     outputText.value = "";
+                    toggleActionButton(clearButton, false);
+                    toggleActionButton(copyButton, false);
                     return;
                 }
 
-                // Split text into words, handling common punctuation/spaces robustly
                 const words = text.toLowerCase().split(/\s+/).filter(word => word.length > 0);
-                
-                let result = [];
-
-                for (let i = 0; i < words.length; i++) {
-                    const word = words[i];
-                    
+                let result = words.map((word, i) => {
                     const isMinorWord = MINOR_WORDS.includes(word);
-
-                    if (
-                        i === 0 || // Rule 1: First word
-                        i === words.length - 1 || // Rule 2: Last word
-                        !isMinorWord // Rule 3: Major word
-                    ) {
-                        // Capitalize the first letter
-                        result.push(word.charAt(0).toUpperCase() + word.slice(1));
+                    if (i === 0 || i === words.length - 1 || !isMinorWord) {
+                        return word.charAt(0).toUpperCase() + word.slice(1);
                     } else {
-                        // Rule 4: Minor word, keep lowercase
-                        result.push(word);
+                        return word;
                     }
-                }
+                }).join(" ");
 
-                // Rejoin the words and place the output
-                outputText.value = result.join(" ");
+                outputText.value = result;
+                toggleActionButton(clearButton, text.length > 0);
+                toggleActionButton(copyButton, result.length > 0);
             }
 
             function copyToClipboard() {
-                outputText.select();
-                outputText.setSelectionRange(0, 99999); // For mobile devices
+                const textToCopy = outputText.value;
+                if (!textToCopy) return;
 
-                try {
-                    document.execCommand('copy');
-                    
-                    // Visual feedback
-                    const originalText = copyButton.innerHTML;
-                    copyButton.innerHTML = '<i data-lucide="check" class="w-5 h-5 inline mr-1"></i> Copied!';
-                    copyButton.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-800', 'dark:bg-gray-700', 'dark:hover:bg-gray-600', 'dark:text-white');
-                    copyButton.classList.add('btn-copy-success');
+                const copySuccess = () => {
+                    const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-colors group-hover:text-tt-primary"></i>';
+                    copyButton.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
                     lucide.createIcons();
-
-                    setTimeout(() => {
-                        copyButton.innerHTML = originalText;
-                        copyButton.classList.remove('btn-copy-success');
-                        copyButton.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-800', 'dark:bg-gray-700', 'dark:hover:bg-gray-600', 'dark:text-white');
+                    
+                    setTimeout(() => { 
+                        copyButton.innerHTML = originalIconHTML; 
                         lucide.createIcons();
                     }, 1500);
-
-                } catch (err) {
-                    alert('Unable to copy text. Please select the text manually.');
+                };
+                
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textToCopy).then(copySuccess).catch(err => console.error('Copy failed:', err));
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = textToCopy;
+                    textArea.style.position = "absolute";
+                    textArea.style.left = "-9999px";
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        copySuccess();
+                    } catch (err) {
+                        console.error('Fallback copy command failed:', err);
+                    }
+                    document.body.removeChild(textArea);
                 }
             }
 
             function clearFields() {
                 inputText.value = "";
-                outputText.value = "";
+                convertToTitleCase();
                 inputText.focus();
             }
-            convertButton.addEventListener('click', convertToTitleCase);
+
             copyButton.addEventListener('click', copyToClipboard);
             clearButton.addEventListener('click', clearFields);
             inputText.addEventListener('input', convertToTitleCase);
-            window.addEventListener('load', convertToTitleCase);
+            
+            convertToTitleCase(); // Initial run to set button states
         });
     </script>
 </body>

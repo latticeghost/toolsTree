@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/case-converter.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/case-converter.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -26,14 +26,12 @@
           const theme = localStorage.getItem('theme');
           const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           
-          // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
           if (theme === 'dark' || (!theme && prefersDark)) {
             document.documentElement.classList.add('dark');
           } else {
             document.documentElement.classList.remove('dark');
           }
         } catch (e) {
-          // Failsafe: default to light mode if any errors occur.
           console.error("Error applying initial theme:", e);
           document.documentElement.classList.remove('dark');
         }
@@ -76,7 +74,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
@@ -92,33 +90,35 @@
             <p class="text-base text-gray-600 dark:text-gray-300">Type once, see all 14+ case styles instantly, and copy the one you need.</p>
         </section>
 
-        <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <label for="inputText" class="block text-xl font-semibold mb-2">Input Text</label>
-                <textarea id="inputText" placeholder="Type or paste your text here..." class="w-full p-4 border rounded-lg shadow-inner min-h-[150px]"></textarea>
-                <div class="flex justify-between items-center">
-                    <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
-                        <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
+                <div class="flex justify-between items-center mb-2">
+                    <label for="inputText" class="block text-xl font-semibold">Input Text</label>
+                    <button id="clearButton" title="Clear Text" class="group p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                        <i data-lucide="trash-2" class="w-4 h-4 text-red-500 transition-colors"></i>
                     </button>
-                    <div id="stats" class="text-xs text-right text-gray-500 mt-1 pr-2">Characters: 0 | Words: 0</div>
+                </div>
+                <textarea id="inputText" placeholder="Type or paste your text here..." class="w-full p-4 border rounded-lg shadow-inner min-h-[150px]"></textarea>
+                <div class="flex justify-end mt-2">
+                    <div id="stats" class="text-xs text-right text-gray-500 pr-2">Characters: 0 | Words: 0</div>
                 </div>
             </div>
 
-            <div class="pt-6 border-t dark:border-gray-700">
+            <div class="pt-6 border-t dark:border-gray-800">
                 <h2 class="text-xl font-bold mb-4">Live Outputs</h2>
                 <div id="outputs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     </div>
             </div>
         </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
              <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Guide to Case Styles</h2>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Guide to Case Styles</h2>
                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">This tool supports crucial case styles used in programming, web development, and writing.</p>
                 <div class="grid md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <h3 class="font-bold mb-1">Programming Cases</h3>
-                        <ul class="list-disc list-inside space-y-1 ml-4">
+                        <ul class="list-disc list-inside space-y-1 ml-4 dark:text-gray-300">
                             <li><strong>camelCase:</strong> Used for variables in JavaScript.</li>
                             <li><strong>PascalCase:</strong> Used for classes in many languages.</li>
                             <li><strong>snake_case:</strong> Used in Python, PHP, and databases.</li>
@@ -130,7 +130,7 @@
                     </div>
                     <div>
                         <h3 class="font-bold mb-1">Literary & Specialty Cases</h3>
-                        <ul class="list-disc list-inside space-y-1 ml-4">
+                        <ul class="list-disc list-inside space-y-1 ml-4 dark:text-gray-300">
                             <li><strong>Sentence case:</strong> Standard for written text.</li>
                             <li><strong>Title Case:</strong> For headlines, capitalizing major words.</li>
                             <li><strong>UPPERCASE / lowercase:</strong> For emphasis or normalization.</li>
@@ -142,7 +142,7 @@
                 </div>
             </div>
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -183,7 +183,7 @@
             inputText: document.getElementById('inputText'),
             outputsGrid: document.getElementById('outputs-grid'),
             stats: document.getElementById('stats'),
-            clearButton: document.getElementById('clearButton') // New: Get the clear button
+            clearButton: document.getElementById('clearButton')
         };
 
         const CASES = {
@@ -224,11 +224,16 @@
                         <h4 class="text-sm font-semibold">${name}</h4>
                         <button data-target="${id}" class="copy-btn p-1 text-gray-500 hover:text-tt-primary"><i data-lucide="copy" class="w-4 h-4"></i></button>
                     </div>
-                    <textarea id="${id}" readonly class="w-full p-2 border rounded-md bg-white dark:bg-gray-800 output-textarea"></textarea>
+                    <textarea id="${id}" readonly class="w-full p-2 border rounded-md bg-white dark:bg-gray-900 output-textarea"></textarea>
                 `;
                 ui.outputsGrid.appendChild(box);
             }
             lucide.createIcons();
+        };
+
+        const toggleClearButton = (enabled) => {
+            ui.clearButton.classList.toggle('opacity-0', !enabled);
+            ui.clearButton.classList.toggle('pointer-events-none', !enabled);
         };
 
         const convertAll = () => {
@@ -243,6 +248,7 @@
             const charCount = input.length;
             const wordCount = input.trim() === '' ? 0 : input.trim().split(/\s+/).length;
             ui.stats.textContent = `Characters: ${charCount} | Words: ${wordCount}`;
+            toggleClearButton(charCount > 0);
         };
 
         const copyText = (e) => {
@@ -251,37 +257,56 @@
 
             const targetId = targetButton.dataset.target;
             const textarea = document.getElementById(targetId);
-            if (textarea.value) {
-                navigator.clipboard.writeText(textarea.value).then(() => {
-                    const icon = targetButton.querySelector('i');
-                    icon.setAttribute('data-lucide', 'check');
+            const textToCopy = textarea.value;
+            
+            if (!textToCopy) return;
+
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                
+                targetButton.innerHTML = successIconHTML;
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    targetButton.innerHTML = originalIconHTML;
                     lucide.createIcons();
-                    setTimeout(() => {
-                        icon.setAttribute('data-lucide', 'copy');
-                        lucide.createIcons();
-                    }, 1500);
-                });
+                }, 1500);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Copy failed:', err));
+            } else {
+                const tempTextArea = document.createElement("textarea");
+                tempTextArea.value = textToCopy;
+                tempTextArea.style.position = "absolute";
+                tempTextArea.style.left = "-9999px";
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+                document.body.removeChild(tempTextArea);
             }
         };
-        
-        // New: Function to clear input, output, and stats
+                
         const clearAll = () => {
             ui.inputText.value = '';
-            for (const name in CASES) {
-                const id = name.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
-                const outputTextarea = document.getElementById(id);
-                if (outputTextarea) {
-                    outputTextarea.value = '';
-                }
-            }
-            ui.stats.textContent = 'Characters: 0 | Words: 0';
+            convertAll();
+            ui.inputText.focus();
         };
 
         // Initialize
         createOutputBoxes();
         ui.inputText.addEventListener('input', convertAll);
         ui.outputsGrid.addEventListener('click', copyText);
-        ui.clearButton.addEventListener('click', clearAll); // New: Add event listener for clear button
+        ui.clearButton.addEventListener('click', clearAll);
+        convertAll(); // Initial run to set button visibility
     });
     </script>
 </body>

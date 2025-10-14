@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="canonical" href="https://toolstree.netlify.app/categories/text.html">
+  <link rel="canonical" href="https://toolstree.vercel.app/categories/text.html">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link href="../assets/output.css" rel="stylesheet">
   <!-- Google tag (gtag.js) -->
@@ -55,7 +55,7 @@
     "@type": "CollectionPage",
     "name": "Text Tools & Converters",
     "description": "A professional collection of free utilities for formatting, counting, and converting text for web, coding, and general use.",
-    "url": "https://toolstree.netlify.app/categories/text.html",
+    "url": "https://toolstree.vercel.app/categories/text.html",
     "publisher": {
       "@type": "Organization",
       "name": "toolsTree"
@@ -63,17 +63,17 @@
     "mainEntity": {
       "@type": "ItemList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "All-in-One Case Converter", "url": "https://toolstree.netlify.app/tools/case-converter.html" },
-        { "@type": "ListItem", "position": 2, "name": "Advanced Text Cleaner & Space Remover", "url": "https://toolstree.netlify.app/tools/remove-spaces.html" },
-        { "@type": "ListItem", "position": 3, "name": "Real-Time Character Counter", "url": "https://toolstree.netlify.app/tools/character-counter.html" },
-        { "@type": "ListItem", "position": 4, "name": "Advanced Text Reverser & Flipper", "url": "https://toolstree.netlify.app/tools/reverse-text.html" },
-        { "@type": "ListItem", "position": 5, "name": "Headline Title Case Converter", "url": "https://toolstree.netlify.app/tools/headline-title-case.html" }
+        { "@type": "ListItem", "position": 1, "name": "All-in-One Case Converter", "url": "https://toolstree.vercel.app/tools/case-converter.html" },
+        { "@type": "ListItem", "position": 2, "name": "Advanced Text Cleaner & Space Remover", "url": "https://toolstree.vercel.app/tools/remove-spaces.html" },
+        { "@type": "ListItem", "position": 3, "name": "Real-Time Character Counter", "url": "https://toolstree.vercel.app/tools/character-counter.html" },
+        { "@type": "ListItem", "position": 4, "name": "Advanced Text Reverser & Flipper", "url": "https://toolstree.vercel.app/tools/reverse-text.html" },
+        { "@type": "ListItem", "position": 5, "name": "Headline Title Case Converter", "url": "https://toolstree.vercel.app/tools/headline-title-case.html" }
       ]
     }
   }
   </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
 
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
     
@@ -108,7 +108,7 @@
         const renderTools = (tools, containerId) => {
             const container = document.getElementById(containerId);
             container.innerHTML = tools.map(tool => `
-                <a href="${tool.url}" class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 space-y-2 dark:bg-gray-800 dark:border-gray-700 hover:scale-[1.01] transform hover:bg-gray-50 dark:hover:bg-gray-700">
+                <a href="${tool.url}" class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 space-y-2 dark:bg-gray-900 dark:border-gray-800 hover:scale-[1.01] transform hover:bg-gray-50 dark:hover:border-tt-primary/50">
                   <i data-lucide="${tool.icon}" class="w-7 h-7 mb-2 ${tool.color} transition group-hover:text-tt-secondary"></i>
                   <h2 class="text-base font-semibold text-gray-800 dark:text-gray-100">${tool.name}</h2>
                   <p class="text-gray-500 text-sm dark:text-gray-400">${tool.description || 'Quick access tool.'}</p>

@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/retirement-calculator.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/retirement-calculator.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
@@ -68,7 +68,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
 
@@ -90,7 +90,7 @@
         </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
                 <div>
                     <h2 class="text-xl font-bold flex items-center mb-4"><i data-lucide="user" class="w-5 h-5 mr-2 stroke-tt-primary"></i>About You</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -105,7 +105,7 @@
                     </div>
                 </div>
 
-                <div class="pt-4 border-t dark:border-gray-700">
+                <div class="pt-4 border-t dark:border-gray-800">
                     <h2 class="text-xl font-bold flex items-center mb-4"><i data-lucide="piggy-bank" class="w-5 h-5 mr-2 stroke-tt-primary"></i>Your Savings Plan</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -126,7 +126,7 @@
                     </div>
                 </div>
 
-                <div class="pt-4 border-t dark:border-gray-700">
+                <div class="pt-4 border-t dark:border-gray-800">
                     <h2 class="text-xl font-bold flex items-center mb-4"><i data-lucide="activity" class="w-5 h-5 mr-2 stroke-tt-primary"></i>Market Assumptions</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 
-                <div class="pt-4 border-t dark:border-gray-700">
+                <div class="pt-4 border-t dark:border-gray-800">
                     <h2 class="text-xl font-bold flex items-center mb-4"><i data-lucide="sunset" class="w-5 h-5 mr-2 stroke-tt-primary"></i>Post-Retirement</h2>
                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -165,19 +165,19 @@
             </div>
 
             <div class="space-y-8">
-                <div id="result" class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-6 border border-gray-100 dark:border-gray-700 text-center">
+                <div id="result" class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 border border-gray-100 dark:border-gray-800 text-center">
                     <p class="text-gray-500 dark:text-gray-400">Enter your details and click "Calculate".</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-4 border border-gray-100 dark:border-gray-700 chart-container">
+                <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-4 border border-gray-100 dark:border-gray-800 chart-container">
                     <h3 class="text-lg font-semibold text-center mb-2">Investment Growth Timeline</h3>
                     <canvas id="retirementChart"></canvas>
                 </div>
             </div>
         </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">How to Use the Retirement Calculator</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the Retirement Calculator</h2>
                 <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
                     <li><strong>Enter Personal Details:</strong> Input your current age and your desired retirement age.</li>
                     <li><strong>Input Your Savings Plan:</strong> Provide your current retirement savings, your current monthly contribution, and the percentage by which you expect to increase your savings each year.</li>
@@ -188,7 +188,7 @@
             </div>
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">

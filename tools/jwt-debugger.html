@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://toolstree.netlify.app/tools/jwt-debugger.html">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/jwt-debugger.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -54,7 +54,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
@@ -78,23 +78,37 @@
                     <button id="loadExampleBtn" class="flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-300 flex-grow sm:flex-grow-0">
                         <i data-lucide="layout-grid" class="w-4 h-4"></i><span>Load Example</span>
                     </button>
-                    <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
+                    <button id="clearBtn" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
                         <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
                     </button>
                 </div>
             </div>
             <div class="space-y-6">
                 <div>
-                    <label class="block text-lg font-semibold mb-2">Decoded Header</label>
-                    <pre><code id="decodedHeader" class="block w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-800 text-sm whitespace-pre-wrap break-all min-h-[100px]"></code></pre>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-lg font-semibold">Decoded Header</label>
+                        <div class="w-8 h-8">
+                            <button id="copyHeaderBtn" class="p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                                <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <pre><code id="decodedHeader" class="block w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-900 text-sm whitespace-pre-wrap break-all min-h-[100px]"></code></pre>
                 </div>
                  <div>
-                    <label class="block text-lg font-semibold mb-2">Decoded Payload</label>
-                    <pre><code id="decodedPayload" class="block w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-800 text-sm whitespace-pre-wrap break-all min-h-[150px]"></code></pre>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-lg font-semibold">Decoded Payload</label>
+                        <div class="w-8 h-8">
+                             <button id="copyPayloadBtn" class="p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                                <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <pre><code id="decodedPayload" class="block w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-900 text-sm whitespace-pre-wrap break-all min-h-[150px]"></code></pre>
                 </div>
                  <div>
                     <h3 class="block text-lg font-semibold mb-2">Verify Signature</h3>
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border dark:border-gray-700 space-y-3">
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-xl border dark:border-gray-800 space-y-3">
                         <textarea id="secret" placeholder="Your-256-bit-secret" class="w-full p-2 border rounded-lg font-mono text-sm h-24"></textarea>
                         <div id="signatureStatus" class="flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-bold">
                             <i id="statusIcon" data-lucide="help-circle" class="w-5 h-5"></i>
@@ -105,9 +119,9 @@
             </div>
         </div>
 
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">About JWT (JSON Web Token)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About JWT (JSON Web Token)</h2>
                  <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed.</p>
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><strong>Header:</strong> Typically consists of two parts: the token type (`JWT`) and the signing algorithm being used, such as HMAC SHA256 or RSA.</li>
@@ -116,7 +130,7 @@
                 </ul>
             </div>
              <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this JWT debugger secure?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. All decoding and signature verification happen entirely within your browser. The token and secret you enter are never sent to our servers, ensuring your sensitive information remains confidential.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What does "Signature Verified" mean?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">It means that the header and payload have not been tampered with. The signature is recalculated using the header, payload, and the secret you provided, and it matches the original signature on the token. If it says "Invalid Signature," it means either the token was altered or the secret is incorrect.</p></details>
@@ -141,10 +155,23 @@
             statusIcon: document.getElementById('statusIcon'),
             statusText: document.getElementById('statusText'),
             loadExampleBtn: document.getElementById('loadExampleBtn'),
-            clearInputBtn: document.getElementById('clearInputBtn'),
+            clearBtn: document.getElementById('clearBtn'),
+            copyHeaderBtn: document.getElementById('copyHeaderBtn'),
+            copyPayloadBtn: document.getElementById('copyPayloadBtn'),
         };
 
         const exampleJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        
+        const toggleCopyButtons = (enabled) => {
+            const headerHasContent = ui.decodedHeader.textContent.trim().length > 0 && !ui.decodedHeader.textContent.startsWith('Invalid');
+            const payloadHasContent = ui.decodedPayload.textContent.trim().length > 0 && !ui.decodedPayload.textContent.startsWith('Invalid');
+
+            ui.copyHeaderBtn.classList.toggle('opacity-0', !headerHasContent || !enabled);
+            ui.copyHeaderBtn.classList.toggle('pointer-events-none', !headerHasContent || !enabled);
+
+            ui.copyPayloadBtn.classList.toggle('opacity-0', !payloadHasContent || !enabled);
+            ui.copyPayloadBtn.classList.toggle('pointer-events-none', !payloadHasContent || !enabled);
+        };
         
         const decodeAndVerify = () => {
             const token = ui.encodedJwt.value.trim();
@@ -161,13 +188,14 @@
             }
             
             const [header, payload, signature] = parts;
+            let success = true;
 
             try {
                 const decodedHeader = JSON.parse(atob(header.replace(/-/g, '+').replace(/_/g, '/')));
                 ui.decodedHeader.textContent = JSON.stringify(decodedHeader, null, 2);
             } catch (e) {
                 setError('Invalid Header: Could not decode or parse the header.', 'header');
-                return;
+                success = false;
             }
             
             try {
@@ -175,10 +203,13 @@
                 ui.decodedPayload.textContent = JSON.stringify(decodedPayload, null, 2);
             } catch (e) {
                 setError('Invalid Payload: Could not decode or parse the payload.', 'payload');
-                return;
+                success = false;
             }
-
-            verifySignature();
+            
+            if(success) {
+                verifySignature();
+                toggleCopyButtons(true);
+            }
         };
 
         const verifySignature = () => {
@@ -217,13 +248,20 @@
             ui.decodedHeader.textContent = (part === 'header' || part === 'all') ? message : '';
             ui.decodedPayload.textContent = (part === 'payload' || part === 'all') ? message : '';
             if (part === 'header') ui.decodedPayload.textContent = '';
-            if (part === 'payload') ui.decodedHeader.textContent = JSON.parse(atob(ui.encodedJwt.value.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')));
-
+            
+            if (part === 'payload' && ui.encodedJwt.value.split('.').length === 3) {
+                try {
+                    ui.decodedHeader.textContent = JSON.stringify(JSON.parse(atob(ui.encodedJwt.value.split('.')[0].replace(/-/g, '+').replace(/_/g, '/'))), null, 2);
+                } catch(e) {
+                    ui.decodedHeader.textContent = "Invalid Header";
+                }
+            }
             setStatus('error', 'Invalid Token Structure');
+            toggleCopyButtons(false);
         };
 
         const setStatus = (type, text) => {
-            ui.signatureStatus.className = 'flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-bold'; // Reset classes
+            ui.signatureStatus.className = 'flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-bold';
             let icon = 'help-circle';
             let classes = 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300';
             if (type === 'success') {
@@ -243,6 +281,7 @@
              ui.decodedHeader.textContent = '';
              ui.decodedPayload.textContent = '';
              setStatus('info', 'Enter a secret to verify');
+             toggleCopyButtons(false);
         };
 
         const loadExample = () => {
@@ -256,13 +295,55 @@
             clearOutputs();
             ui.encodedJwt.focus();
         };
+        
+        // --- BUG FIX STARTS HERE ---
+        const handleCopy = (buttonEl, contentEl) => {
+            const textToCopy = contentEl.textContent;
+            if (!textToCopy || textToCopy.startsWith('Invalid')) return;
+
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                
+                buttonEl.innerHTML = successIconHTML;
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    buttonEl.innerHTML = originalIconHTML;
+                    lucide.createIcons();
+                }, 1500);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Copy failed:', err));
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "absolute";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        };
+        // --- BUG FIX ENDS HERE ---
 
         ui.encodedJwt.addEventListener('input', decodeAndVerify);
         ui.secret.addEventListener('input', verifySignature);
         ui.loadExampleBtn.addEventListener('click', loadExample);
-        ui.clearInputBtn.addEventListener('click', initializeTool);
+        ui.clearBtn.addEventListener('click', initializeTool);
+        ui.copyHeaderBtn.addEventListener('click', () => handleCopy(ui.copyHeaderBtn, ui.decodedHeader));
+        ui.copyPayloadBtn.addEventListener('click', () => handleCopy(ui.copyPayloadBtn, ui.decodedPayload));
         
-        // Initialize the tool to a clean state
         initializeTool();
     });
     </script>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Image Resizer & Template Creator | toolsTree</title>
+    <meta name="description" content="The ultimate tool to resize, customize, and create templates for your social media images. Perfect for Instagram, Facebook, Twitter, and more.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        :root {
+             --tt-primary: #10b981;
+             --tt-secondary: #f97316;
+        }
+        .bg-tt-primary { background-color: var(--tt-primary); }
+        .text-tt-primary { color: var(--tt-primary); }
+        .border-tt-primary { border-color: var(--tt-primary); }
+        .ring-tt-primary:focus { ring-color: var(--tt-primary); }
+        .bg-tt-secondary { background-color: var(--tt-secondary); }
+        .text-tt-secondary { color: var(--tt-secondary); }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+        }
+        /* Custom scrollbar for a cleaner look */
+        .template-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .template-list::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .template-list::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .template-list::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .dark .template-list::-webkit-scrollbar-track { background: #1e293b; }
+        .dark .template-list::-webkit-scrollbar-thumb { background: #475569; }
+        .dark .template-list::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+
+    <div class="max-w-screen-2xl mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Header Section -->
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-3 text-gray-900 dark:text-white">Social Media Image Toolkit</h1>
+            <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Resize, customize, and create stunning templates for all your social media platforms in seconds.</p>
+        </section>
+
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <!-- Left Column: Controls -->
+            <div class="lg:col-span-4 xl:col-span-3 space-y-6">
+                <!-- Image Upload Card -->
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-bold mb-4 flex items-center"><i data-lucide="image-plus" class="w-5 h-5 mr-2 text-tt-primary"></i>Upload Image</h3>
+                    <input type="file" id="imageLoader" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-tt-primary/10 file:text-tt-primary hover:file:bg-tt-primary/20 cursor-pointer"/>
+                    <button id="removeImageBtn" class="mt-3 w-full text-sm text-red-500 hover:text-red-700 dark:hover:text-red-400 hidden items-center justify-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i>Remove Image</button>
+                </div>
+
+                <!-- Dimensions & Platform Card -->
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-bold mb-4 flex items-center"><i data-lucide="crop" class="w-5 h-5 mr-2 text-tt-primary"></i>Resize & Crop</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="platformSelect" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Platform</label>
+                            <select id="platformSelect" class="w-full p-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-tt-primary focus:border-tt-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <!-- Options will be populated by JS -->
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 items-end">
+                            <div>
+                                <label for="widthInput" class="block text-sm font-medium mb-1">Width</label>
+                                <input type="number" id="widthInput" value="1080" class="w-full p-2.5 rounded-lg border bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                            </div>
+                            <div>
+                                <label for="heightInput" class="block text-sm font-medium mb-1">Height</label>
+                                <input type="number" id="heightInput" value="1080" class="w-full p-2.5 rounded-lg border bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Customization Card -->
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-bold mb-4 flex items-center"><i data-lucide="wand-2" class="w-5 h-5 mr-2 text-tt-primary"></i>Customize</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="paddingInput" class="block text-sm font-medium mb-1">Padding</label>
+                            <input type="range" id="paddingInput" min="0" max="200" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                        </div>
+                        <div>
+                            <label for="bgColorPicker" class="block text-sm font-medium mb-1">Background Color</label>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="bgColorPicker" value="#FFFFFF" class="p-1 h-10 w-14 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600">
+                                <input type="text" id="bgColorHex" value="#FFFFFF" class="w-full p-2.5 rounded-lg border bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 font-mono">
+                            </div>
+                        </div>
+                         <div>
+                            <label for="imageFit" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Image Fit</label>
+                            <select id="imageFit" class="w-full p-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-tt-primary focus:border-tt-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="contain">Contain</option>
+                                <option value="cover">Cover</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Text Overlay Card -->
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-bold mb-4 flex items-center"><i data-lucide="type" class="w-5 h-5 mr-2 text-tt-primary"></i>Text Overlay</h3>
+                    <div class="space-y-4">
+                        <textarea id="textInput" placeholder="Enter your text..." class="w-full p-2.5 rounded-lg border bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600" rows="2"></textarea>
+                        <div class="grid grid-cols-2 gap-4">
+                             <div>
+                                <label for="fontSizeInput" class="block text-sm font-medium mb-1">Font Size</label>
+                                <input type="number" id="fontSizeInput" value="48" class="w-full p-2.5 rounded-lg border bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                            </div>
+                            <div>
+                                <label for="textColorPicker" class="block text-sm font-medium mb-1">Text Color</label>
+                                <input type="color" id="textColorPicker" value="#000000" class="w-full h-11 p-1 bg-white border border-gray-300 rounded-lg cursor-pointer dark:bg-gray-700 dark:border-gray-600">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Middle Column: Canvas/Preview -->
+            <div class="lg:col-span-8 xl:col-span-6 flex flex-col items-center justify-center bg-gray-200/50 dark:bg-gray-800/50 p-6 rounded-2xl shadow-inner min-h-[400px] lg:min-h-0">
+                <div id="canvasContainer" class="max-w-full max-h-full flex items-center justify-center">
+                    <canvas id="canvas"></canvas>
+                </div>
+                 <div id="placeholder" class="text-center text-gray-500 dark:text-gray-400">
+                    <i data-lucide="upload-cloud" class="w-16 h-16 mx-auto mb-4"></i>
+                    <h3 class="text-xl font-semibold">Upload an image to start</h3>
+                    <p>Or select a platform to set a canvas size.</p>
+                </div>
+            </div>
+
+            <!-- Right Column: Templates & Export -->
+            <div class="lg:col-span-12 xl:col-span-3 space-y-6">
+                 <!-- Templates Card -->
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-bold mb-4 flex items-center"><i data-lucide="layout-template" class="w-5 h-5 mr-2 text-tt-primary"></i>My Templates</h3>
+                    <div class="space-y-3">
+                        <input type="text" id="templateNameInput" placeholder="Template Name" class="w-full p-2.5 rounded-lg border bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                        <button id="saveTemplateBtn" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold rounded-lg text-white bg-tt-primary hover:bg-green-700">
+                            <i data-lucide="save" class="w-4 h-4"></i>Save Current as Template
+                        </button>
+                    </div>
+                    <hr class="my-4 dark:border-gray-600">
+                    <div id="templateList" class="max-h-64 overflow-y-auto space-y-2 template-list pr-2">
+                        <!-- Templates will be populated by JS -->
+                        <p id="noTemplates" class="text-sm text-center text-gray-500">No saved templates yet.</p>
+                    </div>
+                </div>
+
+                <!-- Export Card -->
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-bold mb-4 flex items-center"><i data-lucide="download" class="w-5 h-5 mr-2 text-tt-secondary"></i>Export Image</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="formatSelect" class="block text-sm font-medium mb-1">Format</label>
+                            <select id="formatSelect" class="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600">
+                                <option value="png">PNG</option>
+                                <option value="jpeg">JPEG</option>
+                                <option value="webp">WEBP</option>
+                            </select>
+                        </div>
+                        <div id="qualityControl" class="hidden">
+                             <label for="qualityInput" class="block text-sm font-medium mb-1">Quality (1-100)</label>
+                             <input type="range" id="qualityInput" min="1" max="100" value="92" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700">
+                        </div>
+                        <button id="downloadBtn" class="w-full flex items-center justify-center gap-2 py-3 px-4 text-base font-bold rounded-lg text-white bg-tt-secondary hover:bg-orange-600">
+                            <i data-lucide="download-cloud" class="w-5 h-5"></i>Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info and FAQ Sections -->
+        <section class="mt-12 bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 space-y-8">
+             <div>
+                <h2 class="text-2xl font-bold mb-3 border-b pb-3 dark:border-gray-700 flex items-center"><i data-lucide="info" class="w-6 h-6 mr-3 text-tt-primary"></i>About This Tool</h2>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Every social media platform has its own preferred image sizes for posts, stories, headers, and profile pictures. Using the correct dimensions is crucial for making your content look professional and engaging. When you upload an image that doesn't fit, the platform will often crop it automatically, which can awkwardly cut off important parts of your visual. This tool helps you avoid that by providing presets for all major platforms and allowing you to fine-tune every aspect of your image before you post.
+                </p>
+            </div>
+             <div>
+                <h2 class="text-2xl font-bold mb-4 border-b pb-3 dark:border-gray-700 flex items-center"><i data-lucide="help-circle" class="w-6 h-6 mr-3 text-tt-primary"></i>Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-4">
+                    <details class="group border-b border-gray-200 dark:border-gray-700 pb-3">
+                        <summary class="flex justify-between items-center font-semibold cursor-pointer py-2 text-lg hover:text-tt-primary">
+                            <span>Why are there so many different image sizes?</span>
+                            <span class="transition-transform duration-300 group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2 pl-2 border-l-2 border-tt-primary">
+                            Each social media platform is designed differently. A vertical format works best for phone-centric apps like Instagram Stories, while a horizontal layout is better for platforms often viewed on desktop, like Twitter or Facebook feeds. Using the optimal size ensures your image is displayed clearly without any weird cropping or loss of quality.
+                        </p>
+                    </details>
+                    <details class="group border-b border-gray-200 dark:border-gray-700 pb-3">
+                        <summary class="flex justify-between items-center font-semibold cursor-pointer py-2 text-lg hover:text-tt-primary">
+                            <span>What's the difference between PNG, JPEG, and WEBP?</span>
+                            <span class="transition-transform duration-300 group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2 pl-2 border-l-2 border-tt-primary">
+                            <strong>JPEG:</strong> Best for photos. It uses compression to create smaller file sizes, but can lose some quality.<br>
+                            <strong>PNG:</strong> Best for graphics, logos, and images that require a transparent background. File sizes are generally larger than JPEGs.<br>
+                            <strong>WEBP:</strong> A modern format developed by Google. It offers excellent quality with much smaller file sizes than both JPEG and PNG, making it great for web performance.
+                        </p>
+                    </details>
+                    <details class="group pb-3">
+                        <summary class="flex justify-between items-center font-semibold cursor-pointer py-2 text-lg hover:text-tt-primary">
+                            <span>How do templates work?</span>
+                             <span class="transition-transform duration-300 group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2 pl-2 border-l-2 border-tt-primary">
+                            Templates save your current settings—like dimensions, background color, padding, and text—so you can quickly apply them again later. If you regularly post the same style of image (like a weekly quote or a product announcement), you can create a template to ensure your branding is consistent and save yourself a lot of time.
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+
+        // UI Elements
+        const ui = {
+            imageLoader: document.getElementById('imageLoader'),
+            removeImageBtn: document.getElementById('removeImageBtn'),
+            platformSelect: document.getElementById('platformSelect'),
+            widthInput: document.getElementById('widthInput'),
+            heightInput: document.getElementById('heightInput'),
+            paddingInput: document.getElementById('paddingInput'),
+            bgColorPicker: document.getElementById('bgColorPicker'),
+            bgColorHex: document.getElementById('bgColorHex'),
+            imageFit: document.getElementById('imageFit'),
+            textInput: document.getElementById('textInput'),
+            fontSizeInput: document.getElementById('fontSizeInput'),
+            textColorPicker: document.getElementById('textColorPicker'),
+            canvas: document.getElementById('canvas'),
+            canvasContainer: document.getElementById('canvasContainer'),
+            placeholder: document.getElementById('placeholder'),
+            formatSelect: document.getElementById('formatSelect'),
+            qualityControl: document.getElementById('qualityControl'),
+            qualityInput: document.getElementById('qualityInput'),
+            downloadBtn: document.getElementById('downloadBtn'),
+            templateNameInput: document.getElementById('templateNameInput'),
+            saveTemplateBtn: document.getElementById('saveTemplateBtn'),
+            templateList: document.getElementById('templateList'),
+            noTemplates: document.getElementById('noTemplates'),
+        };
+
+        const ctx = ui.canvas.getContext('2d');
+        let image = null;
+        let templates = JSON.parse(localStorage.getItem('socialTemplates')) || [];
+
+        const platformPresets = {
+            "Custom": { width: 1080, height: 1080 },
+            "Instagram": {
+                "Post (1:1)": { width: 1080, height: 1080 },
+                "Portrait (4:5)": { width: 1080, height: 1350 },
+                "Story (9:16)": { width: 1080, height: 1920 },
+            },
+            "Facebook": {
+                "Post (1.91:1)": { width: 1200, height: 630 },
+                "Story (9:16)": { width: 1080, height: 1920 },
+            },
+            "Twitter / X": {
+                "Post (16:9)": { width: 1600, height: 900 },
+                "Header (3:1)": { width: 1500, height: 500 },
+            },
+             "LinkedIn": {
+                "Post (1.91:1)": { width: 1200, height: 630 },
+                "Banner (4:1)": { width: 1584, height: 396 },
+            }
+        };
+        
+        // --- Initialization ---
+        function init() {
+            populatePlatforms();
+            updateCanvasSize();
+            renderTemplates();
+            addEventListeners();
+        }
+
+        function populatePlatforms() {
+            for (const platform in platformPresets) {
+                if (platform === "Custom") {
+                    const option = document.createElement('option');
+                    option.value = "Custom";
+                    option.textContent = "Custom";
+                    ui.platformSelect.appendChild(option);
+                } else {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = platform;
+                    for (const type in platformPresets[platform]) {
+                        const option = document.createElement('option');
+                        option.value = `${platform}|${type}`;
+                        option.textContent = type;
+                        optgroup.appendChild(option);
+                    }
+                    ui.platformSelect.appendChild(optgroup);
+                }
+            }
+        }
+        
+        function addEventListeners() {
+            ui.imageLoader.addEventListener('change', handleImageUpload);
+            ui.removeImageBtn.addEventListener('click', removeImage);
+            ui.platformSelect.addEventListener('change', handlePlatformChange);
+            ui.widthInput.addEventListener('input', () => { selectCustom(); updateCanvasSize()});
+            ui.heightInput.addEventListener('input', () => { selectCustom(); updateCanvasSize()});
+            ui.paddingInput.addEventListener('input', draw);
+            ui.bgColorPicker.addEventListener('input', (e) => { ui.bgColorHex.value = e.target.value.toUpperCase(); draw(); });
+            ui.bgColorHex.addEventListener('input', (e) => { ui.bgColorPicker.value = e.target.value; draw(); });
+            ui.imageFit.addEventListener('change', draw);
+            ui.textInput.addEventListener('input', draw);
+            ui.fontSizeInput.addEventListener('input', draw);
+            ui.textColorPicker.addEventListener('input', draw);
+            ui.downloadBtn.addEventListener('click', downloadImage);
+            ui.formatSelect.addEventListener('change', toggleQualityControl);
+            ui.saveTemplateBtn.addEventListener('click', saveTemplate);
+        }
+
+        // --- Canvas & Drawing ---
+        function updateCanvasSize() {
+            ui.canvas.width = parseInt(ui.widthInput.value, 10) || 1080;
+            ui.canvas.height = parseInt(ui.heightInput.value, 10) || 1080;
+            ui.placeholder.classList.add('hidden');
+            ui.canvas.classList.remove('hidden');
+            draw();
+        }
+
+        function draw() {
+            if (!ctx) return;
+            // Clear canvas and draw background
+            ctx.fillStyle = ui.bgColorPicker.value;
+            ctx.fillRect(0, 0, ui.canvas.width, ui.canvas.height);
+
+            if (image) {
+                const padding = parseInt(ui.paddingInput.value, 10);
+                const fit = ui.imageFit.value;
+
+                const canvasAspect = ui.canvas.width / ui.canvas.height;
+                const imageAspect = image.width / image.height;
+                
+                let sx = 0, sy = 0, sWidth = image.width, sHeight = image.height;
+                let dx = padding, dy = padding, dWidth = ui.canvas.width - padding * 2, dHeight = ui.canvas.height - padding * 2;
+
+                if (fit === 'cover') {
+                    if (imageAspect > canvasAspect) {
+                        sHeight = image.height;
+                        sWidth = sHeight * canvasAspect;
+                        sx = (image.width - sWidth) / 2;
+                    } else {
+                        sWidth = image.width;
+                        sHeight = sWidth / canvasAspect;
+                        sy = (image.height - sHeight) / 2;
+                    }
+                    dx = 0; dy = 0; dWidth = ui.canvas.width; dHeight = ui.canvas.height;
+                } else { // contain
+                    const targetWidth = ui.canvas.width - padding * 2;
+                    const targetHeight = ui.canvas.height - padding * 2;
+                    const targetAspect = targetWidth / targetHeight;
+
+                    if (imageAspect > targetAspect) {
+                        dWidth = targetWidth;
+                        dHeight = dWidth / imageAspect;
+                    } else {
+                        dHeight = targetHeight;
+                        dWidth = dHeight * imageAspect;
+                    }
+                    dx = padding + (targetWidth - dWidth) / 2;
+                    dy = padding + (targetHeight - dHeight) / 2;
+                }
+                
+                ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+            }
+
+            // Draw text overlay
+            const text = ui.textInput.value;
+            if (text) {
+                const fontSize = parseInt(ui.fontSizeInput.value, 10);
+                ctx.font = `bold ${fontSize}px Inter`;
+                ctx.fillStyle = ui.textColorPicker.value;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                const x = ui.canvas.width / 2;
+                const y = ui.canvas.height / 2;
+                ctx.fillText(text, x, y);
+            }
+        }
+        
+        // --- Event Handlers ---
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    image = new Image();
+                    image.onload = () => {
+                        ui.removeImageBtn.classList.remove('hidden');
+                        ui.placeholder.classList.add('hidden');
+                        ui.canvas.classList.remove('hidden');
+                        draw();
+                    };
+                    image.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function removeImage() {
+            image = null;
+            ui.imageLoader.value = ''; // Reset file input
+            ui.removeImageBtn.classList.add('hidden');
+            draw();
+             if(!ui.widthInput.value && !ui.heightInput.value) {
+                ui.placeholder.classList.remove('hidden');
+                ui.canvas.classList.add('hidden');
+            }
+        }
+
+        function handlePlatformChange() {
+            const value = ui.platformSelect.value;
+            if (value === "Custom") return;
+            const [platform, type] = value.split('|');
+            const dimensions = platformPresets[platform][type];
+            ui.widthInput.value = dimensions.width;
+            ui.heightInput.value = dimensions.height;
+            updateCanvasSize();
+        }
+        
+        function selectCustom() {
+             ui.platformSelect.value = "Custom";
+        }
+
+        function toggleQualityControl() {
+            if (ui.formatSelect.value === 'jpeg' || ui.formatSelect.value === 'webp') {
+                ui.qualityControl.classList.remove('hidden');
+            } else {
+                ui.qualityControl.classList.add('hidden');
+            }
+        }
+
+        function downloadImage() {
+            const format = ui.formatSelect.value;
+            const quality = parseInt(ui.qualityInput.value, 10) / 100;
+            const mimeType = `image/${format}`;
+            
+            const link = document.createElement('a');
+            link.download = `social-image-${Date.now()}.${format}`;
+            link.href = ui.canvas.toDataURL(mimeType, quality);
+            link.click();
+        }
+
+        // --- Template Management ---
+        function saveTemplate() {
+            const name = ui.templateNameInput.value.trim();
+            if (!name) {
+                // Replace alert with a more subtle notification if possible
+                ui.templateNameInput.classList.add('border-red-500');
+                ui.templateNameInput.placeholder = 'Please enter a name first!';
+                setTimeout(() => {
+                    ui.templateNameInput.classList.remove('border-red-500');
+                    ui.templateNameInput.placeholder = 'Template Name';
+                }, 2000);
+                return;
+            }
+            const template = {
+                id: Date.now(),
+                name: name,
+                settings: {
+                    width: ui.widthInput.value,
+                    height: ui.heightInput.value,
+                    padding: ui.paddingInput.value,
+                    bgColor: ui.bgColorPicker.value,
+                    imageFit: ui.imageFit.value,
+                    text: ui.textInput.value,
+                    fontSize: ui.fontSizeInput.value,
+                    textColor: ui.textColorPicker.value,
+                    platform: ui.platformSelect.value,
+                }
+            };
+            templates.push(template);
+            localStorage.setItem('socialTemplates', JSON.stringify(templates));
+            renderTemplates();
+            ui.templateNameInput.value = '';
+        }
+
+        function loadTemplate(id) {
+            const template = templates.find(t => t.id === id);
+            if (!template) return;
+            const s = template.settings;
+            ui.widthInput.value = s.width;
+            ui.heightInput.value = s.height;
+            ui.paddingInput.value = s.padding;
+            ui.bgColorPicker.value = s.bgColor;
+            ui.bgColorHex.value = s.bgColor.toUpperCase();
+            ui.imageFit.value = s.imageFit;
+            ui.textInput.value = s.text;
+            ui.fontSizeInput.value = s.fontSize;
+            ui.textColorPicker.value = s.textColor;
+            ui.platformSelect.value = s.platform;
+            updateCanvasSize();
+        }
+        
+        function deleteTemplate(id) {
+            templates = templates.filter(t => t.id !== id);
+            localStorage.setItem('socialTemplates', JSON.stringify(templates));
+            renderTemplates();
+        }
+
+        function renderTemplates() {
+            ui.templateList.innerHTML = '';
+            if (templates.length === 0) {
+                ui.noTemplates.style.display = 'block';
+            } else {
+                ui.noTemplates.style.display = 'none';
+                templates.forEach(template => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center justify-between p-2.5 bg-gray-100 dark:bg-gray-700 rounded-lg';
+                    div.innerHTML = `
+                        <span class="font-medium text-sm cursor-pointer hover:text-tt-primary flex-1 truncate" title="Load: ${template.name}">${template.name}</span>
+                        <button class="text-red-500 hover:text-red-700 p-1 rounded-full ml-2" title="Delete template">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    `;
+                    div.querySelector('span').addEventListener('click', () => loadTemplate(template.id));
+                    div.querySelector('button').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteTemplate(template.id);
+                    });
+                    ui.templateList.appendChild(div);
+                });
+                lucide.createIcons();
+            }
+        }
+        
+        // Initial call
+        init();
+    });
+    </script>
+</body>
+</html>
+

@@ -47,7 +47,6 @@
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
         textarea { min-height: 200px; font-family: 'Roboto Mono', monospace; }
         input[type="radio"]:checked + label { background-color: #10b981; color: white; border-color: #10b981; }
-        /* Define the color for tt-primary */
         .text-tt-primary { color: #10b981; }
     </style>
     <script type="application/ld+json">
@@ -107,7 +106,9 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label id="inputLabel" for="inputText" class="text-lg font-semibold">Input</label>
-                        <div class="w-8 h-8"></div>
+                        <button id="clearButton" title="Clear Text" class="group p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-red-500 transition-colors"></i>
+                        </button>
                     </div>
                     <textarea id="inputText" placeholder="Type, paste, or drop a file here..." class="w-full p-4 border rounded-lg transition hover:border-tt-primary"></textarea>
                     <p id="file-info" class="text-xs text-gray-500 mt-1 h-4"></p>
@@ -116,21 +117,14 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label id="outputLabel" for="outputText" class="text-lg font-semibold">Output</label>
-                        <div class="w-8 h-8">
-                            <button id="copyButton" class="group p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
-                                <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-colors group-hover:text-tt-primary"></i>
-                            </button>
-                            </div>
+                        <button id="copyButton" title="Copy Result" class="group p-2 rounded-md transition-opacity opacity-0 pointer-events-none">
+                            <i data-lucide="copy" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-colors group-hover:text-tt-primary"></i>
+                        </button>
                     </div>
                     <textarea id="outputText" readonly placeholder="Result appears here..." class="w-full p-4 border rounded-lg bg-gray-100 dark:bg-gray-700"></textarea>
                 </div>
             </div>
             <div id="message-box" class="mt-4 text-center text-sm h-6"></div>
-            <div class="flex flex-wrap justify-end gap-3 pt-6 mt-2 border-t dark:border-gray-800">
-                <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
-                    <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
-                </button>
-            </div>
         </div>
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
@@ -158,8 +152,6 @@
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof window.injectLayout === 'function') {
             window.injectLayout(false);
-        } else {
-            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
         }
 
         const ui = {
@@ -208,9 +200,9 @@
             }
         };
 
-        const toggleCopyButton = (enabled) => {
-            ui.copyButton.classList.toggle('opacity-0', !enabled);
-            ui.copyButton.classList.toggle('pointer-events-none', !enabled);
+        const toggleActionButton = (button, enabled) => {
+            button.classList.toggle('opacity-0', !enabled);
+            button.classList.toggle('pointer-events-none', !enabled);
         };
 
         const convert = () => {
@@ -255,7 +247,8 @@
             }
             
             ui.outputText.value = output;
-            toggleCopyButton(output.length > 0);
+            toggleActionButton(ui.copyButton, output.length > 0);
+            toggleActionButton(ui.clearButton, input.length > 0);
         };
         
         const handleFile = (file) => {
@@ -279,9 +272,9 @@
         
         const clearAll = () => {
             ui.inputText.value = '';
-            ui.outputText.value = '';
             ui.fileInfo.textContent = '';
-            toggleCopyButton(false);
+            convert(); // This will clear output and update buttons
+            ui.inputText.focus();
         };
 
         // Event Listeners
@@ -330,8 +323,8 @@
         dropZone.addEventListener('drop', e => { handleFile(e.dataTransfer.files[0]); }, false);
 
         renderOptions('unicode');
+        convert(); // Initial run to set button states
     });
     </script>
 </body>
 </html>
-}

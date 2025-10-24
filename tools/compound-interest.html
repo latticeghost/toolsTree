@@ -56,30 +56,58 @@
         .result-input { background-color: #f0fdf4 !important; color: #15803d !important; border-color: #10b981 !important; font-weight: 700 !important; }
         .dark .result-input { background-color: #064e3b !important; color: #a7f3d0 !important; }
     </style>
-
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Advanced Compound Interest Calculator",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Web",
-      "description": "An advanced compound interest calculator to solve for future value, principal, time, or contributions. Includes inflation adjustment, yearly breakdown table, and charts.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "512"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "toolsTree"
-      }
-    }
+        {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Advanced Compound Interest Calculator",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "description": "An advanced compound interest calculator to solve for future value, principal, time, or contributions. Includes inflation adjustment, yearly breakdown table, and charts.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "512"},
+        "publisher": {"@type": "Organization","name": "toolsTree"}
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What's the difference between simple and compound interest?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Simple interest is calculated only on the initial principal amount. You earn the same amount of interest every year. Compound interest is 'interest on interest.' It's calculated on the principal plus all the interest you've already earned. This makes your money grow at an accelerating rate."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What does 'compounding frequency' mean?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This is how often your interest is calculated and added to your balance. The more frequent, the faster it grows. Annually means interest is added once per year. Quarterly means four times per year. Monthly (most common) means it's added every month and will result in the fastest growth."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What's the difference between this and a SIP calculator?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A SIP calculator is designed for regular, fixed monthly investments. This Compound Interest calculator starts with a lump-sum (the Initial Principal) and allows for optional, larger annual contributions. It's better suited for planning based on a one-time investment with yearly top-ups."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why is my 'Value in Today's Money' so much lower?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This figure shows the purchasing power of your future money after accounting for inflation. While your investment might grow to ₹1 Crore in 20 years, inflation means that ₹1 Crore won't buy as much as it does today. This inflation-adjusted number gives you a true sense of your future wealth."
+            }
+            }
+        ]
+        }
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
@@ -98,7 +126,7 @@
             <p class="text-base text-gray-600 dark:text-gray-300">A goal-planning tool to project investment growth with inflation, contributions, and more.</p>
         </section>
 
-        <div class="bg-white dark:bg-black shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800">
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="space-y-5">
                     <div class="mb-6">
@@ -143,10 +171,10 @@
             </div>
         </div>
         
-        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-black border border-gray-100 dark:border-gray-800 space-y-6">
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
              <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">The Power of Compounding</h2>
-                <p class="text-sm mb-4">Compound interest is "interest on interest". It is the engine of wealth creation, allowing your investment to grow at an accelerating rate. This calculator models that growth and adds the ability to factor in regular annual contributions, providing a realistic projection of your long-term investments.</p>
+                <p class="mb-4 text-gray-600 dark:text-gray-300">Compound interest is "interest on interest". It is the engine of wealth creation, allowing your investment to grow at an accelerating rate. This calculator models that growth and adds the ability to factor in regular annual contributions, providing a realistic projection of your long-term investments.</p>
                 <div id="formula-container" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg text-center">$$ A = P \left(1 + \frac{r}{n}\right)^{nt} $$</div>
                 
                 <p class="text-sm mb-2 mt-4 dark:text-gray-300">Where:</p>
@@ -161,8 +189,31 @@
             <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
-                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What's the difference between this and a SIP calculator?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="mt-2 p-2">A SIP calculator is designed for regular, fixed <strong>monthly</strong> investments. This Compound Interest calculator starts with a <strong>lump-sum</strong> (the Initial Principal) and allows for optional, larger <strong>annual</strong> contributions. It's better suited for planning based on a one-time investment with yearly top-ups.</p></details>
-                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why is my 'Value in Today's Money' so much lower?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="mt-2 p-2">This figure shows the <strong>purchasing power</strong> of your future money after accounting for inflation. While your investment might grow to ₹1 Crore in 20 years, inflation means that ₹1 Crore won't buy as much as it does today. This inflation-adjusted number gives you a true sense of your future wealth.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What's the difference between this and a SIP calculator?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="mt-2 p-2 text-gray-600 dark:text-gray-300">A SIP calculator is designed for regular, fixed <strong>monthly</strong> investments. This Compound Interest calculator starts with a <strong>lump-sum</strong> (the Initial Principal) and allows for optional, larger <strong>annual</strong> contributions. It's better suited for planning based on a one-time investment with yearly top-ups.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why is my 'Value in Today's Money' so much lower?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="mt-2 p-2 text-gray-600 dark:text-gray-300">This figure shows the <strong>purchasing power</strong> of your future money after accounting for inflation. While your investment might grow to ₹1 Crore in 20 years, inflation means that ₹1 Crore won't buy as much as it does today. This inflation-adjusted number gives you a true sense of your future wealth.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What's the difference between simple and compound interest?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="mt-2 p-2 text-gray-600 dark:text-gray-300">
+                            <strong>Simple interest</strong> is calculated only on the initial principal amount. You earn the same amount of interest every year. <br><br>
+                            <strong>Compound interest</strong> is "interest on interest." It's calculated on the principal <strong class="font-medium text-gray-900 dark:text-gray-100">plus</strong> all the interest you've already earned. This makes your money grow at an accelerating rate.
+                        </p>
+                    </details>
+                    
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What does "compounding frequency" mean?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="mt-2 p-2 text-gray-600 dark:text-gray-300">
+                            This is how often your interest is calculated and added to your balance. The more frequent, the faster it grows.
+                            <br> • <strong>Annually (1)</strong>: Interest is added once per year.
+                            <br> • <strong>Quarterly (4)</strong>: Interest is added four times per year.
+                            <br> • <strong>Monthly (12)</strong>: Interest is added every month. This is the most common for savings accounts and will result in the fastest growth.
+                        </p>
+                    </details>
                 </div>
             </div>
         </section>
@@ -292,7 +343,7 @@
                     <span>Total Invested:</span><span class="font-semibold text-right">${formatCurrency(vals.totalContribution, vals.currency)}</span>
                     <span>Interest Earned:</span><span class="font-semibold text-right">${formatCurrency(vals.FV - vals.totalContribution, vals.currency)}</span>
                 </div>
-                <div class="mt-2 p-3 bg-gray-200 dark:bg-black rounded-lg">
+                <div class="mt-2 p-3 bg-gray-200 dark:bg-gray-900 rounded-lg">
                     <p class="text-sm">Future Value</p>
                     <p class="text-2xl font-bold text-tt-secondary">${formatCurrency(vals.FV, vals.currency)}</p>
                 </div>

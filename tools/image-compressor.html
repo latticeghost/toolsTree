@@ -62,6 +62,46 @@
       "publisher": { "@type": "Organization", "name": "toolsTree" }
     }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "Are my images really private?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. This tool uses JavaScript's built-in Canvas and File APIs to process images directly on your computer ('client-side'). No data is sent to our servers, making it as secure as editing a file on your local desktop."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Which output format should I choose?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "JPEG: Best for photos, offers the smallest file size. Does not support transparency. PNG: Best for graphics with sharp lines or transparency (logos, icons). File sizes are larger. WebP: A modern format from Google that offers a great balance of small file size and high quality, and supports transparency. It's excellent for web use."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What does the 'Compression Quality' slider do?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This slider controls the level of 'lossy' compression (for JPEG and WebP). A lower number (e.g., 60%) will result in a much smaller file size but may create minor visual artifacts. A higher number (e.g., 90%) will keep almost perfect quality. The default of 80% is a great balance for most web use."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What image formats can I upload?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool currently accepts the three most common web image formats: JPEG (.jpg, .jpeg), PNG (.png), and WebP (.webp). It cannot currently process other formats like GIF, HEIC, or raw camera files."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
@@ -152,7 +192,7 @@
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">A Privacy-First Image Toolkit</h2>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><strong>Total Privacy:</strong> All processing happens in your browser. Your images are never uploaded to a server, ensuring 100% security.</li>
                     <li><strong>Live Preview:</strong> Instantly see the effect of your compression and resizing settings before processing your entire batch of images.</li>
                     <li><strong>Watermarking:</strong> Protect and brand your images by adding custom text watermarks with controls for size, color, and opacity.</li>
@@ -169,6 +209,20 @@
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Which output format should I choose?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary>
                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>JPEG:</strong> Best for photos, offers the smallest file size. Does not support transparency. <strong>PNG:</strong> Best for graphics with sharp lines or transparency (logos, icons). File sizes are larger. <strong>WebP:</strong> A modern format from Google that offers a great balance of small file size and high quality, and supports transparency. It's excellent for web use.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What does the "Compression Quality" slider do?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This slider controls the level of "lossy" compression (for JPEG and WebP). A lower number (e.g., 60%) will result in a much smaller file size but may create minor visual blurriness or "artifacts." A higher number (e.g., 90%) will keep almost perfect quality, but the file size will be larger. The default of 80% is a great balance for most web use.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What image formats can I upload?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool currently accepts the three most common web image formats: <strong>JPEG</strong> (<code>.jpg</code> or <code>.jpeg</code>), <strong>PNG</strong> (<code>.png</code>), and <strong>WebP</strong> (<code>.webp</code>). It cannot currently process other formats like GIF, HEIC, AVIF, or raw camera files (e.g., .CR2, .NEF).</p>
                     </details>
                 </div>
             </div>
@@ -301,26 +355,21 @@
             zip.generateAsync({ type: "blob" }).then(content => saveAs(content, "toolsTree_images.zip"));
         };
         
-        // Event Listeners
         const allSettingsInputs = document.querySelectorAll('#quality-range, #output-format, #new-width, #new-height, #watermarkToggle, #watermarkText, #watermarkSize, #watermarkColor, #watermarkOpacity');
         allSettingsInputs.forEach(input => input.addEventListener('input', () => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(updateLivePreview, 250);
         }));
         
-        // ======================= BUG FIX STARTS HERE =======================
-        // Add a dedicated listener to update the quality percentage text instantly.
         ui.qualityRange.addEventListener('input', () => {
             ui.qualityValue.textContent = ui.qualityRange.value;
         });
-        // ======================= BUG FIX ENDS HERE =======================
         
         ui.watermarkToggle.addEventListener('change', () => { ui.watermarkOptions.style.display = ui.watermarkToggle.checked ? 'block' : 'none'; });
         ui.fileUpload.addEventListener('change', handleFileSelect);
         ui.processBtn.addEventListener('click', processAllFiles);
         ui.downloadAllBtn.addEventListener('click', downloadAll);
 
-        // Drag & Drop
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             ui.dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
             document.body.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);

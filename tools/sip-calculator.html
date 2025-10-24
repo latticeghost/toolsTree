@@ -68,6 +68,54 @@
             "publisher": {"@type": "Organization", "name": "toolsTree"}
             }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What's the difference between a SIP and a lump sum investment?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A SIP involves investing a fixed amount regularly (e.g., monthly), which helps in averaging out purchase costs over time (rupee cost averaging). A lump sum is a one-time large investment. SIPs are ideal for salaried individuals to build wealth with discipline, while lump sums can be effective if you have a large amount of money and believe the market is at a good entry point."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Is the 'Expected Annual Return' guaranteed?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, it is not guaranteed. The return on market-linked investments like mutual funds (where SIPs are common) fluctuates based on market performance. The rate you enter should be a realistic assumption based on the fund's historical performance or your financial advisor's guidance. This calculator is a tool for estimation, not a guarantee of returns."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is a 'Step-Up' SIP?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A 'Step-Up' or 'Top-Up' SIP is an advanced strategy where you automatically increase your monthly SIP amount by a fixed percentage or amount each year (e.g., 10% annually). This aligns your investments with your salary growth and helps you reach your financial goals much faster. While this calculator projects a fixed SIP, a step-up plan will result in a significantly larger final corpus."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is the difference between a SIP and a Mutual Fund?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This is a common point of confusion. A Mutual Fund is the *investment product* itself—a basket of stocks or bonds. A SIP is the *method* you use to invest in that mutual fund. You cannot 'invest in a SIP'; you invest *in a mutual fund via a SIP*."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is the best date of the month to run a SIP?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Multiple studies have shown that over the long term (10+ years), there is no statistically significant difference in returns based on which date your SIP runs. The best advice is to set your SIP date for 1-2 days after your salary is credited to your bank account to ensure the payment never fails."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
@@ -142,8 +190,29 @@
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is a Systematic Investment Plan (SIP)?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>A <strong>Systematic Investment Plan (SIP)</strong> is a simple and disciplined way to invest in mutual funds. Instead of investing a large, one-time amount (called a "lump sum"), a SIP allows you to invest a smaller, fixed amount of money at regular intervals—typically every month.</p>
+                    <p>Think of it as an "EMI" for your investments. This automated, disciplined approach is ideal for salaried individuals and first-time investors who want to build significant wealth over the long term.</p>
+                    
+                    <h3 class="text-xl font-semibold pt-2 text-gray-900 dark:text-gray-100">The 3 Key Benefits of SIPs</h3>
+                    <p>This calculator helps you visualize the end result, which is made possible by three powerful concepts:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">1. Disciplined Investing:</strong> By automating your investments, you remove the emotion of trying to "time the market." You invest consistently whether the market is up or down, which builds a strong habit and prevents costly mistakes.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">2. Rupee Cost Averaging:</strong> This is the biggest advantage. When the market is low, your fixed monthly amount buys <strong class="font-medium text-gray-900 dark:text-gray-100">more</strong> units of a mutual fund. When the market is high, it buys <strong class="font-medium text-gray-900 dark:text-gray-100">fewer</strong> units. Over time, this averages out your purchase cost, reducing the risk of investing all your money at a peak.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">3. The Power of Compounding:</strong> As your investment grows, your returns start earning returns of their own. This creates a "snowball effect" where your wealth can grow exponentially over the long term, as this calculator clearly demonstrates.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the SIP Calculator</h2>
-                <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
                     <li><strong>Enter Investment Details:</strong> Input your monthly investment amount, the expected annual return rate, and the total number of years you plan to invest.</li>
                     <li><strong>Calculate Corpus:</strong> The results update live as you type, or you can click the button to calculate.</li>
                     <li><strong>Analyze Forecast:</strong> The "Maturity Forecast" will display the total amount invested, estimated returns, and the final future value. The doughnut chart provides a clear visual breakdown.</li>
@@ -152,8 +221,8 @@
             
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Understanding the SIP Formula</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">
-                    A <strong>Systematic Investment Plan (SIP)</strong> is a method of investing a fixed sum regularly, typically monthly. It leverages the power of <strong>compounding</strong>, where your returns also start earning returns. The calculator determines the Maturity Amount (M) using the formula:
+                <p class="text-gray-600 mb-4 dark:text-gray-300">
+                    A <strong>Systematic Investment Plan (SIP)</strong> is a method of investing a fixed sum regularly, typically monthly. It leverages the power of <strong class="font-medium text-gray-900 dark:text-gray-100">compounding</strong>, where your returns also start earning returns. The calculator determines the Maturity Amount (M) using the formula:
                 </p>
                 <div class="text-sm font-mono bg-gray-100 p-2 rounded-md dark:bg-gray-700 dark:text-gray-100 mb-4 formula-block">
                     $$ \text{M} = \text{P} \times \left[ \frac{(1+i)^n - 1}{i} \right] \times (1+i) $$
@@ -182,6 +251,29 @@
                             <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
                         </summary>
                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">No, it is not guaranteed. The return on market-linked investments like mutual funds (where SIPs are common) fluctuates based on market performance. The rate you enter should be a realistic assumption based on the fund's historical performance or your financial advisor's guidance. This calculator is a tool for estimation, not a guarantee of returns.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is a "Step-Up" SIP?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">A "Step-Up" or "Top-Up" SIP is an advanced strategy where you automatically increase your monthly SIP amount by a fixed percentage or amount each year (e.g., 10% annually). This aligns your investments with your salary growth and helps you reach your financial goals much faster. While this calculator projects a fixed SIP, a step-up plan will result in a significantly larger final corpus.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is the difference between a SIP and a Mutual Fund?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This is a common point of confusion. A <strong class="font-medium text-gray-900 dark:text-white">Mutual Fund</strong> is the <strong class="font-medium text-gray-900 dark:text-gray-100">investment product</strong> itself—a basket of stocks or bonds. A <strong class="font-medium text-gray-900 dark:text-white">SIP</strong> is the <strong class="font-medium text-gray-900 dark:text-gray-100">method</strong> you use to invest in that mutual fund. You cannot "invest in a SIP"; you invest <strong class="font-medium text-gray-900 dark:text-gray-100">in a mutual fund via a SIP</strong>.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is the best date of the month to run a SIP?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Multiple studies have shown that over the long term (10+ years), there is no statistically significant difference in returns based on which date your SIP runs. The most important thing is not the <strong class="font-medium text-gray-900 dark:text-gray-100">date</strong>, but the <strong class="font-medium text-gray-900 dark:text-gray-100">discipline</strong> of investing every single month. The best advice is to set your SIP date for 1-2 days after your salary is credited to your bank account to ensure the payment never fails.</p>
                     </details>
                 </div>
             </div>

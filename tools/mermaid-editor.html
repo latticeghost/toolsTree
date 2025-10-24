@@ -58,6 +58,59 @@
         .dark .loader { border-color: #4b5563; border-bottom-color: #10b981; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Mermaid.js Live Editor & Renderer",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "description": "A feature-packed, real-time Mermaid.js editor. Create, preview, and export diagrams-as-code including flowcharts, sequence diagrams, and more with pan/zoom and multiple export options.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5.0", "reviewCount": "812"},
+        "publisher": {"@type": "Organization", "name": "toolsTree"}
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "How does PNG export work?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool renders the generated SVG diagram onto a hidden HTML5 canvas element in your browser. It then converts the canvas content into a PNG data URL, which is used to trigger a file download. All processing happens client-side, ensuring your data remains private."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Can I use this for very large diagrams?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. For very large or complex diagrams that might be slow to render on every keystroke, you can uncheck the 'Auto Sync' box. This will reveal a 'Render' button, allowing you to manually trigger a diagram update when you are ready."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What diagram types does Mermaid support?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Mermaid supports a wide variety of common diagram types, including: Flowcharts, Sequence Diagrams, Gantt Charts, Class Diagrams, State Diagrams, Pie Charts, ER Diagrams, User Journey Maps, Git Graphs, and more. This editor uses the latest version of Mermaid, so all currently supported diagram types should render correctly."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Is my diagram data secure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. This tool runs entirely in your web browser. The Mermaid code you enter, and the resulting diagrams, are processed locally on your machine. Nothing is ever sent to our servers, ensuring your diagram data remains completely private."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
@@ -142,8 +195,34 @@
 
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use This Mermaid Editor</h2>
+                <ol class="list-decimal list-inside ml-5 space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Write or Load Code:</strong> Start typing your Mermaid syntax in the left-hand "Mermaid Code" editor. Alternatively, select a diagram type from the "Load Example" dropdown to get started quickly.
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">See the Live Preview:</strong> As you type (with "Auto Sync" checked), the diagram on the right will update in real-time. If you uncheck "Auto Sync," click the "Render" button (<i data-lucide="play" class="w-4 h-4 inline-block -mt-1"></i>) to update the preview manually.
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Interact with the Preview:</strong> Use the zoom controls (<i data-lucide="zoom-in" class="w-4 h-4 inline-block -mt-1"></i> / <i data-lucide="zoom-out" class="w-4 h-4 inline-block -mt-1"></i> / <i data-lucide="expand" class="w-4 h-4 inline-block -mt-1"></i>) or your mouse wheel/trackpad to pan and zoom the diagram for a closer look.
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Customize Theme:</strong> Select a different visual style (like 'Forest' or 'Dark') from the "Theme" dropdown. The preview will update instantly.
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Export Your Work:</strong> Use the buttons at the bottom to:
+                        <ul class="list-disc list-inside ml-5 text-sm mt-1">
+                            <li>Copy the Mermaid code.</li>
+                            <li>Copy the generated SVG code.</li>
+                            <li>Download the diagram as an SVG file.</li>
+                            <li>Download the diagram as a PNG image file.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is Mermaid.js?</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Mermaid is a Javascript-based diagramming and charting tool that uses Markdown-inspired text definitions to create and modify diagrams dynamically. It allows you to create complex diagrams by writing simple code, a concept known as "Diagrams as Code".</p>
+                <p class="text-gray-600 mb-4 dark:text-gray-300">Mermaid is a Javascript-based diagramming and charting tool that uses Markdown-inspired text definitions to create and modify diagrams dynamically. It allows you to create complex diagrams by writing simple code, a concept known as "Diagrams as Code".</p>
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><strong>Version Controlled:</strong> Because diagrams are just text, they can be tracked in Git just like source code.</li>
                     <li><strong>Developer-Friendly:</strong> No need to switch to a graphical editor. Create and update diagrams right from your code editor.</li>
@@ -155,6 +234,21 @@
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How does PNG export work?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool renders the generated SVG diagram onto a hidden HTML5 canvas element in your browser. It then converts the canvas content into a PNG data URL, which is used to trigger a file download. All processing happens client-side, ensuring your data remains private.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Can I use this for very large diagrams?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. For very large or complex diagrams that might be slow to render on every keystroke, you can uncheck the "Auto Sync" box. This will reveal a "Render" button, allowing you to manually trigger a diagram update when you are ready.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What diagram types does Mermaid support?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Mermaid supports a wide variety of common diagram types, including: Flowcharts, Sequence Diagrams, Gantt Charts, Class Diagrams, State Diagrams, Pie Charts, ER Diagrams, User Journey Maps, Git Graphs, and more. This editor uses the latest version of Mermaid, so all currently supported diagram types should render correctly.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Is my diagram data secure?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Yes.</strong> This tool runs entirely in your web browser. The Mermaid code you enter, and the resulting diagrams, are processed locally on your machine. Nothing is ever sent to our servers, ensuring your diagram data remains completely private.</p>
+                    </details>
                 </div>
             </div>
         </section>

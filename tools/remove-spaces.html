@@ -67,6 +67,46 @@
             "publisher": { "@type": "Organization", "name": "toolsTree" }
             }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What's the difference between 'Remove All Spaces' and 'Remove All Whitespace'?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "'Remove All Spaces' is very specific: it only deletes the literal space character. 'Remove All Whitespace' is much more powerful. It deletes spaces, tabs, new lines, carriage returns, and any other invisible 'spacing' character."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Which mode should I use to fix text from a PDF?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "When you copy from a PDF, text often has extra spaces between words and broken lines mid-sentence. Start with 'Normalize Spaces'. This will fix both issues at once, turning the messy, multi-line text into a single, clean paragraph."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Will this tool save or store my text?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. All processing is done 100% in your local web browser. Your text is never sent to our server, and nothing is ever saved or logged. Your privacy is guaranteed."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "'Normalize Spaces' vs. 'Trim Lines': What's the difference?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Trim Lines only removes whitespace from the very beginning and very end of each individual line. Normalize Spaces removes leading/trailing spaces from the entire text block and replaces multiple spaces/tabs/newlines between words with a single space."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
@@ -136,25 +176,125 @@
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Cleaning Modes Explained</h2>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
-                    <li><strong>Normalize Spaces:</strong> Replaces consecutive spaces, tabs, and line breaks with a single space.</li>
-                    <li><strong>Remove All Spaces:</strong> Deletes only space characters (` `), leaving tabs and line breaks intact.</li>
-                    <li><strong>Remove All Whitespace:</strong> The most aggressive mode. Deletes all spaces, tabs, and line breaks.</li>
-                    <li><strong>Remove Empty Lines:</strong> Deletes any lines that are completely empty or contain only whitespace.</li>
-                    <li><strong>Trim Lines:</strong> Removes leading and trailing whitespace from the beginning and end of each individual line.</li>
-                    <li><strong>Tabs to Spaces:</strong> Converts every tab character into a specified number of space characters.</li>
-                </ul>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is a Text Cleaner?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>A text cleaner is a tool that automatically fixes common formatting errors in your text. It removes "messy" parts, like extra spaces, accidental tabs, or unwanted empty lines, which can make text hard to read or cause errors in software.</p>
+                    <p>This tool is essential for anyone who works with text copied from different sources. When you copy text from a PDF, a website, an email, or a document, you often copy invisible "junk" formatting along with it. This tool instantly cleans that junk, leaving you with perfect, standardized text.</p>
+                    <p class="font-medium text-gray-900 dark:text-gray-100">Common use cases:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-1">
+                        <li>Fixing a block of text that has    <strong class="font-normal">double or triple spaces</strong> between words.</li>
+                        <li>Removing all the <strong class="font-normal">empty lines</strong> from a copied list.</li>
+                        <li>Cleaning up code or data that has a mix of <strong class="font-normal">tabs and spaces</strong>.</li>
+                        <li>Deleting <strong class="font-normal">leading or trailing spaces</strong> that are invisible but break data entry.</li>
+                        <li>Preparing a plain-text version of an article for a blog or email.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">A Detailed Guide to Each Cleaning Mode</h2>
+                <p class="text-gray-600 mb-6 dark:text-gray-300">Each mode targets a different, specific text formatting problem. Here’s exactly what each one does.</p>
+                <div class="space-y-5">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">1. Normalize Spaces</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This is the most common mode. It replaces any sequence of whitespace characters (multiple spaces, tabs, and new lines) with a <strong class="font-medium">single space</strong>. It also trims any spaces from the very beginning and end of the text.</p>
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                            <div><span class="font-mono p-1 bg-red-100 dark:bg-red-900/50 rounded">BEFORE:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Hello    world.
+            This is   a
+            test.</pre></div>
+                            <div><span class="font-mono p-1 bg-emerald-100 dark:bg-emerald-900/50 rounded">AFTER:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Hello world. This is a test.</pre></div>
+                        </div>
+                    </div>
+        
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">2. Remove All Spaces</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This mode aggressively deletes <strong class="font-medium">only the space character</strong> (` `). It leaves all other whitespace, like tabs and new lines, completely untouched. Useful for formatting data or creating hashtags.</p>
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                            <div><span class="font-mono p-1 bg-red-100 dark:bg-red-900/50 rounded">BEFORE:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Hello world.
+            This is a test.</pre></div>
+                            <div><span class="font-mono p-1 bg-emerald-100 dark:bg-emerald-900/50 rounded">AFTER:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Helloworld.
+            Thisisatest.</pre></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">3. Remove All Whitespace</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This is the most powerful mode. It deletes <strong class="font-medium">all whitespace characters</strong>, including spaces, tabs, and all line breaks. The result is one continuous string of text.</p>
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                            <div><span class="font-mono p-1 bg-red-100 dark:bg-red-900/50 rounded">BEFORE:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Hello    world.
+            This is a test.</pre></div>
+                            <div><span class="font-mono p-1 bg-emerald-100 dark:bg-emerald-900/50 rounded">AFTER:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Helloworld.Thisisatest.</pre></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">4. Remove Empty Lines</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This mode specifically targets and deletes any lines that are either completely empty or contain only whitespace. It's perfect for cleaning up lists, poems, or code. It <strong class="font-medium">does not</strong> affect spacing <strong class="font-medium text-gray-900 dark:text-gray-100">within</strong> lines.</p>
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                            <div><span class="font-mono p-1 bg-red-100 dark:bg-red-900/50 rounded">BEFORE:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Line 1
+                
+            Line 2
+
+            Line 3</pre></div>
+                            <div><span class="font-mono p-1 bg-emerald-100 dark:bg-emerald-900/50 rounded">AFTER:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Line 1
+            Line 2
+            Line 3</pre></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">5. Trim Lines</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This mode removes all whitespace from the <strong class="font-medium">beginning and end of each line</strong>, without affecting the text in the middle. This is crucial for cleaning data lists or code where leading spaces can break scripts.</p>
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                            <div><span class="font-mono p-1 bg-red-100 dark:bg-red-900/50 rounded">BEFORE:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">  Item 1
+            Item 2  
+                Item 3</pre></div>
+                            <div><span class="font-mono p-1 bg-emerald-100 dark:bg-emerald-900/50 rounded">AFTER:</span><pre class="mt-1 p-2 bg-gray-100 dark:bg-gray-600 rounded dark:text-gray-100">Item 1
+            Item 2
+            Item 3</pre></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">6. Tabs to Spaces</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This mode finds every tab character (<code>\t</code>) and replaces it with a specified number of space characters (defaulting to 4). This is a standard practice for making code formatting consistent across different editors.</p>
+                    </div>
+                </div>
             </div>
             
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
+        
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <span>'Remove All Spaces' vs 'Remove All Whitespace'?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                            <span>What's the difference between 'Remove All Spaces' and 'Remove All Whitespace'?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
                         </summary>
-                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">"Remove All Spaces" only deletes the literal space character. "Remove All Whitespace" is more powerful and also deletes tabs, line breaks, and other invisible whitespace characters.</p>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">"Remove All Spaces" is very specific: it only deletes the literal space character (the one you make with your spacebar). "Remove All Whitespace" is much more powerful. It deletes spaces, tabs, new lines, carriage returns, and any other invisible "spacing" character. </p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Which mode should I use to fix text from a PDF?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">When you copy from a PDF, text often has two problems: extra spaces <strong class="font-medium text-gray-900 dark:text-gray-100">between</strong> words and broken lines in the <strong class="font-medium text-gray-900 dark:text-gray-100">middle</strong> of sentences. Start with <strong class="font-medium text-gray-900 dark:text-gray-100">"Normalize Spaces"</strong>. This will fix both issues at once, turning the messy, multi-line text into a single, clean paragraph.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Will this tool save or store my text?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">No. All processing is done 100% in your local web browser. Your text is never sent to our server, and nothing is ever saved or logged. As soon as you close this tab, your text is gone forever. Your privacy is guaranteed.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>'Normalize Spaces' vs. 'Trim Lines': What's the difference?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Trim Lines</strong> only removes whitespace from the <span class="font-medium">very beginning and very end</span> of each individual line. It doesn't touch spaces <span class="font-medium">within</span> the line. <br><br><strong>Normalize Spaces</strong> is more powerful: it removes leading/trailing spaces <span class="font-medium">from the entire text block</span>, replaces multiple spaces/tabs/newlines <span class="font-medium">between words</span> with a single space, effectively merging everything into one continuous line or paragraph.</p>
                     </details>
                 </div>
             </div>

@@ -70,6 +70,46 @@
       "publisher": { "@type": "Organization", "name": "toolsTree" }
     }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What's the difference between fr, auto, and px?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "These are common CSS Grid track sizing units: 'fr' (Fractional Unit) divides available space proportionally, 'auto' sizes the track to fit its content, and 'px' or '%' sets a fixed or percentage-based size."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "How do I make a cell span multiple columns or rows?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the Named Areas feature. Select all the cells you want an item to cover (e.g., the top three cells) and assign them the same area name (e.g., 'header'). CSS Grid automatically merges adjacent cells with the same name."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "When should I use Grid vs. Flexbox?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use Grid for the main, 2-dimensional page layout (header, sidebar, main, footer). Use Flexbox for 1-dimensional components inside those regions (like aligning links in a nav bar)."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "How do I center an item inside a grid cell?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can apply 'place-items: center;' to the grid container itself, or apply 'align-self: center;' and 'justify-self: center;' to the specific item you want to center."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
@@ -144,8 +184,31 @@
         </div>
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is CSS Grid Layout?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p><strong>CSS Grid Layout</strong> is the most powerful and revolutionary layout system in CSS. It is a 2-dimensional system, meaning it can handle both columns and rows at the same time, unlike its 1-dimensional counterpart, Flexbox.</p>
+                    <p>For decades, developers had to rely on "hacks" like tables, floats, and positioning to create page layouts. Grid is the first module designed specifically to solve this problem, making it simple to build complex, responsive layouts with clean, minimal code.</p>
+                    
+                    <h3 class="text-lg font-semibold pt-2 text-gray-900 dark:text-gray-100">Grid vs. Flexbox: The Simple Answer</h3>
+                    <p>This is the most common question for new developers. The easiest way to remember is:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-1">
+                        <li><strong>Flexbox</strong> is for <strong>1-dimensional</strong> layouts (either a single row or a single column).</li>
+                        <li><strong>Grid</strong> is for <strong>2-dimensional</strong> layouts (rows and columns at the same time).</li>
+                    </ul>
+                    <p>You use <strong>Grid</strong> for the overall page structure (like a `header`, `sidebar`, and `main` content area) and <strong>Flexbox</strong> for the smaller components <strong>inside</strong> those areas (like aligning items in your navigation bar).</p>
+
+                    <h3 class="text-lg font-semibold pt-2 text-gray-900 dark:text-gray-100">Key Concepts This Tool Simplifies</h3>
+                    <p>This generator gives you visual control over Grid's most powerful features:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-1">
+                        <li><strong>Tracks:</strong> These are your columns and rows. You define their sizes in the "Tracks" inputs.</li>
+                        <li><strong>Gaps (Gutters):</strong> The space <strong class="font-medium text-gray-900 dark:text-gray-100">between</strong> your tracks, which you can control with the "Row Gap" and "Column Gap" inputs.</li>
+                        <li><strong>Grid Template Areas:</strong> This is Grid's killer feature. It allows you to "draw" your layout in your CSS, just like ASCII art. This tool generates it for you when you select cells and click "Assign Area."</li>
+                    </ul>
+                </div>
+            </div>
             <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the Grid Generator</h2>
-            <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+            <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
                 <li><strong>Define Tracks:</strong> Enter track sizes (e.g., `1fr 1fr` or `200px auto`) for columns and rows. The preview updates instantly.</li>
                 <li><strong>Set Gutters:</strong> Adjust the row and column gaps in pixels.</li>
                 <li><strong>Select Cells:</strong> Click on cells in the live preview to select them.</li>
@@ -174,6 +237,21 @@
                          <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
                     </summary>
                     <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Use the <strong>Named Areas</strong> feature. Select all the cells you want an item to cover (e.g., the top three cells for a header) and assign them the same area name (e.g., `header`). CSS Grid automatically merges adjacent cells with the same name.</p>
+                </details>
+                <details class="group">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <span>When should I use Grid vs. Flexbox?</span>
+                        <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Use <strong>Grid</strong> for the main, 2-dimensional page layout (the "macro" layout). This includes your main page regions like the header, sidebar, main content, and footer. <br><br> Use <strong>Flexbox</strong> for the 1-dimensional components <strong class="font-medium text-gray-900 dark:text-gray-100">inside</strong> those regions (the "micro" layout). Examples include aligning links in a nav bar, items in a card, or a form label and its input.</p>
+                </details>
+
+                <details class="group">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <span>How do I center an item inside a grid cell?</span>
+                        <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This is what Grid makes incredibly simple. To center an item both horizontally and vertically inside its cell, you can apply <code>place-items: center;</code> to the grid container (which will center <strong class="font-medium text-gray-900 dark:text-gray-100">everything</strong>), or you can apply <code>align-self: center;</code> and To <code>justify-self: center;</code> to the item itself.</p>
                 </details>
             </div>
         </section>

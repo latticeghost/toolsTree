@@ -56,6 +56,54 @@
       "publisher": { "@type": "Organization", "name": "toolsTree" }
     }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What is the best format for the source image?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "For the best results, use a vector format like SVG. If you don't have an SVG, a high-resolution PNG (at least 512x512 pixels) with a transparent background is the next best choice. This allows the generator to scale the image down without losing quality."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is a `site.webmanifest` file?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The `site.webmanifest` is a JSON file that tells the browser about your web application and how it should behave when 'installed' on a user's mobile or desktop device. It includes information like the app's name, icons, start URL, and theme colors, which are essential for Progressive Web Apps (PWAs)."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Where do I upload the generated files?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "For best practice, all the generated files (e.g., `favicon.ico`, `apple-touch-icon.png`, `site.webmanifest`, etc.) should be placed in the root directory of your website. This is the main folder, the same place your `index.html` file usually lives."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "How does the Emoji mode work?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The tool uses your browser's built-in font rendering to draw the emoji onto a canvas. It then exports this canvas image in all the required sizes. Using a single emoji character generally gives the clearest result."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What are Lucide Icons?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Lucide is a popular open-source icon library (lucide.dev) offering thousands of clean, consistent SVG icons. This tool lets you search and select any Lucide icon directly, color it, and generate a full favicon set from it – perfect for developer projects or simple websites."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
@@ -127,8 +175,8 @@
                      <div class="space-y-4">
                         <label for="fgColor" class="block text-sm font-medium" id="fgColorLabel">Icon Color / Foreground</label>
                         <div class="flex items-center gap-3">
-                            <input type="color" id="fgColor" value="#000000" class="p-1 h-10 w-10 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-800">
-                            <input type="text" id="fgColorHex" value="#000000" class="p-2 w-full border rounded-lg font-mono dark:bg-gray-700 dark:border-gray-600">
+                            <input type="color" id="fgColor" value="#10b981" class="p-1 h-10 w-10 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-800">
+                            <input type="text" id="fgColorHex" value="#10b981" class="p-2 w-full border rounded-lg font-mono dark:bg-gray-700 dark:border-gray-600">
                         </div>
 
                         <label for="bgColor" class="block text-sm font-medium">Background Color (Padding)</label>
@@ -149,7 +197,7 @@
                 </div>
             </div>
 
-            <div id="resultsPanel" class="lg:col-span-3 space-y-6 hidden">
+            <div id="resultsPanel" class="lg:col-span-3 space-y-6">
                  <div class="bg-white p-6 rounded-xl shadow-xl dark:bg-gray-900 border dark:border-gray-800">
                     <h2 class="text-xl font-bold mb-4">Live Previews</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -161,7 +209,7 @@
                             </div>
                         </div>
                         <div class="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
-                            <p class="text-sm font-semibold mb-2 text-white">Browser Tab (Dark)</p>
+                            <p class="text-sm font-semibold mb-2">Browser Tab (Dark)</p>
                             <div class="flex items-center p-2 bg-gray-800 rounded-md shadow-inner">
                                 <canvas id="preview32" width="16" height="16" class="mr-2"></canvas>
                                 <span class="text-xs text-gray-200">toolsTree | Your Title Here</span>
@@ -177,16 +225,37 @@
                         </button>
                     </div>
                     <pre class="bg-gray-100 dark:bg-gray-900/50 p-4 rounded-lg text-xs overflow-x-auto"><code id="htmlCodeBlock" class="language-html text-gray-700 dark:text-gray-200">
-&lt;!-- Generate your kit to see the code here --&gt;
+                        &lt;!-- Generate your kit to see the code here --&gt;
                     </code></pre>
                 </div>
             </div>
         </div>
-        
+        <section class="mt-10 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">The Easiest Way to Create a Complete Favicon Set</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>Stop generating just a single `.ico` file! This tool creates the full set of icons modern browsers and devices need, ensuring your website looks sharp everywhere. What makes this generator unique:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-2 mt-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">3 Input Modes:</strong> Start from a high-res image, a simple emoji, or choose from thousands of professional Lucide icons. Perfect for any project, from complex brands to quick prototypes.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Client-Side Privacy:</strong> All image processing happens directly in your browser. Your images are never uploaded, ensuring 100% privacy and security.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Complete Kit Generation:</strong> Get everything you need in one `.zip` file: multi-size PNGs, Apple Touch Icon, `favicon.ico`, and a `site.webmanifest` file for PWAs.
+                        </li>
+                         <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Instant HTML Code:</strong> Copy the exact HTML code needed to implement your new favicons directly into your website's `<head>`.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
         <section class="mt-10 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the Favicon Generator</h2>
-                <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
                     <li><b>Select Source:</b> Choose between uploading a high-res image, typing a single emoji, or searching for a Lucide icon.</li>
                     <li><b>Customize Colors:</b> Set the foreground color (for icons/emojis) and the background color (for padding/manifest).</li>
                     <li><b>Generate Kit:</b> Click the "Generate & Download Kit" button. A `.zip` file containing all your icons and the manifest file will be downloaded.</li>
@@ -195,8 +264,8 @@
             </div>
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Why a Full Favicon Kit Matters</h2>
-                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">A single `favicon.ico` is no longer enough for the modern web. To ensure your brand looks crisp and professional everywhere, you need a comprehensive set of icons for different platforms, browsers, and devices.</p>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                 <p class="text-gray-600 mb-4 dark:text-gray-300">A single `favicon.ico` is no longer enough for the modern web. To ensure your brand looks crisp and professional everywhere, you need a comprehensive set of icons for different platforms, browsers, and devices.</p>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><b>Browser Tabs:</b> Standard 16x16 and 32x32 icons for crystal-clear display on all screens.</li>
                     <li><b>Apple Devices:</b> An `apple-touch-icon.png` is essential for users who add your website to their iPhone or iPad home screen.</li>
                     <li><b>Android & Chrome:</b> High-resolution icons and a `site.webmanifest` file are crucial for home screen shortcuts and creating a native-like Progressive Web App (PWA) experience.</li>
@@ -209,6 +278,20 @@
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is the best format for the source image?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">For the best results, use a vector format like <strong>SVG</strong>. If you don't have an SVG, a high-resolution <strong>PNG</strong> (at least 512x512 pixels) with a transparent background is the next best choice. This allows the generator to scale the image down without losing quality.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is a `site.webmanifest` file?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The `site.webmanifest` is a JSON file that tells the browser about your web application and how it should behave when 'installed' on a user's mobile or desktop device. It includes information like the app's name, icons, start URL, and theme colors, which are essential for Progressive Web Apps (PWAs).</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Where do I upload the generated files?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">For best practice, all the generated files (e.g., `favicon.ico`, `apple-touch-icon.png`, `site.webmanifest`, etc.) should be placed in the <strong>root directory</strong> of your website. This is the main folder, the same place your `index.html` file usually lives.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>How does the Emoji mode work?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The tool uses your browser's built-in font rendering to draw the emoji onto a canvas. It then exports this canvas image in all the required sizes. Using a single emoji character generally gives the clearest result.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What are Lucide Icons?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Lucide is a popular open-source icon library (<a href="https://lucide.dev" target="_blank" class="text-tt-primary hover:underline">lucide.dev</a>) offering thousands of clean, consistent SVG icons. This tool lets you search and select any Lucide icon directly, color it, and generate a full favicon set from it – perfect for developer projects or simple websites.</p>
+                    </details>
                 </div>
             </div>
         </section>
@@ -253,62 +336,64 @@
 
         // --- Core Drawing Functions (Unchanged) ---
 
-        /**
-         * Draws the selected source content (Image, Emoji, or Icon) onto the given canvas context.
-         * This function is the core logic for all favicon generation steps.
-         */
-        function drawSourceToCanvas(ctx, size) {
+        async function drawSourceToCanvas(ctx, size, drawBackground = true) { // Added drawBackground parameter
             const bgColor = ui.bgColorPicker.value;
             const fgColor = ui.fgColorPicker.value;
 
-            // 1. Draw Background
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(0, 0, size, size);
+            // 1. Clear canvas first
+            ctx.clearRect(0, 0, size, size);
+
+            // 2. Draw Background ONLY if requested
+            if (drawBackground) {
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, size, size);
+            }
+
+            // 3. Draw the source content (Image, Emoji, or Icon)
+            let drawPromise = Promise.resolve(); // Default for sync operations
 
             if (activeMode === 'image' && sourceImage) {
-                // 2. Image Mode: Draw the image, scaled to the canvas size
-                // This mode assumes the uploaded image is the source.
                 ctx.drawImage(sourceImage, 0, 0, size, size);
-            } 
-            
+            }
             else if (activeMode === 'emoji' && ui.emojiInput.value) {
-                // 3. Emoji Mode: Draw the emoji in the center
                 const emoji = ui.emojiInput.value.trim();
-                ctx.font = `${size * 0.8}px sans-serif`; // Font size relative to canvas size
+                // For Emoji, ensure foreground color is applied if background is transparent
+                ctx.fillStyle = fgColor; // Apply foreground color for emoji text
+                ctx.font = `${size * 0.8}px sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(emoji, size / 2, size / 2);
-            } 
-            
+                // Adjust position slightly for better centering if needed
+                ctx.fillText(emoji, size / 2, size / 2 + size * 0.05); // Small vertical adjustment might help
+            }
             else if (activeMode === 'icon' && selectedIcon) {
-                // 4. Icon Mode: Draw the Lucide icon
-                // Lucide icons are SVGs. We'll convert the SVG to a Data URL and draw it.
-                // NOTE: This relies on lucide.createIcons being available globally.
-                const iconSVG = lucide.icons[selectedIcon].toSvg({'width': size * 0.8, 'height': size * 0.8, 'stroke': fgColor});
-                
-                const img = new Image();
-                const svgBlob = new Blob([iconSVG], {type: 'image/svg+xml;charset=utf-8'});
-                const url = URL.createObjectURL(svgBlob);
+                const iconNode = lucide.icons[selectedIcon];
+                if (!iconNode) return Promise.reject("Selected icon node not found");
 
-                // Use a nested approach to ensure the image is loaded before drawing
-                return new Promise(resolve => {
+                const svgElement = lucide.createElement(iconNode);
+                const iconSize = size * 0.8;
+                svgElement.setAttribute('width', iconSize);
+                svgElement.setAttribute('height', iconSize);
+                svgElement.setAttribute('stroke', fgColor);
+                const iconSVGString = svgElement.outerHTML;
+
+                const img = new Image();
+                const svgDataURL = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(iconSVGString)));
+
+                // Icon drawing is asynchronous
+                drawPromise = new Promise((resolve, reject) => {
                     img.onload = () => {
-                        // Draw the icon centered
                         const padding = size * 0.1;
-                        ctx.drawImage(img, padding, padding, size * 0.8, size * 0.8);
-                        URL.revokeObjectURL(url);
+                        ctx.drawImage(img, padding, padding, iconSize, iconSize);
                         resolve();
                     };
-                    img.src = url;
+                    img.onerror = reject;
+                    img.src = svgDataURL;
                 });
             }
-            // Return resolved promise if it's not the icon mode (synchronous drawing)
-            return Promise.resolve(); 
+
+            return drawPromise; // Return the promise (resolves immediately for non-icon modes)
         }
 
-        /**
-         * Updates the small live preview canvases.
-         */
         async function updatePreviews() {
             // Clear existing previews
             ui.preview16.clearRect(0, 0, 16, 16);
@@ -320,7 +405,7 @@
             const ctx = hiddenCanvas.getContext('2d');
 
             // Wait for the asynchronous icon drawing if needed
-            await drawSourceToCanvas(ctx, 32); 
+            await drawSourceToCanvas(ctx, 32, false);
 
             // Copy to the smaller preview contexts
             ui.preview16.drawImage(hiddenCanvas, 0, 0, 16, 16);
@@ -354,37 +439,59 @@
             }
         }
         
-        /**
-         * UPDATED: Robust loading and searching logic.
-         */
         function updateIconGrid(query = '') {
-            if (!window.lucide || !lucide.icons) {
-                // If lucide isn't loaded yet, retry logic
-                setTimeout(() => updateIconGrid(query), 100);
+            if (typeof lucide === 'undefined' || !lucide.icons || typeof lucide.createElement !== 'function') {
+                console.warn('Lucide library not ready yet or createElement is missing. Retrying...');
+                setTimeout(() => updateIconGrid(query), 200);
+                ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">Loading icons...</p>`;
                 return;
             }
 
-            ui.iconGrid.innerHTML = '';
+            ui.iconGrid.innerHTML = ''; // Clear previous results
             let count = 0;
             const fgColor = ui.fgColorPicker.value;
-            const lowerQuery = query.toLowerCase();
+            const lowerQuery = query.toLowerCase().trim();
 
-            for (const name in lucide.icons) {
-                // Check if the icon name contains the lowercase query
-                if (query === '' || name.includes(lowerQuery)) { 
-                    if (count++ > 50) break; // Limit grid size
-                    const iconEl = document.createElement('div');
-                    iconEl.className = 'p-1 rounded-md cursor-pointer hover:bg-tt-primary/20 transition text-center';
-                    
-                    // Create the Lucide icon SVG element
-                    const iconSVG = lucide.icons[name].toSvg({'width': 24, 'height': 24, 'stroke': fgColor});
-                    
-                    iconEl.innerHTML = iconSVG;
-                    iconEl.onclick = () => selectIcon(name);
-                    ui.iconGrid.appendChild(iconEl);
-                }
+            try {
+                // --- FIX: Use Object.keys() for iteration ---
+                Object.keys(lucide.icons).forEach(name => {
+                    // Skip if we've already displayed enough icons
+                    if (count >= 100) return;
+
+                    // Check if the icon name matches the query
+                    if (lowerQuery === '' || name.includes(lowerQuery)) {
+                        const iconNode = lucide.icons[name]; // Get the icon data node
+                        if (!iconNode) return; // Skip if icon data is invalid
+
+                        // Use lucide.createElement
+                        const svgElement = lucide.createElement(iconNode);
+                        svgElement.setAttribute('width', 24);
+                        svgElement.setAttribute('height', 24);
+                        svgElement.setAttribute('stroke', fgColor);
+                        const iconSVGString = svgElement.outerHTML; // Get the SVG string
+
+                        const iconEl = document.createElement('div');
+                        iconEl.className = 'p-1 rounded-md cursor-pointer hover:bg-tt-primary/20 transition text-center flex items-center justify-center';
+                        iconEl.setAttribute('title', name);
+                        iconEl.innerHTML = iconSVGString; // Use the generated SVG string
+                        iconEl.onclick = () => selectIcon(name);
+
+                        ui.iconGrid.appendChild(iconEl);
+                        count++;
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error generating icon grid:", error);
+                ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-red-500">Error loading icons. Check console.</p>`;
+                return;
             }
-            if (count === 0) ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">No icons found for "${query}".</p>`;
+
+            if (count === 0 && lowerQuery !== '') {
+                ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">No icons found for "${query}".</p>`;
+            } else if (count === 0 && lowerQuery === '') {
+                ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">Start typing to search icons.</p>`;
+            }
         }
 
         function selectIcon(name) {
@@ -430,7 +537,7 @@
                 canvas.height = size;
                 
                 // Draw source content onto the canvas
-                await drawSourceToCanvas(ctx, size); 
+                drawSourceToCanvas(ctx, size);
 
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
                 
@@ -444,8 +551,12 @@
             
             // Generate favicon.ico (simple version with just 32x32)
             canvas.width = 32; canvas.height = 32;
-            await drawSourceToCanvas(ctx, 32);
+            drawSourceToCanvas(ctx, 32);
             const icoBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            // --- IMPORTANT: ICO generation needs more work for multi-size ---
+            // The simple png-to-ico conversion here is basic.
+            // Real ICO generation requires specific byte structure for multiple sizes.
+            // For now, we'll keep the 32x32 PNG renamed as .ico as a placeholder.
             zip.file('favicon.ico', icoBlob);
 
 

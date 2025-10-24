@@ -69,6 +69,54 @@
       "publisher": { "@type": "Organization", "name": "toolsTree" }
     }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "How does prepayment save so much money?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Interest is calculated on the outstanding principal. By making a prepayment, you reduce the principal amount directly. This means that for all subsequent months, the interest calculated will be on a smaller base, leading to exponential savings over the life of the loan and allowing you to pay it off much faster."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is an amortization schedule?",
+            "acceptedAnswer": {
+                "@type" : "Answer",
+                "text": "It's a detailed table showing a month-by-month breakdown of your loan repayment. For each month, it lists how much of your payment goes towards the principal and how much goes towards interest, along with any prepayments made and the final closing balance. It provides a transparent view of your entire loan journey."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Should my prepayment reduce my EMI or my Loan Tenure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This calculator simulates reducing your tenure, which saves you the most money. Some banks allow you to reduce your EMI, which frees up monthly cash flow but doesn't save as much in total interest."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Monthly vs. Yearly Prepayment: What's better?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Mathematically, making a monthly prepayment is slightly better. Because interest is calculated monthly, any extra principal you pay this month reduces the balance that interest is calculated on next month. A yearly prepayment is still fantastic, but it means the bank is calculating interest on that higher principal amount for 11 extra months."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What's the difference between a Fixed and Floating interest rate?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A Fixed Rate is locked in for the entire loan tenure, so your EMI never changes. A Floating Rate is tied to an external benchmark and can change, meaning your EMI (or tenure) could go up or down over time."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
@@ -138,9 +186,9 @@
         </div>
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
-             <div>
+            <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Understanding EMI & Prepayments</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">An <strong>Equated Monthly Installment (EMI)</strong> is the fixed payment you make to a lender each month. A significant portion of your initial EMIs goes towards paying interest, while later EMIs pay off more of the principal. <strong>Prepayment</strong> is the act of paying more than your EMI. This extra amount goes directly towards reducing your principal loan amount, which drastically reduces the total interest you pay and shortens the loan tenure.</p>
+                <p class="text-gray-600 mb-4 dark:text-gray-300">An <strong>Equated Monthly Installment (EMI)</strong> is the fixed payment you make to a lender each month. A significant portion of your initial EMIs goes towards paying interest, while later EMIs pay off more of the principal. <strong>Prepayment</strong> is the act of paying more than your EMI. This extra amount goes directly towards reducing your principal loan amount, which drastically reduces the total interest you pay and shortens the loan tenure.</p>
                 <div id="formula-container" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg text-center">$$ \text{EMI} = P \times r \times \frac{(1+r)^n}{(1+r)^n - 1} $$</div>
                 
                 <p class="text-sm text-gray-600 mb-2 mt-4 dark:text-gray-300">Where:</p>
@@ -149,12 +197,48 @@
                     <li><b>r</b>: Monthly Interest Rate (Annual Rate &divide; 12 &divide; 100)</li>
                     <li><b>n</b>: Number of Monthly Installments (Loan Tenure in Months)</li>
                 </ul>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Why Use This Advanced Calculator?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>A basic calculator only tells you the EMI. This tool is a complete financial planning dashboard that gives you the power to see the future of your loan.</p>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li><strong class="font-medium text-gray-900 dark:text-gray-100">Dual Calculation Modes:</strong> Don't just find your EMI. You can also enter the EMI you can afford and this tool will calculate the maximum <strong class="font-medium">loan amount you are eligible for</strong>.</li>
+                        <li><strong class="font-medium text-gray-900 dark:text-gray-100">Advanced Prepayment Simulation:</strong> This is the most powerful feature. See <strong class="font-medium text-gray-900 dark:text-gray-100">exactly</strong> how making small <strong class="font-medium">monthly or yearly prepayments</strong> can save you thousands (or lakhs) in interest and shorten your loan tenure by years.</li>
+                        <li><strong class="font-medium text-gray-900 dark:text-gray-100">Detailed Amortization Table:</strong> Generate a full, month-by-month schedule with real dates. You can see precisely how every payment splits between principal and interest, and watch your balance decrease over time.</li>
+                        <li><strong class="font-medium text-gray-900 dark:text-gray-100">Visualize Your Loan:</strong> The interactive pie chart gives you an instant visual breakdown of your total principal vs. your total interest, helping you understand the real cost of your loan.</li>
+                        <li><strong class="font-medium text-gray-900 dark:text-gray-100">Export Your Data:</strong> Download your complete amortization schedule as a <strong class="font-medium">PDF</strong> to share with your financial advisor or as a <strong class="font-medium">CSV</strong> to open in Excel or Google Sheets for further analysis.</li>
+                    </ul>
                 </div>
+            </div>
              <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How does prepayment save so much money?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Interest is calculated on the outstanding principal. By making a prepayment, you reduce the principal amount directly. This means that for all subsequent months, the interest calculated will be on a smaller base, leading to exponential savings over the life of the loan and allowing you to pay it off much faster.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is an amortization schedule?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">It's a detailed table showing a month-by-month breakdown of your loan repayment. For each month, it lists how much of your payment goes towards the principal and how much goes towards interest, along with any prepayments made and the final closing balance. It provides a transparent view of your entire loan journey.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Should my prepayment reduce my EMI or my Loan Tenure?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This is the most common question for borrowers. While most banks default to <strong class="font-medium">reducing your tenure</strong> (which is what this calculator simulates), some allow you to choose. <br><br> • <strong>Reducing Tenure (Recommended):</strong> This saves you the most money. By paying the loan off faster, you drastically cut down on the total interest paid. <br> • <strong>Reducing EMI:</strong> This frees up your monthly cash flow. Your loan tenure remains the same, but your monthly payment decreases. This is a good option if your income has dropped and you need more breathing room in your budget.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Monthly vs. Yearly Prepayment: What's better?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Mathematically, making a <strong class="font-medium">monthly prepayment</strong> is slightly better. Because interest is calculated on your outstanding balance each month, any extra principal you pay <strong class="font-medium text-gray-900 dark:text-gray-100">this</strong> month reduces the balance that interest is calculated on <strong class="font-medium text-gray-900 dark:text-gray-100">next</strong> month. A yearly prepayment is still fantastic, but it means the bank is calculating interest on that higher principal amount for 11 extra months. <br><br><strong>Pro-Tip:</strong> The best strategy is often to just add 10% to your EMI each month (e.g., if your EMI is ₹20,000, set an auto-payment for ₹22,000). You will barely feel it, but you'll pay off your loan years earlier.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What's the difference between a Fixed and Floating interest rate?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool's calculation assumes a <strong class="font-medium">fixed rate</strong> for its forecast. <br><br> • <strong>Fixed Rate:</strong> Your interest rate is locked in for the entire loan tenure. Your EMI never changes. This provides stability and predictable payments, but the initial rate is usually slightly higher. <br> • <strong>Floating Rate:</strong> Your interest rate is tied to an external benchmark (like the Repo Rate). If the benchmark rate goes up, your EMI (or tenure) will also go up. If it goes down, your payments will decrease. It's riskier but often starts at a lower rate than a fixed loan.</p>
+                    </details>
                 </div>
             </div>
         </section>

@@ -67,6 +67,46 @@
             "publisher": { "@type": "Organization", "name": "toolsTree" }
             }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What does 'Compounding Frequency' mean?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This is how often the interest earned is added to your principal balance. 'Quarterly' (every 3 months) is most common for RDs in India. More frequent compounding leads to slightly higher returns due to the effect of earning interest on your interest sooner."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why is the 'Value in Today's Money' lower?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This value accounts for inflation, which is the rate at which money loses its purchasing power over time. While your final maturity amount might be ₹10 Lakhs in 10 years, its actual buying power might only be equivalent to ₹6 Lakhs today. This inflation-adjusted figure gives you a more realistic understanding of your future wealth."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "RD vs. SIP: What's the difference?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Recurring Deposits (RDs) are for safety and guaranteed returns. Your money is 100% secure and earns a fixed interest rate. Systematic Investment Plans (SIPs) are for wealth creation and growth. Your money is invested in market-linked mutual funds, meaning your returns can be much higher, but they are not guaranteed and carry risk."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "RD vs. Fixed Deposit (FD): What's the difference?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Both are safe, guaranteed-return products. The only difference is the payment method: A Fixed Deposit (FD) is for a single, one-time investment (a 'lump sum'). A Recurring Deposit (RD) is for regular, monthly investments."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
@@ -154,7 +194,20 @@
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is a Recurring Deposit (RD)?</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-300">A Recurring Deposit (RD) is a savings tool that allows you to invest a fixed amount every month for a predetermined period. It's offered by banks and financial institutions and earns interest, typically compounded quarterly. It's an excellent way to build savings through disciplined monthly contributions.</p>
+                <p class="text-gray-900 dark:text-gray-300">A Recurring Deposit (RD) is a savings tool that allows you to invest a fixed amount every month for a predetermined period. It's offered by banks and financial institutions and earns interest, typically compounded quarterly. It's an excellent way to build savings through disciplined monthly contributions.</p>
+                <h3 class="text-xl font-semibold pt-2 text-gray-900 dark:text-gray-100">Key Benefits of a Recurring Deposit</h3>
+                <p class="text-gray-700 dark:text-gray-300">An RD is a powerful tool for new savers. Its main advantages are:</p>
+                <ul class="list-disc list-inside ml-5 space-y-2 mt-2">
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-300">Disciplined Savings:</strong> By requiring a fixed monthly payment, an RD instills a strong habit of regular saving. It's a "set it and forget it" way to build a corpus without effort.
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-300">Guaranteed Returns:</strong> Unlike market-linked investments (like SIPs), the interest rate on an RD is fixed and guaranteed. You know exactly how much money you will get at maturity, making it a 100% safe, zero-risk option.
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-300">Affordability & Flexibility:</strong> You can start an RD with as little as ₹100 per month. The tenure is also flexible, typically ranging from 6 months to 10 years, allowing you to save for both short-term and long-term goals.
+                    </li>
+                </ul>
             </div>
             
             <div>
@@ -171,6 +224,27 @@
                             <span>Why is the 'Value in Today's Money' lower?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
                         </summary>
                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This value accounts for inflation, which is the rate at which money loses its purchasing power over time. While your final maturity amount might be ₹10 Lakhs in 10 years, its actual buying power might only be equivalent to ₹6 Lakhs today. This inflation-adjusted figure gives you a more realistic understanding of your future wealth.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>RD vs. SIP: What's the difference?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">
+                            <strong>Recurring Deposits (RDs)</strong> are for <strong>safety and guaranteed returns</strong>. Your money is 100% secure and earns a fixed interest rate. <br><br>
+                            <strong>Systematic Investment Plans (SIPs)</strong> are for <strong>wealth creation and growth</strong>. Your money is invested in market-linked mutual funds, meaning your returns can be much higher, but they are not guaranteed and carry risk.
+                        </p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>RD vs. Fixed Deposit (FD): What's the difference?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">
+                            Both are safe, guaranteed-return products. The only difference is the payment method:<br>
+                            • A <strong>Fixed Deposit (FD)</strong> is for a single, one-time investment (a "lump sum").<br>
+                            • A <strong>Recurring Deposit (RD)</strong> is for regular, monthly investments.
+                        </p>
                     </details>
                 </div>
             </div>

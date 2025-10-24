@@ -27,14 +27,12 @@
             const theme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             
-            // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
             if (theme === 'dark' || (!theme && prefersDark)) {
             document.documentElement.classList.add('dark');
             } else {
             document.documentElement.classList.remove('dark');
             }
         } catch (e) {
-            // Failsafe: default to light mode if any errors occur.
             console.error("Error applying initial theme:", e);
             document.documentElement.classList.remove('dark');
         }
@@ -62,22 +60,51 @@
       "applicationCategory": "DesignApplication",
       "operatingSystem": "Web",
       "description": "The ultimate WCAG 2.1 Contrast Checker. Analyze color pairs against AA/AAA standards, get smart color suggestions to fix contrast issues, and use the eyedropper to pick colors from anywhere on your screen.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "488"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "toolsTree"
-      }
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "488"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
     }
     </script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between AA and AAA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "WCAG has two main levels of compliance. AA is the widely accepted standard that most websites aim for. AAA is a stricter standard (requiring a higher contrast ratio) that is often required for sites dedicated to audiences with visual impairments. Meeting AA is essential; meeting AAA is excellent."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the Eyedropper tool work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Eyedropper uses a modern browser API that allows you to pick a color from anywhere on your screen. When you click the eyedropper icon, your cursor will change, and you can then click on any color to instantly load it into the calculator. Note: This feature is only available on supported desktop browsers like Chrome, Edge, and Opera."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the 'Fix' button work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When you click 'Fix', the tool intelligently adjusts the failing color. It keeps the original hue and saturation but programmatically lightens or darkens the luminosity (brightness) just enough to meet the required contrast ratio, giving you the closest possible compliant color."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What counts as 'Large Text' vs. 'Normal Text'?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "WCAG defines 'Large Text' as 18pt (about 24px) or larger, OR 14pt (about 18.7px) and bold. 'Normal Text' is anything smaller. Because large text is inherently easier to read, it has a lower contrast requirement (3:1 for AA) than normal text (4.5:1 for AA)."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
@@ -151,17 +178,52 @@
                 </div>
             </div>
         </div>
-        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">More Than a Checker, It's a Problem Solver</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>Poor color contrast is one of the most common—and easiest to fix—accessibility failures on the web. This tool is designed to be more than just a simple checker; it's a complete workflow for designers and developers to find and fix contrast issues fast.</p>
+                    <ul class="list-disc list-inside ml-5 space-y-2 mt-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Smart Color Suggestions:</strong> The "Fix" button is our most powerful feature. If your color pair fails, it won't just tell you "no." It will intelligently suggest the <strong class="font-medium text-gray-900 dark:text-gray-100">closest possible</strong> compliant color, saving you time and guesswork.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Screen-Wide Eyedropper:</strong> Instantly check any color on your screen, not just in your browser. You can grab colors from a design mockup in Figma, a logo, or any other application.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Live, Contextual Preview:</strong> See exactly how your color choices will look on real text elements, including normal and large/bold text, as you make changes.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Instant WCAG 2.1 Compliance:</strong> Get a clear, simple Pass/Fail grade for all four common accessibility standards (AA/AAA for normal and large text) in one glance.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
              <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Understanding Accessibility</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Web Content Accessibility Guidelines (WCAG) are standards that ensure digital content is usable by everyone, including people with disabilities. Color contrast is critical for users with low vision. This tool helps you meet those standards effortlessly.</p>
+                <p class="text-gray-600 mb-4 dark:text-gray-300">Web Content Accessibility Guidelines (WCAG) are standards that ensure digital content is usable by everyone, including people with disabilities. Color contrast is critical for users with low vision. This tool helps you meet those standards effortlessly.</p>
             </div>
              <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is the difference between AA and AAA?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">WCAG has two main levels of compliance. <strong>AA</strong> is the widely accepted standard that most websites aim for. <strong>AAA</strong> is a stricter standard (requiring a higher contrast ratio) that is often required for sites dedicated to audiences with visual impairments. Meeting AA is essential; meeting AAA is excellent.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How does the Eyedropper tool work?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The Eyedropper uses a modern browser API that allows you to pick a color from anywhere on your screen. When you click the eyedropper icon, your cursor will change, and you can then click on any color to instantly load it into the calculator. Note: This feature is only available on supported desktop browsers like Chrome, Edge, and Opera.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>How does the 'Fix' button work?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">When you click 'Fix', the tool intelligently adjusts the failing color. It keeps the original hue and saturation but programmatically lightens or darkens the luminosity (brightness) just enough to meet the required contrast ratio, giving you the closest possible compliant color.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What counts as 'Large Text' vs. 'Normal Text'?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">WCAG defines 'Large Text' as <strong>18pt (about 24px)</strong> or larger, OR <strong>14pt (about 18.7px) and bold</strong>. 'Normal Text' is anything smaller. Because large text is inherently easier to read, it has a lower contrast requirement (3:1 for AA) than normal text (4.5:1 for AA).</p>
+                    </details>
                 </div>
             </div>
         </section>

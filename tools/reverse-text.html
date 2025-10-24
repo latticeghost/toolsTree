@@ -66,6 +66,54 @@
             "publisher": {"@type": "Organization", "name": "toolsTree"}
             }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "How does 'Flip (Upside Down)' work?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This mode uses a character map to replace each letter or symbol with a Unicode character that looks like its upside-down version. Not all characters have a flipped equivalent, so some may remain unchanged."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Does this tool work with emojis and special characters?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Modern JavaScript is aware of multi-byte characters like emojis (e.g., 👍), so reversing a string like 'Hi 👍' will correctly result in '👍 iH' instead of breaking the emoji."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "How can I check if a word is a palindrome?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A palindrome reads the same forwards and backwards (like 'level'). Simply type the word and select 'Reverse String' mode. If the output is identical to the input, it's a palindrome!"
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Are the case options applied before or after reversing?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The case options (lowercase, uppercase, invert case) are applied *after* the selected reversal or flipping transformation has been completed. This gives you final control over the appearance of the output text."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "'Reverse String' vs. 'Reverse Letters': What's the difference?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "'Reverse String' reverses the entire input as one block (e.g., `Hello World` becomes `dlroW olleH`). 'Reverse Letters (within Words)' keeps the word order the same but reverses the letters inside each word (e.g., `Hello World` becomes `olleH dlroW`)."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
@@ -135,14 +183,50 @@
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About the Transformation Modes</h2>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
-                    <li><strong>Reverse String:</strong> Reverses every character in the text. "Hello World" &rarr; "dlroW olleH".</li>
-                    <li><strong>Reverse Words:</strong> Reverses the order of words. "Hello World" &rarr; "World Hello".</li>
-                    <li><strong>Reverse Letters:</strong> Reverses the letters inside each word. "Hello World" &rarr; "olleH dlroW".</li>
-                    <li><strong>Reverse Lines:</strong> Reverses the order of lines in a multi-line text.</li>
-                    <li><strong>Flip (Upside Down):</strong> Maps each character to its upside-down equivalent. "Hello" &rarr; "oןןǝH".</li>
-                </ul>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is Text Reversal & Why Use It?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>Text reversal is the process of rearranging characters, words, or lines in a piece of text into the opposite order. While sometimes used just for fun or creating quirky messages, text reversal also has practical applications in programming, data processing, and even linguistics.</p>
+                    <p class="font-medium text-gray-900 dark:text-gray-100">Common uses include:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-1 text-sm">
+                        <li><strong>Fun & Social Media:</strong> Creating backwards messages or flipped text for social media posts or usernames.</li>
+                        <li><strong>Programming Puzzles:</strong> Solving coding challenges that involve string manipulation.</li>
+                        <li><strong>Data Handling:</strong> Reversing specific fields in datasets or log files for analysis.</li>
+                        <li><strong>Checking Palindromes:</strong> Quickly seeing if a word or phrase reads the same forwards and backwards (e.g., "madam").</li>
+                        <li><strong>Simple Obfuscation:</strong> Making text slightly harder to read at a glance (though not secure).</li>
+                    </ul>
+                    <p>This advanced tool offers multiple modes to give you precise control over exactly <strong class="font-medium text-gray-900 dark:text-gray-100">how</strong> your text is reversed or transformed.</p>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Guide to Transformation Modes</h2>
+                <p class="text-sm text-gray-600 mb-6 dark:text-gray-300">Each mode performs a distinct type of text transformation:</p>
+                
+                <div class="space-y-5">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">1. Reverse String</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This reverses the entire sequence of characters in your input, including spaces and punctuation. It reads the text from right to left. <br><strong>Example:</strong> <code>Hello World!</code> &rarr; <code>!dlroW olleH</code></p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">2. Reverse Words</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This reverses the order of the words themselves, while keeping the letters within each word in their original order. <br><strong>Example:</strong> <code>The quick brown fox</code> &rarr; <code>fox brown quick The</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">3. Reverse Letters (within Words)</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This keeps the words in their original order but reverses the letters <strong class="font-medium text-gray-900 dark:text-gray-100">inside</strong> each individual word. <br><strong>Example:</strong> <code>Hello World!</code> &rarr; <code>olleH !dlroW</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">4. Reverse Lines</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">If your text has multiple lines, this mode reverses the order of the lines themselves, from bottom to top, while keeping the content of each line unchanged. <br><strong>Example:</strong> <code>Line 1\nLine 2</code> &rarr; <code>Line 2\nLine 1</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">5. Flip (Upside Down)</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This unique mode reverses the entire string and then attempts to replace each character with its visually corresponding upside-down Unicode character. Great for social media effects. <br><strong>Example:</strong> <code>Amazing!</code> &rarr; <code>¡ƃuızɐɯ∀</code></p>
+                    </div>
+                </div>
             </div>
             
             <div>
@@ -159,6 +243,28 @@
                             <span>Does this tool work with emojis and special characters?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
                         </summary>
                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. Modern JavaScript is aware of multi-byte characters like emojis (e.g., 👍), so reversing a string like "Hi 👍" will correctly result in "👍 iH" instead of breaking the emoji.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>How can I check if a word is a palindrome?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">A palindrome reads the same forwards and backwards (like "level" or "racecar"). Simply type the word into the input box and select the "Reverse String" mode. If the output text is identical to the input text, it's a palindrome!</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Are the case options applied before or after reversing?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The case options (lowercase, uppercase, invert case) are applied <strong class="font-medium text-gray-900 dark:text-gray-100">after</strong> the selected reversal or flipping transformation has been completed. This gives you final control over the appearance of the output text.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>'Reverse String' vs. 'Reverse Letters': What's the difference?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Reverse String</strong> reverses the <span class="font-medium">entire input</span> as one block (e.g., <code>Hello World</code> becomes <code>dlroW olleH</code>). <br><br><strong>Reverse Letters (within Words)</strong> keeps the <span class="font-medium">word order</span> the same but reverses the letters <span class="font-medium">inside each word</span> (e.g., <code>Hello World</code> becomes <code>olleH dlroW</code>).</p>
                     </details>
                 </div>
             </div>

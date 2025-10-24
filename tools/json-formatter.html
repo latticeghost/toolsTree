@@ -72,6 +72,46 @@
             "publisher": {"@type": "Organization", "name": "toolsTree"}
         }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What does 'Sort Keys' do?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "When checked, this option recursively goes through all objects in your JSON and reorders their keys alphabetically (A-Z). This is extremely useful for comparing two JSON files to see if their data is the same, regardless of the original key order."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is the difference between Formatting and Minifying?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Formatting (also called beautifying or pretty-printing) adds indentation and line breaks to make the JSON human-readable. Minifying removes all unnecessary whitespace (spaces, tabs, newlines) to make the file size as small as possible, which is ideal for sending data over a network."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why is my JSON invalid if it has comments (//) or trailing commas (,)?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This is the most common error for developers. The official JSON specification (RFC 8259) is very strict and does not support comments (neither //... nor /*...*/). It also forbids trailing commas after the last element in an object or array. While these are valid in JavaScript, they are not valid in JSON. You must remove them before validating."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why is JSON validation important?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "JSON has a very strict syntax. Even a single misplaced comma or quote can make the entire file invalid, causing errors in applications or APIs that try to read it. Using a validator like this tool before you save or send your JSON ensures it's perfectly formed, preventing bugs and saving debugging time."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
@@ -176,7 +216,7 @@
             
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the JSON Formatter</h2>
-                <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                <ol class="list-inside text-gray-600 space-y-2 dark:text-gray-300">
                     <li><strong>Step 1:</strong> Paste your raw JSON data into the "Input Data" text area. You can also click "Load Example" to see how it works.</li>
                     <li><strong>Step 2:</strong> Choose your desired indentation (2, 3, 4 spaces, or tabs) and check "Sort Keys" if you need keys alphabetized.</li>
                     <li><strong>Step 3:</strong> Click "Format JSON" to beautify the data or "Minify JSON" to compress it into a single line.</li>
@@ -186,7 +226,7 @@
             
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About JSON (JavaScript Object Notation)</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">
+                <p class="text-gray-600 mb-4 dark:text-gray-300">
                     JSON is a lightweight, text-based data-interchange format that is easy for humans to read and write and easy for machines to parse and generate. It is essential for data exchange in web applications, especially for APIs. Our tool goes beyond basic formatting by offering advanced features that dramatically increase developer productivity.
                 </p>
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
@@ -218,6 +258,24 @@
                         </summary>
                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Formatting</strong> (also called beautifying or pretty-printing) adds indentation and line breaks to make the JSON human-readable. <strong>Minifying</strong> removes all unnecessary whitespace (spaces, tabs, newlines) to make the file size as small as possible, which is ideal for sending data over a network.</p>
                     </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why is my JSON invalid if it has comments (//) or trailing commas (,)?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This is the most common error for developers. The official JSON specification (RFC 8259) is very strict and <strong class="font-medium text-gray-900 dark:text-gray-100">does not support comments</strong> (neither <code>//...</code> nor <code>/*...*/</code>). It also <strong class="font-medium text-gray-900 dark:text-gray-100">forbids trailing commas</strong> after the last element in an object or array. While these are valid in JavaScript, they are <strong class="font-medium text-gray-900 dark:text-gray-100">not</strong> valid in JSON. You must remove them before validating.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why is JSON validation important?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">JSON has a very strict syntax. Even a single misplaced comma or quote can make the entire file invalid, causing errors in applications or APIs that try to read it. Using a validator like this tool <strong class="font-medium">before</strong> you save or send your JSON ensures it's perfectly formed, preventing bugs and saving debugging time.</p>
+                    </details>
                 </div>
             </div>
 
@@ -228,11 +286,7 @@
     <script src="../javascript/globals.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // STEP 1: Inject Header/Footer without search bar and initialize theme.
             window.injectLayout(false); 
-
-            // STEP 2: All logic specific to THIS tool goes below.
-            // =================================================================
             
             const inputTextarea = document.getElementById("inputText");
             const outputTextarea = document.getElementById("outputText");
@@ -266,8 +320,7 @@
 
             window.clearOutput = function() {
                 outputTextarea.value = '';
-                validationStatus.innerHTML = '<i data-lucide="alert-circle" class="w-4 h-4 text-yellow-500 inline mr-1"></i> Waiting to process...';
-                validationStatus.className = 'font-bold text-yellow-500 dark:text-yellow-400';
+                validationStatus.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-red-600 inline mr-1"></i> **Invalid:** ${e.message}`;                validationStatus.className = 'font-bold text-yellow-500 dark:text-yellow-400';
                 updateCharacterCount('');
                 toggleActionButtons(true);
                 toggleCopyButton(false);
@@ -327,8 +380,7 @@
                     // --- UX IMPROVEMENT STARTS HERE ---
                     // The detailed error message has been replaced with a simpler, more user-friendly one.
                     outputTextarea.value = '';
-                    validationStatus.innerHTML = '<i data-lucide="x-circle" class="w-4 h-4 text-red-600 inline mr-1"></i> JSON is **Invalid**!';
-                    validationStatus.className = 'font-bold text-red-600 dark:text-red-400';
+                    validationStatus.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-red-600 inline mr-1"></i> **Invalid:** ${e.message}`;                    validationStatus.className = 'font-bold text-red-600 dark:text-red-400';
                     toggleActionButtons(true);
                     toggleCopyButton(false);
                     updateCharacterCount('');

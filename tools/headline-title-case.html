@@ -56,22 +56,43 @@
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "Web",
       "description": "The smart title case tool for essays, blog posts, and academic papers. It correctly applies capitalization rules, ensuring small words remain lowercase (unless they are the first or last word).",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "125"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "toolsTree"
-      }
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "125"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
     }
     </script>   
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "Is this different from a regular 'Title Case' tool?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. A regular tool might capitalize *every* word. Our Headline Title Case Converter uses a smarter algorithm that knows which small words (like 'a', 'the', 'and') should remain lowercase to follow accepted style guides, unless they are the first or last word."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "How does it handle hyphenated words?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Currently, this tool capitalizes the first part of a hyphenated word if it meets the criteria, but may not always capitalize subsequent parts according to specific style guide rules (e.g., 'Step-by-Step' vs. 'Step-By-Step'). For complex hyphenation, always refer to your style guide."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Which style guide does this tool follow exactly?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool implements a general, widely applicable set of title case rules similar to the Chicago Manual of Style's headline style but may differ slightly. It's designed for broad usability (like blog posts) rather than strict adherence to one specific academic style guide like APA or MLA, which have more nuanced rules."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
 
@@ -124,10 +145,22 @@
         </div>
 
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
-            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is Title Case & Why is it Important?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p><strong>Title case</strong> is a specific style of capitalization used for titles of works like books, articles, movies, songs, and blog posts. Unlike <strong class="font-medium">sentence case</strong> (where only the first word and proper nouns are capitalized) or <strong class="font-medium">UPPERCASE</strong> (where everything is capitalized), title case capitalizes most words but keeps certain small words (like articles, prepositions, and conjunctions) lowercase.</p>
+                    <p>Using correct title case is crucial for:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-1 text-sm">
+                        <li><strong>Professionalism:</strong> Adhering to standard capitalization rules makes your writing look polished and credible.</li>
+                        <li><strong>Readability:</strong> Title case helps readers quickly scan and understand headlines and titles.</li>
+                        <li><strong>Style Guide Compliance:</strong> Many academic and publishing style guides (like APA, MLA, Chicago) have specific rules for title case.</li>
+                    </ul>
+                    <p>Manually applying these rules can be tedious and error-prone. This tool automates the process, ensuring your titles are perfectly formatted according to common conventions.</p>
+                </div>
+            </div>
             <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">How to Use the Converter</h2>
-                <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2 dark:text-gray-300">
+                <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
                     <li><strong>Step 1:</strong> Paste your title or text into the "Original Text" field.</li>
                     <li><strong>Step 2:</strong> The conversion happens automatically as you type.</li>
                     <li><strong>Step 3:</strong> Review the formatted result in the "Converted Title" box.</li>
@@ -136,16 +169,24 @@
             </div>
             
             <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">About Title Case Formatting</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">
-                    Title case is essential for professional documents, articles, and headlines. Unlike simple "Capitalize Every Word," proper title case adheres to style guides by ensuring small connecting words are kept in lowercase.
+                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">About Title Case Formatting Rules</h2>
+                <p class="text-gray-600 mb-4 dark:text-gray-300">
+                    Proper title case isn't just about capitalizing every word. Different style guides (like APA, Chicago Manual of Style, MLA, AP) have slightly different rules, especially regarding prepositions and conjunctions.
                 </p>
-                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">The Rules Our Tool Follows</h3>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">The Common Rules Our Tool Follows</h3>
+                <p class="text-sm text-gray-600 mb-2 dark:text-gray-300">This converter applies a widely accepted set of rules suitable for most headlines and titles:</p>
                 <ul class="list-disc list-inside ml-4 space-y-1 text-sm text-gray-600 dark:text-gray-300 mt-2">
-                    <li>The <strong>first and last word</strong> are always capitalized.</li>
-                    <li>All major words (nouns, verbs, adjectives, etc.) are capitalized.</li>
-                    <li>Small connecting words (e.g., a, an, the, and, but, for, of, with) are kept lowercase.</li>
+                    <li>The <strong>first and last word</strong> of the title are always capitalized.
+                        <br><em>Example: <code class="text-xs">The Beginning <strong class="font-normal text-gray-900 dark:text-gray-100">and</strong> the End</code></em>
+                    </li>
+                    <li>All "major" words (nouns, pronouns, verbs, adjectives, adverbs) are capitalized.
+                        <br><em>Example: <code class="text-xs"><strong class="font-normal text-gray-900 dark:text-gray-100">Quickly</strong> <strong class="font-normal text-gray-900 dark:text-gray-100">Brown</strong> <strong class="font-normal text-gray-900 dark:text-gray-100">Fox</strong> <strong class="font-normal text-gray-900 dark:text-gray-100">Jumps</strong></code></em>
+                    </li>
+                    <li>Short coordinating conjunctions, articles, and prepositions (our "minor words" list: a, an, and, as, at, but, by, for, in, nor, of, on, or, so, the, to, up, yet) are kept lowercase unless they are the first or last word.
+                        <br><em>Example: <code class="text-xs">War <strong class="font-normal text-gray-900 dark:text-gray-100">and</strong> Peace</code>; <code class="text-xs">A River Runs <strong class="font-normal text-gray-900 dark:text-gray-100">Through</strong> It</code> (Note: 'Through' is often capitalized in some styles, but lowercase in others if short).</em>
+                    </li>
                 </ul>
+                <p class="text-sm text-gray-600 mt-3 dark:text-gray-300"><em>Always double-check against your specific style guide requirements if submitting for publication.</em></p>
             </div>
             
             <div>
@@ -159,6 +200,23 @@
                             </span>
                         </summary>
                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. A regular tool might capitalize <strong>every</strong> word. Our Headline Title Case Converter uses a smarter algorithm that knows which small words should remain lowercase to follow accepted style guides.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>How does it handle hyphenated words?</span>
+                            <span class="transition group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Currently, this tool capitalizes the first part of a hyphenated word if it meets the criteria, but may not always capitalize subsequent parts according to specific style guide rules (e.g., "Step-by-Step" vs. "Step-By-Step"). For complex hyphenation, always refer to your style guide.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Which style guide does this tool follow exactly?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool implements a general, widely applicable set of title case rules similar to the Chicago Manual of Style's headline style but may differ slightly on specific prepositions or hyphenation. It's designed for broad usability (like blog posts and general articles) rather than strict adherence to one specific academic style guide like APA or MLA, which have more nuanced rules.</p>
                     </details>
                 </div>
             </div>

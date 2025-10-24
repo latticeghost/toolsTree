@@ -53,6 +53,54 @@
       "publisher": { "@type": "Organization", "name": "toolsTree" }
     }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "Is this JWT debugger secure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All decoding and signature verification happen entirely within your browser. The token and secret you enter are never sent to our servers, ensuring your sensitive information remains confidential."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What does 'Signature Verified' mean?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It means that the header and payload have not been tampered with. The signature is recalculated using the header, payload, and the secret you provided, and it matches the original signature on the token. If it says 'Invalid Signature,' it means either the token was altered or the secret is incorrect."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Is the JWT payload encrypted?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. This is a critical misconception. The payload is Base64Url encoded, not encrypted. Anyone who intercepts a JWT can easily decode and read its contents. The signature only verifies that the data is authentic and hasn't been tampered with. Never put highly sensitive, unencrypted information in a JWT payload."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What are 'claims' in the payload?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "'Claims' are the key/value pairs of information inside the JSON payload. Registered Claims are standards like `iat` (Issued At), `exp` (Expiration Time). Private Claims are custom claims for your application, like `userId` or `role`."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why doesn't my RS256 token work?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool is designed for debugging HMAC (symmetric) algorithms like HS256/HS384/HS512, which use a single secret key. RS256, ES256, etc., are asymmetric algorithms that use a private key to sign and a public key to verify. This tool does not support public/private key verification."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
@@ -61,7 +109,7 @@
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
                 <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Data & Developer Tools</a></div></li>
-                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">JWT Debugger</span></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">JWT Debugger & Verifier</span></div></li>
             </ol>
         </nav>
         
@@ -122,11 +170,20 @@
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About JWT (JSON Web Token)</h2>
-                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed.</p>
+                 <p class="text-gray-600 mb-4 dark:text-gray-300">JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. The different components of a JWT are:</p>
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
-                    <li><strong>Header:</strong> Typically consists of two parts: the token type (`JWT`) and the signing algorithm being used, such as HMAC SHA256 or RSA.</li>
-                    <li><strong>Payload:</strong> Contains the claims. Claims are statements about an entity (typically, the user) and additional data. There are registered, public, and private claims.</li>
-                    <li><strong>Signature:</strong> To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that.</li>
+                    <li><strong class="font-medium text-gray-900 dark:text-gray-100">Header:</strong> Typically consists of two parts: the token type (`JWT`) and the signing algorithm being used, such as HMAC SHA256 or RSA.</li>
+                    <li><strong class="font-medium text-gray-900 dark:text-gray-100">Payload:</strong> Contains the claims. Claims are statements about an entity (typically, the user) and additional data. There are registered, public, and private claims.</li>
+                    <li><strong class="font-medium text-gray-900 dark:text-gray-100">Signature:</strong> To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that.</li>
+                </ul>
+                <p class="text-gray-600 my-4 dark:text-gray-300">JWTs are most commonly used for:</p>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Authentication:</strong> This is the most common use. When a user logs in, the server creates a JWT and sends it to the client. The client then includes this JWT in the header of all future requests to prove who they are.
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Information Exchange:</strong> Because they are signed, JWTs are a secure way to transmit information between parties. The signature ensures the sender is who they say they are and that the data wasn't tampered with.
+                    </li>
                 </ul>
             </div>
              <div>
@@ -134,6 +191,31 @@
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this JWT debugger secure?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. All decoding and signature verification happen entirely within your browser. The token and secret you enter are never sent to our servers, ensuring your sensitive information remains confidential.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What does "Signature Verified" mean?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">It means that the header and payload have not been tampered with. The signature is recalculated using the header, payload, and the secret you provided, and it matches the original signature on the token. If it says "Invalid Signature," it means either the token was altered or the secret is incorrect.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Is the JWT payload encrypted?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>No. This is a critical misconception.</strong> The payload is <strong>Base64Url encoded</strong>, not <strong>encrypted</strong>. As you can see from this tool, anyone who intercepts a JWT can easily decode and read its contents. The signature only <strong>verifies</strong> that the data is authentic and hasn't been tampered with. You should <strong>never</strong> put highly sensitive, unencrypted information (like a password or secret API key) in a JWT payload.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What are 'claims' in the payload?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">"Claims" are the key/value pairs of information inside the JSON payload. They are statements about the user and the token itself. <br>
+                        • <strong>Registered Claims:</strong> These are standard, recommended claims like <code>iat</code> (Issued At), <code>exp</code> (Expiration Time), and <code>sub</code> (Subject). <br>
+                        • <strong>Private Claims:</strong> These are custom claims you add for your application, such as <code>"userId": 12345</code> or <code>"role": "admin"</code>.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why doesn't my RS256 token work?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool is designed for debugging <strong>HMAC (symmetric)</strong> algorithms like <code>HS256</code>, <code>HS384</code>, and <code>HS512</code>. These algorithms use a <strong>single secret key</strong> for both signing and verifying. <br><br> <code>RS256</code>, <code>ES256</code>, etc., are <strong>asymmetric</strong> algorithms. They use a <strong>private key</strong> to sign and a <strong>public key</strong> to verify. This tool does not support public/private key verification.</p>
+                    </details>
                 </div>
             </div>
         </section>

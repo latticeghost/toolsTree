@@ -80,6 +80,62 @@
       }
     }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What is CRC32 used for?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "CRC32 (Cyclic Redundancy Check) is not for security. It's a fast and efficient way to check for accidental changes in data. It's commonly used in network protocols (like Ethernet) and file formats (like ZIP and PNG) to ensure data integrity during transmission or storage."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is BLAKE2?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BLAKE2 is a modern cryptographic hash function that is often significantly faster than SHA-2 and SHA-3 while providing an equivalent level of security. It's becoming increasingly popular in high-performance applications."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is MD5 and why is it insecure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "MD5 is a legacy hash function from 1992. It is considered cryptographically broken and insecure. It suffers from 'hash collisions,' where attackers can intentionally create two different inputs that produce the exact same MD5 hash. It should never be used for security purposes like password storage. We provide it only for checking hashes of very old legacy files."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is SHA-256 and where is it used?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "SHA-256 (part of the SHA-2 family) is the current industry standard for cryptographic security. It is used everywhere: SSL/TLS (securing https://), Cryptocurrency (Bitcoin's proof-of-work), Password Storage, and File Verification."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is the 'HMAC Secret Key' for?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The secret key is a shared password. When you enter a key, this tool generates an HMAC instead of a simple hash. An attacker can't forge this HMAC signature without knowing the secret key, even if they know the data. This proves the message came from you (authenticity) and hasn't been tampered with (integrity)."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Are my files or text uploads secure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. 100% secure. This entire tool runs entirely in your local web browser. Your text, your files, and your secret keys are never sent to our server. All calculations happen on your computer, so your data remains completely private."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
@@ -99,20 +155,24 @@
 
         <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <label for="inputText" class="block text-lg font-semibold mb-2">Input Data</label>
+                <div class="flex justify-between items-center mb-2">
+                    <label for="inputText" class="block text-lg font-semibold">Input Data</label>
+                    <button id="clearInputBtn" title="Clear Input" class="group p-2 rounded-md hover:bg-red-100 dark:hover:bg-red-900/50">
+                       <i data-lucide="trash-2" class="w-4 h-4 text-red-500 transition-colors"></i>
+                    </button>
+                </div>
                 <textarea id="inputText" placeholder="Type, paste, or drop a file here to generate hashes..." class="w-full p-3 border rounded-lg shadow-sm focus:ring-tt-primary focus:border-tt-primary transition"></textarea>
                 <p id="file-info" class="text-xs text-gray-500 mt-1 h-4"></p>
             </div>
 
             <div>
-                <label for="hmacKey" class="block text-sm font-medium mb-1">HMAC Secret Key (Optional, for Crypto Hashes)</label>
+                <div class="flex justify-between items-center mb-1">
+                    <label for="hmacKey" class="block text-sm font-medium">HMAC Secret Key (Optional, for Crypto Hashes)</label>
+                    <button id="clearHmacBtn" title="Clear HMAC Key" class="group p-2 rounded-md hover:bg-red-100 dark:hover:bg-red-900/50">
+                       <i data-lucide="trash-2" class="w-4 h-4 text-red-500 transition-colors"></i>
+                    </button>
+                </div>
                 <input id="hmacKey" type="text" placeholder="Enter a secret key to generate HMACs" class="w-full p-3 border rounded-lg">
-            </div>
-
-            <div class="mt-4 flex flex-wrap gap-3">
-                <button id="clearButton" class="w-full sm:w-auto flex items-center justify-center space-x-2 btn-action bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
-                    <i data-lucide="trash-2" class="w-5 h-5"></i> Clear
-                </button>
             </div>
 
             <div>
@@ -136,17 +196,83 @@
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Hash vs. Checksum</h2>
-                <p class="text-sm text-gray-600 mb-2 dark:text-gray-300">
-                    <strong>Cryptographic Hashes</strong> (like SHA-256) are designed for security. They are one-way functions that make it impossible to get the original data back.
-                    <strong>Checksums</strong> (like CRC32) are designed for speed and error-checking. They are used to verify that data (e.g., a downloaded file) has not been accidentally corrupted.
-                </p>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is a Hash Function?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>A hash function is a mathematical algorithm that takes an input (like your text or file) and produces a fixed-size string of characters, which is called a <strong>hash</strong> or <strong>digest</strong>. Think of it as a one-way "digital fingerprint" for your data.</p>
+                    <p class="font-medium text-gray-900 dark:text-gray-100">All cryptographic hashes share three key properties:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">1. One-Way:</strong> It's easy to create a hash from your data, but it is (or should be) computationally impossible to get the original data back just from the hash.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">2. Deterministic:</strong> The <strong>exact same</strong> input will <strong>always</strong> produce the <strong>exact same</strong> hash.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">3. Fixed-Size:</strong> Whether your input is one word or an entire movie, the hash (e.g., SHA-256) will always be the same length (64 characters).
+                        </li>
+                    </ul>
+                </div>
             </div>
-             <div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Hash vs. HMAC vs. Checksum: What's the Difference?</h2>
+                <p class="text-gray-600 mb-6 dark:text-gray-300">These terms are often confused, but they serve very different purposes. This tool can generate all three.</p>
+                
+                <div class="space-y-5">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">1. Checksum (e.g., CRC32, Adler-32)</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">A <strong>Checksum</strong> is used for <strong class="font-medium">data integrity</strong>. Its only job is to detect <strong>accidental</strong> changes in data, like a flipped bit during a file download. Checksums are very fast to calculate but offer <strong class="font-medium">zero security</strong>. They are easily forged.</p>
+                        <p class="text-sm"><strong>Use Case:</strong> Verifying a downloaded <code>.zip</code> file is not corrupt.</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">2. Hash (e.g., SHA-256, BLAKE2s)</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">A <strong>Cryptographic Hash</strong> is used for <strong class="font-medium">data verification</strong>. It is a one-way function designed to be secure against <strong>malicious</strong> changes. It's impossible to reverse and computationally difficult to find two inputs that produce the same hash.</p>
+                        <p class="text-sm"><strong>Use Case:</strong> Securely storing a password (you store the hash, not the password) or verifying a file's authenticity.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">3. HMAC (Hash-based Message Authentication Code)</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">An <strong>HMAC</strong> is used for <strong class="font-medium">data authentication</strong>. It combines a hash function (like SHA-256) with a secret key. This proves that the hash was generated by someone who possesses the key. It verifies both the <em>integrity</em> of the data and the <em>authenticity</em> of the sender.</p>
+                        <p class="text-sm"><strong>Use Case:</strong> Securing API endpoints. A server and a client share a secret key, and all messages are sent with an HMAC signature.</p>
+                    </div>
+                </div>
+            </div>
+                        <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Frequently Asked Questions</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is CRC32 used for?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">CRC32 (Cyclic Redundancy Check) is not for security. It's a fast and efficient way to check for accidental changes in data. It's commonly used in network protocols (like Ethernet) and file formats (like ZIP and PNG) to ensure data integrity during transmission or storage.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is BLAKE2?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">BLAKE2 is a modern cryptographic hash function that is often significantly faster than SHA-2 and SHA-3 while providing an equivalent level of security. It's becoming increasingly popular in high-performance applications.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is MD5 and why is it insecure?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">MD5 is a legacy hash function from 1992. It is considered <strong class="font-medium text-gray-900 dark:text-gray-100">cryptographically broken and insecure</strong>. It suffers from "hash collisions," where attackers can intentionally create two different inputs that produce the <strong class="font-medium text-gray-900 dark:text-gray-100">exact same</strong> MD5 hash. It should <strong class="font-medium">never</strong> be used for security purposes like password storage. We provide it only for checking hashes of very old legacy files.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is SHA-256 and where is it used?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">SHA-256 (part of the SHA-2 family) is the current industry standard for cryptographic security. It is used everywhere: <br> • <strong>SSL/TLS:</strong> Securing the <code>https://</code> connection for this website. <br> • <strong>Cryptocurrency:</strong> It's the core algorithm behind Bitcoin's proof-of-work. <br> • <strong>Password Storage:</strong> Modern systems use it to hash user passwords. <br> • <strong>File Verification:</strong> Software providers publish SHA-256 hashes so you can verify your download is authentic and not-tampered-with.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is the 'HMAC Secret Key' for?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The secret key is a shared password that only you and the intended recipient know. When you enter a key, this tool stops generating a simple hash and generates an <strong class="font-medium">HMAC</strong> instead. An attacker can't forge this HMAC signature without knowing the secret key, even if they know the data and the algorithm. This proves the message came from you.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Are my files or text uploads secure?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Yes. 100% secure.</strong> This entire tool, including all the complex hashing libraries (CryptoJS, BLAKE2s), runs entirely in your local web browser. Your text, your files, and your secret keys are <strong class="font-medium">never sent to our server</strong> or anywhere else. All calculations happen on your computer, so your data remains completely private.</p>
+                    </details>
                 </div>
             </div>
         </section>
@@ -230,7 +356,9 @@
             fileInfo: document.getElementById('file-info'), 
             uppercase: document.getElementById('uppercase'), 
             resultsContainer: document.getElementById('results-container'),
-            clearButton: document.getElementById('clearButton'), 
+            // === CHANGE 5: Replaced old button ID with new ones ===
+            clearInputBtn: document.getElementById('clearInputBtn'),
+            clearHmacBtn: document.getElementById('clearHmacBtn'),
             grid: document.getElementById('algorithms-grid')
         };
         
@@ -359,10 +487,15 @@
             reader.readAsText(file);
         };
 
-        const clearAll = () => {
+        // === CHANGE 6: Replaced old clearAll function ===
+        const clearInput = () => {
             ui.inputText.value = '';
-            ui.hmacKey.value = '';
             ui.fileInfo.textContent = '';
+            generateHashes();
+        };
+
+        const clearHmac = () => {
+            ui.hmacKey.value = '';
             generateHashes();
         };
 
@@ -375,7 +508,10 @@
         ui.inputText.addEventListener('input', debouncedGenerate);
         ui.hmacKey.addEventListener('input', debouncedGenerate);
         ui.uppercase.addEventListener('change', generateHashes);
-        ui.clearButton.addEventListener('click', clearAll);
+        
+        // === CHANGE 7: Replaced old listener with new ones ===
+        ui.clearInputBtn.addEventListener('click', clearInput);
+        ui.clearHmacBtn.addEventListener('click', clearHmac);
         ui.resultsContainer.addEventListener('click', handleCopy);
 
         // Update drag and drop listeners to use the textarea itself

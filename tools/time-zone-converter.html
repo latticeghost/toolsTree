@@ -43,13 +43,13 @@
         window.GLOBAL_ROOT_PATH = '../';
     </script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
     
     <style>
         :root { --tt-primary-stroke: #10b981; }
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
         .dark input, .dark select { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
     </style>
-
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -62,6 +62,30 @@
       "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "341"},
       "publisher": {"@type": "Organization", "name": "toolsTree"}
     }
+    </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "Does this tool handle Daylight Saving Time (DST)?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. This tool's main advantage is its automatic and accurate handling of DST. Because it uses the international IANA time zone database via your browser, it knows the exact DST start and end dates for every supported location, for any given year."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why are there so many time zone options?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We use the official IANA (Internet Assigned Numbers Authority) time zone names, like `America/New_York` or `Europe/Paris`. These are specific location names that account for that region's unique history of time zone and DST rules, making them much more reliable than generic names like 'EST' or 'CST'."
+            }
+            }
+        ]
+        }
     </script>
 
 </head>
@@ -183,9 +207,7 @@
             const targetTimezoneSelect = document.getElementById('target-timezone');
             const setNowBtn = document.getElementById('set-now-btn');
             const swapBtn = document.getElementById('swap-button');
-    
-            // The showMessage function and all calls were previously removed.
-            
+                
             function populateTimezones() {
                 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 let timeZones = new Set(COMMON_TIMEZONES);
@@ -241,26 +263,39 @@
                 const sourceTimeStr = sourceTimeInput.value;
                 const sourceTimeZone = sourceTimezoneSelect.value;
                 const targetTimeZone = targetTimezoneSelect.value;
-    
+
                 const outputDateFull = document.getElementById('output-date-full');
                 const outputTime12h = document.getElementById('output-time-12h');
                 const outputTime24h = document.getElementById('output-time-24h');
-    
-                if (!sourceDateStr || !sourceTimeStr) return;
-    
-                try {
-                    // Combine date and time strings to create a date object.
-                    // This object is created in the *user's local* timezone by default.
-                    const localDate = new Date(`${sourceDateStr}T${sourceTimeStr}`);
-                    
-                    const options = { timeZone: targetTimeZone };
-                    outputDateFull.textContent = new Intl.DateTimeFormat('en-US', { ...options, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(localDate);
-                    outputTime12h.textContent = new Intl.DateTimeFormat('en-US', { ...options, hour: 'numeric', minute: '2-digit', hour12: true }).format(localDate);
-                    outputTime24h.textContent = `${new Intl.DateTimeFormat('en-GB', { ...options, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(localDate)} (24h)`;
-    
-                } catch (error) {
-                    console.error("Conversion error:", error);
+
+                if (!sourceDateStr || !sourceTimeStr) {
+                    outputDateFull.textContent = "Please select a valid date and time.";
+                    outputTime12h.textContent = "--:-- --";
+                    outputTime24h.textContent = "--:-- (24h)";
+                    return;
                 }
+
+                const [year, month, day] = sourceDateStr.split('-').map(Number);
+                const [hour, minute] = sourceTimeStr.split(':').map(Number);
+
+                const sourceDT = luxon.DateTime.fromObject(
+                    { year, month, day, hour, minute },
+                    { zone: sourceTimeZone }
+                );
+
+                if (!sourceDT.isValid) {
+                    outputDateFull.textContent = "Invalid date/time for the source time zone.";
+                    outputTime12h.textContent = "Error";
+                    outputTime24h.textContent = "Error";
+                    console.error("Luxon validity error:", sourceDT.invalidReason, sourceDT.invalidExplanation);
+                    return;
+                }
+
+                const targetDT = sourceDT.setZone(targetTimeZone);
+
+                outputDateFull.textContent = targetDT.toFormat('cccc, LLLL d, yyyy');
+                outputTime12h.textContent = targetDT.toFormat('h:mm a');
+                outputTime24h.textContent = `${targetDT.toFormat('HH:mm')} (24h)`;
             }
     
             // Initialization

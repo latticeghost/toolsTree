@@ -57,21 +57,50 @@
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "Web",
       "description": "The ultimate case converter with live previews for 14+ styles, including Camel, Snake, Kebab, Constant, Title, and Sentence case. Instantly see and copy the format you need.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "215"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "toolsTree"
-      }
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "215"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
     }
+    </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What is the difference between camelCase and PascalCase?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Both cases join words without spaces, but camelCase starts with a lowercase letter (e.g., `myVariableName`), while PascalCase starts with an uppercase letter (e.g., `MyClassName`). PascalCase is often used for class names in programming, while camelCase is common for variable or function names."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why are there so many different programming cases?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Different programming languages, frameworks, and communities have adopted different style conventions over time. For example, `snake_case` is standard in Python, `kebab-case` is used for CSS class names and URLs, and `camelCase`/`PascalCase` are prevalent in the JavaScript and Java worlds."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What rules are used for 'Title Case'?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool uses a common set of rules for Title Case where it capitalizes the first letter of each word, except for minor words (like 'a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'if', 'in', 'nor', 'of', 'on', 'or', 'the', 'to', 'up', 'with', etc.) unless they are the first or last word in the title. This is a general-purpose style suitable for most headlines."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What's the difference between 'Sentence case' and 'Capitalize case'?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sentence case follows standard writing rules: it capitalizes the first letter of the first word, and potentially proper nouns or letters after punctuation like periods. Capitalize case is simpler: it *only* capitalizes the very first letter of the entire input string, making everything else lowercase, regardless of sentence structure."
+            }
+            }
+        ]
+        }
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
@@ -87,7 +116,7 @@
         
         <section class="mb-10 text-center">
             <h1 class="text-3xl sm:text-4xl font-extrabold mb-3">All-in-One Case Converter</h1>
-            <p class="text-base text-gray-600 dark:text-gray-300">Type once, see all 14+ case styles instantly, and copy the one you need.</p>
+            <p class="text-base text-gray-600 dark:text-gray-100">Type once, see all 14+ case styles instantly, and copy the one you need.</p>
         </section>
 
         <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
@@ -112,34 +141,111 @@
         </div>
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
-             <div>
-                <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Guide to Case Styles</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">This tool supports crucial case styles used in programming, web development, and writing.</p>
-                <div class="grid md:grid-cols-2 gap-6 text-sm">
-                    <div>
-                        <h3 class="font-bold mb-1">Programming Cases</h3>
-                        <ul class="list-disc list-inside space-y-1 ml-4 dark:text-gray-300">
-                            <li><strong>camelCase:</strong> Used for variables in JavaScript.</li>
-                            <li><strong>PascalCase:</strong> Used for classes in many languages.</li>
-                            <li><strong>snake_case:</strong> Used in Python, PHP, and databases.</li>
-                            <li><strong>CONSTANT_CASE:</strong> Used for constants in many languages.</li>
-                            <li><strong>kebab-case:</strong> Used in CSS, HTML attributes, and URLs.</li>
-                            <li><strong>dot.case:</strong> Used for object properties in some systems.</li>
-                            <li><strong>path/case:</strong> Used for file paths and URLs.</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold mb-1">Literary & Specialty Cases</h3>
-                        <ul class="list-disc list-inside space-y-1 ml-4 dark:text-gray-300">
-                            <li><strong>Sentence case:</strong> Standard for written text.</li>
-                            <li><strong>Title Case:</strong> For headlines, capitalizing major words.</li>
-                            <li><strong>UPPERCASE / lowercase:</strong> For emphasis or normalization.</li>
-                            <li><strong>Capitalize case:</strong> Capitalizes only the very first letter.</li>
-                            <li><strong>aLtErNaTiNg cAsE:</strong> Swaps case for each letter.</li>
-                            <li><strong>iNVERSE cASE:</strong> Flips the case of every letter.</li>
-                        </ul>
-                    </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What Is a Case Converter?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>A case converter is a simple online tool that allows you to instantly change the capitalization and formatting of your text. Instead of manually re-typing or editing, you can paste your text into a tool like this one and automatically convert it to a variety of styles, such as <strong class="font-medium text-gray-900 dark:text-gray-100">UPPERCASE</strong>, <strong class="font-medium text-gray-900 dark:text-gray-100">lowercase</strong>, <strong class="font-medium text-gray-900 dark:text-gray-100">Title Case</strong>, or <strong class="font-medium text-gray-900 dark:text-gray-100">Sentence case</strong>.</p>
+                    <p>This is extremely useful for everyone from students and writers to programmers and data analysts. You might need to:</p>
+                    <ul class="list-disc list-inside space-y-1 ml-4 dark:text-gray-300">
+                        <li>Fix a paragraph you accidentally typed with CAPS LOCK on.</li>
+                        <li>Format a blog post title or headline correctly in Title Case.</li>
+                        <li>Prepare text for a legal document that requires all caps.</li>
+                        <li>Convert a list of names into <strong class="font-medium text-gray-900 dark:text-gray-100">camelCase</strong> or <strong class="font-medium text-gray-900 dark:text-gray-100">snake_case</strong> for a programming script.</li>
+                        <li>Clean up messy data that has inconsistent capitalization.</li>
+                    </ul>
+                    <p>This tool saves time, reduces errors, and ensures your text is always in the perfect format for any situation.</p>
                 </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use This Case Converter</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>Our tool is designed to be as simple as possible. You type or paste your text once, and you can instantly see the live preview for all 14+ styles at the same time.</p>
+                    <ol class="list-decimal list-inside space-y-1 ml-4 dark:text-gray-300">
+                        <li><strong>Paste Your Text:</strong> Type or paste your original text into the "Input Text" box at the top of the page.</li>
+                        <li><strong>See Live Results:</strong> As you type, the "Live Outputs" grid below will instantly update, showing you what your text looks like in every format.</li>
+                        <li><strong>Copy What You Need:</strong> Find the case style you want (e.g., "kebab-case" or "Title Case") and click the "Copy" icon <i data-lucide="copy" class="w-4 h-4 inline-block -mt-1"></i> on the right side of that box.</li>
+                        <li><strong>Clear and Repeat:</strong> You can clear the input box by clicking the "Trash" icon <i data-lucide="trash-2" class="w-4 h-4 inline-block -mt-1 text-red-500"></i> and paste new text at any time.</li>
+                    </ol>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">A Detailed Guide to All 14+ Case Styles</h2>
+                <p class="text-sm text-gray-600 mb-6 dark:text-gray-300">Understand the purpose and usage of each case style, from standard literary formatting to advanced developer naming conventions.</p>
+                
+                <div class="grid md:grid-cols-2 gap-x-8 gap-y-6">
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Sentence case</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This is the standard capitalization for writing. The first letter of the first word is capitalized, as are any proper nouns or acronyms. All other letters are lowercase. Used for 99% of written content. <br><strong>Example:</strong> <code>The quick brown fox jumps over the lazy dog.</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Title Case</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">Used for headlines, article titles, and book titles. It capitalizes the first and last words, and all "major" words in between. Minor words (like 'a', 'and', 'of', 'the', 'for') are kept lowercase. <br><strong>Example:</strong> <code>A Tale of Two Cities.</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">UPPERCASE</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">Converts every letter to its uppercase form. This is often used for emphasis, headlines, legal document clauses, or to signify acronyms (like <code>NASA</code> or <code>HTML</code>). <br><strong>Example:</strong> <code>WARNING: DO NOT ENTER.</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">lowercase</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">Converts every letter to its lowercase form. This is most often used for data normalization, ensuring that text inputs are consistent for comparison or database storage. <br><strong>Example:</strong> <code>this is all lowercase.</code></p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Capitalize case</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This case only capitalizes the very first letter of the entire text string, leaving all other letters as lowercase. It's different from Sentence case, which capitalizes after periods. <br><strong>Example:</strong> <code>The quick brown fox.</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">aLtErNaTiNg cAsE</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">Also known as "SpongeBob Case," this style alternates between lowercase and uppercase for each letter. It's used almost exclusively for humor, sarcasm, or creating memes. <br><strong>Example:</strong> <code>i'M nOt YElLiNg, yOu'Re YElLiNg.</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">iNVERSE cASE</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">This style flips the case of every letter in the input. Uppercase letters become lowercase, and lowercase letters become uppercase. It's a specialty case, sometimes used for "obfuscating" text. <br><strong>Example:</strong> <code>hELLO wORLD</code> becomes <code>Hello World</code>.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">camelCase</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">A naming convention where words are joined without spaces. The first word is lowercase, and every subsequent word starts with an uppercase letter. Standard for variables in JavaScript. <br><strong>Example:</strong> <code>myVariableName</code></p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">PascalCase</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">Also known as "UpperCamelCase." It's identical to camelCase, except the first word *also* starts with an uppercase letter. Standard for class names in JavaScript, Java, C#, and other languages. <br><strong>Example:</strong> <code>MyClassName</code></p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">snake_case</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">A convention where all letters are lowercase and words are separated by an underscore (<code>_</code>). This is the standard for variables and functions in Python, and is also very common in PHP and for SQL database columns. <br><strong>Example:</strong> <code>user_first_name</code></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">CONSTANT_CASE</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">Also known as "Screaming Snake Case." All letters are uppercase, and words are separated by an underscore. This is used in almost all programming languages to denote a constant value. <br><strong>Example:</strong> <code>MAX_FILE_SIZE = 1024</code></p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">kebab-case</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">All letters are lowercase, and words are separated by a hyphen (<code>-</code>). This is the standard convention for naming CSS classes, HTML attributes, and is also very popular for URL "slugs" (like <code>/guide-to-case-styles</code>). <br><strong>Example:</strong> <code>my-css-class-name</code></p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">dot.case</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">All letters are lowercase, and words are separated by a dot (<code>.</code>). This style is commonly used for package names in Java (e.g., <code>com.example.project</code>) or for accessing properties in configuration files. <br><strong>Example:</strong> <code>config.database.host</code></p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">path/case</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">All letters are lowercase, and words are separated by a forward slash (<code>/</code>). This case directly mimics a file path structure. It's used for URLs, file paths, and breadcrumbs. <br><strong>Example:</strong> <code>path/to/my/file.txt</code></p>
+                    </div>
+
+                </div>
+            </div>
             </div>
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
@@ -164,6 +270,13 @@
                             <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
                         </summary>
                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool uses a common set of rules for Title Case where it capitalizes the first letter of each word, except for minor words (like 'a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'if', 'in', 'nor', 'of', 'on', 'or', 'the', 'to', 'up', 'with', etc.) unless they are the first or last word in the title. This is a general-purpose style suitable for most headlines.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What's the difference between 'Sentence case' and 'Capitalize case'?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Sentence case</strong> follows standard writing rules: it capitalizes the first letter of the first word, and potentially proper nouns or letters after punctuation like periods. <strong>Capitalize case</strong> is simpler: it *only* capitalizes the very first letter of the entire input string, making everything else lowercase, regardless of sentence structure.</p>
                     </details>
                 </div>
             </div>

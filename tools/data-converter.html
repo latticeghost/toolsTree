@@ -73,6 +73,62 @@
       }
     }
     </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "Why would I use a custom base?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "While bases like 2 (Binary), 8 (Octal), 10 (Decimal), and 16 (Hex) are standard in computing, other bases are used in various fields. For example, Base36 (`0-9` and `A-Z`) is sometimes used to create shorter, more human-readable identifiers. This feature provides maximum flexibility for any niche requirement."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Is this tool secure for sensitive data?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All encoding and decoding operations happen entirely within your browser on your computer. No data, whether pasted text or uploaded files, is ever sent to our servers, ensuring your information remains completely private."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Is Base64 a form of encryption?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. This is a critical misconception. Base64 is an encoding, not encryption. It is 100% reversible by anyone and offers zero privacy. Its only purpose is to make binary data safe to transport over text-only systems. Never use Base64 to 'hide' or 'secure' sensitive data."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "When should I use Base64 vs. URL Encoding?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The rule is simple: Use Base64 when you need to represent binary data (like an image or file) as a string. Use URL Encoding when you need to put plain text inside a URL."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What do 'btoa()' and 'atob()' mean?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You may see these in JavaScript. They are the built-in browser functions for Base64. `btoa()` stands for 'Binary to ASCII' and is used to encode a string into Base64. `atob()` stands for 'ASCII to Binary' and is used to decode a Base64 string back to its original form."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "How does file input work differently for Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The tool is smart about file handling: When in Base64 mode, dropping a file (like an image or PDF) will read its binary content and encode/decode it as a Base64 string. For all other modes (URL, Character Codes), dropping a file will read its content as plain text before converting."
+            }
+            }
+        ]
+        }
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
@@ -129,19 +185,98 @@
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About Data Encoding</h2>
-                 <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Encoding is the process of converting data from one form to another. It's a reversible process essential for ensuring data can be safely transmitted and correctly interpreted by different systems.</p>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
-                    <li><strong>Base64:</strong> Encodes binary data (like images) into a text-only format for safe transmission over text-based protocols like email or for embedding in HTML/CSS.</li>
-                    <li><strong>URL Encoding:</strong> Converts special characters (like spaces, `&`, `/`) into a format that is safe to include in a URL.</li>
-                    <li><strong>Character Codes:</strong> Converts human-readable characters into their underlying numerical representations (like Hex, Octal, or any custom base), which is vital for low-level programming and debugging.</li>
-                </ul>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">A Developer's Guide to Data Encoding</h2>
+                <p class="text-gray-600 mb-6 dark:text-gray-300">Encoding is the process of converting data into a specific format for safe, reliable transmission or storage. It is not encryption, but rather a reversible transformation. This tool handles the three most common web encoding types.</p>
+                
+                <div class="space-y-5">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">1. Base64 Encoding</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">Base64 is a method that converts any binary data (like an image, a zip file, or even complex text) into a plain-text string. The resulting string uses only 64 "safe" characters (<code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>+</code>, <code>/</code>) and a padding character (<code>=</code>).</p>
+                        <ul class="list-disc list-inside ml-5 text-sm space-y-1 mt-2 text-gray-600 dark:text-gray-300">
+                            <li><strong>Common Use:</strong> Embedding small images directly into a CSS or HTML file (<code>&lt;img src="data:image/png;base64,..."&gt;</code>) or attaching files to emails.</li>
+                            <li><strong>This Tool:</strong> You can paste text or <strong class="font-medium">drag-and-drop an image file</strong> to instantly get its Base64 data URL.</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">2. URL Encoding (Percent-Encoding)</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">URLs can only contain a limited set of "safe" characters. URL Encoding, also called Percent-Encoding, converts unsafe characters into a format that can be safely transmitted in a URL. It does this by replacing the character with a percent sign (<code>%</code>) followed by its two-digit hex code.</p>
+                        <ul class="list-disc list-inside ml-5 text-sm space-y-1 mt-2 text-gray-600 dark:text-gray-300">
+                            <li><strong>Common Use:</strong> Making a search query safe, like converting "dogs & cats" into <code>dogs%20%26%20cats</code> to be put in a URL.</li>
+                            <li><strong>This Tool:</strong> Instantly encode a full URL or just a piece of text to make it URL-safe.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">3. Character Codes (Hex, Binary, etc.)</h3>
+                        <p class="mt-1 text-gray-700 dark:text-gray-300">Every character on your keyboard is represented by a number in the computer. "Character Codes" are the different numerical bases used to express that number. For example, the letter "A" is 65 in Decimal (Base-10), 41 in Hexadecimal (Base-16), and 1010001 in Binary (Base-2).</p>
+                        <ul class="list-disc list-inside ml-5 text-sm space-y-1 mt-2 text-gray-600 dark:text-gray-300">
+                            <li><strong>Common Use:</strong> Low-level programming, data debugging, and network packet analysis.</li>
+                            <li><strong>This Tool:</strong> Our advanced converter lets you instantly see the code for any character in any base from 2 to 36, giving you complete flexibility.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions</h2>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use This Converter</h2>
+                <ol class="list-decimal list-inside ml-5 space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Select Your Mode:</strong> Choose between "Character Codes," "Base64," or "URL Encoding" at the top.
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Set Your Options:</strong>
+                        <ul class="list-disc list-inside ml-5 text-sm mt-1">
+                            <li>Select the <strong class="font-normal">Direction</strong> ("Encode" or "Decode").</li>
+                            <li>If in "Character Codes" mode, pick your desired base (like Hex or Binary), or enter a <strong class="font-normal">Custom Base</strong> from 2 to 36.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Provide Your Input:</strong> You have two options:
+                        <ul class="list-disc list-inside ml-5 text-sm mt-1">
+                            <li>Paste your text directly into the "Input" box.</li>
+                            <li><strong class="font-normal">Drag-and-drop a file</strong> onto the "Input" box. The tool is smart: for Base64 mode, it will read files (like images or PDFs) as a Data URL. For all other modes, it will read the file as plain text.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong class="font-medium text-gray-900 dark:text-gray-100">Get Your Result:</strong> The "Output" box will update instantly. You can then click the copy icon to get your converted data.
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why would I use a custom base?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">While bases like 2 (Binary), 8 (Octal), 10 (Decimal), and 16 (Hex) are standard in computing, other bases are used in various fields. For example, Base36 (`0-9` and `A-Z`) is sometimes used to create shorter, more human-readable identifiers. This feature provides maximum flexibility for any niche requirement.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this tool secure for sensitive data?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. All encoding and decoding operations happen entirely within your browser on your computer. No data, whether pasted text or uploaded files, is ever sent to our servers, ensuring your information remains completely private.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Is Base64 a form of encryption?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>No. This is a critical misconception.</strong> Base64 is an <strong class="font-medium">encoding</strong>, not <strong class="font-medium">encryption</strong>. It is 100% reversible by anyone and offers zero privacy. Its only purpose is to make binary data safe to transport over text-only systems. Never use Base64 to "hide" or "secure" sensitive data like passwords or private keys.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>When should I use Base64 vs. URL Encoding?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The rule is simple: <br> • Use <strong class="font-medium text-gray-900 dark:text-gray-100">Base64</strong> when you need to represent <strong class="font-medium">binary data</strong> (like an image or file) as a string. <br> • Use <strong class="font-medium text-gray-900 dark:text-gray-100">URL Encoding</strong> when you need to put <strong class="font-medium">plain text</strong> <strong class="font-medium text-gray-900 dark:text-gray-100">inside</strong> a URL.</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What do 'btoa()' and 'atob()' mean?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">You may see these in JavaScript. They are the built-in browser functions for Base64. <br> • <code>btoa()</code> stands for "Binary to ASCII" and is used to <strong class="font-medium">encode</strong> a string into Base64. <br> • <code>atob()</code> stands for "ASCII to Binary" and is used to <strong class="font-medium">decode</strong> a Base64 string back to its original form.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>How does file input work differently for Base64?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The tool is smart about file handling: <br> • When in <strong class="font-medium">Base64 mode</strong>, dropping a file (like an image or PDF) will read its binary content and encode/decode it as a Base64 string (often seen in Data URLs). <br> • For <strong class="font-medium">all other modes</strong> (URL, Character Codes), dropping a file will read its content as plain text before converting.</p>
+                    </details>
                 </div>
             </div>
         </section>

@@ -62,21 +62,50 @@
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Web",
       "description": "Ultimate currency converter with real-time rates, a cross-currency table, historical values, interactive charts, and PDF/PNG export.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "715"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "toolsTree"
-      }
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "715"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
     }
+    </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "How often are the 'live' rates updated?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The exchange rates are updated once every business day around 4:00 PM Central European Time. This tool automatically caches the latest rates to provide a fast experience while ensuring you get the most recent daily data."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why is the historical chart not available for all dates?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The underlying data source from the European Central Bank provides historical data going back to the year 1999 for most major currencies. If you select a date or range before this, or on a weekend/holiday when rates were not published, the data may not be available."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is the 'mid-market rate'?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This calculator shows you the mid-market rate (also called the 'interbank' rate). This is the midpoint between the 'buy' and 'sell' prices on the global currency markets. It's the 'fairest' and most accurate rate, which is why it's used here for informational and charting purposes."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why is this rate different from my bank or a money changer?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Your bank or a currency exchange service needs to make a profit. They will show you a 'buy' rate and a 'sell' rate. The difference between those rates and the 'mid-market rate' (which this tool shows) is called the 'spread,' and it's their service fee. You will never get the exact mid-market rate when you actually exchange money."
+            }
+            }
+        ]
+        }
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
@@ -142,17 +171,59 @@
              <div class="h-80"><canvas id="historyChart"></canvas></div>
              <div id="rateInfo" class="text-sm font-semibold mt-4 text-center text-gray-600 dark:text-gray-300"></div>
         </div>
-        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-700 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Why Use an Advanced Currency Tool?</h2>
+                <div class="space-y-4 text-gray-600 dark:text-gray-300">
+                    <p>A currency converter is a tool that shows you the value of one currency in another, known as an <b>exchange rate</b>. People use them every day to:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>Plan for travel and budget for a trip.</li>
+                        <li>Make purchases from international online stores.</li>
+                        <li>Send money to friends or family in another country.</li>
+                        <li>(For businesses) Send invoices or pay suppliers internationally.</li>
+                        <li>(For investors) Track currency markets and analyze trends.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-semibold pt-2 text-gray-900 dark:text-gray-100">What Makes This Tool Different?</h3>
+                    <p>Most converters only show you today's rate. This tool is a complete dashboard for understanding currency:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Historical Trend Charts:</strong> Don't just see today's rate—see the last 7 days, 30 days, or even the last year. This helps you understand if a currency is getting stronger or weaker, so you can decide if it's a good time to convert.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Rates Table Mode:</strong> Instantly see how one currency (like USD) stacks up against all other major world currencies in a single, clean table.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Specific Date Lookup:</strong> Use the date picker to find the exact exchange rate on a specific day in the past.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-700 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">About Currency Data</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">This tool uses the Frankfurter API, which sources its exchange rates from the European Central Bank and publishes them around 4 PM CET every working day. Rates are for informational purposes and may differ slightly from the rates your bank offers due to bid-ask spreads.</p>
+                <p class="text-gray-600 mb-4 dark:text-gray-300">This tool uses the Frankfurter API, which sources its exchange rates from the European Central Bank and publishes them around 4 PM CET every working day. Rates are for informational purposes and may differ slightly from the rates your bank offers due to bid-ask spreads.</p>
             </div>
              <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-700">Frequently Asked Questions (FAQ)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How often are the 'live' rates updated?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The exchange rates are updated once every business day around 4:00 PM Central European Time. This tool automatically caches the latest rates to provide a fast experience while ensuring you get the most recent daily data.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why is the historical chart not available for all dates?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The underlying data source from the European Central Bank provides historical data going back to the year 1999 for most major currencies. If you select a date or range before this, or on a weekend/holiday when rates were not published, the data may not be available.</p></details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is the "mid-market rate"?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This calculator shows you the <strong>mid-market rate</strong> (also called the "interbank" rate). This is the midpoint between the "buy" and "sell" prices on the global currency markets. It's the "fairest" and most accurate rate, which is why it's used here for informational and charting purposes.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why is this rate different from my bank or a money changer?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Your bank or a currency exchange service is a business that needs to make a profit. They will show you a "buy" rate and a "sell" rate. The difference between those rates and the "mid-market rate" (which this tool shows) is called the "spread," and it's their service fee. You will never get the exact mid-market rate when you actually exchange money.</p>
+                    </details>
                 </div>
             </div>
         </section>

@@ -61,21 +61,58 @@
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "Web",
       "description": "The ultimate text analysis tool. Get live counts for characters, words, sentences, and paragraphs, plus advanced SEO and readability scores (Flesch-Kincaid, Gunning Fog), keyword density, and text-to-speech.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "341"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "toolsTree"
-      }
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "341"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
     }
+    </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "Why are the readability scores different?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Each score uses a different formula. Flesch-Kincaid focuses on word and sentence length, Gunning Fog emphasizes 'complex' words (3+ syllables), and Coleman-Liau uses character counts. Look at them together to get a general sense of readability."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "What is a good keyword density for SEO?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "There's no perfect number; prioritize natural writing. However, a general guideline is around 1-2%. This tool helps monitor density as you write."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "How does the 'Read Aloud' feature work?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It uses your browser's built-in Text-to-Speech (TTS) engine. Hearing your writing read back helps catch awkward phrasing and typos your eyes might miss."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Does the character count include spaces?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. The 'Characters' count includes every single character: letters, numbers, symbols, punctuation, and spaces, matching how limits are typically enforced (e.g., on Twitter/X)."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Is my text saved when I use this tool?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. All analysis happens entirely within your web browser. Your text is never sent to our servers, ensuring your content remains completely private."
+            }
+            }
+        ]
+        }
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
@@ -145,10 +182,40 @@
         </div>
         
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is a Character & Word Counter?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>At its core, a character and word counter is a simple tool that tells you exactly how many characters and words are in your text. This is crucial for meeting specific length requirements, such as:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-1 text-sm">
+                        <li>Social media posts (e.g., Twitter/X character limits).</li>
+                        <li>Academic essays or assignments with strict word counts.</li>
+                        <li>Meta descriptions and title tags for SEO.</li>
+                        <li>Advertising copy (e.g., Google Ads character limits).</li>
+                    </ul>
+                    <p>However, this tool goes far beyond simple counting. It's a comprehensive <strong class="font-medium text-gray-900 dark:text-gray-100">Text Analysis Suite</strong> designed to help you write better, more effective content.</p>
+
+                    <h3 class="text-lg font-semibold pt-2 text-gray-900 dark:text-gray-100">Why Use This Advanced Analyzer?</h3>
+                    <p>Beyond basic counts, this tool provides critical insights:</p>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Readability Scores:</strong> Measures how easy your text is to understand using standard formulas like Flesch-Kincaid. Essential for ensuring your content connects with your target audience.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">SEO & Keyword Analysis:</strong> Check the density of your focus keyword and see the most frequent words in your text. Helps you optimize for search engines without "keyword stuffing."
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Reading Time & Syllables:</strong> Estimates how long it will take to read your text and counts total syllables, useful for presentations or scripts.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Text-to-Speech ("Read Aloud"):</strong> Hear your text read back to you. An invaluable proofreading technique to catch errors and awkward phrasing.
+                        </li>
+                    </ul>
+                </div>
+            </div>
              <div>
                 <h2 class="text-2xl font-bold mb-3 border-b pb-2 dark:border-gray-800">Guide to Readability Scores</h2>
-                <p class="text-sm text-gray-600 mb-4 dark:text-gray-300">Different formulas measure text complexity in different ways. For general web content, aiming for a grade level of around 8 is a good target.</p>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                <p class="text-gray-600 mb-4 dark:text-gray-300">Different formulas measure text complexity in different ways. For general web content, aiming for a grade level of around 8 is a good target.</p>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4 dark:text-gray-300">
                     <li><strong>Flesch-Kincaid Grade Level:</strong> The most common score, representing a US school-grade level. It's based on average sentence and word length.</li>
                     <li><strong>Gunning Fog Index:</strong> Estimates the years of formal education needed to understand the text on the first reading. It focuses on sentence length and "complex" words (3+ syllables).</li>
                     <li><strong>Coleman-Liau Index:</strong> Works by counting characters per word and sentences per 100 words, making it computationally faster than syllable-based scores.</li>
@@ -177,6 +244,21 @@
                             <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
                         </summary>
                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The "Read Aloud" feature uses your browser's built-in Text-to-Speech (TTS) engine to vocalize the text. It's a great way to proofread, as hearing your writing read back can help you catch awkward phrasing and typos that your eyes might otherwise miss.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Does the character count include spaces?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>Yes.</strong> The "Characters" count includes every single character you type, including letters, numbers, symbols, punctuation, and spaces. This is the standard way character limits are enforced (e.g., on Twitter/X).</p>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Is my text saved when I use this tool?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300"><strong>No.</strong> All analysis, including the readability scores and text-to-speech processing, happens entirely within your web browser. Your text is never sent to our servers, ensuring your content remains completely private.</p>
                     </details>
                 </div>
             </div>

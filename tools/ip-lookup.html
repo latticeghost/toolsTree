@@ -338,7 +338,7 @@
                 </div>
             </div>
             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -647,12 +647,25 @@
                 const value = sec[key]; // true, false, or undefined
 
                 element.textContent = typeof value === 'boolean' ? (value ? 'Yes' : 'No') : n_a;
-                // Clear previous color classes before adding new one
-                element.parentElement.classList.remove('text-red-500', 'text-green-500', 'text-gray-500');
+                
+                // Clear all previous color classes, including dark mode variants
+                element.parentElement.classList.remove(
+                    'text-red-500', 'dark:text-red-400',
+                    'text-green-500', 'dark:text-green-400',
+                    'text-gray-500', 'dark:text-gray-400'
+                );
+
                 if (typeof value === 'boolean') {
-                    element.parentElement.classList.add(value ? 'text-red-500' : 'text-green-500');
+                    if (value) {
+                        // It's a proxy/VPN (Danger)
+                        element.parentElement.classList.add('text-red-500', 'dark:text-red-400');
+                    } else {
+                        // It's safe (Success)
+                        element.parentElement.classList.add('text-green-500', 'dark:text-green-400');
+                    }
                 } else {
-                    element.parentElement.classList.add('text-gray-500'); // Default color for N/A
+                    // N/A
+                    element.parentElement.classList.add('text-gray-500', 'dark:text-gray-400');
                 }
             });
 

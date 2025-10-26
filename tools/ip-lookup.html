@@ -33,7 +33,7 @@
     </script>
     <script> window.GLOBAL_ROOT_PATH = '../'; </script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
-    
+
     <!-- Leaflet.js for the interactive map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -42,160 +42,50 @@
         :root { --tt-primary-stroke: #10b981; }
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
-        
+
         /* Map styles */
         #map { height: 350px; border-radius: 0.5rem; z-index: 10; }
         .dark #map { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); }
-        
+
         /* Key-value table style for results */
-        .result-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 0.75rem 1rem;
-            font-size: 0.875rem;
-        }
-        .result-grid dt {
-            font-weight: 600;
-            color: #4b5563; /* gray-600 */
-        }
-        .dark .result-grid dt {
-            color: #d1d5db; /* gray-300 */
-        }
-        .result-grid dd {
-            font-family: 'Roboto Mono', monospace;
-            color: #1f2937; /* gray-800 */
-            word-break: break-all;
-            /* --- NEW: Flex styles for copy button --- */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .dark .result-grid dd {
-            color: #f3f4f6; /* gray-100 */
-        }
-        /* --- NEW: Copy Button Styles --- */
-        .copy-btn {
-            opacity: 1; /* Hide by default */
-            padding: 0.25rem;
-            border-radius: 0.25rem;
-            color: #6b7280; /* gray-500 */
-            transition: opacity 0.2s ease, color 0.2s ease;
-            flex-shrink: 0; 
-        }
-        .dark .copy-btn { color: #9ca3af; /* gray-400 */ }
-        /* Show copy button when results are visible */
+        .result-grid { display: grid; grid-template-columns: auto 1fr; gap: 0.75rem 1rem; font-size: 0.875rem; }
+        .result-grid dt { font-weight: 600; color: #4b5563; }
+        .dark .result-grid dt { color: #d1d5db; }
+        .result-grid dd { font-family: 'Roboto Mono', monospace; color: #1f2937; word-break: break-all; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+        .dark .result-grid dd { color: #f3f4f6; }
+        .copy-btn { opacity: 0; padding: 0.25rem; border-radius: 0.25rem; color: #6b7280; transition: opacity 0.2s ease, color 0.2s ease; flex-shrink: 0; cursor: pointer; }
+        .dark .copy-btn { color: #9ca3af; }
+        .result-grid dd:hover .copy-btn { opacity: 1; color: #10b981; }
 
-        .result-grid dd:hover .copy-btn {
-            opacity: 1;
-            color: #10b981;
-        }
-        /* --- End of NEW --- */
+        .tab-btn { padding: 0.5rem 1rem; font-weight: 600; border-radius: 0.375rem; border: 2px solid transparent; transition: all 0.2s ease-in-out; cursor: pointer; } /* Added cursor */
+        .tab-btn[aria-selected="true"] { background-color: #ecfdf5; color: #065f46; border-color: #10b981; }
+        .dark .tab-btn[aria-selected="true"] { background-color: #064e3b; color: #a7f3d0; border-color: #10b981; }
+        .dark .tab-btn { color: #d1d5db; }
 
-        .tab-btn {
-            padding: 0.5rem 1rem;
-            font-weight: 600;
-            border-radius: 0.375rem;
-            border: 2px solid transparent;
-            transition: all 0.2s ease-in-out;
-        }
-        .tab-btn[aria-selected="true"] {
-            background-color: #ecfdf5; /* emerald-50 */
-            color: #065f46; /* emerald-800 */
-            border-color: #10b981; /* emerald-500 */
-        }
-        .dark .tab-btn[aria-selected="true"] {
-            background-color: #064e3b; /* emerald-900 */
-            color: #a7f3d0; /* emerald-200 */
-            border-color: #10b981; /* emerald-500 */
-        }
-        .dark .tab-btn {
-            color: #d1d5db; /* gray-300 */
-        }
+        /* Custom Leaflet Zoom Icons */
+        .leaflet-control-zoom a { background-color: transparent !important; border: none !important; background-repeat: no-repeat; background-position: center; width: 30px !important; height: 30px !important; transition: all 0.2s ease; }
+        .leaflet-control-zoom a:hover { background-color: rgba(0, 0, 0, 0.05) !important; }
+        .dark .leaflet-control-zoom a:hover { background-color: rgba(255, 255, 255, 0.1) !important; }
+        .leaflet-control-zoom-in, .leaflet-control-zoom-out { text-indent: -9999px; }
+        .leaflet-control-zoom-in { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3Cline x1='11' y1='8' x2='11' y2='14'%3E%3C/line%3E%3Cline x1='8' y1='11' x2='14' y2='11'%3E%3C/line%3E%3C/svg%3E") !important; opacity: 0.8; }
+        .leaflet-control-zoom-out { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3Cline x1='8' y1='11' x2='14' y2='11'%3E%3C/line%3E%3C/svg%3E") !important; opacity: 0.8; }
+        .dark .leaflet-control-zoom-in { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3Cline x1='11' y1='8' x2='11' y2='14'%3E%3C/line%3E%3Cline x1='8' y1='11' x2='14' y2='11'%3E%3C/line%3E%3C/svg%3E") !important; }
+        .dark .leaflet-control-zoom-out { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3Cline x1='8' y1='11' x2='14' y2='11'%3E%3C/line%3E%3C/svg%3E") !important; }
+        .leaflet-touch .leaflet-control-zoom a { width: 34px !important; height: 34px !important; }
 
-        /* --- FIX: Custom Leaflet Zoom Icons --- */
-        .leaflet-control-zoom a {
-            background-color: transparent !important;
-            border: none !important;
-            background-repeat: no-repeat;
-            background-position: center;
-            width: 30px !important;
-            height: 30px !important;
-            /* color property removed, as it's no longer needed */
-            transition: all 0.2s ease;
-        }
-        .dark .leaflet-control-zoom a {
-            /* color property removed */
-        }
-        .leaflet-control-zoom a:hover {
-            background-color: rgba(0, 0, 0, 0.05) !important;
-        }
-        .dark .leaflet-control-zoom a:hover {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-        }
-        
-        .leaflet-control-zoom-in,
-        .leaflet-control-zoom-out {
-            text-indent: -9999px; /* Hide the default '+' and '-' */
-        }
-
-        /* Removed ::before elements and applied icons directly to buttons */
-        .leaflet-control-zoom-in {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3Cline x1='11' y1='8' x2='11' y2='14'%3E%3C/line%3E%3Cline x1='8' y1='11' x2='14' y2='11'%3E%3C/line%3E%3C/svg%3E") !important;
-            opacity: 0.8;
-        }
-        .leaflet-control-zoom-out {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3Cline x1='8' y1='11' x2='14' y2='11'%3E%3C/line%3E%3C/svg%3E") !important;
-            opacity: 0.8;
-        }
-
-        .dark .leaflet-control-zoom-in {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3Cline x1='11' y1='8' x2='11' y2='14'%3E%3C/line%3E%3Cline x1='8' y1='11' x2='14' y2='11'%3E%3C/line%3E%3C/svg%3E") !important;
-        }
-        .dark .leaflet-control-zoom-out {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3Cline x1='8' y1='11' x2='14' y2='11'%3E%3C/line%3E%3C/svg%3E") !important;
-        }
-        
-        .leaflet-touch .leaflet-control-zoom a {
-            width: 34px !important;
-            height: 34px !important;
-        }
-        /* --- End of Fix --- */
-
-        /* --- NEW: DNS Results Styling --- */
-        .dns-record-group {
-            margin-bottom: 0.75rem;
-        }
-        .dns-record-group h4 {
-            font-weight: 600;
-            font-size: 0.875rem;
-            color: #1f2937; /* gray-800 */
-            dark: #f3f4f6; /* gray-100 */
-            margin-bottom: 0.25rem;
-        }
-        .dns-record-list {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.875rem;
-            list-style-type: none;
-            padding-left: 0;
-            background-color: #f9fafb; /* gray-50 */
-            dark: #374151; /* gray-700 */
-            border: 1px solid #e5e7eb; /* gray-200 */
-            dark: #4b5563; /* gray-600 */
-            border-radius: 0.375rem;
-            padding: 0.5rem;
-            word-break: break-all;
-        }
-        .dns-record-list li {
-            padding: 0.25rem 0.5rem;
-        }
-        .dns-record-list li:not(:last-child) {
-            border-bottom: 1px dashed #d1d5db; /* gray-300 */
-            dark: #4b5563; /* gray-600 */
-        }
+        /* DNS Results Styling */
+        .dns-record-group { margin-bottom: 0.75rem; }
+        .dns-record-group h4 { font-weight: 600; font-size: 0.875rem; color: #1f2937; margin-bottom: 0.25rem; }
+        .dark .dns-record-group h4 { color: #f3f4f6; }
+        .dns-record-list { font-family: 'Roboto Mono', monospace; font-size: 0.875rem; list-style-type: none; padding: 0.5rem; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.375rem; word-break: break-all; }
+        .dark .dns-record-list { background-color: #374151; border-color: #4b5563; }
+        .dns-record-list li { padding: 0.25rem 0.5rem; }
+        .dns-record-list li:not(:last-child) { border-bottom: 1px dashed #d1d5db; }
+        .dark .dns-record-list li:not(:last-child) { border-bottom-color: #4b5563; }
     </style>
 
-    <script type="application/ld+json">
+    <!-- ... (LD+JSON Schema and FAQ Schema unchanged) ... -->
+     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
@@ -252,6 +142,7 @@
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <!-- ... (Nav/Breadcrumb unchanged) ... -->
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
@@ -259,7 +150,8 @@
                 <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">IP Address Lookup & Geolocation</span></div></li>
             </ol>
         </nav>
-        
+
+        <!-- ... (Header unchanged) ... -->
         <section class="mb-10 text-center">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">IP Address Lookup & Geolocation</h1>
             <p class="text-base text-gray-600 dark:text-gray-300">Get detailed geolocation, network, security, and timezone data for any IP or domain.</p>
@@ -287,13 +179,16 @@
                         <label for="ipInput" class="block text-lg font-semibold mb-2">Lookup any IP or Domain</label>
                         <div class="flex gap-2">
                             <input type="text" id="ipInput" placeholder="e.g., 8.8.8.8 or google.com" class="w-full p-3 border rounded-lg shadow-sm font-mono">
-                            <button id="lookupBtn" class="flex items-center justify-center space-x-2 bg-tt-primary hover:bg-tt-secondary text-white font-bold py-3 px-5 rounded-lg shadow-md transition duration-300">
-                                <i data-lucide="search" class="w-5 h-5 flex-shrink-0"></i> <!-- Added flex-shrink-0 -->
-                                <span>Lookup</span>
+                            <button id="lookupBtn" class="flex items-center justify-center space-x-2 bg-tt-primary hover:bg-green-700 text-white font-bold py-3 px-5 rounded-lg shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <!-- Added loading spinner elements -->
+                                <span id="lookup-spinner" class="hidden animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
+                                <i id="lookup-icon" data-lucide="search" class="w-5 h-5 flex-shrink-0"></i>
+                                <span id="lookup-text">Lookup</span>
                             </button>
                         </div>
+                         <div id="input-error" class="text-red-500 text-sm mt-1 hidden">Invalid IP or Domain format.</div>
                     </div>
-                    
+
                     <!-- Map Card -->
                     <div>
                         <h2 class="text-lg font-semibold mb-2">Geolocation Map</h2>
@@ -310,7 +205,7 @@
                 <div class="space-y-4">
                     <h2 class="text-lg font-semibold mb-2">Lookup Results</h2>
                     <div id="results-card" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border dark:border-gray-700 min-h-[400px]">
-                        
+
                         <!-- Placeholder -->
                         <div id="results-placeholder" class="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400">
                             <i data-lucide="file-search" class="w-16 h-16 mb-4"></i>
@@ -320,24 +215,24 @@
 
                         <!-- Loading Skeleton -->
                         <div id="results-loading" class="hidden animate-pulse space-y-4">
-                            <div class="flex space-x-2">
-                                <div class="h-8 bg-gray-300 dark:bg-gray-700 rounded-md w-1/4"></div>
-                                <div class="h-8 bg-gray-300 dark:bg-gray-700 rounded-md w-1/4"></div>
-                                <div class="h-8 bg-gray-300 dark:bg-gray-700 rounded-md w-1/4"></div>
+                             <div class="flex space-x-2">
+                                <div class="h-8 bg-gray-300 dark:bg-gray-600 rounded-md w-1/4"></div>
+                                <div class="h-8 bg-gray-300 dark:bg-gray-600 rounded-md w-1/4"></div>
+                                <div class="h-8 bg-gray-300 dark:bg-gray-600 rounded-md w-1/4"></div>
                             </div>
                             <div class="space-y-3 pt-4">
-                                <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3"></div>
-                                <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
-                                <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3"></div>
-                                <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
-                                <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3"></div>
+                               <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
+                               <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+                               <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
+                               <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+                               <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
                             </div>
                         </div>
 
                         <!-- Error Message -->
-                        <div id="results-error" class="hidden flex flex-col items-center justify-center h-full text-red-500">
+                        <div id="results-error" class="hidden flex flex-col items-center justify-center h-full text-red-500 text-center">
                             <i data-lucide="alert-triangle" class="w-16 h-16 mb-4"></i>
-                            <p class="font-semibold" id="error-message"></p>
+                            <p class="font-semibold" id="error-message">An error occurred.</p>
                         </div>
 
                         <!-- Real Results -->
@@ -348,131 +243,53 @@
                                 <button class="tab-btn" id="tab-network" role="tab" aria-selected="false" aria-controls="panel-network">Network</button>
                                 <button class="tab-btn" id="tab-security" role="tab" aria-selected="false" aria-controls="panel-security">Security</button>
                                 <button class="tab-btn" id="tab-timezone" role="tab" aria-selected="false" aria-controls="panel-timezone">Timezone</button>
-                                <!-- NEW: Domain-specific tabs -->
                                 <button class="tab-btn hidden" id="tab-whois" role="tab" aria-selected="false" aria-controls="panel-whois">WHOIS</button>
                                 <button class="tab-btn hidden" id="tab-dns" role="tab" aria-selected="false" aria-controls="panel-dns">DNS Records</button>
                             </div>
-                            
+
                             <!-- Tab Panels -->
                             <div id="tab-panels">
                                 <div id="panel-geo" role="tabpanel" aria-labelledby="tab-geo">
                                     <dl class="result-grid">
-                                        <dt>IP Address</dt>
-                                        <dd>
-                                            <span id="res-query"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Country</dt>
-                                        <dd>
-                                            <span id="res-country"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Region</dt>
-                                        <dd>
-                                            <span id="res-region"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>City</dt>
-                                        <dd>
-                                            <span id="res-city"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Postal Code</dt>
-                                        <dd>
-                                            <span id="res-zip"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Latitude</dt>
-                                        <dd>
-                                            <span id="res-lat"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Longitude</dt>
-                                        <dd>
-                                            <span id="res-lon"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
+                                        <dt>IP Address</dt><dd><span id="res-query">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Country</dt><dd><span id="res-country">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Region</dt><dd><span id="res-region">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>City</dt><dd><span id="res-city">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Postal Code</dt><dd><span id="res-zip">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Latitude</dt><dd><span id="res-lat">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Longitude</dt><dd><span id="res-lon">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
                                     </dl>
                                 </div>
                                 <div id="panel-network" role="tabpanel" aria-labelledby="tab-network" class="hidden">
                                     <dl class="result-grid">
-                                        <dt>ISP</dt>
-                                        <dd>
-                                            <span id="res-isp"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Organization</dt>
-                                        <dd>
-                                            <span id="res-org"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>ASN</dt>
-                                        <dd>
-                                            <span id="res-as"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Hostname</dt>
-                                        <dd>
-                                            <span id="res-hostname"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
+                                        <dt>ISP</dt><dd><span id="res-isp">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Organization</dt><dd><span id="res-org">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>ASN</dt><dd><span id="res-as">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Hostname</dt><dd><span id="res-hostname">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
                                     </dl>
                                 </div>
                                 <div id="panel-security" role="tabpanel" aria-labelledby="tab-security" class="hidden">
                                     <dl class="result-grid">
-                                        <dt>Proxy</dt>
-                                        <dd>
-                                            <span id="res-proxy"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>VPN</dt>
-                                        <dd>
-                                            <span id="res-vpn"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Tor Node</dt>
-                                        <dd>
-                                            <span id="res-tor"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
+                                        <dt>Proxy</dt><dd><span id="res-proxy">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>VPN</dt><dd><span id="res-vpn">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Tor Node</dt><dd><span id="res-tor">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
                                     </dl>
                                 </div>
                                 <div id="panel-timezone" role="tabpanel" aria-labelledby="tab-timezone" class="hidden">
                                     <dl class="result-grid">
-                                        <dt>Timezone</dt>
-                                        <dd>
-                                            <span id="res-timezone"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Local Time</dt>
-                                        <dd>
-                                            <span id="res-localtime"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
+                                        <dt>Timezone</dt><dd><span id="res-timezone">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Local Time</dt><dd><span id="res-localtime">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
                                     </dl>
                                 </div>
-                                <!-- NEW: Domain-specific panels -->
                                 <div id="panel-whois" role="tabpanel" aria-labelledby="tab-whois" class="hidden">
                                     <dl class="result-grid">
-                                        <dt>Registrar</dt>
-                                        <dd>
-                                            <span id="res-whois-registrar"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Registered On</dt>
-                                        <dd>
-                                            <span id="res-whois-registered"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
-                                        <dt>Expires On</dt>
-                                        <dd>
-                                            <span id="res-whois-expires"></span>
-                                            <button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                        </dd>
+                                        <dt>Registrar</dt><dd><span id="res-whois-registrar">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Registered On</dt><dd><span id="res-whois-registered">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                                        <dt>Expires On</dt><dd><span id="res-whois-expires">N/A</span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
                                     </dl>
                                 </div>
                                 <div id="panel-dns" role="tabpanel" aria-labelledby="tab-dns" class="hidden">
-                                    <!-- This panel will be populated by renderDnsResults -->
+                                    <!-- Populated by JS -->
                                 </div>
                             </div>
                         </div>
@@ -480,7 +297,8 @@
                 </div>
             </div>
         </div>
-        
+
+        <!-- ... (Informational sections unchanged) ... -->
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is an IP Address?</h2>
@@ -554,7 +372,7 @@
             </div>
         </section>
     </main>
-    
+
     <script src="../javascript/globals.js" defer></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -562,6 +380,11 @@
             window.injectLayout(false);
         } else {
             console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        // Render initial icons if Lucide is ready
+        if (window.lucide) {
+            lucide.createIcons();
         }
 
         // --- UI Elements ---
@@ -575,6 +398,10 @@
             lookup: {
                 input: document.getElementById('ipInput'),
                 button: document.getElementById('lookupBtn'),
+                spinner: document.getElementById('lookup-spinner'),
+                icon: document.getElementById('lookup-icon'),
+                text: document.getElementById('lookup-text'),
+                inputError: document.getElementById('input-error'),
             },
             map: {
                 container: document.getElementById('map'),
@@ -587,32 +414,22 @@
                 error: document.getElementById('results-error'),
                 errorMessage: document.getElementById('error-message'),
                 content: document.getElementById('results-content'),
-                tabs: document.querySelectorAll('[role="tab"]'),
-                panels: document.querySelectorAll('[role="tabpanel"]'),
-                // NEW: Domain tabs
+                tabs: document.querySelectorAll('[role="tab"]'), // Query all tabs initially
+                panels: document.querySelectorAll('[role="tabpanel"]'), // Query all panels initially
                 tabWhois: document.getElementById('tab-whois'),
                 tabDns: document.getElementById('tab-dns'),
                 panelWhois: document.getElementById('panel-whois'),
                 panelDns: document.getElementById('panel-dns'),
             },
-            res: {
-                query: document.getElementById('res-query'),
-                country: document.getElementById('res-country'),
-                region: document.getElementById('res-region'),
-                city: document.getElementById('res-city'),
-                zip: document.getElementById('res-zip'),
-                lat: document.getElementById('res-lat'),
-                lon: document.getElementById('res-lon'),
-                isp: document.getElementById('res-isp'),
-                org: document.getElementById('res-org'),
-                as: document.getElementById('res-as'),
-                hostname: document.getElementById('res-hostname'), // Added Hostname
-                proxy: document.getElementById('res-proxy'),
-                vpn: document.getElementById('res-vpn'),
-                tor: document.getElementById('res-tor'),
-                timezone: document.getElementById('res-timezone'),
-                localtime: document.getElementById('res-localtime'),
-                // NEW: WHOIS elements
+            res: { // All result spans
+                query: document.getElementById('res-query'), country: document.getElementById('res-country'),
+                region: document.getElementById('res-region'), city: document.getElementById('res-city'),
+                zip: document.getElementById('res-zip'), lat: document.getElementById('res-lat'),
+                lon: document.getElementById('res-lon'), isp: document.getElementById('res-isp'),
+                org: document.getElementById('res-org'), as: document.getElementById('res-as'),
+                hostname: document.getElementById('res-hostname'), proxy: document.getElementById('res-proxy'),
+                vpn: document.getElementById('res-vpn'), tor: document.getElementById('res-tor'),
+                timezone: document.getElementById('res-timezone'), localtime: document.getElementById('res-localtime'),
                 whoisRegistrar: document.getElementById('res-whois-registrar'),
                 whoisRegistered: document.getElementById('res-whois-registered'),
                 whoisExpires: document.getElementById('res-whois-expires'),
@@ -623,13 +440,19 @@
         let map;
         let mapMarker;
         try {
-            map = L.map(ui.map.container).setView([20.5937, 78.9629], 3); // Default view (India, zoomed out)
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+            // Check if Leaflet is loaded
+            if (typeof L !== 'undefined') {
+                map = L.map(ui.map.container).setView([20.5937, 78.9629], 3);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+            } else {
+                throw new Error("Leaflet library not loaded.");
+            }
         } catch (e) {
             console.error("Failed to initialize map:", e);
-            ui.map.container.innerHTML = '<p class="p-4 text-red-500">Error: Could not load map.</p>';
+            ui.map.container.innerHTML = `<div class="absolute inset-0 flex items-center justify-center bg-gray-200 dark:bg-gray-700"><p class="p-4 text-red-500">Error: Could not load map library.</p></div>`;
+            ui.map.placeholder.classList.add('hidden'); // Hide placeholder if map init fails
         }
 
         // --- State Management ---
@@ -638,11 +461,18 @@
             ui.myIp.content.classList.toggle('hidden', isLoading);
         };
 
-        const showResultState = (state) => { // 'placeholder', 'loading', 'error', 'content'
+        const showResultState = (state) => {
             ui.results.placeholder.classList.toggle('hidden', state !== 'placeholder');
             ui.results.loading.classList.toggle('hidden', state !== 'loading');
             ui.results.error.classList.toggle('hidden', state !== 'error');
             ui.results.content.classList.toggle('hidden', state !== 'content');
+        };
+
+        const setLookupButtonLoading = (isLoading) => {
+             ui.lookup.button.disabled = isLoading;
+             ui.lookup.spinner.classList.toggle('hidden', !isLoading);
+             ui.lookup.icon.classList.toggle('hidden', isLoading);
+             ui.lookup.text.textContent = isLoading ? 'Looking up...' : 'Lookup';
         };
 
         // --- API Calls ---
@@ -650,256 +480,269 @@
             const isDomain = !/^\d{1,3}(\.\d{1,3}){3}$/.test(query) && query.includes('.');
             let targetQuery = query;
 
-            if (isDomain && query) {
+            // Simple validation before DNS lookup
+            if (!query && !isDomain) {
+                // Fetch user's IP if query is empty
+            } else if (!isDomain && !/^\d{1,3}(\.\d{1,3}){3}$/.test(query)) {
+                // Basic check if it's not empty, not domain, but not IP either
+                throw new Error("Invalid IP address format.");
+            } else if (isDomain && !/^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/.test(query)) {
+                 // Basic domain format check
+                 throw new Error("Invalid domain name format.");
+            }
+
+
+             if (isDomain && query) {
                 try {
-                    const dnsResponse = await fetch(`https://dns.google/resolve?name=${query}&type=A`);
-                    if (!dnsResponse.ok) throw new Error('DNS resolution failed');
+                    const dnsResponse = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(query)}&type=A`);
+                    if (!dnsResponse.ok) throw new Error(`DNS resolution failed (${dnsResponse.status})`);
                     const dnsData = await dnsResponse.json();
                     if (dnsData.Answer && dnsData.Answer.length > 0) {
-                        targetQuery = dnsData.Answer[0].data; // Use the resolved IP
+                        targetQuery = dnsData.Answer[0].data; // Use the first resolved A record IP
+                         console.log(`Resolved ${query} to ${targetQuery}`);
                     } else {
-                        targetQuery = query; 
+                        // If DNS resolution fails specifically, throw a clearer error
+                        throw new Error(`Could not resolve domain '${query}' to an IP address.`);
                     }
                 } catch (e) {
                     console.error("DNS resolution error:", e);
-                    targetQuery = query;
+                    throw e; // Re-throw to be caught by the main handler
                 }
             }
-            
+
             const url = `https://ipwho.is/${targetQuery || ''}`;
 
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Network response was not ok.');
+                    let errorMsg = `IP lookup failed (Status: ${response.status})`;
+                    try {
+                        const errorData = await response.json();
+                        errorMsg = errorData.message || errorMsg;
+                    } catch(_) { /* Ignore parse error */ }
+                    throw new Error(errorMsg);
                 }
                 const data = await response.json();
 
                 if (data.success === false) {
-                    throw new Error(data.message || 'Invalid query');
+                    throw new Error(data.message || 'Invalid IP or lookup failed');
                 }
-                
+
                 if (isDomain && query) {
                     data.original_query = query;
+                    if (!data.ip) data.ip = targetQuery;
+                } else if (!data.ip) {
+                     throw new Error('API did not return an IP address.');
                 }
-                
+
                 return data;
             } catch (error) {
-                console.error('Fetch error:', error);
-                showResultState('error');
-                ui.results.errorMessage.textContent = error.message;
-                return null;
+                console.error('IPWhois fetch error:', error);
+                throw error;
             }
         };
 
-        // NEW: Production WHOIS Fetch (Using whoisjson.com)
+
         const fetchWhoisData = async (domain) => {
-            const API_KEY = "71e6b2d29fdb67b97029283cf741e3c218c147365e9ba4cbc55f790d7da66c79";
-            
-            const API_URL = `https://whoisjson.com/api/v1/whois?domain=${domain}&apiKey=${API_KEY}`;
-
-            // This keeps the mock data running until you add a real key
-            if (API_KEY === "API_KEY_HERE") {
-                console.warn("WHOIS lookup is mocked. Please add a real API key from whoisjson.com to fetchWhoisData.");
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        resolve({
-                            registrar: "Mock Registrar, Inc. (Add API Key)",
-                            creation_date: "2010-09-15",
-                            expiration_date: "2028-09-15",
-                        });
-                    }, 300);
-                });
-            }
-
-            // --- This is the REAL API call ---
+            const apiUrl = `/api/whois?domain=${encodeURIComponent(domain)}`;
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch(apiUrl);
                 if (!response.ok) {
-                    throw new Error('WHOIS API request failed');
+                    let errorMsg = `WHOIS Error: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMsg = errorData.error || errorData.message || `Server responded with status ${response.status}`;
+                    } catch (parseError) {
+                         errorMsg = `Server error: ${response.status} ${response.statusText}`;
+                    }
+                    throw new Error(errorMsg);
                 }
                 const data = await response.json();
-
-                // 3. This part is now adapted for whoisjson.com's response
-                return {
+                 return {
                     registrar: data.registrar || 'N/A',
                     creation_date: data.creation_date || 'N/A',
                     expiration_date: data.expiration_date || 'N/A',
                 };
-                
             } catch (error) {
-                console.error("WHOIS fetch error:", error);
-                return { registrar: 'Error fetching WHOIS data', creation_date: 'N/A', expiration_date: 'N/A' };
+                console.error("Frontend WHOIS fetch error:", error);
+                return { registrar: `Error: ${error.message}`, creation_date: 'N/A', expiration_date: 'N/A' };
             }
         };
 
-        // NEW: Live DNS Fetch (Using Google DNS)
+        // --- Fetch DNS Data (unchanged) ---
         const fetchDnsData = async (domain) => {
-            const recordTypes = ['A', 'AAAA', 'MX', 'TXT', 'NS'];
-            const dnsApiBase = 'https://dns.google/resolve?name=';
-            
-            // Create an array of fetch promises
-            const promises = recordTypes.map(async (type) => {
-                try {
-                    const response = await fetch(`${dnsApiBase}${domain}&type=${type}`);
-                    if (!response.ok) return { type, records: [] }; // Don't fail all, just return empty
-                    
-                    const data = await response.json();
-                    
-                    // Extract the 'data' field from each answer
-                    const records = data.Answer ? data.Answer.map(ans => {
-                        // MX records are special, they have a priority number
-                        if (type === 'MX') {
-                            const parts = ans.data.split(' ');
-                            return `${parts[0]} ${parts[1]}`;
-                        }
-                        // TXT records might be in quotes, remove them
-                        if (type === 'TXT') {
-                            return ans.data.replace(/"/g, '');
-                        }
-                        return ans.data;
-                    }) : [];
-                    
-                    return { type, records };
-                } catch (e) {
-                    console.error(`DNS fetch error for ${type}:`, e);
-                    return { type, records: [] }; // Return empty on error
-                }
-            });
-            
-            // Wait for all promises to settle
-            const results = await Promise.all(promises);
-            
-            // Convert the array of {type, records} into the object format our renderer expects
-            const dnsData = {};
-            results.forEach(result => {
-                if (result.records.length > 0) {
-                    dnsData[result.type] = result.records;
-                }
-            });
-            
-            return dnsData;
+             const recordTypes = ['A', 'AAAA', 'MX', 'TXT', 'NS'];
+             const dnsApiBase = 'https://dns.google/resolve?name=';
+             const promises = recordTypes.map(async (type) => {
+                 try {
+                     const response = await fetch(`${dnsApiBase}${encodeURIComponent(domain)}&type=${type}`);
+                     if (!response.ok) return { type, records: [] };
+                     const data = await response.json();
+                     const records = data.Answer ? data.Answer.map(ans => {
+                         if (type === 'MX') {
+                             const parts = ans.data.split(' '); return `${parts[0]} ${parts[1]}`;
+                         }
+                         if (type === 'TXT') { return ans.data.replace(/"/g, ''); }
+                         return ans.data;
+                     }) : [];
+                     return { type, records };
+                 } catch (e) {
+                     console.error(`DNS fetch error for ${type}:`, e);
+                     return { type, records: [] };
+                 }
+             });
+             const results = await Promise.all(promises);
+             const dnsData = {};
+             results.forEach(result => {
+                 if (result.records.length > 0) { dnsData[result.type] = result.records; }
+             });
+             return dnsData;
         };
 
 
         // --- Rendering ---
         const renderMyIp = (data) => {
             if (!data) return;
-            ui.myIp.address.textContent = data.ip;
-            ui.myIp.location.textContent = `${data.city}, ${data.region}, ${data.country_code}`;
+            ui.myIp.address.textContent = data.ip || 'Error';
+            ui.myIp.location.textContent = data.success ? `${data.city || ''}, ${data.region || ''}, ${data.country_code || ''}` : 'Location unavailable';
             showMyIpLoading(false);
         };
 
         const renderResults = (data, isDomain) => {
-            if (!data) return;
-            
-            // Toggle domain tabs
+            if (!data || !data.success) {
+                showResultState('error');
+                ui.results.errorMessage.textContent = data?.message || 'Failed to load IP data.';
+                return;
+            };
+
             ui.results.tabWhois.classList.toggle('hidden', !isDomain);
             ui.results.tabDns.classList.toggle('hidden', !isDomain);
-            
+
             const n_a = 'N/A';
-            
-            // Geolocation
-            ui.res.query.textContent = data.original_query ? `${data.original_query} (${data.ip})` : data.ip;
-            ui.res.country.textContent = `${data.country || n_a} (${data.country_code || n_a})`;
+            const conn = data.connection || {};
+            const sec = data.security || {};
+            const tz = data.timezone || {};
+
+            // --- Geolocation ---
+            const displayQuery = data.original_query ? `${data.original_query} (${data.ip})` : data.ip;
+            ui.res.query.textContent = displayQuery || n_a;
+            ui.res.country.textContent = data.country ? `${data.country} (${data.country_code || 'N/A'})` : n_a;
             ui.res.region.textContent = data.region || n_a;
             ui.res.city.textContent = data.city || n_a;
             ui.res.zip.textContent = data.postal || n_a;
             ui.res.lat.textContent = data.latitude || n_a;
             ui.res.lon.textContent = data.longitude || n_a;
-            
-            // Network
-            const conn = data.connection || {};
+
+            // --- Network ---
             ui.res.isp.textContent = conn.isp || n_a;
             ui.res.org.textContent = conn.org || n_a;
-            ui.res.as.textContent = conn.asn || n_a;
-            ui.res.hostname.textContent = conn.domain || n_a;
-            
-            // Security
-            const sec = data.security || {};
-            ui.res.proxy.textContent = sec.is_proxy ? 'Yes' : 'No';
-            ui.res.vpn.textContent = sec.is_vpn ? 'Yes' : 'No';
-            ui.res.tor.textContent = sec.is_tor ? 'Yes' : 'No';
-            
-            ui.res.proxy.parentElement.className = 'result-grid dd';
-            ui.res.vpn.parentElement.className = 'result-grid dd';
-            ui.res.tor.parentElement.className = 'result-grid dd';
+            ui.res.as.textContent = conn.asn ? `AS${conn.asn}` : n_a; // Format ASN
+            ui.res.hostname.textContent = conn.domain || n_a; // Use 'domain' from connection
 
-            ui.res.proxy.parentElement.classList.add(sec.is_proxy ? 'text-red-500' : 'text-green-500');
-            ui.res.vpn.parentElement.classList.add(sec.is_vpn ? 'text-red-500' : 'text-green-500');
-            ui.res.tor.parentElement.classList.add(sec.is_tor ? 'text-red-500' : 'text-green-500');
-            
-            // Timezone
-            const tz = data.timezone || {};
+            // --- Security ---
+            const securityItems = ['proxy', 'vpn', 'tor'];
+            securityItems.forEach(item => {
+                const key = `is_${item}`; // e.g., is_proxy
+                const element = ui.res[item];
+                const value = sec[key]; // true, false, or undefined
+
+                element.textContent = typeof value === 'boolean' ? (value ? 'Yes' : 'No') : n_a;
+                // Clear previous color classes before adding new one
+                element.parentElement.classList.remove('text-red-500', 'text-green-500', 'text-gray-500');
+                if (typeof value === 'boolean') {
+                    element.parentElement.classList.add(value ? 'text-red-500' : 'text-green-500');
+                } else {
+                    element.parentElement.classList.add('text-gray-500'); // Default color for N/A
+                }
+            });
+
+            // --- Timezone ---
             ui.res.timezone.textContent = tz.id || n_a;
+            let localTimeText = n_a;
             try {
-                if (tz.current_time) {
+                 // Prefer current_time from API if available and looks valid
+                 if (tz.current_time && tz.current_time.length > 10) { // Basic check
                     const date = new Date(tz.current_time);
-                    const localTime = date.toLocaleString("en-US", { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-                    ui.res.localtime.textContent = `${localTime} (${tz.abbr || ''})`;
-                } else {
-                     const localTime = new Date().toLocaleString("en-US", { timeZone: tz.id, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-                     ui.res.localtime.textContent = localTime;
-                }
+                    // Check if date is valid after parsing
+                    if (!isNaN(date.getTime())) {
+                        localTimeText = date.toLocaleString("en-US", { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, timeZoneName: 'short' });
+                    }
+                 }
+                 // Fallback: Calculate using timezone ID if current_time failed or missing
+                 if (localTimeText === n_a && tz.id) {
+                     localTimeText = new Date().toLocaleString("en-US", { timeZone: tz.id, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, timeZoneName: 'short' });
+                 }
             } catch (e) {
-                ui.res.localtime.textContent = 'Invalid Timezone Data';
+                console.error("Error formatting time:", e);
+                localTimeText = 'Invalid Time Data';
+            }
+            ui.res.localtime.textContent = localTimeText;
+
+
+            // --- Update Map ---
+            ui.map.placeholder.classList.add('hidden'); // Hide placeholder initially
+            if (map && data.latitude && data.longitude) {
+                try {
+                    const latLon = [data.latitude, data.longitude];
+                    const popupText = `${data.city || 'Location'}, ${data.country || ''}<br>ISP: ${conn.isp || n_a}`;
+                    map.flyTo(latLon, 10, { animate: true, duration: 0.5 });
+                    if (mapMarker) {
+                        mapMarker.setLatLng(latLon).setPopupContent(popupText);
+                    } else {
+                        mapMarker = L.marker(latLon).addTo(map).bindPopup(popupText);
+                    }
+                    setTimeout(() => { if (!map.panAnim) mapMarker.openPopup(); }, 600);
+                } catch(e) {
+                     console.error("Map update error:", e);
+                     ui.map.placeholder.classList.remove('hidden'); // Show placeholder on map error
+                     ui.map.placeholder.textContent = 'Error displaying map data.';
+                }
+            } else {
+                 ui.map.placeholder.textContent = 'Geolocation data unavailable for map.';
+                 ui.map.placeholder.classList.remove('hidden'); // Show placeholder if no lat/lon
             }
 
-            // Update Map
-            if (map && data.latitude && data.longitude) {
-                const latLon = [data.latitude, data.longitude];
-                const popupText = `${data.city || ''}, ${data.country || ''}<br>ISP: ${conn.isp || n_a}`;
-                
-                map.flyTo(latLon, 10);
-                if (mapMarker) {
-                    mapMarker.setLatLng(latLon).setPopupContent(popupText);
-                } else {
-                    mapMarker = L.marker(latLon).addTo(map).bindPopup(popupText).openPopup();
-                }
-                ui.map.placeholder.classList.add('hidden');
-            } else {
-                 ui.map.placeholder.classList.remove('hidden');
-            }
+            // Render Lucide icons for copy buttons etc.
+             if (window.lucide) {
+                lucide.createIcons();
+             }
 
             showResultState('content');
-            // Reset to first tab
-            switchTab(ui.results.tabs[0]);
+            switchTab(ui.results.tabs[0]); // Reset to first tab
         };
 
-        // NEW: Render WHOIS Results
+
         const renderWhoisResults = (data) => {
-            if (!data) return;
-            // Updated to match the fields from whoisjson.com
-            ui.res.whoisRegistrar.textContent = data.registrar || 'N/A';
-            ui.res.whoisRegistered.textContent = data.creation_date ? new Date(data.creation_date).toDateString() : 'N/A';
-            ui.res.whoisExpires.textContent = data.expiration_date ? new Date(data.expiration_date).toDateString() : 'N/A';
+             if (!data) return;
+             const n_a = 'N/A';
+             ui.res.whoisRegistrar.textContent = data.registrar || n_a;
+             // Add date formatting
+             try { ui.res.whoisRegistered.textContent = data.creation_date ? new Date(data.creation_date).toLocaleDateString() : n_a; } catch { ui.res.whoisRegistered.textContent = 'Invalid Date'; }
+             try { ui.res.whoisExpires.textContent = data.expiration_date ? new Date(data.expiration_date).toLocaleDateString() : n_a; } catch { ui.res.whoisExpires.textContent = 'Invalid Date'; }
         };
 
-        // NEW: Render DNS Results
         const renderDnsResults = (data) => {
-            if (!data) {
-                ui.results.panelDns.innerHTML = '<p>No DNS records found.</p>';
+            ui.results.panelDns.innerHTML = ''; // Clear previous results
+            if (!data || Object.keys(data).length === 0) {
+                ui.results.panelDns.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No common DNS records found.</p>';
                 return;
             }
-            
             let html = '';
             const recordTypes = ['A', 'AAAA', 'MX', 'TXT', 'NS'];
-
             recordTypes.forEach(type => {
                 if (data[type] && data[type].length > 0) {
                     html += `<div class="dns-record-group"><h4>${type} Records</h4><ul class="dns-record-list">`;
                     data[type].forEach(record => {
-                        html += `<li>${record}</li>`;
+                        // Basic escaping for safety
+                        const safeRecord = record.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        html += `<li>${safeRecord}</li>`;
                     });
                     html += `</ul></div>`;
                 }
             });
-
             if (html === '') {
-                html = '<p>No common DNS records (A, AAAA, MX, TXT, NS) found.</p>';
+                html = '<p class="text-gray-500 dark:text-gray-400">No common DNS records (A, AAAA, MX, TXT, NS) found.</p>';
             }
-            
             ui.results.panelDns.innerHTML = html;
         };
 
@@ -907,77 +750,82 @@
         // --- Event Handlers ---
         const handleLookup = async () => {
             const query = ui.lookup.input.value.trim();
+             ui.lookup.inputError.classList.add('hidden'); // Hide previous errors
             if (!query) {
-                showResultState('error');
-                ui.results.errorMessage.textContent = 'Please enter an IP or domain.';
                 return;
             }
-            
+
+            setLookupButtonLoading(true); // Show loading state
             showResultState('loading');
+            ui.map.placeholder.textContent = 'Loading map data...'; // Update map placeholder
             ui.map.placeholder.classList.remove('hidden');
 
             const isDomain = !/^\d{1,3}(\.\d{1,3}){3}$/.test(query) && query.includes('.');
-            
-            // Fetch main IP data first
-            const ipData = await fetchIpData(query);
-            if (ipData) {
-                renderResults(ipData, isDomain);
-            }
 
-            // If it was a domain, fetch domain-specific data
-            if (isDomain && ipData) {
-                // Fetch DNS and WHOIS data in parallel
-                try {
+            try {
+                const ipData = await fetchIpData(query);
+                renderResults(ipData, isDomain);
+
+                if (isDomain && ipData.success) {
+                     const originalDomainQuery = ipData.original_query || query; // Use the stored original query
                     const [dnsData, whoisData] = await Promise.all([
-                        fetchDnsData(ipData.original_query || query),
-                        fetchWhoisData(ipData.original_query || query)
+                        fetchDnsData(originalDomainQuery).catch(e => { console.error("DNS fetch failed:", e); return null; }), // Add catch to individual promises
+                        fetchWhoisData(originalDomainQuery).catch(e => { console.error("WHOIS fetch failed:", e); return null; })
                     ]);
-                    
                     renderDnsResults(dnsData);
                     renderWhoisResults(whoisData);
-
-                } catch (error) {
-                    console.error("Error fetching domain data:", error);
-                    // Still show the IP data, but domain tabs might be empty
+                } else if (!isDomain) {
                     renderDnsResults(null);
                     renderWhoisResults(null);
                 }
+
+            } catch (error) {
+                console.error('Lookup failed:', error);
+                showResultState('error');
+                ui.results.errorMessage.textContent = error.message || 'An unknown error occurred during lookup.';
+                ui.map.placeholder.textContent = 'Lookup failed, map unavailable.'; // Update map placeholder on error
+                ui.map.placeholder.classList.remove('hidden');
+            } finally {
+                setLookupButtonLoading(false); // Hide loading state regardless of outcome
             }
         };
 
+
         const switchTab = (tab) => {
-            ui.results.tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
-            // NEW: Include hidden tabs in the query
+            if (!tab) return;
             document.querySelectorAll('[role="tab"]').forEach(t => t.setAttribute('aria-selected', 'false'));
-            
+            // Select the clicked tab
             tab.setAttribute('aria-selected', 'true');
-            
-            ui.results.panels.forEach(p => p.classList.add('hidden'));
-            // NEW: Include hidden panels in the query
+
             document.querySelectorAll('[role="tabpanel"]').forEach(p => p.classList.add('hidden'));
-            
+
+            // Show the target panel
             const panelId = tab.getAttribute('aria-controls');
-            document.getElementById(panelId).classList.remove('hidden');
+            const targetPanel = document.getElementById(panelId);
+            if (targetPanel) {
+                targetPanel.classList.remove('hidden');
+            } else {
+                 console.warn(`Panel with ID ${panelId} not found.`);
+            }
         };
 
-        // --- NEW: Copy to Clipboard Function ---
+
         const handleCopyClick = (e) => {
             const copyButton = e.target.closest('.copy-btn');
-            if (!copyButton) return; // Click wasn't on a copy button
-
-            const textToCopy = copyButton.previousElementSibling.textContent;
-            if (textToCopy === 'N/A') return; // Don't copy N/A
+            if (!copyButton) return;
+            const textElement = copyButton.previousElementSibling; // Get the <span> before the button
+            if (!textElement) return;
+            const textToCopy = textElement.textContent;
+            if (!textToCopy || textToCopy === 'N/A') return;
 
             const copySuccess = () => {
                 const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
                 const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
-                
                 copyButton.innerHTML = successIconHTML;
-                lucide.createIcons();
-                
+                if (window.lucide) lucide.createIcons(); // Re-render icon
                 setTimeout(() => {
                     copyButton.innerHTML = originalIconHTML;
-                    lucide.createIcons();
+                    if (window.lucide) lucide.createIcons(); // Re-render icon
                 }, 1500);
             };
 
@@ -986,58 +834,64 @@
                     .then(copySuccess)
                     .catch(err => console.error('Copy failed:', err));
             } else {
-                // Fallback for older browsers
+                // Basic fallback
                 const textArea = document.createElement("textarea");
                 textArea.value = textToCopy;
-                textArea.style.position = "absolute";
-                textArea.style.left = "-9999px";
+                textArea.style.position = "fixed"; textArea.style.top = "-9999px"; textArea.style.left = "-9999px";
                 document.body.appendChild(textArea);
                 textArea.select();
-                try {
-                    document.execCommand('copy');
-                    copySuccess();
-                } catch (err) {
-                    console.error('Fallback copy command failed: ', err);
-                }
+                try { document.execCommand('copy'); copySuccess(); }
+                catch (err) { console.error('Fallback copy failed:', err); }
                 document.body.removeChild(textArea);
             }
         };
 
-        // --- Initialization ---
+
         const initialize = async () => {
-            // Load user's IP
             showMyIpLoading(true);
-            showResultState('placeholder');
-            const myIpData = await fetchIpData('');
-            
-            if (myIpData) {
+            showResultState('placeholder'); // Start with placeholder
+            ui.map.placeholder.classList.remove('hidden'); // Show map placeholder initially
+
+            try {
+                const myIpData = await fetchIpData(''); // Fetch user's IP
                 renderMyIp(myIpData);
-                renderResults(myIpData, false); // Initial load is always an IP, so isDomain is false
-            } else {
+                renderResults(myIpData, false); // Render initial results for user's IP
+            } catch (error) {
                 showMyIpLoading(false);
-                ui.myIp.address.textContent = 'Could not fetch IP';
-                ui.myIp.location.textContent = 'Please try refreshing.';
+                ui.myIp.address.textContent = 'Error';
+                ui.myIp.location.textContent = 'Could not fetch your IP.';
                 showResultState('error');
-                ui.results.errorMessage.textContent = "Could not fetch your IP. Please try a manual lookup.";
+                ui.results.errorMessage.textContent = error.message || "Could not fetch your IP details.";
+                ui.map.placeholder.textContent = 'Could not fetch IP, map unavailable.';
+                ui.map.placeholder.classList.remove('hidden');
             }
 
-            // Add event listeners
+            // Add event listeners AFTER elements are potentially updated
             ui.lookup.button.addEventListener('click', handleLookup);
             ui.lookup.input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') handleLookup();
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Prevent potential form submission if wrapped in form
+                    handleLookup();
+                }
             });
 
-            // NEW: Query *all* tabs including the hidden ones
             document.querySelectorAll('[role="tab"]').forEach(tab => {
                 tab.addEventListener('click', () => switchTab(tab));
             });
 
-            // --- NEW: Add event listener for copy buttons ---
             ui.results.card.addEventListener('click', handleCopyClick);
+
+             // Make sure Lucide icons are rendered after initial content is potentially added
+             if (window.lucide) {
+                lucide.createIcons();
+             }
         };
 
+        // Call initialize now that it's defined
         initialize();
-    });
+        // --- End of Fix ---
+
+    }); // End DOMContentLoaded listener
     </script>
 </body>
 </html>

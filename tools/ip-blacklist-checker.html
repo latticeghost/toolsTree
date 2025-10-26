@@ -382,38 +382,34 @@
 
         // --- API Call ---
         const fetchAbuseData = async (ip) => {
-            // YOUR API KEY IS PLACED HERE
-            const API_KEY = "1570601bb8d82977b5de1c57730bd11739fbc1cb76adba7110ea6ad817f091b862af178470673547";
-            
-            const url = new URL('https://api.abuseipdb.com/api/v2/check');
-            url.searchParams.set('ipAddress', ip);
-            url.searchParams.set('maxAgeInDays', '90'); // Check reports from the last 90 days
-            url.searchParams.set('verbose', 'true');    // Get full report details
+            // Call your OWN backend endpoint
+            const url = `/api/check-ip?ip=${encodeURIComponent(ip)}`; // Relative URL
 
             try {
-                const response = await fetch(url, {
-                    headers: {
-                        'Key': API_KEY,
-                        'Accept': 'application/json'
-                    }
-                });
+                // No API key needed here!
+                const response = await fetch(url);
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    let errorMsg = `API Error: ${response.status}`;
-                    if (errorData && errorData.errors) {
-                        errorMsg = errorData.errors[0].detail;
+                    let errorMsg = `Error: ${response.status}`;
+                     // Try to get specific error from your backend or AbuseIPDB via backend
+                    if (errorData && errorData.error) {
+                        errorMsg = errorData.error;
+                    } else if (errorData && errorData.errors && errorData.errors[0]){
+                         errorMsg = errorData.errors[0].detail || errorMsg;
                     }
                     throw new Error(errorMsg);
                 }
-                
+
                 const data = await response.json();
-                return data.data; // The results are in the 'data' property
+                // Your backend should return the 'data' part directly now
+                return data;
 
             } catch (error) {
-                console.error("AbuseIPDB fetch error:", error);
+                console.error("Frontend fetch error:", error);
                 showResultState('error');
-                ui.errorMessage.textContent = error.message;
+                // Display the error message received from your backend
+                ui.errorMessage.textContent = error.message || "Failed to fetch data.";
                 return null;
             }
         };

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Google SERP Snippet Preview Tool | toolsTree</title>
+    <meta name="description" content="Simulate how your webpage's title tag, meta description, URL, and rich snippets (date, stars) will appear in Google search results on desktop and mobile. Optimize for clicks!">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <!-- UPDATE: Canonical URL -->
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/serp-previewer.html"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+      })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <style>
+        :root { 
+            --tt-primary-stroke: #10b981; 
+            /* Google SERP Colors */
+            --google-link: #1a0dab;
+            --google-visited: #660099; 
+            --google-url: #006621;
+            --google-text: #4d5156;
+            --google-border: #dfe1e5;
+            --google-stars: #ffb800;
+        }
+        .dark {
+            --google-link: #8ab4f8;
+            --google-visited: #c58af9;
+            --google-url: #81c995;
+            --google-text: #bdc1c6;
+            --google-border: #3c4043;
+        }
+        
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        /* Input feedback styling */
+        .pixel-counter { 
+             font-size: 0.75rem; /* text-xs */
+             margin-top: 0.25rem; /* mt-1 */
+             text-align: right;
+             padding-right: 0.25rem; /* pr-1 */
+        }
+        .text-ok { color: #16a34a; /* green-600 */ }
+        .dark .text-ok { color: #4ade80; /* green-400 */ }
+        .text-warn { color: #f59e0b; /* amber-500 */ }
+        .dark .text-warn { color: #fcd34d; /* amber-300 */ }
+        .text-error { color: #ef4444; /* red-500 */ }
+        .dark .text-error { color: #f87171; /* red-400 */ }
+        
+        /* SERP Preview specific styles */
+        .serp-preview {
+            border: 1px solid var(--google-border);
+            border-radius: 8px;
+            padding: 16px;
+            background-color: white;
+            font-family: 'Roboto', sans-serif; /* Google uses Roboto */
+        }
+        .dark .serp-preview { background-color: #202124; } /* Google dark mode background */
+        
+        .serp-header { display: flex; align-items: center; margin-bottom: 4px; }
+        .serp-favicon { width: 16px; height: 16px; margin-right: 8px; border-radius: 4px; background-color: #eee; } /* Placeholder */
+        .serp-url { color: var(--google-url); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .serp-title a { color: var(--google-link); font-size: 20px; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+        .serp-title a:hover { text-decoration: underline; }
+        .serp-description { color: var(--google-text); font-size: 14px; line-height: 1.57; word-wrap: break-word; }
+        .serp-description strong { font-weight: bold; color: #202124; } /* Bolding for keywords */
+        .dark .serp-description strong { color: #e8eaed; }
+        
+        /* Rich Snippets */
+        .serp-rich-snippet { display: flex; align-items: center; color: var(--google-text); font-size: 14px; margin-top: 2px; }
+        .serp-date { margin-right: 8px; }
+        .serp-stars { color: var(--google-stars); margin-right: 4px; display: flex; }
+        .serp-stars svg { width: 14px; height: 14px; fill: currentColor; }
+
+        /* Mobile specific styles */
+        .serp-preview-mobile .serp-title a { font-size: 18px; }
+        .serp-preview-mobile .serp-description { font-size: 13px; }
+        
+        /* Toggle Buttons */
+        .toggle-btn {
+             padding: 0.5rem 1rem; /* py-2 px-4 */
+             border: 1px solid #d1d5db; /* border-gray-300 */
+             border-radius: 0.375rem; /* rounded-md */
+             font-size: 0.875rem; /* text-sm */
+             cursor: pointer;
+             background-color: white;
+             transition: all 0.2s ease;
+        }
+        .dark .toggle-btn {
+             background-color: #374151; /* dark:bg-gray-700 */
+             border-color: #4b5563; /* dark:border-gray-600 */
+        }
+        .toggle-btn.active {
+             background-color: #10b981; /* bg-tt-primary */
+             color: white;
+             border-color: #10b981; /* border-tt-primary */
+        }
+        .dark .toggle-btn.active {
+             background-color: #059669; /* dark adjusted */
+        }
+        .toggle-btn:not(.active):hover {
+             background-color: #f3f4f6; /* hover:bg-gray-100 */
+        }
+         .dark .toggle-btn:not(.active):hover {
+             background-color: #4b5563; /* dark:hover:bg-gray-600 */
+        }
+
+        /* Helper to measure text width */
+        #text-width-tester {
+            position: absolute;
+            visibility: hidden;
+            height: auto;
+            width: auto;
+            white-space: nowrap;
+        }
+
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Google SERP Snippet Preview Tool",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Simulate how your webpage will appear in Google search results on desktop and mobile. Optimize title tags, meta descriptions, URLs, and rich snippets (date, ratings) for better CTR.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+     <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a SERP Snippet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A SERP (Search Engine Results Page) Snippet is the preview of a webpage shown in search results like Google's. It typically includes the page title (as a clickable link), the URL, and a meta description summarizing the page content. Optimizing this snippet is crucial for attracting clicks (CTR - Click-Through Rate)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why are pixel widths important for Titles and Descriptions?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Google doesn't truncate titles and descriptions based on a fixed character count, but rather on the pixel width they occupy. Some characters (like 'W' or 'M') are wider than others (like 'i' or 'l'). This tool uses pixel width calculations (approximated) to give a more accurate preview of potential truncation than simple character counters."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are Rich Snippets?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Rich Snippets are enhanced search results that show extra information alongside the standard title, URL, and description. Common examples include star ratings for products/reviews, publication dates for articles, event details, or recipe information. They are generated when Google understands structured data (like Schema.org markup) on your webpage. This tool simulates date and star rating snippets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I get my favicon to show in the preview?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Enter a valid, live URL in the 'Website URL' field. The tool will attempt to fetch the favicon automatically. If it cannot be fetched (due to server restrictions or if the favicon doesn't exist), a placeholder will be shown. Note that Google doesn't always show favicons, especially on desktop."
+          }
+        },
+        {
+            "@type": "Question",
+            "name": "How does keyword highlighting work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "When you enter a keyword in the optional field, the tool simulates how Google might bold matching terms within your meta description in the search results. This helps you visualize how relevant your description looks for specific searches."
+            }
+          }
+      ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <!-- UPDATE: Breadcrumb -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/seo-marketing.html" class="ml-1 hover:text-tt-primary md:ml-2">SEO & Marketing Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">SERP Snippet Preview Tool</span></div></li>
+            </ol>
+        </nav>
+        
+        <!-- UPDATE: Title and Description -->
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Google SERP Snippet Preview Tool</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">See how your page looks on Google. Optimize titles, descriptions & rich snippets for desktop & mobile.</p>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Input Column -->
+            <div class="bg-white dark:bg-gray-900 shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-5">
+                <h2 class="text-xl font-bold mb-3">Enter Your Page Details</h2>
+                <div>
+                    <label for="pageUrl" class="block text-sm font-medium mb-1">Website URL</label>
+                    <input type="url" id="pageUrl" placeholder="https://www.example.com/your-page" class="w-full p-2 border rounded-lg shadow-sm font-mono">
+                    <p class="text-xs text-gray-500 mt-1">Enter the full URL to fetch the favicon and display the path.</p>
+                </div>
+                 <div>
+                    <label for="pageTitle" class="block text-sm font-medium mb-1">Title Tag</label>
+                    <input type="text" id="pageTitle" placeholder="Your Catchy Page Title | Brand Name" class="w-full p-2 border rounded-lg shadow-sm">
+                    <div id="titleCounter" class="pixel-counter">0 / 600 pixels (approx)</div>
+                </div>
+                 <div>
+                    <label for="pageDescription" class="block text-sm font-medium mb-1">Meta Description</label>
+                    <textarea id="pageDescription" rows="4" placeholder="Write a compelling summary of your page content here..." class="w-full p-2 border rounded-lg shadow-sm"></textarea>
+                    <div id="descriptionCounter" class="pixel-counter">0 / 960 pixels (approx)</div>
+                </div>
+                <div>
+                    <label for="keyword" class="block text-sm font-medium mb-1">Target Keyword (Optional)</label>
+                    <input type="text" id="keyword" placeholder="e.g., best seo tool" class="w-full p-2 border rounded-lg shadow-sm">
+                    <p class="text-xs text-gray-500 mt-1">See how this keyword looks bolded in the description.</p>
+                </div>
+
+                <div class="pt-4 border-t dark:border-gray-700">
+                     <h3 class="text-md font-semibold mb-2">Rich Snippet Options</h3>
+                     <div class="space-y-3">
+                         <div class="flex items-center">
+                             <input id="showDate" type="checkbox" class="h-4 w-4 text-tt-primary focus:ring-tt-secondary border-gray-300 rounded">
+                             <label for="showDate" class="ml-2 block text-sm font-medium">Show Date Snippet</label>
+                         </div>
+                          <div class="flex items-center">
+                             <input id="showStars" type="checkbox" class="h-4 w-4 text-tt-primary focus:ring-tt-secondary border-gray-300 rounded">
+                             <label for="showStars" class="ml-2 block text-sm font-medium">Show Star Rating (e.g., 4.5)</label>
+                         </div>
+                     </div>
+                </div>
+                 <div class="flex justify-end pt-4 border-t dark:border-gray-700">
+                    <button id="clearButton" class="flex items-center space-x-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        <span>Clear All Fields</span>
+                    </button>
+                 </div>
+            </div>
+        
+            <!-- Preview Column -->
+            <div class="space-y-6">
+                 <div class="flex justify-center items-center gap-2">
+                    <button id="desktopToggle" class="toggle-btn active flex items-center gap-1">
+                        <i data-lucide="monitor" class="w-4 h-4"></i> Desktop
+                    </button>
+                    <button id="mobileToggle" class="toggle-btn flex items-center gap-1">
+                        <i data-lucide="smartphone" class="w-4 h-4"></i> Mobile
+                    </button>
+                 </div>
+
+                 <!-- Desktop Preview -->
+                 <div id="desktopPreview" class="serp-preview">
+                                          <div class="serp-header">
+                        <img id="faviconDesktop" src="https://placehold.co/16x16/eee/ccc?text=F" alt="Favicon" class="serp-favicon">
+                        <span id="urlDesktop" class="serp-url">https://www.example.com › your-page</span>
+                     </div>
+                     <h3 class="serp-title"><a id="titleDesktop" href="#" target="_blank">Your Catchy Page Title | Brand Name</a></h3>
+                     <div class="serp-rich-snippet">
+                         <span id="dateDesktop" class="serp-date hidden">Oct 26, 2025 – </span>
+                         <span id="starsDesktop" class="serp-stars hidden">
+                             <!-- Stars SVG will be added here by JS -->
+                         </span>
+                     </div>
+                     <p id="descriptionDesktop" class="serp-description">Write a compelling summary of your page content here... This is where Google shows a snippet of text from your page, hopefully matching the searcher's query.</p>
+                 </div>
+
+                 <!-- Mobile Preview -->
+                 <div id="mobilePreview" class="serp-preview serp-preview-mobile hidden">
+                                           <div class="serp-header mb-1">
+                        <img id="faviconMobile" src="https://placehold.co/16x16/eee/ccc?text=F" alt="Favicon" class="serp-favicon">
+                        <span id="urlMobile" class="serp-url">https://www.example.com › your-page</span>
+                     </div>
+                     <h3 class="serp-title"><a id="titleMobile" href="#" target="_blank">Your Catchy Page Title | Brand Name</a></h3>
+                      <div class="serp-rich-snippet">
+                         <span id="dateMobile" class="serp-date hidden">Oct 26, 2025 – </span>
+                         <span id="starsMobile" class="serp-stars hidden">
+                            <!-- Stars SVG will be added here by JS -->
+                         </span>
+                     </div>
+                     <p id="descriptionMobile" class="serp-description">Write a compelling summary of your page content here... This is where Google shows a snippet of text from your page, hopefully matching the searcher's query.</p>
+                 </div>
+            </div>
+        </div>
+        
+        <!-- ... (Informational Sections - Updated) ... -->
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is a SERP Snippet Preview?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>A <strong>SERP (Search Engine Results Page) Snippet</strong> is the small block of information that represents your webpage in Google's search results. It's usually made up of the page title (blue link), the URL or breadcrumb path, and a short description.</p> 
+                    <p>This preview tool simulates how that snippet will look based on the Title Tag and Meta Description you provide. Optimizing this snippet is one of the most important aspects of SEO (Search Engine Optimization) because it directly influences whether a user clicks on your link or a competitor's (your Click-Through Rate or CTR).</p>
+                    <p>This advanced tool helps by:</p>
+                    <ul class="list-disc list-inside space-y-1 ml-4">
+                        <li>Showing realistic <strong>Desktop and Mobile</strong> previews.</li>
+                        <li>Using <strong>pixel width limits</strong> (approximated) for truncation, which is more accurate than character counts.</li>
+                        <li>Simulating <strong>rich snippets</strong> like dates and star ratings.</li>
+                        <li>Highlighting your target <strong>keyword</strong> in the description.</li>
+                        <li>Attempting to fetch and display your site's <strong>favicon</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the SERP Preview Tool</h2>
+                <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
+                    <li><strong>Enter URL:</strong> Input the full URL of your page to see the path and attempt to load the favicon.</li>
+                    <li><strong>Write Title Tag:</strong> Craft your title. Keep an eye on the pixel counter – aim to stay under 600px to avoid truncation.</li>
+                    <li><strong>Write Meta Description:</strong> Write a compelling description. Aim for ~960px or less to avoid truncation.</li>
+                    <li><strong>(Optional) Add Keyword:</strong> Enter your main target keyword to see it highlighted.</li>
+                    <li><strong>(Optional) Toggle Rich Snippets:</strong> Check the boxes to simulate how date or star ratings might appear.</li>
+                    <li><strong>Switch Views:</strong> Click the "Desktop" and "Mobile" buttons to see how your snippet adapts.</li>
+                    <li><strong>Refine:</strong> Adjust your title and description based on the previews until you're satisfied.</li>
+                </ol>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Tips for Writing Effective Titles & Descriptions</h2>
+                 <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4 dark:text-gray-300">
+                    <li><strong>Include Keywords:</strong> Naturally incorporate your target keywords, especially near the beginning of the title.</li>
+                    <li><strong>Focus on User Intent:</strong> What is the searcher looking for? Answer their implicit question.</li>
+                    <li><strong>Highlight Benefits/Value:</strong> Why should they click *your* link? Mention unique selling points.</li>
+                    <li><strong>Use Action Words:</strong> Encourage clicks with words like "Learn," "Discover," "Compare," "Shop," "Get."</li>
+                    <li><strong>Be Concise & Accurate:</strong> Avoid overly long text that gets cut off (...). Ensure the snippet accurately reflects the page content.</li>
+                     <li><strong>Match Title & Description:</strong> Ensure they are relevant to each other and target the same core topic.</li>
+                    <li><strong>Consider Mobile:</strong> Titles and descriptions often appear shorter on mobile. Check the mobile preview!</li>
+                </ul>
+            </div>
+            <!-- ... (FAQ Section - Updated) ... -->
+             <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is a SERP Snippet?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">A SERP (Search Engine Results Page) Snippet is the preview of a webpage shown in search results like Google's. It typically includes the page title (as a clickable link), the URL, and a meta description summarizing the page content. Optimizing this snippet is crucial for attracting clicks (CTR - Click-Through Rate).</p>
+                    </details>
+                    <details class="group">
+                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why are pixel widths important for Titles and Descriptions?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Google doesn't truncate titles and descriptions based on a fixed character count, but rather on the <strong>pixel width</strong> they occupy on the screen. Some characters (like 'W' or 'M') are wider than others (like 'i' or 'l'). This tool uses pixel width calculations (approximated using typical fonts and sizes) to give a more accurate preview of potential truncation than simple character counters.</p>
+                   </details>
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What are Rich Snippets?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Rich Snippets are enhanced search results that show extra information alongside the standard title, URL, and description. Common examples include star ratings for products/reviews, publication dates for articles, event details, or recipe information. They are generated when Google understands structured data (like Schema.org markup) on your webpage. This tool simulates how date and star rating snippets might appear if Google chooses to show them.</p>
+                    </details>
+                     <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>How do I get my favicon to show in the preview?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Enter a valid, live URL in the 'Website URL' field. The tool will attempt to fetch the favicon using a public proxy service (like Google's or DuckDuckGo's). If it cannot be fetched (due to server restrictions, the favicon not existing, or proxy issues), a placeholder will be shown. Note that Google doesn't always show favicons, especially consistently on desktop results.</p>
+                    </details>
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                           <span>How does keyword highlighting work?</span>
+                           <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                       </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">When you enter a keyword in the optional field, the tool simulates how Google might bold matching terms (and synonyms/related terms, although this tool only matches the exact keyword) within your meta description in the search results. This helps you visualize how relevant your description looks for specific searches.</p>
+                   </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Hidden element for measuring text width -->
+    <div id="text-width-tester" style="font-family: 'Roboto', sans-serif;"></div>
+
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+             console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+         if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // --- UI Elements ---
+        const ui = {
+            pageUrl: document.getElementById('pageUrl'),
+            pageTitle: document.getElementById('pageTitle'),
+            titleCounter: document.getElementById('titleCounter'),
+            pageDescription: document.getElementById('pageDescription'),
+            descriptionCounter: document.getElementById('descriptionCounter'),
+            keyword: document.getElementById('keyword'),
+            showDate: document.getElementById('showDate'),
+            showStars: document.getElementById('showStars'),
+            clearButton: document.getElementById('clearButton'),
+            desktopToggle: document.getElementById('desktopToggle'),
+            mobileToggle: document.getElementById('mobileToggle'),
+            desktopPreview: document.getElementById('desktopPreview'),
+            mobilePreview: document.getElementById('mobilePreview'),
+            
+            // Elements within previews
+            faviconDesktop: document.getElementById('faviconDesktop'),
+            urlDesktop: document.getElementById('urlDesktop'),
+            titleDesktop: document.getElementById('titleDesktop'),
+            dateDesktop: document.getElementById('dateDesktop'),
+            starsDesktop: document.getElementById('starsDesktop'),
+            descriptionDesktop: document.getElementById('descriptionDesktop'),
+            
+            faviconMobile: document.getElementById('faviconMobile'),
+            urlMobile: document.getElementById('urlMobile'),
+            titleMobile: document.getElementById('titleMobile'),
+            dateMobile: document.getElementById('dateMobile'),
+            starsMobile: document.getElementById('starsMobile'),
+            descriptionMobile: document.getElementById('descriptionMobile'),
+
+            // Hidden element for width testing
+            textWidthTester: document.getElementById('text-width-tester'),
+        };
+
+        // --- Constants ---
+        const PIXEL_LIMITS = {
+            title: 600,
+            description: 960,
+        };
+        const PLACEHOLDER_FAVICON = 'https://placehold.co/16x16/eee/ccc?text=F'; // Placeholder
+
+        // --- State ---
+        let currentFavicon = PLACEHOLDER_FAVICON;
+        let todayDateFormatted = ''; // Cache formatted date
+
+        // --- Helper Functions ---
+
+        // Get approximate pixel width of text
+        const getTextWidth = (text, fontSize, fontWeight = 'normal') => {
+            ui.textWidthTester.style.fontSize = fontSize;
+            ui.textWidthTester.style.fontWeight = fontWeight;
+            ui.textWidthTester.textContent = text;
+            return ui.textWidthTester.offsetWidth;
+        };
+        
+        // Update counter text and color based on pixel width
+        const updateCounter = (element, text, limit, fontSize, fontWeight = 'normal') => {
+             const width = getTextWidth(text, fontSize, fontWeight);
+             const percentage = limit > 0 ? (width / limit) * 100 : 0;
+             let statusClass = 'text-ok';
+             let statusText = 'OK';
+
+             if (width > limit) {
+                 statusClass = 'text-error';
+                 statusText = 'Too long';
+             } else if (percentage > 90) {
+                 statusClass = 'text-warn';
+                 statusText = 'Near limit';
+             }
+             
+             element.textContent = `${width} / ${limit} pixels (${statusText})`;
+             element.className = `pixel-counter ${statusClass}`; // Reset and apply class
+        };
+        
+        // Format URL for display (breadcrumb style)
+        const formatUrlForDisplay = (urlStr) => {
+            try {
+                const url = new URL(urlStr);
+                // Basic breadcrumb simulation
+                let path = url.pathname;
+                if (path === '/') return url.hostname; 
+                // Remove leading/trailing slashes, replace slashes with ›
+                path = path.replace(/^\/|\/$/g, '').replace(/\//g, ' › ');
+                return `${url.hostname} › ${path}`;
+            } catch (e) {
+                return urlStr || 'example.com › your-page'; // Fallback
+            }
+        };
+
+        // Fetch Favicon (using a proxy to avoid CORS)
+        const updateFavicon = (urlStr) => {
+             try {
+                const url = new URL(urlStr);
+                const faviconServiceUrl = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=16`; 
+                // Fallback using DuckDuckGo if needed: `https://icons.duckduckgo.com/ip3/${url.hostname}.ico`;
+                
+                currentFavicon = faviconServiceUrl;
+                // Add error handling to reset to placeholder if fetch fails
+                ui.faviconDesktop.src = currentFavicon;
+                ui.faviconMobile.src = currentFavicon;
+                ui.faviconDesktop.onerror = () => { ui.faviconDesktop.src = PLACEHOLDER_FAVICON; };
+                ui.faviconMobile.onerror = () => { ui.faviconMobile.src = PLACEHOLDER_FAVICON; };
+
+             } catch (e) {
+                 // Invalid URL, reset to placeholder
+                 currentFavicon = PLACEHOLDER_FAVICON;
+                 ui.faviconDesktop.src = currentFavicon;
+                 ui.faviconMobile.src = currentFavicon;
+             }
+        };
+        
+        // Highlight keyword in description
+        const highlightKeyword = (text, keyword) => {
+             if (!keyword) return text;
+             const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+             return text.replace(regex, '<strong>$1</strong>');
+        };
+
+        // Generate Star SVG HTML
+        const generateStarsHtml = () => {
+             // Simple 4.5 star example
+             let html = '';
+             const starFilled = `<svg viewBox="0 0 16 16"><path fill="currentColor" d="M9.13 4.34 H13 L10 7 L11 11 L8 9 L5 11 L6 7 L3 4 H7 L8 1 Z"/></svg>`;
+             const starHalf = `<svg viewBox="0 0 16 16"><path fill="currentColor" d="M8 1 L9 4 H12 L10 6 L10 7 L11 10 L8 9 Z M8 1 L7 4 H4 L6 6 L6 7 L5 10 L8 9 Z"/></svg>`; // Placeholder, needs real half star
+             const starOutline = `<svg viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-width="1" d="M9.13 4.34 H13 L10 7 L11 11 L8 9 L5 11 L6 7 L3 4 H7 L8 1 Z"/></svg>`;
+             
+             for(let i=0; i<4; i++) html += starFilled;
+             // Basic half star (replace with better SVG if available)
+             html += `<svg viewBox="0 0 16 16"><path fill="currentColor" d="M8 1L9.1 4.1h3.2l-2.6 1.9 1 3.1-2.7-1.8v8.7z"/></svg>`; 
+             // for(let i=0; i<0; i++) html += starOutline; // if needed
+             return `<span class="mr-1">4.5</span>` + html; 
+        };
+        
+        // Get Formatted Date
+        const getFormattedDate = () => {
+             if (!todayDateFormatted) {
+                 const today = new Date();
+                 todayDateFormatted = today.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+             }
+             return todayDateFormatted + ' – '; // Add separator
+        };
+
+        // --- Main Update Function ---
+        const updatePreview = () => {
+            const url = ui.pageUrl.value.trim();
+            const title = ui.pageTitle.value.trim() || ui.pageTitle.placeholder;
+            const description = ui.pageDescription.value.trim() || ui.pageDescription.placeholder;
+            const keyword = ui.keyword.value.trim();
+            const showDate = ui.showDate.checked;
+            const showStars = ui.showStars.checked;
+
+            // Update Favicon (only if URL changes significantly)
+            if (ui.faviconDesktop.src === PLACEHOLDER_FAVICON || !ui.faviconDesktop.src.includes(new URL(url || 'http://example.com').hostname)) {
+                 updateFavicon(url);
+            }
+
+            const formattedUrl = formatUrlForDisplay(url);
+            const descriptionWithHighlight = highlightKeyword(description, keyword);
+            const dateText = showDate ? getFormattedDate() : '';
+            const starsHtml = showStars ? generateStarsHtml() : '';
+
+            // Update Desktop Preview
+            ui.urlDesktop.textContent = formattedUrl;
+            ui.titleDesktop.textContent = title;
+            ui.titleDesktop.href = url || '#';
+            ui.descriptionDesktop.innerHTML = descriptionWithHighlight;
+            ui.dateDesktop.textContent = dateText;
+            ui.dateDesktop.classList.toggle('hidden', !showDate);
+            ui.starsDesktop.innerHTML = starsHtml;
+            ui.starsDesktop.classList.toggle('hidden', !showStars);
+
+            // Update Mobile Preview
+            ui.urlMobile.textContent = formattedUrl;
+            ui.titleMobile.textContent = title;
+            ui.titleMobile.href = url || '#';
+            ui.descriptionMobile.innerHTML = descriptionWithHighlight;
+            ui.dateMobile.textContent = dateText;
+            ui.dateMobile.classList.toggle('hidden', !showDate);
+            ui.starsMobile.innerHTML = starsHtml;
+            ui.starsMobile.classList.toggle('hidden', !showStars);
+            
+            // Update Counters (using styles from preview elements)
+            updateCounter(ui.titleCounter, title, PIXEL_LIMITS.title, '20px', 'normal'); // Desktop title size
+            updateCounter(ui.descriptionCounter, description, PIXEL_LIMITS.description, '14px'); // Desktop desc size
+        };
+
+        // --- Toggle Preview Mode ---
+        const setPreviewMode = (mode) => {
+            if (mode === 'desktop') {
+                ui.desktopPreview.classList.remove('hidden');
+                ui.mobilePreview.classList.add('hidden');
+                ui.desktopToggle.classList.add('active');
+                ui.mobileToggle.classList.remove('active');
+            } else {
+                ui.desktopPreview.classList.add('hidden');
+                ui.mobilePreview.classList.remove('hidden');
+                ui.desktopToggle.classList.remove('active');
+                ui.mobileToggle.classList.add('active');
+            }
+        };
+
+        // --- Clear Fields ---
+        const clearFields = () => {
+            ui.pageUrl.value = '';
+            ui.pageTitle.value = '';
+            ui.pageDescription.value = '';
+            ui.keyword.value = '';
+            ui.showDate.checked = false;
+            ui.showStars.checked = false;
+            updateFavicon(''); // Reset favicon
+            updatePreview(); // Trigger update
+        };
+
+        // --- Event Listeners ---
+        const inputs = [ui.pageUrl, ui.pageTitle, ui.pageDescription, ui.keyword, ui.showDate, ui.showStars];
+        inputs.forEach(input => input.addEventListener('input', updatePreview));
+        inputs.forEach(input => input.addEventListener('change', updatePreview)); // For checkboxes
+
+        ui.desktopToggle.addEventListener('click', () => setPreviewMode('desktop'));
+        ui.mobileToggle.addEventListener('click', () => setPreviewMode('mobile'));
+        ui.clearButton.addEventListener('click', clearFields);
+        
+        // --- Initial State ---
+        updatePreview();
+        setPreviewMode('desktop'); 
+
+    });
+    </script>
+</body>
+</html>

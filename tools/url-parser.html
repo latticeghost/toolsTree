@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced URL Parser & Decoder | toolsTree</title>
+    <meta name="description" content="Break down any URL into its components (protocol, host, path, query, hash) and automatically decode encoded characters.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/url-parser.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+      })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        /* Key-value table style */
+        .result-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.75rem 1rem;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .result-grid dt {
+            font-weight: 600; /* font-semibold */
+            color: #4b5563; /* gray-600 */
+        }
+        .dark .result-grid dt {
+            color: #d1d5db; /* gray-300 */
+        }
+        .result-grid dd {
+            font-family: 'Roboto Mono', monospace;
+            color: #1f2937; /* gray-800 */
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dark .result-grid dd {
+            color: #f3f4f6; /* gray-100 */
+        }
+        /* Copy Button Styles */
+        .copy-btn {
+            opacity: 1; /* Hide by default */
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            color: #6b7280; /* gray-500 */
+            transition: opacity 0.2s ease, color 0.2s ease;
+            flex-shrink: 0; 
+        }
+        .dark .copy-btn { color: #9ca3af; /* gray-400 */ }
+        .result-grid dd:hover .copy-btn,
+        .query-param-item:hover .copy-btn { 
+            opacity: 1; 
+            color: #10b981; /* tt-primary */ 
+        }
+
+        /* Query Parameters List */
+         .query-param-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.875rem;
+        }
+        .query-param-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #e5e7eb; /* gray-200 */
+            font-family: 'Roboto Mono', monospace;
+        }
+        .dark .query-param-item {
+             border-bottom-color: #4b5563; /* gray-600 */
+        }
+        .query-param-item:last-child {
+            border-bottom: none;
+        }
+        .query-param-key {
+            font-weight: 600;
+            color: #4b5563; /* gray-600 */
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        .dark .query-param-key {
+            color: #d1d5db; /* gray-300 */
+        }
+        .query-param-value {
+             word-break: break-all;
+             color: #1f2937; /* gray-800 */
+        }
+        .dark .query-param-value {
+             color: #f3f4f6; /* gray-100 */
+        }
+        .query-param-controls {
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced URL Parser & Decoder",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "Break down any URL into its components (protocol, host, path, query, hash) and automatically decode encoded characters.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are the different parts of a URL?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A URL (Uniform Resource Locator) typically consists of: the Protocol (e.g., 'https'), the Hostname (e.g., 'www.example.com'), an optional Port (e.g., ':8080'), the Pathname (e.g., '/path/to/page'), the Query String (e.g., '?param1=value1&param2=value2'), and the Fragment/Hash (e.g., '#section'). This tool breaks down a URL into these components."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is URL encoding (percent-encoding)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "URL encoding replaces unsafe or reserved characters in a URL with a '%' symbol followed by two hexadecimal digits. For example, a space character becomes '%20', and an ampersand '&' becomes '%26'. This ensures the URL is transmitted correctly. This tool automatically decodes these sequences in the Pathname and Query Parameters for readability."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why are Query Parameters important?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Query parameters (the part after the '?') are used to send additional data to the web server. They are common in search results (e.g., '?q=search+term'), tracking links (e.g., '?utm_source=google'), and API calls. This tool lists them individually, which is useful for debugging or analysis."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/networking.html" class="ml-1 hover:text-tt-primary md:ml-2">Networking & Security Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced URL Parser & Decoder</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced URL Parser & Decoder</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Paste a URL to see its components and decoded query parameters.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
+            <!-- Input Section -->
+            <div>
+                <!-- MODIFIED: Added flex container for label and clear button -->
+                <div class="flex justify-between items-center mb-1">
+                    <label for="urlInput" class="block text-sm font-medium">URL to Parse</label>
+                    <!-- NEW: Clear Button -->
+                    <button id="clearButton" title="Clear Text" class="group p-1 rounded-md transition-opacity opacity-0 pointer-events-none text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <textarea id="urlInput" placeholder="e.g., https://example.com/search?q=url%20parser#results" class="w-full p-3 border rounded-lg shadow-sm font-mono h-24"></textarea>
+                <div id="input-error" class="text-red-500 text-sm mt-2 hidden">Invalid URL. Please enter a complete URL starting with http:// or https://.</div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="pt-6 border-t dark:border-gray-800">
+                <h2 class="text-xl font-bold mb-4">Parsed URL Components</h2>
+                
+                <!-- Placeholder -->
+                <div id="results-placeholder" class="text-gray-500 dark:text-gray-400">
+                    <p>Enter a URL above to see its parsed components.</p>
+                </div>
+                
+                <!-- Real Results -->
+                <div id="results-content" class="hidden space-y-6">
+                    <!-- Basic Components -->
+                    <div>
+                        <h3 class="font-semibold mb-2 text-lg">Main Components</h3>
+                        <dl class="result-grid">
+                            <dt>Protocol (Scheme): </dt>
+                            <dd><span id="res-protocol"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Hostname:</dt>
+                            <dd><span id="res-hostname"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Port:</dt>
+                            <dd><span id="res-port"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Pathname (Decoded):</dt>
+                            <dd><span id="res-pathname"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Query String:</dt>
+                            <dd><span id="res-querystring"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                             <dt>Hash / Fragment:</dt>
+                            <dd><span id="res-hash"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                        </dl>
+                    </div>
+                    
+                    <!-- Query Parameters -->
+                    <div>
+                        <h3 class="font-semibold mb-2 text-lg">Query Parameters (Decoded)</h3>
+                         <ul id="res-queryparams" class="query-param-list">
+                            <!-- Items will be added dynamically -->
+                             <li id="queryparams-placeholder" class="text-gray-500 text-sm">No query parameters found.</li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Understanding URL Components</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>A URL (Uniform Resource Locator), commonly known as a web address, is structured to tell browsers how and where to retrieve a resource. This tool breaks down a URL into its standard parts:</p>
+                    <ul class="list-disc list-inside space-y-2 ml-4">
+                        <li><strong>Protocol:</strong> Specifies the method to access the resource (e.g., `http`, `https`, `ftp`). `https` is the secure version of `http`.</li>
+                        <li><strong>Hostname:</strong> The domain name (e.g., `www.example.com`) or IP address that identifies the server hosting the resource.</li>
+                        <li><strong>Port:</strong> An optional number specifying the network "door" on the server to connect to (e.g., `:8080`). If omitted, it defaults to port 80 for `http` and 443 for `https`.</li>
+                        <li><strong>Pathname:</strong> The specific path to the resource on the server (e.g., `/path/to/page.html`). This part is often URL-encoded; this tool automatically decodes it.</li>
+                        <li><strong>Query String:</strong> The part after the `?` symbol, containing key-value pairs (e.g., `?search=term&page=2`). Used to send extra data to the server. Parameters are separated by `&`.</li>
+                        <li><strong>Hash / Fragment:</strong> The part after the `#` symbol (e.g., `#section-id`). It specifies a specific location or section within the resource, handled entirely by the browser, not sent to the server.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">URL Encoding and Decoding</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>URLs can only contain a specific set of characters (ASCII letters, numbers, and a few symbols like `-`, `.`, `_`, `~`). Other characters, especially spaces, punctuation, or non-ASCII characters, must be encoded. This is called <strong class="font-medium text-gray-900 dark:text-gray-100">URL encoding</strong> or <strong class="font-medium text-gray-900 dark:text-gray-100">percent-encoding</strong>.</p>
+                    <p>The process replaces the unsafe character with a `%` followed by its two-digit hexadecimal representation. For example:</p>
+                    <ul class="list-disc list-inside space-y-1 ml-4 font-mono">
+                        <li>Space becomes `%20`</li>
+                        <li>`&` becomes `%26`</li>
+                        <li>`?` becomes `%3F`</li>
+                        <li>`/` becomes `%2F` (when needed in a parameter value)</li>
+                        <li>`=` becomes `%3D`</li>
+                    </ul>
+                    <p>This tool automatically <strong class="font-medium text-gray-900 dark:text-gray-100">decodes</strong> the Pathname and Query Parameter values, converting sequences like `%20` back into readable characters like spaces, making it easier to understand the intended data.</p>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What are the different parts of a URL?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">A URL (Uniform Resource Locator) typically consists of: the <strong>Protocol</strong> (e.g., 'https'), the <strong>Hostname</strong> (e.g., 'www.example.com'), an optional <strong>Port</strong> (e.g., ':8080'), the <strong>Pathname</strong> (e.g., '/path/to/page'), the <strong>Query String</strong> (e.g., '?param1=value1&param2=value2'), and the <strong>Fragment/Hash</strong> (e.g., '#section'). This tool breaks down a URL into these components.</p>
+                    </details>
+                    <details class="group">
+                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is URL encoding (percent-encoding)?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">URL encoding replaces unsafe or reserved characters in a URL with a '%' symbol followed by two hexadecimal digits. For example, a space character becomes <code>%20</code>, and an ampersand '&' becomes <code>%26</code>. This ensures the URL is transmitted correctly. This tool automatically decodes these sequences in the Pathname and Query Parameters for readability.</p>
+                   </details>
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why are Query Parameters important?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Query parameters (the part after the '?') are used to send additional data to the web server. They are common in search results (e.g., <code>?q=search+term</code>), tracking links (e.g., <code>?utm_source=google</code>), and API calls. This tool lists them individually, which is useful for debugging or analysis.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        // --- UI Elements ---
+        const ui = {
+            urlInput: document.getElementById('urlInput'),
+            clearButton: document.getElementById('clearButton'), // NEW: Clear button
+            inputError: document.getElementById('input-error'),
+            resultsPlaceholder: document.getElementById('results-placeholder'),
+            resultsContent: document.getElementById('results-content'),
+            res: {
+                protocol: document.getElementById('res-protocol'),
+                hostname: document.getElementById('res-hostname'),
+                port: document.getElementById('res-port'),
+                pathname: document.getElementById('res-pathname'),
+                querystring: document.getElementById('res-querystring'),
+                hash: document.getElementById('res-hash'),
+                queryparams: document.getElementById('res-queryparams'),
+                queryparamsPlaceholder: document.getElementById('queryparams-placeholder'),
+            }
+        };
+
+        // --- State Management ---
+        const showResultState = (showResults) => {
+            ui.resultsPlaceholder.classList.toggle('hidden', showResults);
+            ui.resultsContent.classList.toggle('hidden', !showResults);
+        };
+
+        // NEW: Toggle Clear Button Visibility
+        const toggleClearButton = () => {
+            const hasContent = ui.urlInput.value.trim().length > 0;
+            ui.clearButton.classList.toggle('opacity-0', !hasContent);
+            ui.clearButton.classList.toggle('pointer-events-none', !hasContent);
+        };
+
+        // --- URL Parsing Logic ---
+        const parseUrl = () => {
+            const urlString = ui.urlInput.value.trim();
+            const n_a = 'N/A';
+
+            toggleClearButton(); // NEW: Update button visibility
+
+            if (!urlString) {
+                showResultState(false);
+                ui.inputError.classList.add('hidden');
+                return;
+            }
+
+            try {
+                // Use the browser's built-in URL object for robust parsing
+                const url = new URL(urlString);
+
+                // Basic Components
+                ui.res.protocol.textContent = url.protocol || n_a;
+                ui.res.hostname.textContent = url.hostname || n_a;
+                ui.res.port.textContent = url.port || n_a; // Empty string if default port
+                
+                // Decode pathname
+                try {
+                    ui.res.pathname.textContent = url.pathname ? decodeURIComponent(url.pathname) : '/';
+                } catch (e) {
+                    ui.res.pathname.textContent = url.pathname || n_a; // Show raw if decoding fails
+                    console.warn("Could not decode pathname:", e);
+                }
+
+                ui.res.querystring.textContent = url.search || n_a; // Includes leading '?'
+                ui.res.hash.textContent = url.hash || n_a;      // Includes leading '#'
+
+                // Query Parameters
+                ui.res.queryparams.innerHTML = ''; // Clear previous params
+                const params = url.searchParams;
+                let hasParams = false;
+                params.forEach((value, key) => {
+                    hasParams = true;
+                    const listItem = document.createElement('li');
+                    listItem.className = 'query-param-item';
+                    
+                    // Decode key and value
+                    let decodedKey, decodedValue;
+                    try { decodedKey = decodeURIComponent(key); } catch (e) { decodedKey = key; }
+                    try { decodedValue = decodeURIComponent(value); } catch (e) { decodedValue = value; }
+
+                    listItem.innerHTML = `
+                        <span class="query-param-key">${decodedKey}</span>
+                        <span class="query-param-value">${decodedValue}</span>
+                        <span class="query-param-controls">
+                           <button class="copy-btn" title="Copy Value"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                        </span>
+                    `;
+                    // Store raw value for copying
+                    listItem.querySelector('.copy-btn').dataset.copyValue = decodedValue; 
+                    ui.res.queryparams.appendChild(listItem);
+                });
+
+                // Show placeholder if no params
+                ui.res.queryparamsPlaceholder.classList.toggle('hidden', hasParams);
+                if (!hasParams) {
+                    ui.res.queryparams.appendChild(ui.res.queryparamsPlaceholder); // Re-add placeholder
+                }
+                
+                showResultState(true);
+                ui.inputError.classList.add('hidden');
+                lucide.createIcons(); // Re-render copy icons
+
+            } catch (e) {
+                // Handle invalid URL input
+                if (e instanceof TypeError) {
+                    // Only show specific error if it looks like a URL parsing issue
+                     ui.inputError.textContent = "Invalid URL. Please enter a complete URL starting with http:// or https://.";
+                    ui.inputError.classList.remove('hidden');
+                } else {
+                    console.error("URL Parsing Error:", e);
+                     ui.inputError.textContent = "An unexpected error occurred.";
+                     ui.inputError.classList.remove('hidden');
+                }
+                showResultState(false);
+            }
+        };
+
+        // --- Copy to Clipboard ---
+        const handleCopyClick = (e) => {
+            const copyButton = e.target.closest('.copy-btn');
+            if (!copyButton) return; 
+
+            let textToCopy = '';
+            
+            // Check if it's a query parameter button
+            if (copyButton.dataset.copyValue) {
+                textToCopy = copyButton.dataset.copyValue;
+            } else {
+                // Otherwise, get from the sibling span
+                 const textElement = copyButton.previousElementSibling;
+                 if (textElement) {
+                     textToCopy = textElement.textContent;
+                 }
+            }
+           
+            if (textToCopy === 'N/A' || !textToCopy) return;
+
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                
+                copyButton.innerHTML = successIconHTML;
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    copyButton.innerHTML = originalIconHTML;
+                    lucide.createIcons();
+                }, 1500);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Copy failed:', err));
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "absolute";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        };
+        
+        // NEW: Clear Input Function
+        const clearInput = () => {
+            ui.urlInput.value = '';
+            parseUrl(); // Re-parse to clear results and hide button
+            ui.urlInput.focus(); // Focus input for user
+        };
+
+
+        // --- Event Listeners ---
+        ui.urlInput.addEventListener('input', parseUrl);
+        ui.clearButton.addEventListener('click', clearInput); // NEW: Listener for clear button
+        // Need to listen on resultsContent because buttons are dynamic
+        ui.resultsContent.addEventListener('click', handleCopyClick); 
+
+        // --- Initial State ---
+        showResultState(false); // Start with placeholder visible
+        // Pre-fill example URL
+        ui.urlInput.value = "https://example.com:8080/path/page?query=test%20space&encoded=amp%26persand#fragment";
+        parseUrl(); // Parse the example on load
+        toggleClearButton(); // NEW: Set initial button state
+
+    });
+    </script>
+</body>
+</html>
+

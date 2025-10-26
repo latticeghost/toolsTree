@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://toolstree.vercel.app/tools/css-grid-generator.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script async src="https://www.googagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -38,7 +38,7 @@
         :root { --tt-primary-stroke: #10b981; }
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
-        .grid-container { display: grid; width: 100%; height: 100%; min-height: 300px; }
+        .grid-container { display: grid; width: 100%; height: 100%; min-height: 300px; user-select: none; }
         .grid-cell {
             border: 1px dashed #6b7280;
             display: flex;
@@ -53,9 +53,42 @@
         }
         .dark .grid-cell { color: #d1d5db; background-color: rgba(55, 65, 81, 0.5); border-color: #4b5563; }
         .grid-cell:hover { background-color: rgba(16, 185, 129, 0.2); }
-        .grid-cell.selected { outline: 2px solid #ef4444; }
+        .grid-cell.selected { background-color: rgba(239, 68, 68, 0.3); outline: 2px solid #ef4444; }
         .area-control { border-bottom: 1px solid #e5e7eb; padding: 0.5rem 0; }
         .dark .area-control { border-color: #4b5563; }
+        .edit-area-btn { cursor: pointer; border-radius: 0.375rem; padding: 0.25rem 0.5rem; margin: 0 -0.5rem; }
+        .edit-area-btn:hover { background-color: rgba(243, 244, 246, 0.8); }
+        .dark .edit-area-btn:hover { background-color: rgba(55, 65, 81, 0.5); }
+        .preset-btn { 
+            padding: 0.25rem 0.75rem; 
+            font-size: 0.75rem; 
+            font-family: 'Roboto Mono', monospace;
+            border: 1px solid #d1d5db;
+            border-radius: 9999px;
+            background-color: #f9fafb;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .preset-btn:hover { background-color: #f3f4f6; }
+        .dark .preset-btn { 
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+        .dark .preset-btn:hover { background-color: #4b5563; }
+        
+        #area-color-input { 
+            min-width: 40px; 
+            height: 40px;
+            padding: 0; 
+            border: none;
+            border-radius: 0.375rem; 
+            background-color: transparent; 
+            cursor: pointer; 
+            overflow: hidden;
+        }
+        #area-color-input::-webkit-color-swatch-wrapper { padding: 0; }
+        #area-color-input::-webkit-color-swatch { border: none; border-radius: 0.375rem; }
+        #area-color-input::-moz-color-swatch { border: none; border-radius: 0.375rem; }
     </style>
     <script type="application/ld+json">
     {
@@ -117,8 +150,8 @@
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
-                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Developer Tools</a></div></li>
-                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">CSS Grid Generator</span></div></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/data-dev.html" class="ml-1 hover:text-tt-primary md:ml-2">Data & Developer Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">CSS Grid Generator & Visual Builder</span></div></li>
             </ol>
         </nav>
         
@@ -133,9 +166,23 @@
                     <h2 class="text-xl font-bold mb-4">1. Grid Structure</h2>
                     <div class="space-y-4">
                         <label class="block text-sm font-medium">Columns (Tracks)</label>
+                        <div id="col-presets" class="flex flex-wrap gap-2">
+                            <button class="preset-btn" data-value="1fr 1fr">1fr 1fr</button>
+                            <button class="preset-btn" data-value="1fr 2fr">1fr 2fr</button>
+                            <button class="preset-btn" data-value="1fr 1fr 1fr">1fr 1fr 1fr</button>
+                            <button class="preset-btn" data-value="100px 1fr auto">100px 1fr auto</button>
+                        </div>
                         <input id="col-tracks" type="text" value="1fr 1fr 1fr" placeholder="e.g., 1fr 200px 1fr" class="w-full p-2 border rounded-lg font-mono">
+                        <p id="col-error" class="text-red-500 text-xs mt-1 h-4"></p>
+                        
                         <label class="block text-sm font-medium">Rows (Tracks)</label>
+                        <div id="row-presets" class="flex flex-wrap gap-2">
+                            <button class="preset-btn" data-value="auto">auto</button>
+                            <button class="preset-btn" data-value="1fr 1fr">1fr 1fr</button>
+                            <button class="preset-btn" data-value="auto 1fr auto">auto 1fr auto</button>
+                        </div>
                         <input id="row-tracks" type="text" value="auto 1fr auto" placeholder="e.g., auto 1fr auto" class="w-full p-2 border rounded-lg font-mono">
+                        <p id="row-error" class="text-red-500 text-xs mt-1 h-4"></p>
                     </div>
                     <div class="grid grid-cols-2 gap-4 pt-4 border-t dark:border-gray-800">
                         <div>
@@ -151,6 +198,7 @@
                     <div class="space-y-3">
                         <label for="area-name-input" class="block text-sm font-medium">Assign Selected Cells to Area:</label>
                         <div class="flex space-x-2">
+                            <input id="area-color-input" type="color" value="#10b981">
                             <input id="area-name-input" type="text" placeholder="e.g., header, sidebar" class="flex-grow p-2 border rounded-lg">
                             <button id="assign-area-btn" disabled class="px-4 py-2 text-sm bg-tt-primary text-white font-semibold rounded-lg hover:bg-green-700 transition disabled:bg-gray-400">Assign</button>
                         </div>
@@ -209,13 +257,14 @@
             </div>
             <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the Grid Generator</h2>
             <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
-                <li><strong>Define Tracks:</strong> Enter track sizes (e.g., `1fr 1fr` or `200px auto`) for columns and rows. The preview updates instantly.</li>
+                <li><strong>Define Tracks:</strong> Enter track sizes (e.g., `1fr 1fr` or `200px auto`) for columns and rows, or use the presets.</li>
                 <li><strong>Set Gutters:</strong> Adjust the row and column gaps in pixels.</li>
-                <li><strong>Select Cells:</strong> Click on cells in the live preview to select them.</li>
-                <li><strong>Assign Areas:</strong> Enter a name (e.g., `header`) and click "Assign." The CSS will include `grid-template-areas`.</li>
+                <li><strong>Select Cells:</strong> Click and drag on the live preview to select multiple cells.</li>
+                <li><strong>Assign Areas:</strong> Pick a color, enter a name (e.g., `header`), and click "Assign."</li>
+                <li><strong>Manage Areas:</strong> Click any area in the "Named Areas" list to load its name and color for editing or re-use. Click the "X" to remove it.</li>
                 <li><strong>Export Code:</strong> Click the copy button to get the complete CSS block.</li>
             </ol>
-            <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+            <h2 class="text-2xl font-bold text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
             <div class="space-y-3 text-sm">
                  <details class="group">
                     <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -260,15 +309,18 @@
     <script src="../javascript/globals.js" defer></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- 1. INITIALIZE LAYOUT ---
         if (typeof window.injectLayout === 'function') {
             window.injectLayout(false);
         }
 
-        // --- 2. DEFINE UI ELEMENTS AND STATE ---
         const ui = {
             colTracksInput: document.getElementById('col-tracks'),
             rowTracksInput: document.getElementById('row-tracks'),
+            colError: document.getElementById('col-error'),
+            rowError: document.getElementById('row-error'),
+            colPresets: document.getElementById('col-presets'),
+            rowPresets: document.getElementById('row-presets'),
+            areaColorInput: document.getElementById('area-color-input'),
             rowGapInput: document.getElementById('row-gap'),
             colGapInput: document.getElementById('col-gap'),
             gridVisualizer: document.getElementById('grid-visualizer'),
@@ -285,18 +337,51 @@
             trackDefinitions: { cols: '1fr 1fr 1fr', rows: 'auto 1fr auto' },
             gaps: { row: 10, col: 10 },
             gridAreas: [], selectedCells: [], areaColors: {},
+            isDragging: false
         };
         
-        const COLORS = ['#10b981', '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#d946ef'];
+        const DEFAULT_COLORS = ['#10b981', '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#d946ef'];
+        
+        function isValidTrack(track) {
+            const validTrackRegex = /^(auto|subgrid|min-content|max-content|([0-9.]+(fr|px|%|em|rem|vw|vh|ch))|minmax\s*\(.+,.+\))$/i;
+            return validTrackRegex.test(track.trim());
+        }
 
-        // --- 3. CORE LOGIC FUNCTIONS ---
         function parseTracks(trackString) {
             return (trackString || '').trim().split(/\s+/).filter(t => t);
         }
 
         function updateGridDimensions() {
+            ui.colError.textContent = '';
+            ui.rowError.textContent = '';
+            
             const parsedCols = parseTracks(ui.colTracksInput.value);
             const parsedRows = parseTracks(ui.rowTracksInput.value);
+
+            let isColsValid = true;
+            let isRowsValid = true;
+            
+            const firstInvalidCol = parsedCols.find(track => !isValidTrack(track));
+            if (firstInvalidCol) {
+                ui.colError.textContent = `Invalid track: "${firstInvalidCol}"`;
+                isColsValid = false;
+            }
+            
+            const firstInvalidRow = parsedRows.find(track => !isValidTrack(track));
+            if (firstInvalidRow) {
+                ui.rowError.textContent = `Invalid track: "${firstInvalidRow}"`;
+                isRowsValid = false;
+            }
+            
+            if (parsedCols.length === 0 || parsedRows.length === 0) {
+                state.gridAreas = [];
+                state.rows = 0;
+                state.cols = 0;
+            }
+            
+            if (!isColsValid || !isRowsValid) {
+                return;
+            }
 
             state.trackDefinitions.cols = parsedCols.join(' ');
             state.trackDefinitions.rows = parsedRows.join(' ');
@@ -326,12 +411,17 @@
         }
 
         function renderVisualizer() {
-            ui.gridVisualizer.style.gridTemplateColumns = state.trackDefinitions.cols;
-            ui.gridVisualizer.style.gridTemplateRows = state.trackDefinitions.rows;
-            ui.gridVisualizer.style.gridGap = `${state.gaps.row}px ${state.gaps.col}px`;
-            ui.gridVisualizer.innerHTML = '';
-            
             if (state.rows > 0 && state.cols > 0) {
+                
+                ui.gridVisualizer.style.display = 'grid';
+                ui.gridVisualizer.style.alignItems = '';
+                ui.gridVisualizer.style.justifyContent = '';
+
+                ui.gridVisualizer.style.gridTemplateColumns = state.trackDefinitions.cols;
+                ui.gridVisualizer.style.gridTemplateRows = state.trackDefinitions.rows;
+                ui.gridVisualizer.style.gridGap = `${state.gaps.row}px ${state.gaps.col}px`;
+                ui.gridVisualizer.innerHTML = '';
+            
                 for (let r = 0; r < state.rows; r++) {
                     for (let c = 0; c < state.cols; c++) {
                         const cell = document.createElement('div');
@@ -353,8 +443,18 @@
                     }
                 }
             } else {
-                 ui.gridVisualizer.innerHTML = '<div class="flex items-center justify-center text-gray-500 w-full h-full">Enter valid track definitions above.</div>';
+                 
+                 ui.gridVisualizer.style.display = 'flex';
+                 ui.gridVisualizer.style.alignItems = 'center';
+                 ui.gridVisualizer.style.justifyContent = 'center';
+                 
+                 ui.gridVisualizer.style.gridTemplateColumns = '';
+                 ui.gridVisualizer.style.gridTemplateRows = '';
+                 ui.gridVisualizer.style.gridGap = '';
+
+                 ui.gridVisualizer.innerHTML = '<span class="text-gray-500 text-sm">Enter valid track definitions above.</span>';
             }
+            
             renderNamedAreasList();
         }
         
@@ -371,9 +471,9 @@
                 const areaDiv = document.createElement('div');
                 areaDiv.className = 'flex justify-between items-center area-control';
                 areaDiv.innerHTML = `
-                    <div class="flex items-center space-x-2">
-                        <span style="background-color: ${color}; width: 12px; height: 12px; border-radius: 3px;"></span>
-                        <span class="font-mono text-sm">${areaName}</span>
+                    <div class="flex items-center space-x-2 edit-area-btn" data-area="${areaName}">
+                        <span style="background-color: ${color}; width: 12px; height: 12px; border-radius: 3px; pointer-events: none;"></span>
+                        <span class="font-mono text-sm" style="pointer-events: none;">${areaName}</span>
                     </div>
                     <button data-area="${areaName}" class="remove-area-btn p-1 text-red-500 hover:text-red-700">
                         <i data-lucide="x" class="w-4 h-4"></i>
@@ -383,31 +483,70 @@
             });
             if (window.lucide) lucide.createIcons();
         }
+        
+        function setNextColor() {
+            const existingColors = Object.values(state.areaColors);
+            const nextColor = DEFAULT_COLORS.find(c => !existingColors.includes(c)) 
+                            || DEFAULT_COLORS[Math.floor(Math.random() * DEFAULT_COLORS.length)];
+            ui.areaColorInput.value = nextColor;
+        }
 
-        // --- 4. EVENT HANDLER FUNCTIONS ---
-        function handleCellClick(e) {
+        function handleDragStart(e) {
             if (state.rows === 0 || state.cols === 0) return;
+            e.preventDefault();
             const cell = e.target.closest('.grid-cell');
             if (!cell) return;
+            
+            state.isDragging = true;
             const r = parseInt(cell.dataset.row);
             const c = parseInt(cell.dataset.col);
-            const index = state.selectedCells.findIndex(s => s.r === r && s.c === c);
-            if (index > -1) {
-                state.selectedCells.splice(index, 1);
-            } else {
-                state.selectedCells.push({ r, c });
-            }
-            ui.assignAreaBtn.disabled = state.selectedCells.length === 0;
+            
+            state.selectedCells = [{ r, c }];
+            ui.assignAreaBtn.disabled = false;
+            cell.classList.add('selected');
             renderVisualizer();
+        }
+
+        function handleDragOver(e) {
+            if (!state.isDragging) return;
+            const cell = e.target.closest('.grid-cell');
+            if (!cell) return;
+            
+            const r = parseInt(cell.dataset.row);
+            const c = parseInt(cell.dataset.col);
+            const alreadySelected = state.selectedCells.some(s => s.r === r && s.c === c);
+            
+            if (!alreadySelected) {
+                state.selectedCells.push({ r, c });
+                cell.classList.add('selected');
+            }
+        }
+
+        function handleDragEnd() {
+            state.isDragging = false;
+            ui.assignAreaBtn.disabled = state.selectedCells.length === 0;
+        }
+        
+        function handlePresetClick(e) {
+            const btn = e.target.closest('.preset-btn');
+            if (!btn) return;
+            
+            const value = btn.dataset.value;
+            if (e.currentTarget.id === 'col-presets') {
+                ui.colTracksInput.value = value;
+            } else if (e.currentTarget.id === 'row-presets') {
+                ui.rowTracksInput.value = value;
+            }
+            updateGridDimensions();
         }
         
         function handleAssignArea() {
             const areaName = ui.areaNameInput.value.trim().replace(/\s/g, '_').toLowerCase() || 'unnamed-area';
             if (state.selectedCells.length === 0) return;
-            if (!state.areaColors[areaName]) {
-                 const existingColorCount = Object.keys(state.areaColors).length;
-                 state.areaColors[areaName] = COLORS[existingColorCount % COLORS.length];
-            }
+            
+            const color = ui.areaColorInput.value;
+            state.areaColors[areaName] = color;
+
             state.selectedCells.forEach(s => {
                 if (state.gridAreas[s.r] !== undefined && state.gridAreas[s.r][s.c] !== undefined) {
                     state.gridAreas[s.r][s.c] = areaName;
@@ -416,20 +555,31 @@
             state.selectedCells = [];
             ui.areaNameInput.value = '';
             ui.assignAreaBtn.disabled = true;
+            
+            setNextColor();
             renderVisualizer();
             generateCode();
         }
         
-        function handleRemoveArea(e) {
-            const btn = e.target.closest('.remove-area-btn');
-            if (!btn) return;
-            const areaToRemove = btn.dataset.area;
-            state.gridAreas = state.gridAreas.map(row => 
-                row.map(area => area === areaToRemove ? '.' : area)
-            );
-            delete state.areaColors[areaToRemove];
-            renderVisualizer();
-            generateCode();
+        function handleNamedListClick(e) {
+            const removeBtn = e.target.closest('.remove-area-btn');
+            if (removeBtn) {
+                const areaToRemove = removeBtn.dataset.area;
+                state.gridAreas = state.gridAreas.map(row => 
+                    row.map(area => area === areaToRemove ? '.' : area)
+                );
+                delete state.areaColors[areaToRemove];
+                renderVisualizer();
+                generateCode();
+                return;
+            }
+            
+            const editBtn = e.target.closest('.edit-area-btn');
+            if (editBtn) {
+                const areaToEdit = editBtn.dataset.area;
+                ui.areaNameInput.value = areaToEdit;
+                ui.areaColorInput.value = state.areaColors[areaToEdit];
+            }
         }
         
         function handleResetAreas() {
@@ -442,7 +592,6 @@
             generateCode();
         }
 
-        // --- 5. ATTACH EVENT LISTENERS ---
         const inputControls = [ui.colTracksInput, ui.rowTracksInput, ui.rowGapInput, ui.colGapInput];
         inputControls.forEach(input => {
             input.addEventListener('input', () => {
@@ -453,13 +602,18 @@
                 updateGridDimensions();
             });
         });
-
-        ui.gridVisualizer.addEventListener('click', handleCellClick);
+        
+        ui.gridVisualizer.addEventListener('mousedown', handleDragStart);
+        ui.gridVisualizer.addEventListener('mouseover', handleDragOver);
+        document.addEventListener('mouseup', handleDragEnd);
+        
+        ui.colPresets.addEventListener('click', handlePresetClick);
+        ui.rowPresets.addEventListener('click', handlePresetClick);
+        
         ui.assignAreaBtn.addEventListener('click', handleAssignArea);
-        ui.namedAreasList.addEventListener('click', handleRemoveArea);
+        ui.namedAreasList.addEventListener('click', handleNamedListClick);
         ui.resetAreasBtn.addEventListener('click', handleResetAreas);
         
-        // --- FUNCTIONALITY FIX STARTS HERE ---
         ui.copyBtn.addEventListener('click', () => {
             const textToCopy = ui.cssCode.textContent;
             if (!textToCopy) return;
@@ -497,9 +651,7 @@
                 document.body.removeChild(textArea);
             }
         });
-        // --- FUNCTIONALITY FIX ENDS HERE ---
         
-        // --- 6. INITIALIZE THE TOOL ---
         updateGridDimensions();
     });
     </script>

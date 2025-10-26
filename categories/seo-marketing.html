@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Online Text Tools & Converters | toolsTree</title>
-  <meta name="description" content="A professional collection of free utilities for formatting, counting, and converting text, including case conversion, word count, character count, text cleaning, and text reversal.">
+  <title>Free Online SEO & Marketing Tools | toolsTree</title>
+  <meta name="description" content="A collection of free tools for SEO analysis and marketing campaign management, including UTM builders, SERP previews, and meta tag generators.">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="canonical" href="https://toolstree.vercel.app/categories/text.html">
+  <link rel="canonical" href="https://toolstree.vercel.app/categories/seo-marketing.html">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link href="../assets/output.css" rel="stylesheet">
   <!-- Google tag (gtag.js) -->
@@ -27,14 +27,12 @@
         const theme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        // Apply 'dark' class if saved theme is 'dark' OR if there's no saved theme and OS prefers dark.
         if (theme === 'dark' || (!theme && prefersDark)) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
         }
       } catch (e) {
-        // Failsafe: default to light mode if any errors occur.
         console.error("Error applying initial theme:", e);
         document.documentElement.classList.remove('dark');
       }
@@ -53,9 +51,9 @@
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Text Tools & Converters",
-    "description": "A professional collection of free utilities for formatting, counting, and converting text for web, coding, and general use.",
-    "url": "https://toolstree.vercel.app/categories/text.html",
+    "name": "SEO & Marketing Tools",
+    "description": "A collection of free tools for SEO analysis and marketing campaign management.",
+    "url": "https://toolstree.vercel.app/categories/seo-marketing.html",
     "publisher": {
       "@type": "Organization",
       "name": "toolsTree"
@@ -63,11 +61,9 @@
     "mainEntity": {
       "@type": "ItemList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "All-in-One Case Converter", "url": "https://toolstree.vercel.app/tools/case-converter.html" },
-        { "@type": "ListItem", "position": 2, "name": "Advanced Text Cleaner & Space Remover", "url": "https://toolstree.vercel.app/tools/remove-spaces.html" },
-        { "@type": "ListItem", "position": 3, "name": "Real-Time Character Counter", "url": "https://toolstree.vercel.app/tools/character-counter.html" },
-        { "@type": "ListItem", "position": 4, "name": "Advanced Text Reverser & Flipper", "url": "https://toolstree.vercel.app/tools/reverse-text.html" },
-        { "@type": "ListItem", "position": 5, "name": "Headline Title Case Converter", "url": "https://toolstree.vercel.app/tools/headline-title-case.html" }
+        { "@type": "ListItem", "position": 1, "name": "UTM Campaign URL Builder", "url": "https://toolstree.vercel.app/tools/utm-builder.html" },
+        { "@type": "ListItem", "position": 2, "name": "SERP Previewer", "url": "https://toolstree.vercel.app/tools/serp-previewer.html" },
+        { "@type": "ListItem", "position": 3, "name": "Meta Tag Generator", "url": "https://toolstree.vercel.app/tools/meta-tag-generator.html" }
       ]
     }
   }
@@ -80,29 +76,27 @@
     <nav class="flex mb-6" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
             <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
-            <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Text Tools & Converters</span></div></li>
+            <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">SEO & Marketing Tools</span></div></li>
         </ol>
     </nav>
     
     <div class="text-center mb-10">
         <div class="inline-flex items-center justify-center p-3 rounded-full bg-tt-primary/10 mb-4">
-            <i data-lucide="type" class="w-8 h-8 text-tt-primary"></i>
+            <i data-lucide="line-chart" class="w-8 h-8 text-tt-primary"></i>
         </div>
-      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">Text Tools & Converters</h1>
-      <p class="text-lg text-gray-600 mt-2 dark:text-gray-300">A professional collection of free utilities for formatting, counting, and converting text for web, coding, and general use.</p>
+      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">SEO & Marketing Tools</h1>
+      <p class="text-lg text-gray-600 mt-2 dark:text-gray-300">Utilities for optimizing website visibility and tracking marketing campaigns.</p>
     </div>
 
-    <div id="text-tools" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+    <div id="seo-tools" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
     </main>
 
     <script src="../javascript/globals.js" defer></script>
     <script>
-        const ALL_TOOLS_TEXT = [
-            { name: "All-in-One Case Converter", url: "../tools/case-converter.html", category: "Text", icon: "text-cursor-input", color: "text-purple-600", description: "Convert text to UPPERCASE, lowercase, Title Case, and more." },
-            { name: "Advanced Text Cleaner & Space Remover", url: "../tools/remove-spaces.html", category: "Text", icon: "sparkles", color: "text-blue-500", description: "Remove extra spaces, line breaks, and other cleanup tasks." },
-            { name: "Real-Time Character Counter, Word, SEO & Readability Counter", url: "../tools/character-counter.html", category: "Text", icon: "ruler", color: "text-cyan-500", description: "Precisely count all characters with and without spaces." },
-            { name: "Advanced Text Reverser & Flipper", url: "../tools/reverse-text.html", category: "Text", icon: "rotate-ccw", color: "text-red-500", description: "Reverse text, words, or lines in multiple configurations." },
-            { name: "Headline Title Case Converter", url: "../tools/headline-title-case.html", category: "Text", icon: "subtitles", color: "text-purple-600", description: "Formats headlines and titles using proper rules, skipping minor words like 'a' and 'the'." },
+        const ALL_TOOLS_SEO = [
+            { name: "UTM Campaign URL Builder", url: "../tools/utm-builder.html", category: "SEO", icon: "link", color: "text-blue-600", description: "Create trackable campaign URLs with UTM parameters." },
+            { name: "SERP (Search Engine Results Page) Snippet Preview Tool", url: "../tools/serp-previewer.html", category: "SEO", icon: "search", color: "text-green-600", description: "See how your page title and meta description look on Google." },
+            { name: "Advanced Meta Tag Generator", url: "../tools/meta-tag-generator.html", category: "SEO", icon: "tag", color: "text-indigo-600", description: "Generate essential meta tags (title, description, OG) for your pages." },
         ];
         
         const renderTools = (tools, containerId) => {
@@ -122,9 +116,8 @@
             } else {
                 console.warn('`injectLayout` function not found. Header/footer will not be injected.');
             }
-            renderTools(ALL_TOOLS_TEXT, 'text-tools');
+            renderTools(ALL_TOOLS_SEO, 'seo-tools');
         });
     </script>
 </body>
 </html>
-

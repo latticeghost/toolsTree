@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Meta Tag Generator (SEO & Social) | toolsTree</title>
+    <meta name="description" content="Generate essential meta tags (title, description), Open Graph tags (Facebook, LinkedIn), and Twitter Card tags to improve SEO and social sharing. Includes previews and character counters.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <!-- UPDATE: Canonical URL -->
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/meta-tag-generator.html"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+      })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <style>
+        :root { 
+            --tt-primary-stroke: #10b981; 
+            /* Added colors for preview */
+            --preview-bg: #f0f2f5;
+            --preview-border: #dadde1;
+            --preview-text-light: #606770;
+            --preview-text-dark: #1c1e21;
+            --preview-link: #606770; 
+        }
+        .dark {
+             --preview-bg: #242526;
+             --preview-border: #3e4042;
+             --preview-text-light: #b0b3b8;
+             --preview-text-dark: #e4e6eb;
+             --preview-link: #b0b3b8;
+        }
+
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        /* Character Counter styling */
+        .char-counter { 
+             font-size: 0.75rem; /* text-xs */
+             margin-top: 0.25rem; /* mt-1 */
+             text-align: right;
+             padding-right: 0.25rem; /* pr-1 */
+             color: #6b7280; /* gray-500 */
+        }
+        .dark .char-counter { color: #9ca3af; /* gray-400 */ }
+        .char-counter.warn { color: #f59e0b; /* amber-500 */ }
+        .char-counter.error { color: #ef4444; /* red-500 */ }
+        .dark .char-counter.warn { color: #fcd34d; /* amber-300 */ }
+        .dark .char-counter.error { color: #f87171; /* red-400 */ }
+
+        /* Copy Button Styles */
+        .copy-btn {
+            opacity: 0; 
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            color: #6b7080; 
+            transition: opacity 0.2s ease, color 0.2s ease;
+            cursor: pointer;
+        }
+        .dark .copy-btn { color: #9ca3af; }
+        .output-wrapper:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { color: #10b981; } 
+        .dark .copy-btn:hover { color: #10b981; }
+
+        /* Social Preview Card */
+        .social-preview-card {
+             background-color: var(--preview-bg);
+             border: 1px solid var(--preview-border);
+             border-radius: 8px;
+             max-width: 500px;
+             margin: 1rem auto 0;
+             font-family: 'Roboto', sans-serif;
+             overflow: hidden; /* Ensure image fits */
+        }
+        .social-preview-image {
+             width: 100%;
+             height: 260px; /* Approx 1.91:1 ratio */
+             background-color: #e0e0e0; /* Placeholder BG */
+             background-size: cover;
+             background-position: center;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             color: #9e9e9e; /* Placeholder text color */
+        }
+        .dark .social-preview-image { background-color: #4b5563; color: #9ca3af; }
+        .social-preview-content { padding: 12px; }
+        .social-preview-url { 
+            font-size: 12px; 
+            color: var(--preview-link); 
+            text-transform: uppercase; 
+            margin-bottom: 4px; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+        }
+        .social-preview-title { 
+            font-size: 16px; 
+            font-weight: 600; 
+            color: var(--preview-text-dark); 
+            margin-bottom: 4px; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+        }
+        .social-preview-description { 
+            font-size: 14px; 
+            color: var(--preview-text-light); 
+            max-height: 3.6em; /* Limit to approx 2 lines */
+            overflow: hidden; 
+            line-height: 1.2em;
+        }
+        
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced Meta Tag Generator (SEO & Social)",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "Generate meta title, meta description, Open Graph, and Twitter Card tags for better SEO and social media sharing. Includes live previews and character counts.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+     <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are meta tags?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Meta tags are snippets of HTML code placed in the <head> section of a webpage. They provide information about the page to search engines and social media platforms, but are generally not visible to users on the page itself. Key tags include the title tag (technically not a meta tag, but crucial) and the meta description."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why are meta tags important for SEO?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The title tag and meta description heavily influence how your page appears in search results (the SERP snippet). A compelling title and description can significantly improve your Click-Through Rate (CTR). Search engines also use the title tag as a strong ranking signal. The robots meta tag tells search engines if they should index the page or follow its links."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are Open Graph (OG) tags?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Open Graph tags are meta tags specifically designed to control how your webpage content appears when shared on social media platforms like Facebook, LinkedIn, Pinterest, etc. They define the preview title (og:title), description (og:description), image (og:image), URL (og:url), and type of content (og:type)."
+          }
+        },
+        {
+           "@type": "Question",
+           "name": "What are Twitter Card tags?",
+           "acceptedAnswer": {
+             "@type": "Answer",
+             "text": "Twitter Card tags are similar to Open Graph tags but specific to Twitter. They control how your content appears when shared on Twitter, allowing you to specify a card type (e.g., summary, summary_large_image), title, description, and image. If Twitter tags are not present, Twitter will often fall back to using Open Graph tags."
+           }
+         },
+         {
+            "@type": "Question",
+            "name": "What's the ideal length for titles and descriptions?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "There's no strict character limit, as search engines often truncate based on pixel width. However, common recommendations are: Title Tag: Under 60 characters (approx. 600 pixels). Meta Description: Under 160 characters (approx. 960 pixels). This tool provides character counts and approximate pixel widths to help you optimize."
+            }
+          }
+      ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <!-- UPDATE: Breadcrumb -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/seo-marketing.html" class="ml-1 hover:text-tt-primary md:ml-2">SEO & Marketing Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced Meta Tag Generator</span></div></li>
+            </ol>
+        </nav>
+        
+        <!-- UPDATE: Title and Description -->
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced Meta Tag Generator</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Generate Title, Description, Open Graph & Twitter Card tags for SEO & Social.</p>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Input Column -->
+            <div class="bg-white dark:bg-gray-900 shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
+                
+                <!-- Basic SEO Tags -->
+                <fieldset class="space-y-4 border-b pb-6 dark:border-gray-700">
+                    <legend class="text-lg font-semibold mb-2">Basic SEO Tags</legend>
+                    <div>
+                        <label for="pageTitle" class="block text-sm font-medium mb-1">Title Tag <span class="text-red-500">*</span></label>
+                        <input type="text" id="pageTitle" placeholder="Your Catchy Page Title | Brand Name" required class="w-full p-2 border rounded-lg shadow-sm">
+                        <div id="titleCounter" class="char-counter">0 / 60 Chars | ~0 / 600 px</div>
+                    </div>
+                     <div>
+                        <label for="pageDescription" class="block text-sm font-medium mb-1">Meta Description <span class="text-red-500">*</span></label>
+                        <textarea id="pageDescription" rows="3" placeholder="Write a compelling summary..." required class="w-full p-2 border rounded-lg shadow-sm"></textarea>
+                        <div id="descriptionCounter" class="char-counter">0 / 160 Chars | ~0 / 960 px</div>
+                    </div>
+                     <div>
+                        <label for="robots" class="block text-sm font-medium mb-1">Robots Meta Tag</label>
+                        <select id="robots" class="w-full p-2 border rounded-lg shadow-sm bg-white dark:bg-gray-700">
+                            <option value="index, follow" selected>index, follow (Default)</option>
+                            <option value="noindex, follow">noindex, follow</option>
+                            <option value="index, nofollow">index, nofollow</option>
+                            <option value="noindex, nofollow">noindex, nofollow</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <!-- Open Graph Tags -->
+                 <fieldset class="space-y-4 border-b pb-6 dark:border-gray-700">
+                    <legend class="text-lg font-semibold mb-2 flex items-center gap-2">
+                        <i data-lucide="facebook" class="w-5 h-5"></i>Open Graph (Facebook, etc.)
+                    </legend>
+                    <div class="flex items-center">
+                        <input id="useOgDefaults" type="checkbox" checked class="h-4 w-4 text-tt-primary focus:ring-tt-secondary border-gray-300 rounded">
+                        <label for="useOgDefaults" class="ml-2 block text-sm font-medium">Use Title & Description above</label>
+                    </div>
+                    <div id="ogCustomFields" class="space-y-4 hidden">
+                         <div>
+                            <label for="ogTitle" class="block text-sm font-medium mb-1">og:title</label>
+                            <input type="text" id="ogTitle" placeholder="Title for social sharing" class="w-full p-2 border rounded-lg shadow-sm">
+                        </div>
+                         <div>
+                            <label for="ogDescription" class="block text-sm font-medium mb-1">og:description</label>
+                            <textarea id="ogDescription" rows="2" placeholder="Description for social sharing" class="w-full p-2 border rounded-lg shadow-sm"></textarea>
+                        </div>
+                    </div>
+                     <div>
+                        <label for="ogImage" class="block text-sm font-medium mb-1">og:image URL <span class="text-red-500">*</span></label>
+                        <input type="url" id="ogImage" placeholder="https://example.com/image.jpg" required class="w-full p-2 border rounded-lg shadow-sm">
+                         <p class="text-xs text-gray-500 mt-1">Recommended size: 1200x630px.</p>
+                    </div>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="ogUrl" class="block text-sm font-medium mb-1">og:url <span class="text-red-500">*</span></label>
+                            <input type="url" id="ogUrl" placeholder="https://example.com/your-page" required class="w-full p-2 border rounded-lg shadow-sm">
+                        </div>
+                         <div>
+                            <label for="ogType" class="block text-sm font-medium mb-1">og:type</label>
+                            <select id="ogType" class="w-full p-2 border rounded-lg shadow-sm bg-white dark:bg-gray-700">
+                                <option value="website" selected>website</option>
+                                <option value="article">article</option>
+                                <option value="book">book</option>
+                                <option value="profile">profile</option>
+                                <option value="video.movie">video.movie</option>
+                                <option value="music.song">music.song</option>
+                            </select>
+                        </div>
+                     </div>
+                     <div>
+                        <label for="ogSiteName" class="block text-sm font-medium mb-1">og:site_name (Optional)</label>
+                        <input type="text" id="ogSiteName" placeholder="Your Website Name" class="w-full p-2 border rounded-lg shadow-sm">
+                    </div>
+                 </fieldset>
+
+                 <!-- Twitter Card Tags -->
+                 <fieldset class="space-y-4">
+                     <legend class="text-lg font-semibold mb-2 flex items-center gap-2">
+                        <i data-lucide="twitter" class="w-5 h-5"></i>Twitter Card
+                    </legend>
+                    <div class="flex items-center">
+                        <input id="useTwitterDefaults" type="checkbox" checked class="h-4 w-4 text-tt-primary focus:ring-tt-secondary border-gray-300 rounded">
+                        <label for="useTwitterDefaults" class="ml-2 block text-sm font-medium">Use Title, Description & Image above</label>
+                    </div>
+                     <div id="twitterCustomFields" class="space-y-4 hidden">
+                         <div>
+                            <label for="twitterTitle" class="block text-sm font-medium mb-1">twitter:title</label>
+                            <input type="text" id="twitterTitle" placeholder="Title for Twitter" class="w-full p-2 border rounded-lg shadow-sm">
+                        </div>
+                         <div>
+                            <label for="twitterDescription" class="block text-sm font-medium mb-1">twitter:description</label>
+                            <textarea id="twitterDescription" rows="2" placeholder="Description for Twitter" class="w-full p-2 border rounded-lg shadow-sm"></textarea>
+                        </div>
+                         <div>
+                            <label for="twitterImage" class="block text-sm font-medium mb-1">twitter:image URL</label>
+                            <input type="url" id="twitterImage" placeholder="https://example.com/twitter-image.jpg" class="w-full p-2 border rounded-lg shadow-sm">
+                            <p class="text-xs text-gray-500 mt-1">Leave blank to use OG image.</p>
+                        </div>
+                    </div>
+                    <div>
+                         <label for="twitterCard" class="block text-sm font-medium mb-1">twitter:card Type</label>
+                         <select id="twitterCard" class="w-full p-2 border rounded-lg shadow-sm bg-white dark:bg-gray-700">
+                             <option value="summary" selected>summary</option>
+                             <option value="summary_large_image">summary_large_image</option>
+                             <!-- <option value="app">app</option> 
+                             <option value="player">player</option> -->
+                         </select>
+                         <p class="text-xs text-gray-500 mt-1">'summary_large_image' requires an image.</p>
+                    </div>
+                     <div>
+                        <label for="twitterSite" class="block text-sm font-medium mb-1">twitter:site (Optional)</label>
+                        <input type="text" id="twitterSite" placeholder="@YourTwitterHandle" class="w-full p-2 border rounded-lg shadow-sm">
+                        <p class="text-xs text-gray-500 mt-1">Your site's Twitter username.</p>
+                    </div>
+                 </fieldset>
+
+                 <!-- Clear Button -->
+                 <div class="flex justify-end pt-6 border-t dark:border-gray-700">
+                    <button id="clearButton" class="flex items-center space-x-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        <span>Clear All Fields</span>
+                    </button>
+                 </div>
+            </div>
+        
+            <!-- Output/Preview Column -->
+            <div class="space-y-6">
+                <!-- Social Preview -->
+                <div>
+                     <h2 class="text-xl font-bold mb-3 text-center">Social Share Preview (Approx.)</h2>
+                    <div class="social-preview-card">
+                        <div id="previewImage" class="social-preview-image">
+                            <span>Image Preview (1200x630)</span>
+                        </div>
+                        <div class="social-preview-content">
+                            <div id="previewUrl" class="social-preview-url">example.com</div>
+                            <div id="previewTitle" class="social-preview-title">Your Catchy Page Title | Brand Name</div>
+                            <div id="previewDescription" class="social-preview-description">Write a compelling summary of your page content here...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generated Code Output -->
+                 <div class="bg-white dark:bg-gray-900 shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="text-xl font-bold">Generated Meta Tags</h2>
+                        <button id="copyBtn" title="Copy Code" class="copy-btn p-2 rounded-md">
+                             <i data-lucide="copy" class="w-5 h-5"></i>
+                         </button>
+                    </div>
+                     <div class="output-wrapper relative">
+                        <textarea id="generatedTags" readonly class="w-full p-3 border rounded-lg shadow-inner font-mono min-h-[250px] bg-gray-50 dark:bg-gray-900/50 text-xs"></textarea>
+                     </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ... (Informational Sections - Updated) ... -->
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What Are Meta Tags?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p><strong>Meta tags</strong> are snippets of HTML code that describe a webpage's content. They aren't displayed on the page itself but live in the `<head>` section of the HTML. Search engines (like Google) and social media platforms (like Facebook, Twitter) read these tags to understand what your page is about.</p> 
+                    <p>While many meta tags exist, the most crucial for SEO and social sharing include:</p>
+                    <ul class="list-disc list-inside space-y-1 ml-4">
+                        <li><strong>Title Tag:</strong> (Technically not a meta tag, but vital) Defines the title shown in browser tabs and search results. A major SEO factor.</li>
+                        <li><strong>Meta Description:</strong> Provides a brief summary of the page, often shown below the title in search results. Crucial for attracting clicks.</li>
+                        <li><strong>Open Graph Tags (og:*):</strong> Control how your content appears when shared on platforms like Facebook, LinkedIn, Pinterest.</li>
+                        <li><strong>Twitter Card Tags (twitter:*):</strong> Specifically control how content appears when shared on Twitter.</li>
+                        <li><strong>Robots Meta Tag:</strong> Tells search engine crawlers whether to index the page or follow its links.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Why Are Meta Tags Important?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>Well-crafted meta tags are essential for:</p>
+                    <ul class="list-disc list-inside space-y-2 ml-4">
+                        <li><strong>SEO (Search Engine Optimization):</strong> The title tag is a key ranking factor. Title and description influence your appearance in search results, directly impacting your Click-Through Rate (CTR). The robots tag controls indexing.</li>
+                        <li><strong>Social Media Sharing:</strong> Open Graph and Twitter Card tags ensure your links look appealing when shared, displaying the correct title, description, and image. This encourages engagement and drives traffic.</li>
+                        <li><strong>User Experience:</strong> A clear title tag helps users understand the page content in their browser tabs and search results.</li>
+                        <li><strong>Accessibility:</strong> Assistive technologies can use meta tags to provide context about the page.</li>
+                    </ul>
+                     <p>Using a generator helps ensure you include all necessary tags with the correct syntax and optimized lengths.</p>
+                </div>
+            </div>
+             <!-- ... (FAQ Section - Updated) ... -->
+             <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
+                <div class="space-y-3 text-sm">
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                           <span>What are meta tags?</span>
+                           <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                       </summary>
+                       <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Meta tags are snippets of HTML code placed in the <code>&lt;head&gt;</code> section of a webpage. They provide information about the page to search engines and social media platforms, but are generally not visible to users on the page itself. Key tags include the title tag (technically not a meta tag, but crucial) and the meta description.</p>
+                   </details>
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                           <span>Why are meta tags important for SEO?</span>
+                           <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                       </summary>
+                       <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The <strong>title tag</strong> and <strong>meta description</strong> heavily influence how your page appears in search results (the SERP snippet). A compelling title and description can significantly improve your Click-Through Rate (CTR). Search engines also use the title tag as a strong ranking signal. The <strong>robots meta tag</strong> tells search engines if they should index the page or follow its links.</p>
+                   </details>
+                   <details class="group">
+                       <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                           <span>What are Open Graph (OG) tags?</span>
+                           <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                       </summary>
+                       <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Open Graph tags are meta tags specifically designed to control how your webpage content appears when shared on social media platforms like Facebook, LinkedIn, Pinterest, etc. They define the preview title (<code>og:title</code>), description (<code>og:description</code>), image (<code>og:image</code>), URL (<code>og:url</code>), and type of content (<code>og:type</code>).</p>
+                   </details>
+                    <details class="group">
+                       <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                           <span>What are Twitter Card tags?</span>
+                           <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                       </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Twitter Card tags are similar to Open Graph tags but specific to Twitter. They control how your content appears when shared on Twitter, allowing you to specify a card type (e.g., summary, summary_large_image), title, description, and image. If Twitter tags are not present, Twitter will often fall back to using Open Graph tags.</p>
+                   </details>
+                   <details class="group">
+                       <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                           <span>What's the ideal length for titles and descriptions?</span>
+                           <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                       </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">There's no strict character limit, as search engines often truncate based on pixel width. However, common recommendations are: <br><strong>Title Tag:</strong> Under 60 characters (approx. 600 pixels). <br><strong>Meta Description:</strong> Under 160 characters (approx. 960 pixels). <br>This tool provides character counts and approximate pixel widths (using common fonts) to help you optimize within these guidelines.</p>
+                   </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Hidden element for measuring text width -->
+    <div id="text-width-tester" style="position: absolute; visibility: hidden; height: auto; width: auto; white-space: nowrap; font-family: 'Roboto', sans-serif;"></div>
+
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+             console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+         if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // --- UI Elements ---
+        const ui = {
+            // Basic
+            pageTitle: document.getElementById('pageTitle'),
+            titleCounter: document.getElementById('titleCounter'),
+            pageDescription: document.getElementById('pageDescription'),
+            descriptionCounter: document.getElementById('descriptionCounter'),
+            robots: document.getElementById('robots'),
+            // OG
+            useOgDefaults: document.getElementById('useOgDefaults'),
+            ogCustomFields: document.getElementById('ogCustomFields'),
+            ogTitle: document.getElementById('ogTitle'),
+            ogDescription: document.getElementById('ogDescription'),
+            ogImage: document.getElementById('ogImage'),
+            ogUrl: document.getElementById('ogUrl'),
+            ogType: document.getElementById('ogType'),
+            ogSiteName: document.getElementById('ogSiteName'),
+            // Twitter
+            useTwitterDefaults: document.getElementById('useTwitterDefaults'),
+            twitterCustomFields: document.getElementById('twitterCustomFields'),
+            twitterTitle: document.getElementById('twitterTitle'),
+            twitterDescription: document.getElementById('twitterDescription'),
+            twitterImage: document.getElementById('twitterImage'),
+            twitterCard: document.getElementById('twitterCard'),
+            twitterSite: document.getElementById('twitterSite'),
+            // Output & Preview
+            generatedTags: document.getElementById('generatedTags'),
+            copyBtn: document.getElementById('copyBtn'),
+            clearButton: document.getElementById('clearButton'),
+            previewImage: document.getElementById('previewImage'),
+            previewUrl: document.getElementById('previewUrl'),
+            previewTitle: document.getElementById('previewTitle'),
+            previewDescription: document.getElementById('previewDescription'),
+            // Helpers
+            textWidthTester: document.getElementById('text-width-tester'),
+        };
+
+        // --- Constants ---
+        const TITLE_CHAR_LIMIT = 60;
+        const DESC_CHAR_LIMIT = 160;
+        const TITLE_PIXEL_LIMIT = 600;
+        const DESC_PIXEL_LIMIT = 960; 
+
+        // --- Helper Functions ---
+
+        // Get approximate pixel width 
+        const getTextWidth = (text, fontSize = '16px', fontWeight = 'normal') => {
+            ui.textWidthTester.style.fontSize = fontSize;
+            ui.textWidthTester.style.fontWeight = fontWeight;
+            ui.textWidthTester.textContent = text;
+            return ui.textWidthTester.offsetWidth;
+        };
+
+        // Update character and pixel counter
+        const updateCounter = (element, text, charLimit, pixelLimit, fontSize, fontWeight = 'normal') => {
+            const charCount = text.length;
+            const pixelWidth = getTextWidth(text, fontSize, fontWeight);
+            let statusClass = '';
+            
+            if (charCount > charLimit || pixelWidth > pixelLimit) {
+                statusClass = 'error';
+            } else if (charCount > charLimit * 0.9 || pixelWidth > pixelLimit * 0.9) {
+                statusClass = 'warn';
+            }
+            
+            element.textContent = `${charCount} / ${charLimit} Chars | ~${pixelWidth} / ${pixelLimit} px`;
+            element.className = `char-counter ${statusClass}`; // Reset and apply class
+        };
+        
+        // Escape HTML entities for content attribute
+        const escapeHtml = (unsafe) => {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        };
+
+        // --- Main Generation Function ---
+        const generateMetaTags = () => {
+            const title = ui.pageTitle.value.trim();
+            const description = ui.pageDescription.value.trim();
+            const robots = ui.robots.value;
+            
+            const useOgDefaults = ui.useOgDefaults.checked;
+            const ogTitle = useOgDefaults ? title : ui.ogTitle.value.trim();
+            const ogDescription = useOgDefaults ? description : ui.ogDescription.value.trim();
+            const ogImage = ui.ogImage.value.trim();
+            const ogUrl = ui.ogUrl.value.trim();
+            const ogType = ui.ogType.value;
+            const ogSiteName = ui.ogSiteName.value.trim();
+
+            const useTwitterDefaults = ui.useTwitterDefaults.checked;
+            const twitterCard = ui.twitterCard.value;
+            const twitterTitle = useTwitterDefaults ? title : ui.twitterTitle.value.trim();
+            const twitterDescription = useTwitterDefaults ? description : ui.twitterDescription.value.trim();
+            // Use specific twitter image if provided, else fallback to OG image
+            const twitterImageInput = ui.twitterImage.value.trim();
+            const twitterImage = useTwitterDefaults ? (twitterImageInput || ogImage) : (twitterImageInput || ogImage); 
+            const twitterSite = ui.twitterSite.value.trim();
+
+            let tags = [];
+
+            // Basic Tags
+            if (title) tags.push(`<title>${escapeHtml(title)}</title>`);
+            if (description) tags.push(`<meta name="description" content="${escapeHtml(description)}">`);
+            if (robots !== 'index, follow') tags.push(`<meta name="robots" content="${robots}">`); // Only add if not default
+
+            // Open Graph Tags
+            tags.push('\n<!-- Open Graph / Facebook -->');
+            if (ogTitle) tags.push(`<meta property="og:title" content="${escapeHtml(ogTitle)}">`);
+            if (ogDescription) tags.push(`<meta property="og:description" content="${escapeHtml(ogDescription)}">`);
+            if (ogImage) tags.push(`<meta property="og:image" content="${ogImage}">`); // URLs don't need escaping
+            if (ogUrl) tags.push(`<meta property="og:url" content="${ogUrl}">`);
+            if (ogType) tags.push(`<meta property="og:type" content="${ogType}">`);
+            if (ogSiteName) tags.push(`<meta property="og:site_name" content="${escapeHtml(ogSiteName)}">`);
+
+            // Twitter Card Tags
+            tags.push('\n<!-- Twitter -->');
+            if (twitterCard) tags.push(`<meta name="twitter:card" content="${twitterCard}">`);
+            if (twitterTitle) tags.push(`<meta name="twitter:title" content="${escapeHtml(twitterTitle)}">`);
+            if (twitterDescription) tags.push(`<meta name="twitter:description" content="${escapeHtml(twitterDescription)}">`);
+            if (twitterImage) tags.push(`<meta name="twitter:image" content="${twitterImage}">`); // URLs don't need escaping
+            if (twitterSite) tags.push(`<meta name="twitter:site" content="${twitterSite}">`); // Handle doesn't need escaping typically
+
+            const output = tags.join('\n');
+            ui.generatedTags.value = output;
+
+            // Update Counters
+            updateCounter(ui.titleCounter, title, TITLE_CHAR_LIMIT, TITLE_PIXEL_LIMIT, '16px', '600'); // Assuming title is boldish
+            updateCounter(ui.descriptionCounter, description, DESC_CHAR_LIMIT, DESC_PIXEL_LIMIT, '14px');
+
+            // Update Preview
+            ui.previewTitle.textContent = ogTitle || title || 'Your Title Here';
+            ui.previewDescription.textContent = ogDescription || description || 'Your description here...';
+            // Extract domain for preview URL
+            try {
+                 const urlObj = new URL(ogUrl || 'http://example.com');
+                 ui.previewUrl.textContent = urlObj.hostname.toUpperCase();
+            } catch {
+                 ui.previewUrl.textContent = 'EXAMPLE.COM';
+            }
+            // Update preview image
+            if (ogImage) {
+                 ui.previewImage.style.backgroundImage = `url('${ogImage}')`;
+                 ui.previewImage.textContent = ''; // Clear placeholder text
+            } else {
+                 ui.previewImage.style.backgroundImage = 'none';
+                 ui.previewImage.textContent = 'Image Preview (1200x630)';
+            }
+            
+            // Toggle Copy Button
+             ui.copyBtn.classList.toggle('opacity-0', output.length === 0);
+             ui.copyBtn.classList.toggle('pointer-events-none', output.length === 0);
+        };
+
+        // --- Toggle Custom Fields Visibility ---
+        const toggleCustomFields = (checkbox, fieldsDiv) => {
+            fieldsDiv.style.display = checkbox.checked ? 'none' : 'block';
+            generateMetaTags(); // Regenerate when toggling
+        };
+
+        // --- Clear Fields ---
+        const clearFields = () => {
+             const inputs = document.querySelectorAll('input[type="text"], input[type="url"], textarea');
+             inputs.forEach(input => input.value = '');
+             ui.robots.selectedIndex = 0;
+             ui.ogType.selectedIndex = 0;
+             ui.twitterCard.selectedIndex = 0;
+             ui.useOgDefaults.checked = true;
+             ui.useTwitterDefaults.checked = true;
+             toggleCustomFields(ui.useOgDefaults, ui.ogCustomFields);
+             toggleCustomFields(ui.useTwitterDefaults, ui.twitterCustomFields);
+             generateMetaTags(); // Trigger update
+        };
+
+        // --- Event Listeners ---
+        const allInputs = document.querySelectorAll('input, textarea, select');
+        allInputs.forEach(input => {
+            input.addEventListener('input', generateMetaTags);
+            input.addEventListener('change', generateMetaTags); // For selects/checkboxes
+        });
+        
+        ui.useOgDefaults.addEventListener('change', () => toggleCustomFields(ui.useOgDefaults, ui.ogCustomFields));
+        ui.useTwitterDefaults.addEventListener('change', () => toggleCustomFields(ui.useTwitterDefaults, ui.twitterCustomFields));
+        
+        ui.clearButton.addEventListener('click', clearFields);
+
+        // Copy Button Logic
+        ui.copyBtn.addEventListener('click', () => {
+            const textToCopy = ui.generatedTags.value;
+            if (!textToCopy) return;
+
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-5 h-5"></i>';
+                ui.copyBtn.innerHTML = '<i data-lucide="check" class="w-5 h-5 text-emerald-500"></i>';
+                if (window.lucide) lucide.createIcons();
+                
+                setTimeout(() => { 
+                    ui.copyBtn.innerHTML = originalIconHTML; 
+                    if (window.lucide) lucide.createIcons();
+                }, 1500);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Copy failed:', err));
+            } else {
+                ui.generatedTags.select(); 
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+            }
+        });
+        
+        // --- Initial State ---
+        toggleCustomFields(ui.useOgDefaults, ui.ogCustomFields); // Hide initially
+        toggleCustomFields(ui.useTwitterDefaults, ui.twitterCustomFields); // Hide initially
+        generateMetaTags(); // Initial call 
+
+    });
+    </script>
+</body>
+</html>

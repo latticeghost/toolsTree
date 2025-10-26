@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Subnet Calculator (IPv4) | toolsTree</title>
+    <meta name="description" content="Calculate IPv4 subnets easily. Enter an IP and CIDR or mask to find network, broadcast, host range, wildcard mask, and binary representations.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/subnet-calculator.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+      })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        /* Key-value table style for results */
+        .result-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.75rem 1rem;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .result-grid dt {
+            font-weight: 600; /* font-semibold */
+            color: #4b5563; /* gray-600 */
+        }
+        .dark .result-grid dt {
+            color: #d1d5db; /* gray-300 */
+        }
+        .result-grid dd {
+            font-family: 'Roboto Mono', monospace;
+            color: #1f2937; /* gray-800 */
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dark .result-grid dd {
+            color: #f3f4f6; /* gray-100 */
+        }
+        /* Copy Button Styles */
+        .copy-btn {
+            opacity: 0; /* Hide by default */
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            color: #6b7280; /* gray-500 */
+            transition: opacity 0.2s ease, color 0.2s ease;
+            flex-shrink: 0; 
+        }
+        .dark .copy-btn { color: #9ca3af; /* gray-400 */ }
+        .result-grid dd:hover .copy-btn { opacity: 1; color: #10b981; /* tt-primary */ }
+        /* Removed background-color rules from hover states */
+        .copy-btn:hover { /* background-color: #f3f4f6; */ /* gray-100 */ }
+        .dark .copy-btn:hover { /* background-color: #374151; */ /* gray-700 */ }
+
+
+        /* Style for binary outputs */
+        .binary-output span {
+            display: inline-block;
+            margin-right: 4px; /* Space between octets */
+        }
+        .binary-output span:last-child {
+            margin-right: 0;
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced Subnet Calculator (IPv4)",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": "Calculate IPv4 subnets easily. Enter an IP and CIDR or mask to find network, broadcast, host range, wildcard mask, and binary representations.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is subnetting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Subnetting is the process of dividing a large IP network into smaller, more manageable subnetworks (subnets). This helps improve network performance, enhances security by isolating segments, and simplifies network administration."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between CIDR notation and a subnet mask?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "They represent the same thing: the division between the network portion and the host portion of an IP address. CIDR (Classless Inter-Domain Routing) notation uses a slash followed by the number of bits in the network portion (e.g., /24). A subnet mask uses a 32-bit number written in dotted-decimal format (e.g., 255.255.255.0). /24 is equivalent to 255.255.255.0."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are Network and Broadcast addresses?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Network Address is the first address in a subnet and identifies the subnet itself. All host bits are set to 0. The Broadcast Address is the last address in a subnet, used to send messages to all devices within that subnet. All host bits are set to 1. Neither of these addresses can be assigned to individual devices."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a Wildcard Mask?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A wildcard mask is essentially the inverse of a subnet mask. It's used primarily in Access Control Lists (ACLs) on routers and firewalls. Where a subnet mask has a '1' bit, the wildcard mask has a '0', and vice versa. It tells the router which bits in an IP address to check."
+          }
+        },
+         {
+          "@type": "Question",
+          "name": "What are Private IP Addresses?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Private IP addresses are specific ranges reserved for internal networks (like your home or office Wi-Fi). They are not routable on the public internet. Common private ranges include 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16. Devices using these IPs need a router with Network Address Translation (NAT) to communicate with the internet."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/networking.html" class="ml-1 hover:text-tt-primary md:ml-2">Networking & Security Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced Subnet Calculator (IPv4)</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced Subnet Calculator (IPv4)</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Enter an IP address and mask to calculate network details.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
+            <!-- Input Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div class="md:col-span-2">
+                    <label for="ipAddress" class="block text-sm font-medium mb-1">IP Address</label>
+                    <input type="text" id="ipAddress" placeholder="e.g., 192.168.1.100" value="192.168.1.100" class="w-full p-3 border rounded-lg shadow-sm font-mono">
+                </div>
+                <div>
+                    <label for="subnetMask" class="block text-sm font-medium mb-1">Subnet Mask or CIDR</label>
+                    <input type="text" id="subnetMask" placeholder="e.g., 24 or 255.255.255.0" value="24" class="w-full p-3 border rounded-lg shadow-sm font-mono">
+                </div>
+            </div>
+             <div id="input-error" class="text-red-500 text-sm mt-2 hidden">Invalid input. Please check IP address and mask format.</div>
+
+            <!-- Results Section -->
+            <div class="pt-6 border-t dark:border-gray-800">
+                <h2 class="text-xl font-bold mb-4">Calculated Subnet Details</h2>
+                <div id="results-placeholder" class="text-gray-500 dark:text-gray-400">Enter IP and Mask above to see results.</div>
+                
+                <div id="results-content" class="hidden space-y-6">
+                    <!-- Basic Info -->
+                    <div>
+                        <h3 class="font-semibold mb-2 text-lg">Network Information</h3>
+                        <dl class="result-grid">
+                            <dt>Network Address</dt>
+                            <dd><span id="res-networkAddr"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Broadcast Address</dt>
+                            <dd><span id="res-broadcastAddr"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Usable Host Range</dt>
+                            <dd><span id="res-hostRange"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                             <dt>Number of Hosts</dt>
+                            <dd><span id="res-numHosts"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                             <dt>Subnet Mask</dt>
+                            <dd><span id="res-subnetMask"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Wildcard Mask</dt>
+                            <dd><span id="res-wildcardMask"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>IP Type</dt>
+                            <dd><span id="res-ipType"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                        </dl>
+                    </div>
+                    
+                    <!-- Binary Representations -->
+                    <div>
+                        <h3 class="font-semibold mb-2 text-lg">Binary Representations</h3>
+                         <dl class="result-grid">
+                            <dt>IP Address</dt>
+                            <dd class="binary-output"><span id="res-ipBinary"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Subnet Mask</dt>
+                            <dd class="binary-output"><span id="res-maskBinary"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Network Address</dt>
+                            <dd class="binary-output"><span id="res-networkBinary"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Broadcast Address</dt>
+                            <dd class="binary-output"><span id="res-broadcastBinary"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                         </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is Subnetting?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>Subnetting is the practice of dividing a single large IP network into multiple smaller, more manageable subnetworks, or "subnets." This is a fundamental concept in networking for several reasons:</p>
+                    <ul class="list-disc list-inside space-y-1 ml-4">
+                        <li><strong>Organization:</strong> It allows network administrators to logically group devices, for example, by department (Sales, Engineering) or by floor in a building.</li>
+                        <li><strong>Performance:</strong> It reduces network congestion. Broadcast traffic, which goes to all devices on a network, is contained within its subnet, preventing it from flooding the entire larger network.</li>
+                        <li><strong>Security:</strong> Subnets allow for the creation of security boundaries. Access Control Lists (ACLs) can be applied between subnets to control which devices can communicate with each other.</li>
+                        <li><strong>Address Efficiency:</strong> While less critical with IPv6, subnetting helps utilize the available IP address space more efficiently in IPv4 networks.</li>
+                    </ul>
+                    <p>Subnetting involves using a portion of the "host" part of an IP address to create subnet identifiers. The subnet mask (or CIDR prefix) defines how many bits are used for the network/subnet portion and how many are left for individual hosts within that subnet.</p>
+                </div>
+            </div>
+            <div>
+                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Understanding the Calculations</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>This calculator uses bitwise operations based on the provided IP address and subnet mask:</p>
+                    <ul class="list-disc list-inside space-y-2 ml-4">
+                        <li><strong>Network Address:</strong> Calculated by performing a bitwise AND operation between the IP address and the subnet mask. This effectively zeroes out the host bits, leaving only the network identifier.</li>
+                        <li><strong>Broadcast Address:</strong> Calculated by taking the network address and setting all the host bits (defined by the inverse of the subnet mask) to '1'.</li>
+                        <li><strong>Usable Host Range:</strong> The first usable host address is one greater than the network address. The last usable host address is one less than the broadcast address.</li>
+                        <li><strong>Number of Usable Hosts:</strong> Calculated as 2^h - 2, where 'h' is the number of host bits (32 minus the CIDR prefix length). We subtract 2 because the network and broadcast addresses are reserved. For /31 and /32 networks, special rules apply (0 usable hosts for general use).</li>
+                        <li><strong>Wildcard Mask:</strong> The bitwise inverse (NOT) of the subnet mask. Used in Access Control Lists (ACLs).</li>
+                        <li><strong>IP Type:</strong> Checks if the IP address falls within the standard private IPv4 ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16). All other addresses are considered public.</li>
+                        <li><strong>Binary Representations:</strong> Shows the 32-bit binary equivalent of the IP, Mask, Network, and Broadcast addresses, making the bitwise operations clearer.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is subnetting?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Subnetting is the process of dividing a large IP network into smaller, more manageable subnetworks (subnets). This helps improve network performance, enhances security by isolating segments, and simplifies network administration.</p>
+                    </details>
+                    <details class="group">
+                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is the difference between CIDR notation and a subnet mask?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">They represent the same thing: the division between the network portion and the host portion of an IP address. CIDR (Classless Inter-Domain Routing) notation uses a slash followed by the number of bits in the network portion (e.g., <code>/24</code>). A subnet mask uses a 32-bit number written in dotted-decimal format (e.g., <code>255.255.255.0</code>). /24 is equivalent to 255.255.255.0.</p>
+                   </details>
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What are Network and Broadcast addresses?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The <strong>Network Address</strong> is the first address in a subnet and identifies the subnet itself. All host bits are set to 0. The <strong>Broadcast Address</strong> is the last address in a subnet, used to send messages to all devices within that subnet. All host bits are set to 1. Neither of these addresses can be assigned to individual devices.</p>
+                    </details>
+                    <details class="group">
+                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is a Wildcard Mask?</span>
+                             <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">A wildcard mask is essentially the inverse of a subnet mask. It's used primarily in Access Control Lists (ACLs) on routers and firewalls. Where a subnet mask has a '1' bit, the wildcard mask has a '0', and vice versa. It tells the router which bits in an IP address to check when filtering traffic.</p>
+                    </details>
+                     <details class="group">
+                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What are Private IP Addresses?</span>
+                             <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Private IP addresses are specific ranges reserved for internal networks (like your home or office Wi-Fi). They are not routable on the public internet. Common private ranges include <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, and <code>192.168.0.0/16</code>. Devices using these IPs need a router with Network Address Translation (NAT) to communicate with the internet.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        // --- UI Elements ---
+        const ui = {
+            ipAddress: document.getElementById('ipAddress'),
+            subnetMask: document.getElementById('subnetMask'),
+            inputError: document.getElementById('input-error'),
+            resultsPlaceholder: document.getElementById('results-placeholder'),
+            resultsContent: document.getElementById('results-content'),
+            res: {
+                networkAddr: document.getElementById('res-networkAddr'),
+                broadcastAddr: document.getElementById('res-broadcastAddr'),
+                hostRange: document.getElementById('res-hostRange'),
+                numHosts: document.getElementById('res-numHosts'),
+                subnetMask: document.getElementById('res-subnetMask'),
+                wildcardMask: document.getElementById('res-wildcardMask'),
+                ipType: document.getElementById('res-ipType'),
+                ipBinary: document.getElementById('res-ipBinary'),
+                maskBinary: document.getElementById('res-maskBinary'),
+                networkBinary: document.getElementById('res-networkBinary'),
+                broadcastBinary: document.getElementById('res-broadcastBinary'),
+            }
+        };
+
+        // --- Core Calculation Logic ---
+
+        // Helper: Convert dotted decimal IP/Mask to integer
+        const ipToInt = (ip) => {
+            // FIX: Added validation for octet values > 255
+            const octets = ip.split('.');
+            if (octets.length !== 4 || octets.some(octet => {
+                const num = parseInt(octet, 10);
+                // Check if it's a number, if it's > 255, if it's < 0, or if it's not a valid integer string (e.g., "01" is ok, but "0a" is not)
+                return isNaN(num) || num > 255 || num < 0 || !/^\d+$/.test(octet) || octet.length > 3;
+            })) {
+                return null;
+            }
+            // Use the validated octets array to perform the reduction
+            return octets.reduce((res, octet) => (res << 8) | parseInt(octet, 10), 0) >>> 0;
+        };
+
+
+        // Helper: Convert integer to dotted decimal IP/Mask
+        const intToIp = (int) => {
+            if (int === null || int < 0 || int > 0xFFFFFFFF) return null;
+            return [(int >>> 24), (int >>> 16) & 0xFF, (int >>> 8) & 0xFF, int & 0xFF].join('.');
+        };
+
+        // Helper: Convert integer to binary string (32 bits, dotted)
+        const intToBinary = (int) => {
+             if (int === null || int < 0 || int > 0xFFFFFFFF) return 'N/A';
+             let bin = int.toString(2).padStart(32, '0');
+             return `<span>${bin.substring(0,8)}</span><span>${bin.substring(8,16)}</span><span>${bin.substring(16,24)}</span><span>${bin.substring(24,32)}</span>`;
+        };
+        
+        // Helper: Convert CIDR prefix to integer mask
+        const cidrToIntMask = (cidr) => {
+            if (cidr < 0 || cidr > 32) return null;
+            // Create mask by shifting bits. (-1 is 0xFFFFFFFF)
+            return cidr === 0 ? 0 : (-1 << (32 - cidr)) >>> 0; 
+        };
+
+        // Helper: Convert integer mask to CIDR prefix
+        const intMaskToCidr = (maskInt) => {
+            let cidr = 0;
+            let mask = maskInt;
+            while (mask & 0x80000000) {
+                cidr++;
+                mask <<= 1;
+            }
+            // Validate if it's a valid mask (contiguous 1s followed by 0s)
+            return (mask === 0) ? cidr : null;
+        };
+        
+        // Helper: Validate dotted decimal mask
+        const isValidDottedMask = (maskInt) => {
+            if (maskInt === null) return false;
+            let mask = maskInt;
+            // Check if it's contiguous 1s followed by 0s
+            mask = ~mask; // Invert
+            // If (mask + 1) is a power of 2, it's valid
+            return ((mask + 1) & mask) === 0;
+        };
+
+        // Helper: Get IP type
+        const getIpType = (ipInt) => {
+            if (ipInt === null) return 'N/A';
+            const ranges = [
+                { start: ipToInt('10.0.0.0'), end: ipToInt('10.255.255.255') },      // 10.0.0.0/8
+                { start: ipToInt('172.16.0.0'), end: ipToInt('172.31.255.255') },    // 172.16.0.0/12
+                { start: ipToInt('192.168.0.0'), end: ipToInt('192.168.255.255') }, // 192.168.0.0/16
+                { start: ipToInt('127.0.0.0'), end: ipToInt('127.255.255.255') },   // Loopback 127.0.0.0/8
+                { start: ipToInt('169.254.0.0'), end: ipToInt('169.254.255.255') } // APIPA 169.254.0.0/16
+            ];
+            
+            if (ipInt >= ranges[3].start && ipInt <= ranges[3].end) return 'Private (Loopback)';
+            if (ipInt >= ranges[4].start && ipInt <= ranges[4].end) return 'Private (APIPA)';
+            if (ipInt >= ranges[0].start && ipInt <= ranges[0].end) return 'Private (Class A)';
+            if (ipInt >= ranges[1].start && ipInt <= ranges[1].end) return 'Private (Class B)';
+            if (ipInt >= ranges[2].start && ipInt <= ranges[2].end) return 'Private (Class C)';
+            
+            return 'Public';
+        };
+
+        // --- Main Calculation Function ---
+        const calculateSubnet = () => {
+            const ipStr = ui.ipAddress.value.trim();
+            const maskStr = ui.subnetMask.value.trim();
+
+            const ipInt = ipToInt(ipStr);
+            let maskInt = null;
+            let cidr = null;
+
+            // Parse mask/CIDR input
+            if (/^\d{1,2}$/.test(maskStr)) { // CIDR
+                cidr = parseInt(maskStr, 10);
+                maskInt = cidrToIntMask(cidr);
+            } else if (/^\d{1,3}(\.\d{1,3}){3}$/.test(maskStr)) { // Dotted Decimal
+                maskInt = ipToInt(maskStr);
+                if (!isValidDottedMask(maskInt)) maskInt = null; // Validate
+                if(maskInt !== null) cidr = intMaskToCidr(maskInt);
+            }
+
+            // Validation
+            if (ipInt === null || maskInt === null || cidr === null) {
+                ui.inputError.classList.remove('hidden');
+                ui.resultsPlaceholder.classList.remove('hidden');
+                ui.resultsContent.classList.add('hidden');
+                return;
+            } else {
+                ui.inputError.classList.add('hidden');
+            }
+
+            // Calculations
+            const networkInt = (ipInt & maskInt) >>> 0;
+            const broadcastInt = (networkInt | (~maskInt)) >>> 0;
+            const wildcardInt = (~maskInt) >>> 0;
+            
+            const firstHostInt = (cidr < 31) ? networkInt + 1 : null;
+            const lastHostInt = (cidr < 31) ? broadcastInt - 1 : null;
+            
+            let numHosts = 0;
+            if (cidr < 31) {
+              numHosts = Math.pow(2, 32 - cidr) - 2;
+            }
+            if (numHosts < 0) numHosts = 0; // Handle /31, /32 case display
+
+
+            // Rendering
+            ui.res.networkAddr.textContent = intToIp(networkInt);
+            ui.res.broadcastAddr.textContent = intToIp(broadcastInt);
+            ui.res.hostRange.textContent = (firstHostInt && lastHostInt) ? `${intToIp(firstHostInt)} - ${intToIp(lastHostInt)}` : 'N/A';
+            ui.res.numHosts.textContent = numHosts.toLocaleString();
+            ui.res.subnetMask.textContent = `${intToIp(maskInt)} (/${cidr})`;
+            ui.res.wildcardMask.textContent = intToIp(wildcardInt);
+            ui.res.ipType.textContent = getIpType(ipInt);
+
+            ui.res.ipBinary.innerHTML = intToBinary(ipInt);
+            ui.res.maskBinary.innerHTML = intToBinary(maskInt);
+            ui.res.networkBinary.innerHTML = intToBinary(networkInt);
+            ui.res.broadcastBinary.innerHTML = intToBinary(broadcastInt);
+            
+            ui.resultsPlaceholder.classList.add('hidden');
+            ui.resultsContent.classList.remove('hidden');
+            lucide.createIcons(); // Re-render copy icons
+        };
+        
+        // --- Copy to Clipboard ---
+        const handleCopyClick = (e) => {
+            const copyButton = e.target.closest('.copy-btn');
+            if (!copyButton) return; 
+
+            const textElement = copyButton.previousElementSibling;
+            if (!textElement) return;
+
+            let textToCopy = textElement.textContent;
+            
+            // Special handling for binary - remove span tags
+            if (textElement.parentElement.classList.contains('binary-output')) {
+                textToCopy = textElement.innerText.replace(/\s+/g, ''); // Get innerText and remove spaces
+            }
+             if (textToCopy === 'N/A') return;
+
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                
+                copyButton.innerHTML = successIconHTML;
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    copyButton.innerHTML = originalIconHTML;
+                    lucide.createIcons();
+                }, 1500);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Copy failed:', err));
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "absolute";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        };
+
+        // --- Event Listeners ---
+        ui.ipAddress.addEventListener('input', calculateSubnet);
+        ui.subnetMask.addEventListener('input', calculateSubnet);
+        ui.resultsContent.addEventListener('click', handleCopyClick);
+
+        // --- Initial Calculation ---
+        calculateSubnet(); 
+    });
+    </script>
+</body>
+</html>
+

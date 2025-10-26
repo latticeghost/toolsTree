@@ -170,6 +170,32 @@
                 </div>
             </a>
 
+            <a href="categories/networking.html" class="group block p-6 bg-white dark:bg-gray-900 rounded-xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 dark:border-gray-800 hover:border-tt-primary dark:hover:border-tt-primary/50 hover:bg-gray-50">
+                <div class="flex items-center space-x-4 mb-4">
+                    <i data-lucide="shield" class="w-8 h-8 text-tt-primary transition group-hover:scale-110"></i>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Networking & Security Tools</h2>
+                </div>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Essential utilities for IP lookups, domain checks, subnet calculations.</p>
+                <div id="networking-tools-preview" class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-gray-400"></div>
+                <div class="mt-4 text-tt-primary font-semibold flex items-center group-hover:text-tt-secondary transition">
+                    View All Tools 
+                    <i data-lucide="arrow-right" class="w-4 h-4 ml-2 transition group-hover:translate-x-1"></i>
+                </div>
+            </a>
+
+            <a href="categories/seo-marketing.html" class="group block p-6 bg-white dark:bg-gray-900 rounded-xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 dark:border-gray-800 hover:border-tt-primary dark:hover:border-tt-primary/50 hover:bg-gray-50">
+                <div class="flex items-center space-x-4 mb-4">
+                    <i data-lucide="trending-up" class="w-8 h-8 text-tt-primary transition group-hover:scale-110"></i>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">SEO & Marketing Tools</h2>
+                </div>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Utilities to boost your online presence, analyze keywords, generate meta tags and more.</p>
+                <div id="seo-tools-preview" class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-gray-400"></div>
+                <div class="mt-4 text-tt-primary font-semibold flex items-center group-hover:text-tt-secondary transition">
+                    View All Tools 
+                    <i data-lucide="arrow-right" class="w-4 h-4 ml-2 transition group-hover:translate-x-1"></i>
+                </div>
+            </a>
+            
             <a href="categories/misc.html" class="group block p-6 bg-white dark:bg-gray-900 rounded-xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 dark:border-gray-800 hover:border-tt-primary dark:hover:border-tt-primary/50 hover:bg-gray-50">
                 <div class="flex items-center space-x-4 mb-4">
                     <i data-lucide="wrench" class="w-8 h-8 text-tt-primary transition group-hover:scale-110"></i>
@@ -182,23 +208,27 @@
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-2 transition group-hover:translate-x-1"></i>
                 </div>
             </a>
-            </div>
+        </div>
     </main>
 
     <script src="javascript/globals.js" defer></script>
     <script>
         const ALL_TOOLS_LOCAL = [
             { name: "Advanced Data Converter", url: "tools/data-converter.html", category: "Data&Developer" },
-            { name: "JSON Formatter, Validator & Minifier", url: "tools/json-formatter.html", category: "Data&Developer" },
+            { name: "Mermaid.js Live Editor & Renderer", url: "tools/mermaid-editor.html", category: "Data&Developer" },
             { name: "Time Zone Converter", url: "tools/time-zone-converter.html", category: "Clock&Time" },
             { name: "All-in-One Case Converter", url: "tools/case-converter.html", category: "Text" },
             { name: "Text Cleaner & Space Remover", url: "tools/remove-spaces.html", category: "Text" },
             { name: "Loan EMI & Prepayment Calculator", url: "tools/emi-calculator.html", category: "Finance" },
-            { name: "SIP Calculator", url: "tools/sip-calculator.html", category: "Finance" },
+            { name: "Advanced Compound Interest Calculator", url: "tools/compound-interest.html", category: "Finance" },
             { name: "Advanced Image Optimizer with Watermark", url: "tools/image-compressor.html", category: "Image" },
             { name: "WCAG Color Contrast Checker", url: "tools/contrast-checker.html", category: "Image" },
             { name: "Password Generator & Analyzer", url: "tools/password-generator.html", category: "Misc" },
             { name: "Advanced QR Code Generator", url: "tools/qr-generator.html", category: "Misc" },
+            { name: "IP Address Lookup & Geolocation", url: "tools/ip-lookup.html", category: "Networking"},
+            { name: "Advanced Subnet Calculator (IPv7)", url: "tools/subnet-calculator.html", category: "Networking"},
+            { name: "UTM Campaign URL Builder", url: "../tools/utm-builder.html", category: "SEO"},
+            { name: "Advanced Meta Tag Generator", url: "../tools/meta-tag-generator.html", category: "SEO"},
         ];
         
         const CATEGORY_MAP = {
@@ -207,7 +237,9 @@
             'clock-time-tools-preview': 'Clock&Time',
             'finance-tools-preview': 'Finance',
             'image-tools-preview': 'Image',
-            'misc-tools-preview': 'Misc'
+            'misc-tools-preview': 'Misc',
+            'networking-tools-preview' : 'Networking',
+            'seo-tools-preview' : 'SEO'
         };
 
         const renderCategoryPreviews = () => {

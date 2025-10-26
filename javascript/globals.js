@@ -49,8 +49,8 @@ const FOOTER_HTML = (rootPath) => `
 // --- 2. TOOL DATA (Centralized for Global Search) ---
 const ALL_TOOLS = [
     { name: "Character Code & Data Converter", url: "tools/data-converter.html", category: "Data & Developer", icon: "replace", color: "text-tt-primary", description: "Convert Unicode, Hex, Binary, Base64, and URL encoding." },
-    { name: "JSON Formatter, Validator & Minifier", url: "tools/json-formatter.html", category: "Developer", icon: "box", color: "text-purple-600", description: "Format, validate, and minify your JSON data instantly." },
-    { name: "Hash, HMAC & Checksum Generator", url: "tools/hash-generator.html", category: "Developer", icon: "fingerprint", color: "text-red-500", description: "Generate cryptographic hashes from any input text." },
+    { name: "JSON Formatter, Validator & Minifier", url: "tools/json-formatter.html", category: "Data & Developer", icon: "box", color: "text-purple-600", description: "Format, validate, and minify your JSON data instantly." },
+    { name: "Hash, HMAC & Checksum Generator", url: "tools/hash-generator.html", category: "Networking & Security", icon: "fingerprint", color: "text-red-500", description: "Generate cryptographic hashes from any input text." },
     { name: "Time Zone Converter", url: "tools/time-zone-converter.html", category: "Clock & Time", icon: "globe", color: "text-blue-500", description: "Convert time between multiple global time zones instantly." },
     { name: "Date Calculator", url: "tools/date-calculator.html", category: "Clock & Time", icon: "calendar", color: "text-purple-500", description: "Calculate days between dates or add/subtract time from a date." },
     { name: "Case Converter", url: "tools/case-converter.html", category: "Text", icon: "text-cursor-input", color: "text-purple-600", description: "Convert text to UPPERCASE, lowercase, Title Case, and more." },
@@ -68,9 +68,17 @@ const ALL_TOOLS = [
     { name: "Rent vs. Buy Home Calculator", url: "tools/rent-vs-buy-calculator.html", category: "Finance", icon: "scale", color: "text-blue-600", description: "Analyze the financial costs and benefits of renting versus buying." },
     { name: "Advanced CSS Gradient Generator", url: "tools/css-gradient-generator.html", category: "Data & Developer", icon: "palette", color: "text-purple-600", description: "Visually create and customize stunning CSS gradients." },
     { name: "Next-Gen Favicon Generator Kit", url: "../tools/favicon-generator.html", category: "Image", icon: "gem", color: "text-blue-500", description: "Create a complete favicon package (ICO, PNG, manifest) from a single image." },
-    { name: "JWT Debugger & Verifier", url: "../tools/jwt-debugger.html", category: "Data&Developer", icon: "key-round", color: "text-rose-600", description: "Decode and verify JWTs with HS256/384/512 signature checks." },
-    { name: "CSS Grid Generator & Visual Builder", url: "../tools/css-grid-generator.html", category: "Data&Developer", icon: "layout-grid", color: "text-tt-primary", description: "Visually build complex CSS Grid layouts, named areas, and track definitions." },
-    { name: "Mermaid.js Live Editor & Renderer",url: "../tools/mermaid-editor.html",category: "Data&Developer",icon: "workflow", color: "text-emerald-500", description: "Visualize and render diagrams (flowcharts, sequence, class, Gantt) from Mermaid.js code in real-time." },
+    { name: "JWT Debugger & Verifier", url: "../tools/jwt-debugger.html", category: "Data & Developer", icon: "key-round", color: "text-rose-600", description: "Decode and verify JWTs with HS256/384/512 signature checks." },
+    { name: "CSS Grid Generator & Visual Builder", url: "../tools/css-grid-generator.html", category: "Data & Developer", icon: "layout-grid", color: "text-tt-primary", description: "Visually build complex CSS Grid layouts, named areas, and track definitions." },
+    { name: "Mermaid.js Live Editor & Renderer",url: "../tools/mermaid-editor.html",category: "Data & Developer",icon: "workflow", color: "text-emerald-500", description: "Visualize and render diagrams (flowcharts, sequence, class, Gantt) from Mermaid.js code in real-time." },
+    { name: "IP Address Lookup & Geolocation", url: "../tools/ip-lookup.html", category: "Networking & Security", icon: "map-pin", color: "text-blue-600", description: "Find the geographic location, ISP, and other details of any IP address." },
+    { name: "Advanced Subnet Calculator (IPv4)", url: "../tools/subnet-calculator.html", category: "Networking & Security", icon: "binary", color: "text-orange-500", description: "Calculate IP ranges, broadcast addresses, and netmasks for any subnet." },
+    { name: "IP Blacklist & Abuse Checker", url: "../tools/ip-blacklist-checker.html", category: "Networking & Security", icon: "shield-alert", color: "text-red-600", description: "Check if an IP is on a blacklist and see its abuse confidence score." },
+    { name: "Advanced URL Parser & Decoder", url: "../tools/url-parser.html", category: "Networking & Security", icon: "link-2", color: "text-purple-600", description: "Break down URLs into components and decode query parameters." },
+    { name: "UTM Campaign URL Builder", url: "../tools/utm-builder.html", category: "SEO & Marketing", icon: "link", color: "text-blue-600", description: "Create trackable campaign URLs with UTM parameters." },
+    { name: "SERP (Search Engine Results Page) Snippet Preview Tool", url: "../tools/serp-previewer.html", category: "SEO & Marketing", icon: "search", color: "text-green-600", description: "See how your page title and meta description look on Google." },
+    { name: "Advanced Meta Tag Generator", url: "../tools/meta-tag-generator.html", category: "SEO & Marketing", icon: "tag", color: "text-indigo-600", description: "Generate essential meta tags (title, description, OG) for your pages." },
+
 ];
 
 // --- 3. THEME MANAGEMENT LOGIC (FUTURE-PROOF) ---
@@ -140,7 +148,7 @@ const setupGlobalSearch = (rootPath) => {
                     <i data-lucide="${tool.icon}" class="w-4 h-4 ${tool.color} mr-3"></i>
                     <div class="flex flex-col overflow-hidden">
                         <div class="text-sm font-medium text-gray-800 dark:text-gray-100 whitespace-nowrap">${tool.name}</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400">${tool.category.replace(/&/g, ' & ')} Tool</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">${tool.category.replace(/&/g, ' & ')} Tools</div>
                     </div>
                 </a>
             `).join('');

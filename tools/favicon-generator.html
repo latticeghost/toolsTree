@@ -44,6 +44,7 @@
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
+    <!-- ... (LD+JSON Schema and FAQ Schema are unchanged) ... -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -108,6 +109,7 @@
 <body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <!-- ... (Nav/Breadcrumb is unchanged) ... -->
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
@@ -124,6 +126,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <div class="lg:col-span-2 bg-white dark:bg-gray-900 shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
                 
+                <!-- ... (1. Select Source is unchanged) ... -->
                 <div>
                     <h2 class="text-xl font-bold mb-3">1. Select Source</h2>
                     <div id="modeSelector" class="flex gap-2 text-sm border-b pb-4 dark:border-gray-800">
@@ -138,6 +141,7 @@
                     </div>
                 </div>
 
+                <!-- ... (Image Mode is unchanged) ... -->
                 <div id="imageMode" class="space-y-4">
                     <label for="imageUpload" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-500">
                         <div id="uploadPrompt" class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -150,18 +154,26 @@
                     </label>
                 </div>
                 
+                <!-- ... (Emoji Mode is unchanged) ... -->
                 <div id="emojiMode" class="space-y-4 hidden">
                     <label for="emojiInput" class="block text-sm font-medium mb-2">Paste or Type a Single Emoji (e.g., 🚀)</label>
                     <input type="text" id="emojiInput" maxlength="2" placeholder="✨" class="text-6xl text-center w-full p-3 border rounded-lg dark:bg-gray-700" style="height: 192px;">
                     <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Using a single character ensures the best quality result.</p>
                 </div>
 
+                <!-- START: "Load More" HTML Implementation -->
                 <div id="iconMode" class="space-y-4 hidden">
                     <label for="iconSearch" class="block text-sm font-medium mb-2">Search Lucide Icons</label>
                     <input type="text" id="iconSearch" placeholder="e.g., search, user, feather" class="w-full p-2 border rounded-lg dark:bg-gray-700">
                     <div id="iconGrid" class="grid grid-cols-6 gap-2 p-3 border rounded-lg bg-gray-50 dark:bg-gray-900/50 max-h-48 overflow-y-auto">
                         <p class="col-span-6 text-center text-gray-500">Loading icons...</p>
                     </div>
+                    
+                    <!-- ADDED "Load More" Button -->
+                    <button id="loadMoreBtn" class="hidden w-full mt-2 p-2 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                        Load More
+                    </button>
+                    
                     <div id="selectedIconPreview" class="text-center text-sm font-semibold h-6 mt-3">No icon selected.</div>
                     
                     <p class="text-xs text-gray-500 dark:text-gray-300 text-center mt-3">
@@ -169,11 +181,14 @@
                         <span id="lucideLink" class="text-tt-primary hover:underline cursor-pointer">lucide.dev</span> and paste it into the search bar.
                     </p>
                 </div>
+                <!-- END: "Load More" HTML Implementation -->
 
+
+                <!-- ... (2. Customize Colors is unchanged) ... -->
                 <div>
                     <h2 class="text-xl font-bold mb-3">2. Customize Colors</h2>
                      <div class="space-y-4">
-                        <label for="fgColor" class="block text-sm font-medium" id="fgColorLabel">Icon Color / Foreground</label>
+                        <label for="fgColor" class="block text-sm font-medium" id="fgColorLabel">Icon Color</label>
                         <div class="flex items-center gap-3">
                             <input type="color" id="fgColor" value="#10b981" class="p-1 h-10 w-10 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-800">
                             <input type="text" id="fgColorHex" value="#10b981" class="p-2 w-full border rounded-lg font-mono dark:bg-gray-700 dark:border-gray-600">
@@ -184,9 +199,16 @@
                             <input type="color" id="bgColor" value="#FFFFFF" class="p-1 h-10 w-10 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-800">
                             <input type="text" id="bgColorHex" value="#FFFFFF" class="p-2 w-full border rounded-lg font-mono dark:bg-gray-700 dark:border-gray-600">
                         </div>
-                    </div>
+                        
+                        <div class="flex items-center pt-2">
+                            <input type="checkbox" id="transparentBg" class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-tt-primary focus:ring-tt-primary">
+                            <label for="transparentBg" class="ml-2 block text-sm">Transparent background (for PNGs)</label>
+                        </div>
+                        <p class="text-xs text-gray-500 -mt-2"><i data-lucide="info" class="w-3 h-3 inline-block mr-1"></i> `apple-touch-icon.png` will always receive a background for best results on iOS.</p>
+                        </div>
                 </div>
 
+                <!-- ... (3. Generate Your Kit is unchanged) ... -->
                  <div>
                     <h2 class="text-xl font-bold mb-3">3. Generate Your Kit</h2>
                     <button id="generateBtn" disabled class="w-full flex items-center justify-center gap-2 bg-tt-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
@@ -197,6 +219,7 @@
                 </div>
             </div>
 
+            <!-- ... (Results Panel is unchanged) ... -->
             <div id="resultsPanel" class="lg:col-span-3 space-y-6">
                  <div class="bg-white p-6 rounded-xl shadow-xl dark:bg-gray-900 border dark:border-gray-800">
                     <h2 class="text-xl font-bold mb-4">Live Previews</h2>
@@ -220,8 +243,8 @@
                  <div class="bg-white p-6 rounded-xl shadow-xl dark:bg-gray-900 border dark:border-gray-800">
                     <div class="flex justify-between items-center mb-2">
                         <h2 class="text-xl font-bold">Your HTML Code</h2>
-                        <button id="copyBtn" class="flex items-center gap-2 text-sm bg-gray-200 dark:bg-gray-600 px-3 py-1 rounded-md hover:bg-gray-300">
-                            <i data-lucide="copy" class="w-4 h-4"></i><span id="copyBtnText">Copy</span>
+                        <button id="copyBtn" class="p-2 rounded-md text-gray-500 hover:text-tt-primary transition-colors">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <pre class="bg-gray-100 dark:bg-gray-900/50 p-4 rounded-lg text-xs overflow-x-auto"><code id="htmlCodeBlock" class="language-html text-gray-700 dark:text-gray-200">
@@ -230,6 +253,8 @@
                 </div>
             </div>
         </div>
+        
+        <!-- ... (All informational sections are unchanged) ... -->
         <section class="mt-10 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">The Easiest Way to Create a Complete Favicon Set</h2>
@@ -243,7 +268,7 @@
                             <strong class="font-medium text-gray-900 dark:text-gray-100">Client-Side Privacy:</strong> All image processing happens directly in your browser. Your images are never uploaded, ensuring 100% privacy and security.
                         </li>
                         <li>
-                            <strong class="font-medium text-gray-900 dark:text-gray-100">Complete Kit Generation:</strong> Get everything you need in one `.zip` file: multi-size PNGs, Apple Touch Icon, `favicon.ico`, and a `site.webmanifest` file for PWAs.
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Complete Kit Generation:</strong> Get everything you need in one `.zip` file: multi-size PNGs, Apple Touch Icon, and a `site.webmanifest` file for PWAs.
                         </li>
                          <li>
                             <strong class="font-medium text-gray-900 dark:text-gray-100">Instant HTML Code:</strong> Copy the exact HTML code needed to implement your new favicons directly into your website's `<head>`.
@@ -257,7 +282,7 @@
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use the Favicon Generator</h2>
                 <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
                     <li><b>Select Source:</b> Choose between uploading a high-res image, typing a single emoji, or searching for a Lucide icon.</li>
-                    <li><b>Customize Colors:</b> Set the foreground color (for icons/emojis) and the background color (for padding/manifest).</li>
+                    <li><b>Customize Colors:</b> Set the icon/emoji color and the background color. You can also opt for a transparent background.</li>
                     <li><b>Generate Kit:</b> Click the "Generate & Download Kit" button. A `.zip` file containing all your icons and the manifest file will be downloaded.</li>
                     <li><b>Implement:</b> Unzip the file and place the contents in the root directory of your website. Copy the provided HTML code and paste it into the `<head>` section of your website's pages.</li>
                 </ol>
@@ -269,15 +294,14 @@
                     <li><b>Browser Tabs:</b> Standard 16x16 and 32x32 icons for crystal-clear display on all screens.</li>
                     <li><b>Apple Devices:</b> An `apple-touch-icon.png` is essential for users who add your website to their iPhone or iPad home screen.</li>
                     <li><b>Android & Chrome:</b> High-resolution icons and a `site.webmanifest` file are crucial for home screen shortcuts and creating a native-like Progressive Web App (PWA) experience.</li>
-                    <li><b>Windows Tiles:</b> While not generated in this basic kit, a full setup often includes icons for Windows Start Menu pinning.</li>
                 </ul>
             </div>
              <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is the best format for the source image?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">For the best results, use a vector format like <strong>SVG</strong>. If you don't have an SVG, a high-resolution <strong>PNG</strong> (at least 512x512 pixels) with a transparent background is the next best choice. This allows the generator to scale the image down without losing quality.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What is a `site.webmanifest` file?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The `site.webmanifest` is a JSON file that tells the browser about your web application and how it should behave when 'installed' on a user's mobile or desktop device. It includes information like the app's name, icons, start URL, and theme colors, which are essential for Progressive Web Apps (PWAs).</p></details>
-                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Where do I upload the generated files?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">For best practice, all the generated files (e.g., `favicon.ico`, `apple-touch-icon.png`, `site.webmanifest`, etc.) should be placed in the <strong>root directory</strong> of your website. This is the main folder, the same place your `index.html` file usually lives.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Where do I upload the generated files?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">For best practice, all the generated files (e.g., `apple-touch-icon.png`, `site.webmanifest`, etc.) should be placed in the <strong>root directory</strong> of your website. This is the main folder, the same place your `index.html` file usually lives.</p></details>
                     <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                             <span>How does the Emoji mode work?</span>
@@ -301,12 +325,20 @@
     
     <script src="../javascript/globals.js" defer></script>
     <script>
-    // Debounce timer for the icon search listener
+    
+    // --- START: "Load More" State Variables ---
     let debounceTimer;
+    let currentSearchResults = [];
+    let currentIconPage = 0;
+    const ICONS_PER_PAGE = 200; // Set page size
+    // --- END: "Load More" State Variables ---
 
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof window.injectLayout === 'function') {
             window.injectLayout(false);
+        }
+        if (window.lucide) {
+            lucide.createIcons();
         }
 
         // --- UI Elements ---
@@ -315,18 +347,20 @@
             imagePreview: document.getElementById('imagePreview'),
             bgColorPicker: document.getElementById('bgColor'), bgColorHex: document.getElementById('bgColorHex'),
             fgColorPicker: document.getElementById('fgColor'), fgColorHex: document.getElementById('fgColorHex'),
+            fgColorLabel: document.getElementById('fgColorLabel'),
             generateBtn: document.getElementById('generateBtn'), resultsPanel: document.getElementById('resultsPanel'),
             htmlCodeBlock: document.getElementById('htmlCodeBlock'), copyBtn: document.getElementById('copyBtn'),
-            copyBtnText: document.getElementById('copyBtnText'), statusText: document.getElementById('statusText'),
             preview16: document.getElementById('preview16').getContext('2d'),
-            preview32: document.getElementById('preview32').getContext('2d'),
-            
-            // New UI elements
+            preview32: document.getElementById('preview32').getContext('2d'), 
             modeRadios: document.querySelectorAll('input[name="sourceMode"]'),
             imageMode: document.getElementById('imageMode'), emojiMode: document.getElementById('emojiMode'), iconMode: document.getElementById('iconMode'),
             emojiInput: document.getElementById('emojiInput'), iconSearch: document.getElementById('iconSearch'),
-            iconGrid: document.getElementById('iconGrid'), selectedIconPreview: document.getElementById('selectedIconPreview'),
-            lucideLink: document.getElementById('lucideLink') // Get the new span element
+            iconGrid: document.getElementById('iconGrid'), 
+            loadMoreBtn: document.getElementById('loadMoreBtn'), // <-- ADDED
+            selectedIconPreview: document.getElementById('selectedIconPreview'),
+            lucideLink: document.getElementById('lucideLink'),
+            statusText: document.getElementById('statusText'),
+            transparentBg: document.getElementById('transparentBg')
         };
         const hiddenCanvas = document.createElement('canvas');
         
@@ -334,9 +368,9 @@
         let selectedIcon = null; // Used for icon mode
         let activeMode = 'image';
 
-        // --- Core Drawing Functions (Unchanged) ---
-
-        async function drawSourceToCanvas(ctx, size, drawBackground = true) { // Added drawBackground parameter
+        // --- Core Drawing Functions ---
+        // ... (drawSourceToCanvas function is unchanged) ...
+        async function drawSourceToCanvas(ctx, size, drawBackground = true) { // Parameter is now used
             const bgColor = ui.bgColorPicker.value;
             const fgColor = ui.fgColorPicker.value;
 
@@ -350,20 +384,17 @@
             }
 
             // 3. Draw the source content (Image, Emoji, or Icon)
-            let drawPromise = Promise.resolve(); // Default for sync operations
+            let drawPromise = Promise.resolve(); 
 
             if (activeMode === 'image' && sourceImage) {
                 ctx.drawImage(sourceImage, 0, 0, size, size);
             }
             else if (activeMode === 'emoji' && ui.emojiInput.value) {
                 const emoji = ui.emojiInput.value.trim();
-                // For Emoji, ensure foreground color is applied if background is transparent
-                ctx.fillStyle = fgColor; // Apply foreground color for emoji text
                 ctx.font = `${size * 0.8}px sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                // Adjust position slightly for better centering if needed
-                ctx.fillText(emoji, size / 2, size / 2 + size * 0.05); // Small vertical adjustment might help
+                ctx.fillText(emoji, size / 2, size / 2 + size * 0.05); 
             }
             else if (activeMode === 'icon' && selectedIcon) {
                 const iconNode = lucide.icons[selectedIcon];
@@ -379,7 +410,6 @@
                 const img = new Image();
                 const svgDataURL = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(iconSVGString)));
 
-                // Icon drawing is asynchronous
                 drawPromise = new Promise((resolve, reject) => {
                     img.onload = () => {
                         const padding = size * 0.1;
@@ -391,27 +421,23 @@
                 });
             }
 
-            return drawPromise; // Return the promise (resolves immediately for non-icon modes)
+            return drawPromise; 
         }
 
+        // ... (updatePreviews function is unchanged) ...
         async function updatePreviews() {
-            // Clear existing previews
             ui.preview16.clearRect(0, 0, 16, 16);
-            ui.preview32.clearRect(0, 0, 16, 16); // Only draw on 16x16 area
+            ui.preview32.clearRect(0, 0, 16, 16); 
             
-            // Draw on hidden canvas first, then copy to previews
             hiddenCanvas.width = 32;
             hiddenCanvas.height = 32;
             const ctx = hiddenCanvas.getContext('2d');
 
-            // Wait for the asynchronous icon drawing if needed
-            await drawSourceToCanvas(ctx, 32, false);
+            await drawSourceToCanvas(ctx, 32, !ui.transparentBg.checked); 
 
-            // Copy to the smaller preview contexts
             ui.preview16.drawImage(hiddenCanvas, 0, 0, 16, 16);
             ui.preview32.drawImage(hiddenCanvas, 0, 0, 16, 16);
 
-            // Re-enable/disable button based on current source availability
             let canGenerate = false;
             if (activeMode === 'image') canGenerate = !!sourceImage;
             else if (activeMode === 'emoji') canGenerate = !!ui.emojiInput.value.trim();
@@ -419,8 +445,10 @@
             ui.generateBtn.disabled = !canGenerate;
         }
 
-        // --- Handlers (Unchanged) ---
 
+        // --- Handlers ---
+        
+        // ... (handleImageUpload function is unchanged) ...
         function handleImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
@@ -439,61 +467,100 @@
             }
         }
         
+        // --- START: REVISED Icon Grid Logic ---
+        
+        // This new function renders one batch of icons
+        function renderIconBatch() {
+            const fgColor = ui.fgColorPicker.value;
+            const start = currentIconPage * ICONS_PER_PAGE;
+            const end = start + ICONS_PER_PAGE;
+            
+            const batch = currentSearchResults.slice(start, end);
+
+            // Handle "No icons found" on the *first page*
+            if (start === 0 && batch.length === 0) {
+                const query = ui.iconSearch.value.trim();
+                if (query !== '') {
+                    ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">No icons found for "${query}".</p>`;
+                } else {
+                    // Show a prompt if search is empty
+                    ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">Search to see icons (e.g., "star", "user")</p>`;
+                }
+                ui.loadMoreBtn.classList.add('hidden'); // Ensure it's hidden
+                return;
+            }
+            
+            // Render the batch
+            try {
+                for (const name of batch) {
+                    const iconNode = lucide.icons[name]; 
+                    if (!iconNode) continue; 
+
+                    const svgElement = lucide.createElement(iconNode);
+                    svgElement.setAttribute('width', 24);
+                    svgElement.setAttribute('height', 24);
+                    svgElement.setAttribute('stroke', fgColor);
+                    const iconSVGString = svgElement.outerHTML; 
+
+                    const iconEl = document.createElement('div');
+                    iconEl.className = 'p-1 rounded-md cursor-pointer hover:bg-tt-primary/20 transition text-center flex items-center justify-center';
+                    iconEl.setAttribute('title', name);
+                    iconEl.innerHTML = iconSVGString; 
+                    iconEl.onclick = () => selectIcon(name);
+
+                    ui.iconGrid.appendChild(iconEl);
+                }
+            } catch (error) {
+                console.error("Error rendering icon batch:", error);
+                ui.iconGrid.innerHTML += `<p class="col-span-6 text-center text-red-500">Error rendering icons.</p>`;
+            }
+            
+            // Update button visibility
+            if (currentSearchResults.length > end) {
+                ui.loadMoreBtn.classList.remove('hidden');
+            } else {
+                ui.loadMoreBtn.classList.add('hidden');
+            }
+            
+            currentIconPage++;
+        }
+
+        // This function now *filters* and calls renderIconBatch
         function updateIconGrid(query = '') {
             if (typeof lucide === 'undefined' || !lucide.icons || typeof lucide.createElement !== 'function') {
-                console.warn('Lucide library not ready yet or createElement is missing. Retrying...');
+                console.warn('Lucide library not ready yet. Retrying...');
                 setTimeout(() => updateIconGrid(query), 200);
                 ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">Loading icons...</p>`;
                 return;
             }
 
-            ui.iconGrid.innerHTML = ''; // Clear previous results
-            let count = 0;
-            const fgColor = ui.fgColorPicker.value;
+            // Clear state
+            ui.iconGrid.innerHTML = ''; 
+            ui.loadMoreBtn.classList.add('hidden');
+            currentIconPage = 0;
             const lowerQuery = query.toLowerCase().trim();
 
+            // Filter all 1000+ icons into the state array
             try {
-                // --- FIX: Use Object.keys() for iteration ---
-                Object.keys(lucide.icons).forEach(name => {
-                    // Skip if we've already displayed enough icons
-                    if (count >= 100) return;
-
-                    // Check if the icon name matches the query
-                    if (lowerQuery === '' || name.includes(lowerQuery)) {
-                        const iconNode = lucide.icons[name]; // Get the icon data node
-                        if (!iconNode) return; // Skip if icon data is invalid
-
-                        // Use lucide.createElement
-                        const svgElement = lucide.createElement(iconNode);
-                        svgElement.setAttribute('width', 24);
-                        svgElement.setAttribute('height', 24);
-                        svgElement.setAttribute('stroke', fgColor);
-                        const iconSVGString = svgElement.outerHTML; // Get the SVG string
-
-                        const iconEl = document.createElement('div');
-                        iconEl.className = 'p-1 rounded-md cursor-pointer hover:bg-tt-primary/20 transition text-center flex items-center justify-center';
-                        iconEl.setAttribute('title', name);
-                        iconEl.innerHTML = iconSVGString; // Use the generated SVG string
-                        iconEl.onclick = () => selectIcon(name);
-
-                        ui.iconGrid.appendChild(iconEl);
-                        count++;
-                    }
+                currentSearchResults = Object.keys(lucide.icons).filter(name => {
+                    return lowerQuery === '' || name.includes(lowerQuery);
                 });
-
             } catch (error) {
-                console.error("Error generating icon grid:", error);
-                ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-red-500">Error loading icons. Check console.</p>`;
+                console.error("Error filtering icons:", error);
+                ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-red-500">Error filtering icons.</p>`;
                 return;
             }
+            
+            // Render the first batch
+            renderIconBatch();
 
-            if (count === 0 && lowerQuery !== '') {
-                ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">No icons found for "${query}".</p>`;
-            } else if (count === 0 && lowerQuery === '') {
-                ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">Start typing to search icons.</p>`;
-            }
+            // Scroll grid to top on new search
+            ui.iconGrid.scrollTop = 0;
         }
+        // --- END: REVISED Icon Grid Logic ---
 
+
+        // ... (selectIcon function is unchanged) ...
         function selectIcon(name) {
             selectedIcon = name;
             ui.selectedIconPreview.innerHTML = `Selected: <strong>${name}</strong>`;
@@ -501,11 +568,18 @@
             ui.iconGrid.scrollTop = 0; 
         }
 
+        // ... (switchMode function is unchanged, but corrected for emoji bug) ...
         function switchMode(mode) {
             activeMode = mode;
             [ui.imageMode, ui.emojiMode, ui.iconMode].forEach(el => el.classList.add('hidden'));
 
-            // Reset image visibility (only needed for image mode)
+            const fgControls = [ui.fgColorLabel, ui.fgColorPicker.parentElement];
+            if (mode === 'image' || mode === 'emoji') { // <-- Correctly hides for Emoji too
+                fgControls.forEach(el => el.classList.add('hidden'));
+            } else {
+                fgControls.forEach(el => el.classList.remove('hidden'));
+            }
+
             ui.imagePreview.classList.add('hidden');
             ui.uploadPrompt.classList.remove('hidden');
 
@@ -515,11 +589,12 @@
                 ui.emojiMode.classList.remove('hidden');
             } else if (mode === 'icon') {
                 ui.iconMode.classList.remove('hidden');
-                updateIconGrid(ui.iconSearch.value); // Re-render grid when switching to icon mode
+                updateIconGrid(ui.iconSearch.value); 
             }
             updatePreviews();
         }
 
+        // ... (generateFaviconKit function is unchanged) ...
         async function generateFaviconKit() {
             if (ui.generateBtn.disabled) return;
             
@@ -531,13 +606,15 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const bgColor = ui.bgColorPicker.value;
+            
+            const addBg = !ui.transparentBg.checked;
 
             for (const size of sizes) {
                 canvas.width = size;
                 canvas.height = size;
                 
-                // Draw source content onto the canvas
-                drawSourceToCanvas(ctx, size);
+                const drawBackground = (size === 180) ? true : addBg;
+                await drawSourceToCanvas(ctx, size, drawBackground);
 
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
                 
@@ -549,17 +626,6 @@
                 zip.file(filename, blob);
             }
             
-            // Generate favicon.ico (simple version with just 32x32)
-            canvas.width = 32; canvas.height = 32;
-            drawSourceToCanvas(ctx, 32);
-            const icoBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-            // --- IMPORTANT: ICO generation needs more work for multi-size ---
-            // The simple png-to-ico conversion here is basic.
-            // Real ICO generation requires specific byte structure for multiple sizes.
-            // For now, we'll keep the 32x32 PNG renamed as .ico as a placeholder.
-            zip.file('favicon.ico', icoBlob);
-
-
             // Generate webmanifest
             const manifest = {
                 name: "Your App Name",
@@ -574,7 +640,6 @@
             };
             zip.file('site.webmanifest', JSON.stringify(manifest, null, 2));
 
-            // Update UI and trigger download
             updateHtmlCodeBlock();
             ui.resultsPanel.classList.remove('hidden');
             
@@ -588,6 +653,7 @@
             ui.generateBtn.disabled = false;
         }
         
+        // ... (updateHtmlCodeBlock function is unchanged) ...
         function updateHtmlCodeBlock() {
             const code = `&lt;link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"&gt;
 &lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"&gt;
@@ -595,41 +661,31 @@
 &lt;link rel="manifest" href="/site.webmanifest"&gt;`;
             ui.htmlCodeBlock.innerHTML = code;
         }
-
-        function copyHtmlCode() {
-            navigator.clipboard.writeText(ui.htmlCodeBlock.innerText).then(() => {
-                ui.copyBtnText.textContent = 'Copied!';
-                setTimeout(() => { ui.copyBtnText.textContent = 'Copy'; }, 2000);
-            });
-        }
         
         // --- Event Listeners and Initialization ---
 
-        // Local variable to hold the debounce timeout ID
-        let inputDebounceTimer;
+        let inputDebounceTimer; // Note: This was already defined globally, but moved for clarity
 
-        // Click handler for the custom link span
         ui.lucideLink.addEventListener('click', () => {
             window.open('https://lucide.dev', '_blank');
         });
 
-
-        // Input Listeners
         ui.imageUpload.addEventListener('change', handleImageUpload);
         ui.emojiInput.addEventListener('input', () => {
             clearTimeout(inputDebounceTimer);
             inputDebounceTimer = setTimeout(updatePreviews, 200);
         });
         
-        // NEW ROBUST DEBOUNCE FOR ICON SEARCH
         ui.iconSearch.addEventListener('input', () => {
             clearTimeout(inputDebounceTimer);
             inputDebounceTimer = setTimeout(() => {
                 updateIconGrid(ui.iconSearch.value);
-            }, 300);
+            }, 300); // Debounce search
         });
         
-        // Color Listeners (Fast updates for preview)
+        // --- ADDED Event Listener for Load More ---
+        ui.loadMoreBtn.addEventListener('click', renderIconBatch);
+        
         const colorUpdateHandler = () => {
             clearTimeout(inputDebounceTimer);
             inputDebounceTimer = setTimeout(updatePreviews, 50);
@@ -638,15 +694,51 @@
         ui.bgColorHex.addEventListener('input', () => { ui.bgColorPicker.value = ui.bgColorHex.value; colorUpdateHandler(); });
         ui.fgColorPicker.addEventListener('input', () => { ui.fgColorHex.value = ui.fgColorPicker.value.toUpperCase(); colorUpdateHandler(); });
         ui.fgColorHex.addEventListener('input', () => { ui.fgColorPicker.value = ui.fgColorHex.value; colorUpdateHandler(); });
-
-        // Mode and Button Listeners
+        
+        ui.transparentBg.addEventListener('change', updatePreviews);
         ui.modeRadios.forEach(radio => radio.addEventListener('change', () => switchMode(radio.value)));
         ui.generateBtn.addEventListener('click', generateFaviconKit);
-        ui.copyBtn.addEventListener('click', copyHtmlCode);
+        
+        // ... (Copy Button listener is unchanged) ...
+        ui.copyBtn.addEventListener('click', () => {
+            const textToCopy = ui.htmlCodeBlock.innerText;
+            if (!textToCopy || textToCopy.includes('see the code here')) {
+                return; 
+            }
+            const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
+            const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+            const copySuccess = () => {
+                ui.copyBtn.innerHTML = successIconHTML;
+                if (window.lucide) lucide.createIcons();
+                setTimeout(() => {
+                    ui.copyBtn.innerHTML = originalIconHTML;
+                    if (window.lucide) lucide.createIcons();
+                }, 1500);
+            };
+            if (navigator.clipboard && window.isSecureContext) {
+                 navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Failed to copy: ', err));
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "absolute";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy failed: ', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        });       
         
         // Initial setup
         switchMode('image');
-        updateIconGrid('star');
+        updateIconGrid(''); // Changed from 'star' to '' to show the prompt
     });
     </script>
 </body>

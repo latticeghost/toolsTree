@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced IP Blacklist & Abuse Checker | toolsTree</title>
+    <meta name="description" content="Check if an IP address is malicious. Query the AbuseIPDB blacklist for abuse reports, confidence score, and known attack types.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/ip-blacklist-checker.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+      })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        /* Key-value table style for results */
+        .result-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.75rem 1rem;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .result-grid dt {
+            font-weight: 600; /* font-semibold */
+            color: #4b5563; /* gray-600 */
+        }
+        .dark .result-grid dt {
+            color: #d1d5db; /* gray-300 */
+        }
+        .result-grid dd {
+            font-family: 'Roboto Mono', monospace;
+            color: #1f2937; /* gray-800 */
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dark .result-grid dd {
+            color: #f3f4f6; /* gray-100 */
+        }
+        /* Copy Button Styles */
+        .copy-btn {
+            opacity: 0; /* Hide by default */
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            color: #6b7280; /* gray-500 */
+            transition: opacity 0.2s ease, color 0.2s ease;
+            flex-shrink: 0; 
+        }
+        .dark .copy-btn { color: #9ca3af; /* gray-400 */ }
+        .result-grid dd:hover .copy-btn { opacity: 1; color: #10b981; /* tt-primary */ }
+        .copy-btn:hover { /* background-color: #f3f4f6; */ }
+        .dark .copy-btn:hover { /* background-color: #374151; */ }
+
+        /* Report Category Tags */
+        .category-tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .category-tag {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem; /* text-xs */
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px; /* rounded-full */
+            background-color: #f3f4f6; /* gray-100 */
+            color: #374151; /* gray-700 */
+            font-weight: 500;
+        }
+        .dark .category-tag {
+            background-color: #374151; /* gray-700 */
+            color: #e5e7eb; /* gray-200 */
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "IP Blacklist & Abuse Checker",
+      "applicationCategory": "SecurityApplication",
+      "operatingSystem": "Web",
+      "description": "Check if an IP address is malicious. Query the AbuseIPDB blacklist for abuse reports, confidence score, and known attack types.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is an IP Blacklist?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "An IP blacklist is a real-time list of IP addresses that are known to be sources of malicious activity, such as spam, hacking attempts (like Brute-Force), or malware distribution. This tool checks your IP against one of the largest databases, AbuseIPDB, to see if it has been reported."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does 'Abuse Confidence Score' mean?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Abuse Confidence Score (from 0% to 100%) is AbuseIPDB's rating of how certain they are that an IP address is malicious, based on the quantity and reliability of abuse reports. A high score (e.g., 90-100%) strongly indicates a dangerous IP."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What should I do if my IP address is blacklisted?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If it's your personal IP, first run a full malware scan on your computer. If you are on a dynamic IP, you can often get a new one by rebooting your router. If you are a server administrator, you must secure your server (check logs, update firewalls, change passwords) and then request delisting from the blacklist provider."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/networking.html" class="ml-1 hover:text-tt-primary md:ml-2">Networking & Security Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">IP Blacklist & Abuse Checker</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">IP Blacklist & Abuse Checker</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Check the reputation of any IP address against the AbuseIPDB blacklist.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
+            <!-- Input Section -->
+            <div class="space-y-2"> 
+                <div>
+                    <label for="ipAddress" class="block text-sm font-medium mb-1">IP Address to Check</label>
+                    <input type="text" id="ipAddress" placeholder="e.g., 1.1.1.1" class="w-full p-3 border rounded-lg shadow-sm font-mono">
+                </div>
+                <div> 
+                    <button id="checkBtn" class="w-full flex items-center justify-center space-x-2 bg-tt-primary hover:bg-tt-secondary text-white font-bold py-3 px-5 rounded-lg shadow-md transition duration-300">
+                        <i data-lucide="shield-check" class="w-5 h-5 flex-shrink-0"></i>
+                        <span>Check IP</span>
+                    </button>
+                </div>
+            </div>
+             <div id="input-error" class="text-red-500 text-sm mt-2 hidden">Invalid IP address format.</div>
+
+            <!-- Results Section -->
+            <div class="pt-6 border-t dark:border-gray-800">
+                <h2 class="text-xl font-bold mb-4">Reputation Report</h2>
+                
+                <!-- Placeholder -->
+                <div id="results-placeholder" class="text-gray-500 dark:text-gray-400">
+                    <p>Enter an IP address and click "Check IP" to see its reputation report.</p>
+                </div>
+                
+                <!-- Loading Skeleton -->
+                <div id="results-loading" class="hidden animate-pulse space-y-4">
+                    <div class="h-10 bg-gray-300 dark:bg-gray-700 rounded-md w-1/3"></div>
+                    <div class="h-6 bg-gray-300 dark:bg-gray-700 rounded-md w-1/2"></div>
+                    <div class="space-y-3 pt-4">
+                        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3"></div>
+                        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
+                        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3"></div>
+                    </div>
+                </div>
+                
+                <!-- Error Message -->
+                <div id="results-error" class="hidden flex flex-col items-center justify-center text-red-500">
+                    <i data-lucide="alert-triangle" class="w-12 h-12 mb-4"></i>
+                    <p class="font-semibold" id="error-message"></p>
+                </div>
+
+                <!-- Real Results -->
+                <div id="results-content" class="hidden space-y-6">
+                    <!-- Status Box -->
+                    <div id="status-box" class="p-4 rounded-lg text-center">
+                        <h3 class="text-2xl font-bold" id="status-text"></h3>
+                    </div>
+
+                    <!-- Score Bar -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-tt-primary">Abuse Confidence Score</span>
+                            <span class="text-sm font-medium text-tt-primary" id="score-percent"></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700">
+                            <div id="score-bar" class="bg-tt-primary h-4 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Basic Info -->
+                    <div>
+                        <h3 class="font-semibold mb-2 text-lg">IP Details</h3>
+                        <dl class="result-grid">
+                            <dt>Queried IP</dt>
+                            <dd><span id="res-ipAddress"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Public IP</dt>
+                            <dd><span id="res-isPublic"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>ISP</dt>
+                            <dd><span id="res-isp"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Country</dt>
+                            <dd><span id="res-country"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Hostname</dt>
+                            <dd><span id="res-hostname"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Whitelisted</dt>
+                            <dd><span id="res-isWhitelisted"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                        </dl>
+                    </div>
+                    
+                    <!-- Report Details -->
+                    <div>
+                        <h3 class="font-semibold mb-2 text-lg">Abuse Report</h3>
+                         <dl class="result-grid">
+                            <dt>Total Reports</dt>
+                            <dd><span id="res-totalReports"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Last Reported</dt>
+                            <dd><span id="res-lastReported"></span><button class="copy-btn" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button></dd>
+                            <dt>Report Categories</dt>
+                            <dd id="res-categories" class="category-tag-list"></dd>
+                         </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is an IP Blacklist?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>An <strong>IP Blacklist</strong> is a real-time, crowd-sourced database of IP addresses that are known to be associated with malicious activity. System administrators and webmasters from around the world report IPs that perform attacks on their servers. These reports are collected and analyzed to build a global list of "bad" IPs.</p>
+                    <p>This tool queries one of the world's largest blacklist databases, AbuseIPDB, which collects millions of reports per day. Common reasons an IP gets blacklisted include:</p>
+                    <ul class="list-disc list-inside space-y-1 ml-4">
+                        <li><strong>Spam:</strong> Sending unsolicited email.</li>
+                        <li><strong>Brute-Force Attacks:</strong> Repeatedly trying to guess passwords for services like SSH, RDP, or WordPress.</li>
+                        <li><strong>Port Scanning:</strong>Probing servers for open and vulnerable ports.</li>
+                        <li><strong>Web App Attacks:</strong> Attempting to exploit vulnerabilities like SQL injection.</li>
+                        <li><strong>Malware Distribution:</strong> Hosting or spreading viruses and other malware.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Understanding the Report</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>When you check an IP, this tool provides a simple-to-understand report:</p>
+                    <ul class="list-disc list-inside space-y-2 ml-4">
+                        <li><strong>Threat Level:</strong> A clear, color-coded summary (Safe, Suspicious, Dangerous) to give you an immediate assessment of the risk.</li>
+                        <li><strong>Abuse Confidence Score:</strong> A percentage (0-100%) from AbuseIPDB indicating how certain they are that the IP is malicious. A score of 0% means it's clean, while 100% means it is definitively a source of attacks.</li>
+                        <li><strong>Total Reports:</strong> The raw number of times this IP has been reported by other users. A high number (e.g., > 1,000) is a major red flag.</li>
+                        <li><strong>Report Categories:</strong> A list of the specific attack types the IP has been reported for. This helps you understand <strong class="font-medium text-gray-900 dark:text-gray-100">why</strong> the IP is considered dangerous.</li>
+                        <li><strong>Is Whitelisted:</strong> AbuseIPDB maintains a list of IPs that are known to be safe (e.g., major search engine crawlers). If this is "Yes", you can generally trust the IP, even if it has a few false-positive reports.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What is an IP Blacklist?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">An IP blacklist is a real-time list of IP addresses that are known to be sources of malicious activity, such as spam, hacking attempts (like Brute-Force), or malware distribution. This tool checks your IP against one of the largest databases, AbuseIPDB, to see if it has been reported.</p>
+                    </details>
+                    <details class="group">
+                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What does 'Abuse Confidence Score' mean?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">The Abuse Confidence Score (from 0% to 100%) is AbuseIPDB's rating of how certain they are that an IP address is malicious, based on the quantity and reliability of abuse reports. A high score (e.g., 90-100%) strongly indicates a dangerous IP. A low score (0-25%) usually means the IP is safe.</p>
+                   </details>
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What should I do if my IP address is blacklisted?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">If it's your personal home IP, first run a full malware and virus scan on all your computers. Your devices could be part of a botnet. If you are on a "dynamic" IP (most home users are), you can often get a new one by unplugging your router for 5 minutes and plugging it back in. If you are a server administrator, you must immediately secure your server, check logs for suspicious activity, update all passwords, and then request delisting from AbuseIPDB.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        } else {
+            console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+        }
+
+        // --- UI Elements ---
+        const ui = {
+            ipAddress: document.getElementById('ipAddress'),
+            checkBtn: document.getElementById('checkBtn'),
+            inputError: document.getElementById('input-error'),
+            resultsPlaceholder: document.getElementById('results-placeholder'),
+            resultsLoading: document.getElementById('results-loading'),
+            resultsError: document.getElementById('results-error'),
+            errorMessage: document.getElementById('error-message'),
+            resultsContent: document.getElementById('results-content'),
+            statusBox: document.getElementById('status-box'),
+            statusText: document.getElementById('status-text'),
+            scorePercent: document.getElementById('score-percent'),
+            scoreBar: document.getElementById('score-bar'),
+            res: {
+                ipAddress: document.getElementById('res-ipAddress'),
+                isPublic: document.getElementById('res-isPublic'),
+                isp: document.getElementById('res-isp'),
+                country: document.getElementById('res-country'),
+                hostname: document.getElementById('res-hostname'),
+                isWhitelisted: document.getElementById('res-isWhitelisted'),
+                totalReports: document.getElementById('res-totalReports'),
+                lastReported: document.getElementById('res-lastReported'),
+                categories: document.getElementById('res-categories'),
+            }
+        };
+
+        // --- AbuseIPDB Category Mapping ---
+        // From: https://www.abuseipdb.com/categories
+        const ABUSE_CATEGORIES = {
+            3: "Brute-Force", 4: "DDoS Attack", 5: "FTP Brute-Force", 6: "Ping of Death",
+            7: "Phishing", 8: "Fraud Orders", 9: "Open Proxy", 10: "Web Spam",
+            11: "Email Spam", 12: "Blog Spam", 13: "VPN IP", 14: "Port Scan",
+            15: "Hacking", 16: "SQL Injection", 17: "Email Spoofing", 18: "Web App Attack",
+            19: "SSH", 20: "IoT Targeted", 21: "Bad Web Bot", 22: "Exploited Host",
+            23: "Tor IP"
+        };
+        
+        // --- State Management ---
+        const showResultState = (state) => { // 'placeholder', 'loading', 'error', 'content'
+            ui.resultsPlaceholder.classList.toggle('hidden', state !== 'placeholder');
+            ui.resultsLoading.classList.toggle('hidden', state !== 'loading');
+            ui.resultsError.classList.toggle('hidden', state !== 'error');
+            ui.resultsContent.classList.toggle('hidden', state !== 'content');
+        };
+
+        // --- IP Validation (re-used from subnet calc) ---
+        const isValidIp = (ip) => {
+            const octets = ip.split('.');
+            if (octets.length !== 4 || octets.some(octet => {
+                const num = parseInt(octet, 10);
+                return isNaN(num) || num > 255 || num < 0 || !/^\d+$/.test(octet) || octet.length > 3;
+            })) {
+                return false;
+            }
+            return true;
+        };
+
+        // --- API Call ---
+        const fetchAbuseData = async (ip) => {
+            // YOUR API KEY IS PLACED HERE
+            const API_KEY = "1570601bb8d82977b5de1c57730bd11739fbc1cb76adba7110ea6ad817f091b862af178470673547";
+            
+            const url = new URL('https://api.abuseipdb.com/api/v2/check');
+            url.searchParams.set('ipAddress', ip);
+            url.searchParams.set('maxAgeInDays', '90'); // Check reports from the last 90 days
+            url.searchParams.set('verbose', 'true');    // Get full report details
+
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Key': API_KEY,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    let errorMsg = `API Error: ${response.status}`;
+                    if (errorData && errorData.errors) {
+                        errorMsg = errorData.errors[0].detail;
+                    }
+                    throw new Error(errorMsg);
+                }
+                
+                const data = await response.json();
+                return data.data; // The results are in the 'data' property
+
+            } catch (error) {
+                console.error("AbuseIPDB fetch error:", error);
+                showResultState('error');
+                ui.errorMessage.textContent = error.message;
+                return null;
+            }
+        };
+        
+        // --- Render Results ---
+        const renderResults = (data) => {
+            const score = data.abuseConfidenceScore || 0;
+            const n_a = 'N/A';
+            
+            // 1. Set Status Box
+            let statusText = 'SAFE';
+            let statusClasses = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'; // Safe
+            
+            if (score > 75) {
+                statusText = 'DANGEROUS';
+                statusClasses = 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'; // Dangerous
+            } else if (score > 25) {
+                statusText = 'SUSPICIOUS';
+                statusClasses = 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'; // Suspicious
+            }
+            
+            ui.statusBox.className = 'p-4 rounded-lg text-center ' + statusClasses;
+            ui.statusText.textContent = statusText;
+
+            // 2. Set Score Bar
+            ui.scorePercent.textContent = `${score}%`;
+            ui.scoreBar.style.width = `${score}%`;
+            
+            // 3. Set IP Details
+            ui.res.ipAddress.textContent = data.ipAddress || n_a;
+            ui.res.isPublic.textContent = data.isPublic ? 'Yes' : 'No (Private/Reserved)';
+            ui.res.isp.textContent = data.isp || n_a;
+            ui.res.country.textContent = data.countryName ? `${data.countryName} (${data.countryCode})` : n_a;
+            ui.res.hostname.textContent = data.hostnames && data.hostnames.length > 0 ? data.hostnames[0] : n_a;
+            
+            ui.res.isWhitelisted.textContent = data.isWhitelisted ? 'Yes' : 'No';
+            ui.res.isWhitelisted.parentElement.className = 'result-grid dd';
+            ui.res.isWhitelisted.parentElement.classList.add(data.isWhitelisted ? 'text-green-500' : 'text-gray-500');
+
+            // 4. Set Abuse Report Details
+            ui.res.totalReports.textContent = (data.totalReports || 0).toLocaleString();
+            ui.res.lastReported.textContent = data.lastReportedAt ? new Date(data.lastReportedAt).toLocaleString() : 'Never';
+
+            // 5. Build Category Tags
+            ui.res.categories.innerHTML = ''; // Clear old tags
+            if (data.reports && data.reports.length > 0) {
+                const categoryIds = new Set();
+                data.reports.forEach(report => {
+                    report.categories.forEach(catId => categoryIds.add(catId));
+                });
+                
+                if (categoryIds.size > 0) {
+                    categoryIds.forEach(id => {
+                        const tagName = ABUSE_CATEGORIES[id] || `Unknown (${id})`;
+                        const tagEl = document.createElement('span');
+                        tagEl.className = 'category-tag';
+                        tagEl.textContent = tagName;
+                        ui.res.categories.appendChild(tagEl);
+                    });
+                } else {
+                     ui.res.categories.innerHTML = '<span class="text-gray-500 text-sm">No specific categories reported.</span>';
+                }
+            } else {
+                ui.res.categories.innerHTML = '<span class="text-gray-500 text-sm">No reports in the last 90 days.</span>';
+            }
+
+            showResultState('content');
+            lucide.createIcons();
+        };
+
+        // --- Main Handler ---
+        const handleCheck = async () => {
+            const ip = ui.ipAddress.value.trim();
+            
+            if (!isValidIp(ip)) {
+                ui.inputError.classList.remove('hidden');
+                return;
+            } else {
+                ui.inputError.classList.add('hidden');
+            }
+            
+            showResultState('loading');
+            
+            const data = await fetchAbuseData(ip);
+            
+            if (data) {
+                renderResults(data);
+            }
+        };
+
+        // --- Copy to Clipboard ---
+        const handleCopyClick = (e) => {
+            const copyButton = e.target.closest('.copy-btn');
+            if (!copyButton) return; 
+
+            const textElement = copyButton.previousElementSibling;
+            if (!textElement) return;
+
+            let textToCopy = textElement.textContent;
+            if (textToCopy === 'N/A') return;
+
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                
+                copyButton.innerHTML = successIconHTML;
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    copyButton.innerHTML = originalIconHTML;
+                    lucide.createIcons();
+                }, 1500);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Copy failed:', err));
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "absolute";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        };
+
+        // --- Event Listeners ---
+        ui.checkBtn.addEventListener('click', handleCheck);
+        ui.ipAddress.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleCheck();
+        });
+        ui.resultsContent.addEventListener('click', handleCopyClick);
+
+    });
+    </script>
+</body>
+</html>

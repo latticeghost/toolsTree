@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced UTM Campaign URL Builder with QR Code | toolsTree</title>
+    <meta name="description" content="Generate trackable URLs with UTM parameters (source, medium, campaign, term, content). Includes suggestions, lowercase enforcement, and QR code generation.">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/utm-builder.html">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="../assets/output.css" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+      })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" xintegrity="sha512-CNgIRecGo7nphbeZ0/hINuwNZUCvQ/xl2qwCTM4e+0PdUPkxM3AWImqTpOSUjDhaErbfnSwVIcUyPNsAV/yt+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        /* Generated URL styling */
+        #generatedUrl { background-color: #f0fdf4; color: #15803d; border-color: #10b981; font-weight: 600; }
+        .dark #generatedUrl { background-color: #064e3b; color: #a7f3d0; border-color: #10b981; }
+        
+        /* Copy Button Styles */
+        .copy-btn { opacity: 0; padding: 0.25rem; border-radius: 0.25rem; color: #6b7080; transition: opacity 0.2s ease, color 0.2s ease; cursor: pointer; }
+        .dark .copy-btn { color: #9ca3af; }
+        .output-wrapper:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { color: #10b981; } 
+        .dark .copy-btn:hover { color: #10b981; }
+
+        /* QR Code Styling */
+        #qrCodeWrapper { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb; }
+        .dark #qrCodeWrapper { border-top-color: #4b5563; }
+        /* Style the container, not the canvas directly */
+        #qrCodeContainer { 
+            width: 180px; /* 160px QR + 2*10px padding */
+            height: 180px; 
+            margin: 0 auto 1rem; 
+            background-color: white; 
+            padding: 10px; 
+            border-radius: 0.375rem; 
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); 
+        }
+        /* Ensure the generated img/canvas fits */
+        #qrCodeContainer canvas, #qrCodeContainer img { display: block; width: 100%; height: 100%; }
+
+        #qrCodePlaceholder { text-align: center; padding: 2rem 0; color: #6b7280; font-size: 0.875rem; }
+        .dark #qrCodePlaceholder { color: #9ca3af; }
+        
+        /* Tooltip Styles */
+        .tooltip-container { position: relative; display: inline-flex; align-items: center; }
+        .tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-8px); background-color: #1f2937; color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; pointer-events: none; z-index: 10; }
+        .dark .tooltip { background-color: #374151; color: #f3f4f6; }
+        .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 5px; border-style: solid; border-color: #1f2937 transparent transparent transparent; }
+        .dark .tooltip::after { border-color: #374151 transparent transparent transparent; }
+        .tooltip-container:hover .tooltip { opacity: 1; visibility: visible; }
+    </style>
+
+    <!-- ... (LD+JSON Schema and FAQ Schema are unchanged) ... -->
+     <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced UTM Campaign URL Builder",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Generate trackable URLs with UTM parameters. Includes suggestions, lowercase enforcement, and QR code generation.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "publisher": {"@type": "Organization", "name": "toolsTree"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are UTM parameters?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "UTM parameters are short text codes added to the end of a URL (after a '?') that allow analytics tools like Google Analytics to track where website visitors are coming from and how effective marketing campaigns are. The standard parameters are utm_source, utm_medium, utm_campaign, utm_term, and utm_content."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What do the different UTM parameters mean?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "utm_source: Identifies the specific source of your traffic (e.g., 'google', 'facebook', 'newsletter'). utm_medium: Identifies the marketing medium (e.g., 'cpc', 'social', 'email'). utm_campaign: Identifies the specific campaign name (e.g., 'summer_sale', 'product_launch'). utm_term: Used for paid search to identify keywords. utm_content: Used to differentiate similar content or links within the same ad (e.g., 'logolink', 'textlink')."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which UTM parameters are required?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Typically, utm_source, utm_medium, and utm_campaign are considered essential for meaningful campaign tracking in Google Analytics. utm_term and utm_content are optional but useful for more granular tracking, especially in paid advertising."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why enforce lowercase for UTM parameters?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Analytics platforms like Google Analytics are case-sensitive. 'Google' and 'google' would be tracked as two separate sources. Enforcing lowercase ensures all traffic from the same source/medium/campaign is grouped together correctly, leading to cleaner and more accurate reports."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <!-- ... (Nav/Breadcrumb is unchanged) ... -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/seo-marketing.html" class="ml-1 hover:text-tt-primary md:ml-2">SEO & Marketing Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">UTM Campaign URL Builder</span></div></li>
+            </ol>
+        </nav>
+        
+        <!-- ... (Header is unchanged) ... -->
+        <section class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced UTM Campaign URL Builder</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Generate trackable URLs with suggestions, QR codes, and more.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
+            <!-- ... (Input Section and Tooltip are unchanged) ... -->
+            <div class="space-y-4">
+                 <div>
+                    <label for="baseUrl" class="block text-sm font-medium">Website URL <span class="text-red-500">*</span></label>
+                    <input type="url" id="baseUrl" placeholder="https://www.example.com" required class="mt-1 w-full p-3 border rounded-lg shadow-sm font-mono">
+                     <div id="url-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid URL (e.g., https://example.com).</div>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="utmSource" class="block text-sm font-medium">Campaign Source <span class="text-red-500">*</span></label>
+                        <input type="text" id="utmSource" list="source-suggestions" placeholder="e.g., google, newsletter" required class="mt-1 w-full p-3 border rounded-lg shadow-sm font-mono">
+                         <p class="text-xs text-gray-500 mt-1">Identify the advertiser, site, publication, etc.</p>
+                         <datalist id="source-suggestions">
+                            <option value="google"></option><option value="facebook"></option><option value="linkedin"></option><option value="twitter"></option><option value="instagram"></option><option value="newsletter"></option><option value="email"></option><option value="bing"></option><option value="duckduckgo"></option><option value="partnership"></option>
+                         </datalist>
+                    </div>
+                     <div>
+                        <label for="utmMedium" class="block text-sm font-medium">Campaign Medium <span class="text-red-500">*</span></label>
+                        <input type="text" id="utmMedium" list="medium-suggestions" placeholder="e.g., cpc, banner, email" required class="mt-1 w-full p-3 border rounded-lg shadow-sm font-mono">
+                         <p class="text-xs text-gray-500 mt-1">Advertising or marketing medium.</p>
+                         <datalist id="medium-suggestions">
+                             <option value="cpc"></option><option value="social"></option><option value="email"></option><option value="banner"></option><option value="referral"></option><option value="affiliate"></option><option value="organic"></option><option value="display"></option><option value="video"></option>
+                         </datalist>
+                    </div>
+                 </div>
+                 <div>
+                    <label for="utmCampaign" class="block text-sm font-medium">Campaign Name <span class="text-red-500">*</span></label>
+                    <input type="text" id="utmCampaign" placeholder="e.g., summer_sale, product_launch" required class="mt-1 w-full p-3 border rounded-lg shadow-sm font-mono">
+                     <p class="text-xs text-gray-500 mt-1">Specific product promotion or strategic campaign.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="utmTerm" class="block text-sm font-medium">Campaign Term (Optional)</label>
+                        <input type="text" id="utmTerm" placeholder="e.g., running+shoes" class="mt-1 w-full p-3 border rounded-lg shadow-sm font-mono">
+                        <p class="text-xs text-gray-500 mt-1">Identify paid search keywords.</p>
+                    </div>
+                     <div>
+                        <label for="utmContent" class="block text-sm font-medium">Campaign Content (Optional)</label>
+                        <input type="text" id="utmContent" placeholder="e.g., logolink, textlink" class="mt-1 w-full p-3 border rounded-lg shadow-sm font-mono">
+                        <p class="text-xs text-gray-500 mt-1">Differentiate ads or links pointing to the same URL.</p>
+                    </div>
+                 </div>
+                <div class="flex items-center pt-4 border-t dark:border-gray-700">
+                    <input id="forceLowercase" type="checkbox" checked class="h-4 w-4 text-tt-primary focus:ring-tt-secondary border-gray-300 rounded">
+                    <label for="forceLowercase" class="ml-2 block text-sm font-medium">Enforce lowercase on parameters</label>
+                    <div class="tooltip-container ml-1"> 
+                        <i data-lucide="info" class="w-4 h-4 text-gray-400 cursor-help"></i>
+                        <span class="tooltip">Converts all UTM parameter values to lowercase for consistency in analytics (Recommended)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ... (Clear Button is unchanged) ... -->
+             <div class="flex justify-end pt-4 border-t dark:border-gray-700">
+                <button id="clearButton" class="flex items-center space-x-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    <span>Clear All Fields</span>
+                </button>
+             </div>
+
+
+            <!-- Generated URL Output & QR Code -->
+            <div class="pt-6 border-t dark:border-gray-700">
+                <h2 class="text-xl font-bold mb-2">Generated Campaign URL</h2>
+                <div class="output-wrapper relative"> 
+                    <textarea id="generatedUrl" readonly class="w-full p-3 border rounded-lg shadow-inner font-mono min-h-[100px] pr-10"></textarea>
+                    <button id="copyUrlButton" title="Copy URL" class="copy-btn absolute top-2 right-2 p-1 rounded-md">
+                        <i data-lucide="copy" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div id="output-placeholder" class="text-gray-500 text-sm mt-2">Fill in the required fields (*) above to generate the URL.</div>
+
+                 <!-- --- START: QR Code Fix - Use Container --- -->
+                 <div id="qrCodeWrapper" class="hidden">
+                     <h3 class="text-lg font-semibold mb-3 text-center">QR Code</h3>
+                     <!-- Target this container for QR generation -->
+                     <div id="qrCodeContainer" class="w-[180px] h-[180px] mx-auto"></div> 
+                     <div id="qrCodePlaceholder" class="hidden">Generating QR code...</div>
+                     <button id="downloadQrButton" class="mt-4 mx-auto flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-300">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Download QR Code</span>
+                     </button>
+                 </div>
+                 <!-- --- END: QR Code Fix --- -->
+            </div>
+        </div>
+        
+        <!-- ... (Informational sections are unchanged) ... -->
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What Are UTM Parameters?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p><strong>UTM parameters</strong> (Urchin Tracking Module parameters) are five simple tags you can add to the end of your URLs. When someone clicks a link with these tags, tools like Google Analytics can capture exactly where that click came from and attribute it to the correct marketing campaign.</p> 
+                    <p>They are essential for understanding the effectiveness of your digital marketing efforts, allowing you to see which sources, mediums, and campaigns are driving the most traffic and conversions to your website.</p>
+                    <p>The standard UTM parameters are:</p>
+                    <ul class="list-disc list-inside space-y-1 ml-4 font-mono">
+                        <li><code>utm_source</code>: Where the traffic originated (e.g., google, facebook, newsletter).</li>
+                        <li><code>utm_medium</code>: The general type of traffic (e.g., cpc, social, email, referral).</li>
+                        <li><code>utm_campaign</code>: The specific marketing campaign name (e.g., summer_sale, new_product_launch).</li>
+                        <li><code>utm_term</code>: (Optional) Used to identify keywords in paid search campaigns.</li>
+                        <li><code>utm_content</code>: (Optional) Used to differentiate between links or ads within the same campaign (e.g., button_click vs. image_click).</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Why Use a UTM Builder?</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>While you can manually type UTM parameters onto a URL, using a builder like this offers several advantages:</p>
+                    <ul class="list-disc list-inside space-y-2 ml-4">
+                        <li><strong>Consistency:</strong> Ensures you use the same parameter names and formatting every time, which is crucial for accurate reporting in analytics. Typos like `utm_source=Google` vs. `utm_source=google` will show up as separate sources. Using suggestions and lowercase enforcement helps maintain this.</li>
+                        <li><strong>Accuracy:</strong> Automatically handles the correct URL structure (using `?` for the first parameter and `&` for subsequent ones) and URL encodes any special characters in your values (like spaces becoming `%20`).</li>
+                        <li><strong>Efficiency:</strong> Saves time compared to manually typing or remembering the parameter names, especially when creating multiple links. Suggestions speed this up further.</li>
+                        <li><strong>Clarity:</strong> Provides clear fields for each standard parameter, reducing the chance of missing essential tags like `utm_source` or `utm_medium`.</li>
+                        <li><strong>Convenience:</strong> Instantly generate a QR code for your trackable link, ready for use in print or offline campaigns.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+                <div class="space-y-3 text-sm">
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What are UTM parameters?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">UTM parameters are short text codes added to the end of a URL (after a '?') that allow analytics tools like Google Analytics to track where website visitors are coming from and how effective marketing campaigns are. The standard parameters are <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, <code>utm_term</code>, and <code>utm_content</code>.</p>
+                    </details>
+                    <details class="group">
+                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>What do the different UTM parameters mean?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">
+                            <strong><code>utm_source</code>:</strong> Identifies the specific source of your traffic (e.g., 'google', 'facebook', 'newsletter').<br>
+                            <strong><code>utm_medium</code>:</strong> Identifies the marketing medium (e.g., 'cpc', 'social', 'email').<br>
+                            <strong><code>utm_campaign</code>:</strong> Identifies the specific campaign name (e.g., 'summer_sale', 'product_launch').<br>
+                            <strong><code>utm_term</code>:</strong> (Optional) Used for paid search to identify keywords.<br>
+                            <strong><code>utm_content</code>:</strong> (Optional) Used to differentiate similar content or links within the same ad (e.g., 'logolink', 'textlink').
+                        </p>
+                   </details>
+                   <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Which UTM parameters are required?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                        <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Typically, <code>utm_source</code>, <code>utm_medium</code>, and <code>utm_campaign</code> are considered essential for meaningful campaign tracking in Google Analytics. <code>utm_term</code> and <code>utm_content</code> are optional but useful for more granular tracking, especially in paid advertising.</p>
+                    </details>
+                     <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span>Why enforce lowercase for UTM parameters?</span>
+                            <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span>
+                        </summary>
+                         <p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Analytics platforms like Google Analytics are case-sensitive. 'Google' and 'google' would be tracked as two separate sources. Enforcing lowercase ensures all traffic from the same source/medium/campaign is grouped together correctly, leading to cleaner and more accurate reports.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false); 
+        } else {
+            console.warn('injectLayout function not found. Skipping layout injection.');
+        }
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // --- UI Elements ---
+        const ui = {
+            baseUrl: document.getElementById('baseUrl'),
+            utmSource: document.getElementById('utmSource'),
+            utmMedium: document.getElementById('utmMedium'),
+            utmCampaign: document.getElementById('utmCampaign'),
+            utmTerm: document.getElementById('utmTerm'),
+            utmContent: document.getElementById('utmContent'),
+            forceLowercase: document.getElementById('forceLowercase'), 
+            generatedUrl: document.getElementById('generatedUrl'),
+            copyUrlButton: document.getElementById('copyUrlButton'),
+            clearButton: document.getElementById('clearButton'),
+            outputPlaceholder: document.getElementById('output-placeholder'),
+            urlError: document.getElementById('url-error'),
+            qrCodeWrapper: document.getElementById('qrCodeWrapper'), 
+            // --- START QR CODE FIX ---
+            qrCodeContainer: document.getElementById('qrCodeContainer'), // Target container div
+            // --- END QR CODE FIX ---
+            qrCodePlaceholder: document.getElementById('qrCodePlaceholder'),
+            downloadQrButton: document.getElementById('downloadQrButton'),
+        };
+
+        const requiredFields = [ui.baseUrl, ui.utmSource, ui.utmMedium, ui.utmCampaign];
+        const allFields = [ui.baseUrl, ui.utmSource, ui.utmMedium, ui.utmCampaign, ui.utmTerm, ui.utmContent, ui.forceLowercase]; 
+
+        let qrCodeInstance = null; 
+
+        // --- URL Generation Logic ---
+        // ... (generateUrl function is unchanged) ...
+         const generateUrl = () => {
+            const baseUrl = ui.baseUrl.value.trim();
+            const enforceLowercase = ui.forceLowercase.checked; 
+            
+            let isValidBaseUrl = false;
+            if (baseUrl) {
+                 try {
+                    // Slightly stricter: ensure it's http or https
+                    if (!baseUrl.toLowerCase().startsWith('http://') && !baseUrl.toLowerCase().startsWith('https://')) {
+                        throw new Error('Missing protocol');
+                    }
+                    new URL(baseUrl); 
+                    isValidBaseUrl = true;
+                    ui.urlError.classList.add('hidden');
+                 } catch (_) {
+                    ui.urlError.classList.remove('hidden');
+                 }
+            } else {
+                 ui.urlError.classList.add('hidden'); // Also hide error if input is empty
+            }
+
+            const allRequiredFilled = requiredFields.every(field => field.value.trim() !== '');
+            
+            if (!isValidBaseUrl || !allRequiredFilled) {
+                ui.generatedUrl.value = '';
+                ui.outputPlaceholder.classList.remove('hidden');
+                ui.qrCodeWrapper.classList.add('hidden'); 
+                return; // Stop here if validation fails
+            }
+            
+            ui.outputPlaceholder.classList.add('hidden'); // Hide placeholder text
+            
+            // Build the query string
+            const params = new URLSearchParams();
+            const utmMap = {
+                utm_source: ui.utmSource.value.trim(),
+                utm_medium: ui.utmMedium.value.trim(),
+                utm_campaign: ui.utmCampaign.value.trim(),
+                utm_term: ui.utmTerm.value.trim(),
+                utm_content: ui.utmContent.value.trim(),
+            };
+
+            for (const key in utmMap) {
+                let value = utmMap[key];
+                if (value) { // Only add if value exists
+                    if (enforceLowercase) {
+                        value = value.toLowerCase();
+                    }
+                    // URL encoding is handled automatically by URLSearchParams
+                    params.append(key, value);
+                }
+            }
+            
+            // Combine base URL and params
+            // Check if base URL already has query params
+            const separator = baseUrl.includes('?') ? '&' : '?';
+            const finalUrl = `${baseUrl}${separator}${params.toString()}`;
+            
+            ui.generatedUrl.value = finalUrl;
+            
+            generateQrCode(finalUrl); 
+            ui.qrCodeWrapper.classList.remove('hidden'); 
+        };
+        
+
+        // --- START: Fixed QR Code Generation ---
+        const generateQrCode = (url) => {
+            // Always clear the container first
+            ui.qrCodeContainer.innerHTML = ''; 
+            ui.qrCodePlaceholder.classList.remove('hidden'); // Show loading/placeholder
+
+            if (!url) {
+                ui.qrCodePlaceholder.textContent = 'Enter URL to generate QR code.';
+                qrCodeInstance = null; // Reset instance if URL is invalid
+                return;
+            }
+
+            ui.qrCodePlaceholder.textContent = 'Generating QR code...';
+
+            try {
+                // Ensure the library is loaded
+                if (typeof QRCode === 'undefined') {
+                    console.error("QRCode library is not loaded.");
+                    ui.qrCodePlaceholder.textContent = 'Error: QR Code library failed to load.';
+                    return;
+                }
+
+                // Use setTimeout to ensure the DOM is ready for QR code generation
+                setTimeout(() => {
+                    // Create a new QRCode instance *targeting the container div*
+                    qrCodeInstance = new QRCode(ui.qrCodeContainer, {
+                        text: url,
+                        width: 160,
+                        height: 160,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    ui.qrCodePlaceholder.classList.add('hidden'); // Hide placeholder on success
+                }, 50); // Small delay might help rendering consistency
+
+            } catch (e) {
+                console.error("QR Code generation failed:", e);
+                ui.qrCodePlaceholder.textContent = 'Error generating QR code.';
+                ui.qrCodePlaceholder.classList.remove('hidden');
+                qrCodeInstance = null; // Reset instance on error
+            }
+        };
+        // --- END: Fixed QR Code Generation ---
+
+        // --- START: Fixed Download QR Code ---
+        const downloadQrCode = () => {
+             // Check container has child elements (img or canvas)
+            if (!ui.generatedUrl.value || !ui.qrCodeContainer.hasChildNodes()) {
+                console.warn("QR Code not generated or container is empty.");
+                return; 
+            }
+
+            // The library generates an <img> inside the container when it works
+            const imgElement = ui.qrCodeContainer.querySelector('img'); 
+            // Fallback to canvas if img isn't found (might happen with older versions or errors)
+            const canvasElement = ui.qrCodeContainer.querySelector('canvas'); 
+            
+            let dataUrl = null;
+
+            if (imgElement && imgElement.src) {
+                 // Easiest: Use the image source directly if it's a data URL
+                 if (imgElement.src.startsWith('data:image/png')) {
+                     dataUrl = imgElement.src;
+                 } else {
+                     // If it's not a data URL, we need to draw it to a canvas first
+                     // This is less common with this library but good practice
+                     const tempCanvas = document.createElement('canvas');
+                     tempCanvas.width = imgElement.naturalWidth || 160;
+                     tempCanvas.height = imgElement.naturalHeight || 160;
+                     const ctx = tempCanvas.getContext('2d');
+                     // Draw white background first for non-transparent PNGs
+                     ctx.fillStyle = '#FFFFFF';
+                     ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                     try {
+                        ctx.drawImage(imgElement, 0, 0);
+                        dataUrl = tempCanvas.toDataURL("image/png");
+                     } catch (e) {
+                         console.error("Error drawing image to canvas for download:", e);
+                         return; // Stop if drawing fails
+                     }
+                 }
+            } else if (canvasElement) {
+                 // Fallback if the library generated a canvas instead
+                 dataUrl = canvasElement.toDataURL("image/png");
+            }
+
+            if (!dataUrl) {
+                console.error("Could not get QR Code image data for download.");
+                return;
+            }
+
+            // Convert to format suitable for download link
+            const pngUrlForDownload = dataUrl.replace("image/png", "image/octet-stream");
+             
+             // Create filename
+             let filename = 'qrcode.png';
+             try {
+                 const urlHostname = new URL(ui.baseUrl.value.trim()).hostname;
+                 filename = `utm_qr_${urlHostname.replace(/^www\./, '')}.png`;
+             } catch (_) { /* Keep default filename */ }
+             
+             // Trigger download
+             let downloadLink = document.createElement("a");
+             downloadLink.href = pngUrlForDownload;
+             downloadLink.download = filename;
+             document.body.appendChild(downloadLink);
+             downloadLink.click();
+             document.body.removeChild(downloadLink);
+        };
+        // --- END: Fixed Download QR Code ---
+
+
+        // --- Clear Fields ---
+        // ... (clearFields function is unchanged) ...
+        const clearFields = () => {
+            allFields.forEach(field => {
+                if(field.type === 'checkbox') {
+                    field.checked = true; // Reset checkbox to default checked
+                } else {
+                    field.value = '';
+                }
+            });
+            generateUrl(); 
+        };
+
+        // --- Copy to Clipboard ---
+        // ... (handleCopyClick function is unchanged) ...
+        const handleCopyClick = () => {
+            const textToCopy = ui.generatedUrl.value;
+            if (!textToCopy) return;
+            const copySuccess = () => {
+                const originalIconHTML = '<i data-lucide="copy" class="w-5 h-5"></i>';
+                const successIconHTML = '<i data-lucide="check" class="w-5 h-5 text-emerald-500"></i>';
+                ui.copyUrlButton.innerHTML = successIconHTML;
+                lucide.createIcons();
+                setTimeout(() => {
+                    ui.copyUrlButton.innerHTML = originalIconHTML;
+                    lucide.createIcons();
+                }, 1500);
+            };
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(copySuccess)
+                    .catch(err => console.error('Copy failed:', err));
+            } else {
+                ui.generatedUrl.select(); 
+                try {
+                    document.execCommand('copy');
+                    copySuccess();
+                } catch (err) {
+                    console.error('Fallback copy command failed: ', err);
+                }
+            }
+        };
+
+        // --- Event Listeners ---
+        // ... (Event listeners are unchanged) ...
+        allFields.forEach(field => field.addEventListener('input', generateUrl));
+        ui.clearButton.addEventListener('click', clearFields);
+        ui.copyUrlButton.addEventListener('click', handleCopyClick);
+        ui.downloadQrButton.addEventListener('click', downloadQrCode); 
+
+        // --- Initial State ---
+        generateUrl(); 
+
+    });
+    </script>
+</body>
+</html>
+

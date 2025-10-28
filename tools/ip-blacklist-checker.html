@@ -10,6 +10,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://toolstree.vercel.app/tools/ip-blacklist-checker.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
@@ -39,23 +42,22 @@
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
         
-        /* Key-value table style for results */
         .result-grid {
             display: grid;
             grid-template-columns: auto 1fr;
             gap: 0.75rem 1rem;
-            font-size: 0.875rem; /* text-sm */
+            font-size: 0.875rem;
         }
         .result-grid dt {
-            font-weight: 600; /* font-semibold */
-            color: #4b5563; /* gray-600 */
+            font-weight: 600;
+            color: #4b5563;
         }
         .dark .result-grid dt {
-            color: #d1d5db; /* gray-300 */
+            color: #d1d5db;
         }
         .result-grid dd {
             font-family: 'Roboto Mono', monospace;
-            color: #1f2937; /* gray-800 */
+            color: #1f2937;
             word-break: break-all;
             display: flex;
             justify-content: space-between;
@@ -63,23 +65,19 @@
             gap: 0.5rem;
         }
         .dark .result-grid dd {
-            color: #f3f4f6; /* gray-100 */
+            color: #f3f4f6;
         }
-        /* Copy Button Styles */
         .copy-btn {
-            opacity: 0; /* Hide by default */
+            opacity: 0;
             padding: 0.25rem;
             border-radius: 0.25rem;
-            color: #6b7280; /* gray-500 */
+            color: #6b7280;
             transition: opacity 0.2s ease, color 0.2s ease;
             flex-shrink: 0; 
         }
-        .dark .copy-btn { color: #9ca3af; /* gray-400 */ }
-        .result-grid dd:hover .copy-btn { opacity: 1; color: #10b981; /* tt-primary */ }
-        .copy-btn:hover { /* background-color: #f3f4f6; */ }
-        .dark .copy-btn:hover { /* background-color: #374151; */ }
+        .dark .copy-btn { color: #9ca3af;}
+        .result-grid dd:hover .copy-btn { opacity: 1; color: #10b981;}
 
-        /* Report Category Tags */
         .category-tag-list {
             display: flex;
             flex-wrap: wrap;
@@ -87,16 +85,16 @@
         }
         .category-tag {
             font-family: 'Roboto Mono', monospace;
-            font-size: 0.75rem; /* text-xs */
+            font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
-            border-radius: 9999px; /* rounded-full */
-            background-color: #f3f4f6; /* gray-100 */
-            color: #374151; /* gray-700 */
+            border-radius: 9999px;
+            background-color: #f3f4f6;
+            color: #374151;
             font-weight: 500;
         }
         .dark .category-tag {
-            background-color: #374151; /* gray-700 */
-            color: #e5e7eb; /* gray-200 */
+            background-color: #374151;
+            color: #e5e7eb;
         }
     </style>
 
@@ -145,8 +143,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
@@ -240,7 +237,6 @@
                         </dl>
                     </div>
                     
-                    <!-- Report Details -->
                     <div>
                         <h3 class="font-semibold mb-2 text-lg">Abuse Report</h3>
                          <dl class="result-grid">
@@ -322,7 +318,6 @@
             console.warn('`injectLayout` function not found. Header/footer will not be injected.');
         }
 
-        // --- UI Elements ---
         const ui = {
             ipAddress: document.getElementById('ipAddress'),
             checkBtn: document.getElementById('checkBtn'),
@@ -421,7 +416,7 @@
             
             // 1. Set Status Box
             let statusText = 'SAFE';
-            let statusClasses = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'; // Safe
+            let statusClasses = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'; // Safe
             
             if (score > 75) {
                 statusText = 'DANGEROUS';
@@ -454,7 +449,7 @@
             ui.res.lastReported.textContent = data.lastReportedAt ? new Date(data.lastReportedAt).toLocaleString() : 'Never';
 
             // 5. Build Category Tags
-            ui.res.categories.innerHTML = ''; // Clear old tags
+            ui.res.categories.innerHTML = '';
             if (data.reports && data.reports.length > 0) {
                 const categoryIds = new Set();
                 data.reports.forEach(report => {
@@ -480,7 +475,6 @@
             lucide.createIcons();
         };
 
-        // --- Main Handler ---
         const handleCheck = async () => {
             const ip = ui.ipAddress.value.trim();
             
@@ -500,7 +494,6 @@
             }
         };
 
-        // --- Copy to Clipboard ---
         const handleCopyClick = (e) => {
             const copyButton = e.target.closest('.copy-btn');
             if (!copyButton) return; 
@@ -545,7 +538,6 @@
             }
         };
 
-        // --- Event Listeners ---
         ui.checkBtn.addEventListener('click', handleCheck);
         ui.ipAddress.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleCheck();

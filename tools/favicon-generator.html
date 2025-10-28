@@ -10,7 +10,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://toolstree.vercel.app/tools/favicon-generator.html">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <style>
         :root { --tt-primary-stroke: #10b981; }
@@ -106,10 +108,8 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
-        <!-- ... (Nav/Breadcrumb is unchanged) ... -->
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
@@ -126,7 +126,6 @@
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <div class="lg:col-span-2 bg-white dark:bg-gray-900 shadow-xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
                 
-                <!-- ... (1. Select Source is unchanged) ... -->
                 <div>
                     <h2 class="text-xl font-bold mb-3">1. Select Source</h2>
                     <div id="modeSelector" class="flex gap-2 text-sm border-b pb-4 dark:border-gray-800">
@@ -141,7 +140,6 @@
                     </div>
                 </div>
 
-                <!-- ... (Image Mode is unchanged) ... -->
                 <div id="imageMode" class="space-y-4">
                     <label for="imageUpload" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-500">
                         <div id="uploadPrompt" class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -154,14 +152,12 @@
                     </label>
                 </div>
                 
-                <!-- ... (Emoji Mode is unchanged) ... -->
                 <div id="emojiMode" class="space-y-4 hidden">
                     <label for="emojiInput" class="block text-sm font-medium mb-2">Paste or Type a Single Emoji (e.g., 🚀)</label>
                     <input type="text" id="emojiInput" maxlength="2" placeholder="✨" class="text-6xl text-center w-full p-3 border rounded-lg dark:bg-gray-700" style="height: 192px;">
                     <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Using a single character ensures the best quality result.</p>
                 </div>
 
-                <!-- START: "Load More" HTML Implementation -->
                 <div id="iconMode" class="space-y-4 hidden">
                     <label for="iconSearch" class="block text-sm font-medium mb-2">Search Lucide Icons</label>
                     <input type="text" id="iconSearch" placeholder="e.g., search, user, feather" class="w-full p-2 border rounded-lg dark:bg-gray-700">
@@ -169,7 +165,6 @@
                         <p class="col-span-6 text-center text-gray-500">Loading icons...</p>
                     </div>
                     
-                    <!-- ADDED "Load More" Button -->
                     <button id="loadMoreBtn" class="hidden w-full mt-2 p-2 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                         Load More
                     </button>
@@ -181,10 +176,7 @@
                         <span id="lucideLink" class="text-tt-primary hover:underline cursor-pointer">lucide.dev</span> and paste it into the search bar.
                     </p>
                 </div>
-                <!-- END: "Load More" HTML Implementation -->
 
-
-                <!-- ... (2. Customize Colors is unchanged) ... -->
                 <div>
                     <h2 class="text-xl font-bold mb-3">2. Customize Colors</h2>
                      <div class="space-y-4">
@@ -208,7 +200,6 @@
                         </div>
                 </div>
 
-                <!-- ... (3. Generate Your Kit is unchanged) ... -->
                  <div>
                     <h2 class="text-xl font-bold mb-3">3. Generate Your Kit</h2>
                     <button id="generateBtn" disabled class="w-full flex items-center justify-center gap-2 bg-tt-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
@@ -219,7 +210,6 @@
                 </div>
             </div>
 
-            <!-- ... (Results Panel is unchanged) ... -->
             <div id="resultsPanel" class="lg:col-span-3 space-y-6">
                  <div class="bg-white p-6 rounded-xl shadow-xl dark:bg-gray-900 border dark:border-gray-800">
                     <h2 class="text-xl font-bold mb-4">Live Previews</h2>
@@ -254,7 +244,6 @@
             </div>
         </div>
         
-        <!-- ... (All informational sections are unchanged) ... -->
         <section class="mt-10 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">The Easiest Way to Create a Complete Favicon Set</h2>
@@ -326,12 +315,10 @@
     <script src="../javascript/globals.js" defer></script>
     <script>
     
-    // --- START: "Load More" State Variables ---
     let debounceTimer;
     let currentSearchResults = [];
     let currentIconPage = 0;
-    const ICONS_PER_PAGE = 200; // Set page size
-    // --- END: "Load More" State Variables ---
+    const ICONS_PER_PAGE = 200;
 
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof window.injectLayout === 'function') {
@@ -341,7 +328,6 @@
             lucide.createIcons();
         }
 
-        // --- UI Elements ---
         const ui = {
             imageUpload: document.getElementById('imageUpload'), uploadPrompt: document.getElementById('uploadPrompt'),
             imagePreview: document.getElementById('imagePreview'),
@@ -356,7 +342,7 @@
             imageMode: document.getElementById('imageMode'), emojiMode: document.getElementById('emojiMode'), iconMode: document.getElementById('iconMode'),
             emojiInput: document.getElementById('emojiInput'), iconSearch: document.getElementById('iconSearch'),
             iconGrid: document.getElementById('iconGrid'), 
-            loadMoreBtn: document.getElementById('loadMoreBtn'), // <-- ADDED
+            loadMoreBtn: document.getElementById('loadMoreBtn'),
             selectedIconPreview: document.getElementById('selectedIconPreview'),
             lucideLink: document.getElementById('lucideLink'),
             statusText: document.getElementById('statusText'),
@@ -364,26 +350,21 @@
         };
         const hiddenCanvas = document.createElement('canvas');
         
-        let sourceImage = null; // Used for image mode
-        let selectedIcon = null; // Used for icon mode
+        let sourceImage = null;
+        let selectedIcon = null;
         let activeMode = 'image';
 
-        // --- Core Drawing Functions ---
-        // ... (drawSourceToCanvas function is unchanged) ...
-        async function drawSourceToCanvas(ctx, size, drawBackground = true) { // Parameter is now used
+        async function drawSourceToCanvas(ctx, size, drawBackground = true) {
             const bgColor = ui.bgColorPicker.value;
             const fgColor = ui.fgColorPicker.value;
 
-            // 1. Clear canvas first
             ctx.clearRect(0, 0, size, size);
 
-            // 2. Draw Background ONLY if requested
             if (drawBackground) {
                 ctx.fillStyle = bgColor;
                 ctx.fillRect(0, 0, size, size);
             }
 
-            // 3. Draw the source content (Image, Emoji, or Icon)
             let drawPromise = Promise.resolve(); 
 
             if (activeMode === 'image' && sourceImage) {
@@ -424,7 +405,6 @@
             return drawPromise; 
         }
 
-        // ... (updatePreviews function is unchanged) ...
         async function updatePreviews() {
             ui.preview16.clearRect(0, 0, 16, 16);
             ui.preview32.clearRect(0, 0, 16, 16); 
@@ -445,10 +425,6 @@
             ui.generateBtn.disabled = !canGenerate;
         }
 
-
-        // --- Handlers ---
-        
-        // ... (handleImageUpload function is unchanged) ...
         function handleImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
@@ -466,10 +442,7 @@
                 reader.readAsDataURL(file);
             }
         }
-        
-        // --- START: REVISED Icon Grid Logic ---
-        
-        // This new function renders one batch of icons
+                
         function renderIconBatch() {
             const fgColor = ui.fgColorPicker.value;
             const start = currentIconPage * ICONS_PER_PAGE;
@@ -477,20 +450,17 @@
             
             const batch = currentSearchResults.slice(start, end);
 
-            // Handle "No icons found" on the *first page*
             if (start === 0 && batch.length === 0) {
                 const query = ui.iconSearch.value.trim();
                 if (query !== '') {
                     ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">No icons found for "${query}".</p>`;
                 } else {
-                    // Show a prompt if search is empty
                     ui.iconGrid.innerHTML = `<p class="col-span-6 text-center text-gray-500">Search to see icons (e.g., "star", "user")</p>`;
                 }
-                ui.loadMoreBtn.classList.add('hidden'); // Ensure it's hidden
+                ui.loadMoreBtn.classList.add('hidden');
                 return;
             }
             
-            // Render the batch
             try {
                 for (const name of batch) {
                     const iconNode = lucide.icons[name]; 
@@ -515,7 +485,6 @@
                 ui.iconGrid.innerHTML += `<p class="col-span-6 text-center text-red-500">Error rendering icons.</p>`;
             }
             
-            // Update button visibility
             if (currentSearchResults.length > end) {
                 ui.loadMoreBtn.classList.remove('hidden');
             } else {
@@ -525,7 +494,6 @@
             currentIconPage++;
         }
 
-        // This function now *filters* and calls renderIconBatch
         function updateIconGrid(query = '') {
             if (typeof lucide === 'undefined' || !lucide.icons || typeof lucide.createElement !== 'function') {
                 console.warn('Lucide library not ready yet. Retrying...');
@@ -534,13 +502,11 @@
                 return;
             }
 
-            // Clear state
             ui.iconGrid.innerHTML = ''; 
             ui.loadMoreBtn.classList.add('hidden');
             currentIconPage = 0;
             const lowerQuery = query.toLowerCase().trim();
 
-            // Filter all 1000+ icons into the state array
             try {
                 currentSearchResults = Object.keys(lucide.icons).filter(name => {
                     return lowerQuery === '' || name.includes(lowerQuery);
@@ -551,16 +517,11 @@
                 return;
             }
             
-            // Render the first batch
             renderIconBatch();
 
-            // Scroll grid to top on new search
             ui.iconGrid.scrollTop = 0;
         }
-        // --- END: REVISED Icon Grid Logic ---
 
-
-        // ... (selectIcon function is unchanged) ...
         function selectIcon(name) {
             selectedIcon = name;
             ui.selectedIconPreview.innerHTML = `Selected: <strong>${name}</strong>`;
@@ -568,7 +529,6 @@
             ui.iconGrid.scrollTop = 0; 
         }
 
-        // ... (switchMode function is unchanged, but corrected for emoji bug) ...
         function switchMode(mode) {
             activeMode = mode;
             [ui.imageMode, ui.emojiMode, ui.iconMode].forEach(el => el.classList.add('hidden'));
@@ -594,7 +554,6 @@
             updatePreviews();
         }
 
-        // ... (generateFaviconKit function is unchanged) ...
         async function generateFaviconKit() {
             if (ui.generateBtn.disabled) return;
             
@@ -626,7 +585,6 @@
                 zip.file(filename, blob);
             }
             
-            // Generate webmanifest
             const manifest = {
                 name: "Your App Name",
                 short_name: "App",
@@ -653,7 +611,6 @@
             ui.generateBtn.disabled = false;
         }
         
-        // ... (updateHtmlCodeBlock function is unchanged) ...
         function updateHtmlCodeBlock() {
             const code = `&lt;link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"&gt;
 &lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"&gt;
@@ -662,9 +619,7 @@
             ui.htmlCodeBlock.innerHTML = code;
         }
         
-        // --- Event Listeners and Initialization ---
-
-        let inputDebounceTimer; // Note: This was already defined globally, but moved for clarity
+        let inputDebounceTimer;
 
         ui.lucideLink.addEventListener('click', () => {
             window.open('https://lucide.dev', '_blank');
@@ -680,10 +635,9 @@
             clearTimeout(inputDebounceTimer);
             inputDebounceTimer = setTimeout(() => {
                 updateIconGrid(ui.iconSearch.value);
-            }, 300); // Debounce search
+            }, 300);
         });
         
-        // --- ADDED Event Listener for Load More ---
         ui.loadMoreBtn.addEventListener('click', renderIconBatch);
         
         const colorUpdateHandler = () => {
@@ -699,7 +653,6 @@
         ui.modeRadios.forEach(radio => radio.addEventListener('change', () => switchMode(radio.value)));
         ui.generateBtn.addEventListener('click', generateFaviconKit);
         
-        // ... (Copy Button listener is unchanged) ...
         ui.copyBtn.addEventListener('click', () => {
             const textToCopy = ui.htmlCodeBlock.innerText;
             if (!textToCopy || textToCopy.includes('see the code here')) {
@@ -736,9 +689,8 @@
             }
         });       
         
-        // Initial setup
         switchMode('image');
-        updateIconGrid(''); // Changed from 'star' to '' to show the prompt
+        updateIconGrid('');
     });
     </script>
 </body>

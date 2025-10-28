@@ -11,7 +11,11 @@
     <link rel="manifest" href="/site.webmanifest">
     <!-- UPDATE: Canonical URL -->
     <link rel="canonical" href="https://toolstree.vercel.app/tools/serp-previewer.html"> 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -38,7 +42,6 @@
     <style>
         :root { 
             --tt-primary-stroke: #10b981; 
-            /* Google SERP Colors */
             --google-link: #1a0dab;
             --google-visited: #660099; 
             --google-url: #006621;
@@ -57,79 +60,73 @@
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
         
-        /* Input feedback styling */
         .pixel-counter { 
-             font-size: 0.75rem; /* text-xs */
-             margin-top: 0.25rem; /* mt-1 */
+             font-size: 0.75rem;
+             margin-top: 0.25rem;
              text-align: right;
-             padding-right: 0.25rem; /* pr-1 */
+             padding-right: 0.25rem;
         }
-        .text-ok { color: #16a34a; /* green-600 */ }
-        .dark .text-ok { color: #4ade80; /* green-400 */ }
-        .text-warn { color: #f59e0b; /* amber-500 */ }
-        .dark .text-warn { color: #fcd34d; /* amber-300 */ }
-        .text-error { color: #ef4444; /* red-500 */ }
-        .dark .text-error { color: #f87171; /* red-400 */ }
+        .text-ok { color: #16a34a;}
+        .dark .text-ok { color: #4ade80;}
+        .text-warn { color: #f59e0b;}
+        .dark .text-warn { color: #fcd34d;}
+        .text-error { color: #ef4444;}
+        .dark .text-error { color: #f87171;}
         
-        /* SERP Preview specific styles */
         .serp-preview {
             border: 1px solid var(--google-border);
             border-radius: 8px;
             padding: 16px;
             background-color: white;
-            font-family: 'Roboto', sans-serif; /* Google uses Roboto */
+            font-family: 'Roboto', sans-serif;
         }
-        .dark .serp-preview { background-color: #202124; } /* Google dark mode background */
+        .dark .serp-preview { background-color: #202124; }
         
         .serp-header { display: flex; align-items: center; margin-bottom: 4px; }
-        .serp-favicon { width: 16px; height: 16px; margin-right: 8px; border-radius: 4px; background-color: #eee; } /* Placeholder */
+        .serp-favicon { width: 16px; height: 16px; margin-right: 8px; border-radius: 4px; background-color: #eee; }
         .serp-url { color: var(--google-url); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .serp-title a { color: var(--google-link); font-size: 20px; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
         .serp-title a:hover { text-decoration: underline; }
         .serp-description { color: var(--google-text); font-size: 14px; line-height: 1.57; word-wrap: break-word; }
-        .serp-description strong { font-weight: bold; color: #202124; } /* Bolding for keywords */
+        .serp-description strong { font-weight: bold; color: #202124; }
         .dark .serp-description strong { color: #e8eaed; }
         
-        /* Rich Snippets */
         .serp-rich-snippet { display: flex; align-items: center; color: var(--google-text); font-size: 14px; margin-top: 2px; }
         .serp-date { margin-right: 8px; }
         .serp-stars { color: var(--google-stars); margin-right: 4px; display: flex; }
         .serp-stars svg { width: 14px; height: 14px; fill: currentColor; }
 
-        /* Mobile specific styles */
         .serp-preview-mobile .serp-title a { font-size: 18px; }
         .serp-preview-mobile .serp-description { font-size: 13px; }
         
-        /* Toggle Buttons */
         .toggle-btn {
-             padding: 0.5rem 1rem; /* py-2 px-4 */
-             border: 1px solid #d1d5db; /* border-gray-300 */
-             border-radius: 0.375rem; /* rounded-md */
-             font-size: 0.875rem; /* text-sm */
+             padding: 0.5rem 1rem;
+             border: 1px solid #d1d5db;
+             border-radius: 0.375rem;
+             font-size: 0.875rem;
              cursor: pointer;
              background-color: white;
              transition: all 0.2s ease;
         }
         .dark .toggle-btn {
-             background-color: #374151; /* dark:bg-gray-700 */
-             border-color: #4b5563; /* dark:border-gray-600 */
+             background-color: #374151;
+             border-color: #4b5563;
         }
         .toggle-btn.active {
-             background-color: #10b981; /* bg-tt-primary */
+             background-color: #10b981;
              color: white;
-             border-color: #10b981; /* border-tt-primary */
+             border-color: #10b981;
         }
         .dark .toggle-btn.active {
-             background-color: #059669; /* dark adjusted */
+             background-color: #059669;
         }
         .toggle-btn:not(.active):hover {
-             background-color: #f3f4f6; /* hover:bg-gray-100 */
+             background-color: #f3f4f6;
         }
          .dark .toggle-btn:not(.active):hover {
-             background-color: #4b5563; /* dark:hover:bg-gray-600 */
+             background-color: #4b5563;
         }
 
-        /* Helper to measure text width */
         #text-width-tester {
             position: absolute;
             visibility: hidden;
@@ -201,8 +198,7 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <!-- UPDATE: Breadcrumb -->
         <nav class="flex mb-6" aria-label="Breadcrumb">
@@ -310,7 +306,6 @@
             </div>
         </div>
         
-        <!-- ... (Informational Sections - Updated) ... -->
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What is a SERP Snippet Preview?</h2>
@@ -351,9 +346,8 @@
                     <li><strong>Consider Mobile:</strong> Titles and descriptions often appear shorter on mobile. Check the mobile preview!</li>
                 </ul>
             </div>
-            <!-- ... (FAQ Section - Updated) ... -->
-             <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQ)</h2>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
                 <div class="space-y-3 text-sm">
                    <details class="group">
                         <summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -395,7 +389,6 @@
         </section>
     </main>
     
-    <!-- Hidden element for measuring text width -->
     <div id="text-width-tester" style="font-family: 'Roboto', sans-serif;"></div>
 
     <script src="../javascript/globals.js" defer></script>

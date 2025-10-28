@@ -10,6 +10,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://toolstree.vercel.app/tools/mermaid-editor.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -20,7 +23,6 @@
         gtag('config', 'G-N1KEVGM2VP');
     </script>
     <script>
-        // Theme initialization script
         (function() {
             try {
                 const theme = localStorage.getItem('theme');
@@ -112,8 +114,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
@@ -230,7 +231,7 @@
                 </ul>
             </div>
              <div>
-                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions</h2>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
                 <div class="space-y-3 text-sm">
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How does PNG export work?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool renders the generated SVG diagram onto a hidden HTML5 canvas element in your browser. It then converts the canvas content into a PNG data URL, which is used to trigger a file download. All processing happens client-side, ensuring your data remains private.</p></details>
                     <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Can I use this for very large diagrams?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. For very large or complex diagrams that might be slow to render on every keystroke, you can uncheck the "Auto Sync" box. This will reveal a "Render" button, allowing you to manually trigger a diagram update when you are ready.</p></details>

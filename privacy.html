@@ -8,7 +8,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
@@ -34,19 +36,9 @@
     </script>
     <script>
         window.GLOBAL_ROOT_PATH = '';
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { 'tt-primary': '#10b981', 'tt-secondary': '#4f46e5' },
-                    fontFamily: { sans: ['Roboto Mono', 'monospace'] }
-                }
-            }
-        };
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <div class="text-center mb-10">
             <h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">Privacy Policy</h1>

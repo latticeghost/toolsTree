@@ -10,6 +10,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://toolstree.vercel.app/tools/utm-builder.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
@@ -41,23 +45,19 @@
         .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
         .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
         
-        /* Generated URL styling */
         #generatedUrl { background-color: #f0fdf4; color: #15803d; border-color: #10b981; font-weight: 600; }
         .dark #generatedUrl { background-color: #064e3b; color: #a7f3d0; border-color: #10b981; }
         
-        /* Copy Button Styles */
         .copy-btn { opacity: 0; padding: 0.25rem; border-radius: 0.25rem; color: #6b7080; transition: opacity 0.2s ease, color 0.2s ease; cursor: pointer; }
         .dark .copy-btn { color: #9ca3af; }
         .output-wrapper:hover .copy-btn { opacity: 1; }
         .copy-btn:hover { color: #10b981; } 
         .dark .copy-btn:hover { color: #10b981; }
 
-        /* QR Code Styling */
         #qrCodeWrapper { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb; }
         .dark #qrCodeWrapper { border-top-color: #4b5563; }
-        /* Style the container, not the canvas directly */
         #qrCodeContainer { 
-            width: 180px; /* 160px QR + 2*10px padding */
+            width: 180px;
             height: 180px; 
             margin: 0 auto 1rem; 
             background-color: white; 
@@ -65,13 +65,11 @@
             border-radius: 0.375rem; 
             box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); 
         }
-        /* Ensure the generated img/canvas fits */
         #qrCodeContainer canvas, #qrCodeContainer img { display: block; width: 100%; height: 100%; }
 
         #qrCodePlaceholder { text-align: center; padding: 2rem 0; color: #6b7280; font-size: 0.875rem; }
         .dark #qrCodePlaceholder { color: #9ca3af; }
         
-        /* Tooltip Styles */
         .tooltip-container { position: relative; display: inline-flex; align-items: center; }
         .tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-8px); background-color: #1f2937; color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; pointer-events: none; z-index: 10; }
         .dark .tooltip { background-color: #374151; color: #f3f4f6; }
@@ -80,7 +78,6 @@
         .tooltip-container:hover .tooltip { opacity: 1; visibility: visible; }
     </style>
 
-    <!-- ... (LD+JSON Schema and FAQ Schema are unchanged) ... -->
      <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -134,10 +131,8 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
-        <!-- ... (Nav/Breadcrumb is unchanged) ... -->
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
@@ -146,14 +141,12 @@
             </ol>
         </nav>
         
-        <!-- ... (Header is unchanged) ... -->
         <section class="mb-10 text-center">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced UTM Campaign URL Builder</h1>
             <p class="text-base text-gray-600 dark:text-gray-300">Generate trackable URLs with suggestions, QR codes, and more.</p>
         </section>
 
         <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-6">
-            <!-- ... (Input Section and Tooltip are unchanged) ... -->
             <div class="space-y-4">
                  <div>
                     <label for="baseUrl" class="block text-sm font-medium">Website URL <span class="text-red-500">*</span></label>
@@ -205,7 +198,6 @@
                 </div>
             </div>
 
-            <!-- ... (Clear Button is unchanged) ... -->
              <div class="flex justify-end pt-4 border-t dark:border-gray-700">
                 <button id="clearButton" class="flex items-center space-x-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition">
                     <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -214,7 +206,6 @@
              </div>
 
 
-            <!-- Generated URL Output & QR Code -->
             <div class="pt-6 border-t dark:border-gray-700">
                 <h2 class="text-xl font-bold mb-2">Generated Campaign URL</h2>
                 <div class="output-wrapper relative"> 
@@ -225,10 +216,8 @@
                 </div>
                 <div id="output-placeholder" class="text-gray-500 text-sm mt-2">Fill in the required fields (*) above to generate the URL.</div>
 
-                 <!-- --- START: QR Code Fix - Use Container --- -->
                  <div id="qrCodeWrapper" class="hidden">
                      <h3 class="text-lg font-semibold mb-3 text-center">QR Code</h3>
-                     <!-- Target this container for QR generation -->
                      <div id="qrCodeContainer" class="w-[180px] h-[180px] mx-auto"></div> 
                      <div id="qrCodePlaceholder" class="hidden">Generating QR code...</div>
                      <button id="downloadQrButton" class="mt-4 mx-auto flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-300">
@@ -236,11 +225,9 @@
                         <span>Download QR Code</span>
                      </button>
                  </div>
-                 <!-- --- END: QR Code Fix --- -->
             </div>
         </div>
         
-        <!-- ... (Informational sections are unchanged) ... -->
         <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
             <div>
                 <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">What Are UTM Parameters?</h2>
@@ -324,7 +311,6 @@
             lucide.createIcons();
         }
 
-        // --- UI Elements ---
         const ui = {
             baseUrl: document.getElementById('baseUrl'),
             utmSource: document.getElementById('utmSource'),
@@ -339,9 +325,7 @@
             outputPlaceholder: document.getElementById('output-placeholder'),
             urlError: document.getElementById('url-error'),
             qrCodeWrapper: document.getElementById('qrCodeWrapper'), 
-            // --- START QR CODE FIX ---
-            qrCodeContainer: document.getElementById('qrCodeContainer'), // Target container div
-            // --- END QR CODE FIX ---
+            qrCodeContainer: document.getElementById('qrCodeContainer'),
             qrCodePlaceholder: document.getElementById('qrCodePlaceholder'),
             downloadQrButton: document.getElementById('downloadQrButton'),
         };
@@ -351,8 +335,6 @@
 
         let qrCodeInstance = null; 
 
-        // --- URL Generation Logic ---
-        // ... (generateUrl function is unchanged) ...
          const generateUrl = () => {
             const baseUrl = ui.baseUrl.value.trim();
             const enforceLowercase = ui.forceLowercase.checked; 
@@ -360,7 +342,6 @@
             let isValidBaseUrl = false;
             if (baseUrl) {
                  try {
-                    // Slightly stricter: ensure it's http or https
                     if (!baseUrl.toLowerCase().startsWith('http://') && !baseUrl.toLowerCase().startsWith('https://')) {
                         throw new Error('Missing protocol');
                     }
@@ -371,7 +352,7 @@
                     ui.urlError.classList.remove('hidden');
                  }
             } else {
-                 ui.urlError.classList.add('hidden'); // Also hide error if input is empty
+                 ui.urlError.classList.add('hidden');
             }
 
             const allRequiredFilled = requiredFields.every(field => field.value.trim() !== '');
@@ -380,12 +361,11 @@
                 ui.generatedUrl.value = '';
                 ui.outputPlaceholder.classList.remove('hidden');
                 ui.qrCodeWrapper.classList.add('hidden'); 
-                return; // Stop here if validation fails
+                return;
             }
             
-            ui.outputPlaceholder.classList.add('hidden'); // Hide placeholder text
+            ui.outputPlaceholder.classList.add('hidden');
             
-            // Build the query string
             const params = new URLSearchParams();
             const utmMap = {
                 utm_source: ui.utmSource.value.trim(),
@@ -397,17 +377,14 @@
 
             for (const key in utmMap) {
                 let value = utmMap[key];
-                if (value) { // Only add if value exists
+                if (value) {
                     if (enforceLowercase) {
                         value = value.toLowerCase();
                     }
-                    // URL encoding is handled automatically by URLSearchParams
                     params.append(key, value);
                 }
             }
             
-            // Combine base URL and params
-            // Check if base URL already has query params
             const separator = baseUrl.includes('?') ? '&' : '?';
             const finalUrl = `${baseUrl}${separator}${params.toString()}`;
             
@@ -418,31 +395,26 @@
         };
         
 
-        // --- START: Fixed QR Code Generation ---
         const generateQrCode = (url) => {
-            // Always clear the container first
             ui.qrCodeContainer.innerHTML = ''; 
-            ui.qrCodePlaceholder.classList.remove('hidden'); // Show loading/placeholder
+            ui.qrCodePlaceholder.classList.remove('hidden');
 
             if (!url) {
                 ui.qrCodePlaceholder.textContent = 'Enter URL to generate QR code.';
-                qrCodeInstance = null; // Reset instance if URL is invalid
+                qrCodeInstance = null;
                 return;
             }
 
             ui.qrCodePlaceholder.textContent = 'Generating QR code...';
 
             try {
-                // Ensure the library is loaded
                 if (typeof QRCode === 'undefined') {
                     console.error("QRCode library is not loaded.");
                     ui.qrCodePlaceholder.textContent = 'Error: QR Code library failed to load.';
                     return;
                 }
 
-                // Use setTimeout to ensure the DOM is ready for QR code generation
                 setTimeout(() => {
-                    // Create a new QRCode instance *targeting the container div*
                     qrCodeInstance = new QRCode(ui.qrCodeContainer, {
                         text: url,
                         width: 160,
@@ -451,45 +423,35 @@
                         colorLight: "#ffffff",
                         correctLevel: QRCode.CorrectLevel.H
                     });
-                    ui.qrCodePlaceholder.classList.add('hidden'); // Hide placeholder on success
-                }, 50); // Small delay might help rendering consistency
+                    ui.qrCodePlaceholder.classList.add('hidden');
+                }, 50);
 
             } catch (e) {
                 console.error("QR Code generation failed:", e);
                 ui.qrCodePlaceholder.textContent = 'Error generating QR code.';
                 ui.qrCodePlaceholder.classList.remove('hidden');
-                qrCodeInstance = null; // Reset instance on error
+                qrCodeInstance = null;
             }
         };
-        // --- END: Fixed QR Code Generation ---
-
-        // --- START: Fixed Download QR Code ---
         const downloadQrCode = () => {
-             // Check container has child elements (img or canvas)
             if (!ui.generatedUrl.value || !ui.qrCodeContainer.hasChildNodes()) {
                 console.warn("QR Code not generated or container is empty.");
                 return; 
             }
 
-            // The library generates an <img> inside the container when it works
             const imgElement = ui.qrCodeContainer.querySelector('img'); 
-            // Fallback to canvas if img isn't found (might happen with older versions or errors)
             const canvasElement = ui.qrCodeContainer.querySelector('canvas'); 
             
             let dataUrl = null;
 
             if (imgElement && imgElement.src) {
-                 // Easiest: Use the image source directly if it's a data URL
                  if (imgElement.src.startsWith('data:image/png')) {
                      dataUrl = imgElement.src;
                  } else {
-                     // If it's not a data URL, we need to draw it to a canvas first
-                     // This is less common with this library but good practice
                      const tempCanvas = document.createElement('canvas');
                      tempCanvas.width = imgElement.naturalWidth || 160;
                      tempCanvas.height = imgElement.naturalHeight || 160;
                      const ctx = tempCanvas.getContext('2d');
-                     // Draw white background first for non-transparent PNGs
                      ctx.fillStyle = '#FFFFFF';
                      ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
                      try {
@@ -497,11 +459,10 @@
                         dataUrl = tempCanvas.toDataURL("image/png");
                      } catch (e) {
                          console.error("Error drawing image to canvas for download:", e);
-                         return; // Stop if drawing fails
+                         return;
                      }
                  }
             } else if (canvasElement) {
-                 // Fallback if the library generated a canvas instead
                  dataUrl = canvasElement.toDataURL("image/png");
             }
 
@@ -510,17 +471,14 @@
                 return;
             }
 
-            // Convert to format suitable for download link
             const pngUrlForDownload = dataUrl.replace("image/png", "image/octet-stream");
              
-             // Create filename
              let filename = 'qrcode.png';
              try {
                  const urlHostname = new URL(ui.baseUrl.value.trim()).hostname;
                  filename = `utm_qr_${urlHostname.replace(/^www\./, '')}.png`;
              } catch (_) { /* Keep default filename */ }
              
-             // Trigger download
              let downloadLink = document.createElement("a");
              downloadLink.href = pngUrlForDownload;
              downloadLink.download = filename;
@@ -528,15 +486,11 @@
              downloadLink.click();
              document.body.removeChild(downloadLink);
         };
-        // --- END: Fixed Download QR Code ---
 
-
-        // --- Clear Fields ---
-        // ... (clearFields function is unchanged) ...
         const clearFields = () => {
             allFields.forEach(field => {
                 if(field.type === 'checkbox') {
-                    field.checked = true; // Reset checkbox to default checked
+                    field.checked = true;
                 } else {
                     field.value = '';
                 }
@@ -544,8 +498,6 @@
             generateUrl(); 
         };
 
-        // --- Copy to Clipboard ---
-        // ... (handleCopyClick function is unchanged) ...
         const handleCopyClick = () => {
             const textToCopy = ui.generatedUrl.value;
             if (!textToCopy) return;
@@ -574,14 +526,11 @@
             }
         };
 
-        // --- Event Listeners ---
-        // ... (Event listeners are unchanged) ...
         allFields.forEach(field => field.addEventListener('input', generateUrl));
         ui.clearButton.addEventListener('click', clearFields);
         ui.copyUrlButton.addEventListener('click', handleCopyClick);
         ui.downloadQrButton.addEventListener('click', downloadQrCode); 
 
-        // --- Initial State ---
         generateUrl(); 
 
     });

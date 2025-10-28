@@ -10,6 +10,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://toolstree.vercel.app/tools/ip-lookup.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="../assets/output.css" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
@@ -84,7 +87,6 @@
         .dark .dns-record-list li:not(:last-child) { border-bottom-color: #4b5563; }
     </style>
 
-    <!-- ... (LD+JSON Schema and FAQ Schema unchanged) ... -->
      <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -139,10 +141,8 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
-        <!-- ... (Nav/Breadcrumb unchanged) ... -->
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
@@ -151,7 +151,6 @@
             </ol>
         </nav>
 
-        <!-- ... (Header unchanged) ... -->
         <section class="mb-10 text-center">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">IP Address Lookup & Geolocation</h1>
             <p class="text-base text-gray-600 dark:text-gray-300">Get detailed geolocation, network, security, and timezone data for any IP or domain.</p>
@@ -159,7 +158,6 @@
 
         <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Left Column: Input, Map -->
                 <div class="space-y-6">
                     <!-- My IP Card -->
                     <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border dark:border-gray-700">

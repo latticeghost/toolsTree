@@ -10,7 +10,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://toolstree.vercel.app/tools/data-converter.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
     <link href="../assets/output.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
     <script>
@@ -130,9 +135,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen">
-
-    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans"> <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
         <nav class="flex mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
                 <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
@@ -304,17 +307,17 @@
 
         const renderOptions = (mode) => {
             let html = '';
-            const dirHTML = `<div class="flex items-center gap-4"><label class="font-medium">Direction:</label><div class="flex gap-4"><label><input type="radio" name="direction" value="encode" checked class="mr-1">Encode</label><label><input type="radio" name="direction" value="decode" class="mr-1">Decode</label></div></div>`;
+            const dirHTML = `<div class="flex items-center gap-4"><label class="font-medium">Direction:</label><div class="flex gap-4"><label class="flex items-center"><input type="radio" name="direction" value="encode" checked class="mr-1">Encode</label><label class="flex items-center"><input type="radio" name="direction" value="decode" class="mr-1">Decode</label></div></div>`;
             switch(mode) {
                 case 'unicode': 
                     html = `<div class="space-y-4">${dirHTML}
                                 <div class="flex items-center gap-4"><label class="font-medium">Code Base:</label>
                                     <div class="flex flex-wrap gap-4 text-sm">
-                                        <label><input type="radio" name="codeBase" value="hex" checked class="mr-1">Hex (16)</label>
-                                        <label><input type="radio" name="codeBase" value="dec" class="mr-1">Decimal (10)</label>
-                                        <label><input type="radio" name="codeBase" value="oct" class="mr-1">Octal (8)</label>
-                                        <label><input type="radio" name="codeBase" value="bin" class="mr-1">Binary (2)</label>
-                                        <label class="flex items-center"><input type="radio" name="codeBase" value="custom" class="mr-1">Custom: 
+                                        <label class="flex items-center"><input type="radio" name="codeBase" value="hex" checked class="mr-1">Hex (16)</label>
+                                        <label class="flex items-center"><input type="radio" name="codeBase" value="dec" class="mr-1">Decimal (10)</label>
+                                        <label class="flex items-center"><input type="radio" name="codeBase" value="oct" class="mr-1">Octal (8)</label>
+                                        <label class="flex items-center"><input type="radio" name="codeBase" value="bin" class="mr-1">Binary (2)</label>
+                                        <label class="flex items-center whitespace-nowrap"><input type="radio" name="codeBase" value="custom" class="mr-1">Custom: 
                                             <input type="number" id="customBase" min="2" max="36" placeholder="2-36" class="w-20 ml-2 p-1 border rounded-md text-center">
                                         </label>
                                     </div>

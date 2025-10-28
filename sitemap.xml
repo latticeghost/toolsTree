@@ -9,42 +9,52 @@
 
 <url>
   <loc>https://toolstree.vercel.app/</loc>
-  <lastmod>2025-10-13T05:29:59+00:00</lastmod>
+  <lastmod>2025-10-28T13:52:54+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
   <loc>https://toolstree.vercel.app/categories/data-dev.html</loc>
-  <lastmod>2025-10-13T05:30:00+00:00</lastmod>
+  <lastmod>2025-10-28T13:52:54+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://toolstree.vercel.app/categories/text.html</loc>
-  <lastmod>2025-10-13T05:30:00+00:00</lastmod>
+  <lastmod>2025-10-28T13:52:55+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://toolstree.vercel.app/categories/clock.html</loc>
-  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
+  <lastmod>2025-10-28T13:52:55+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://toolstree.vercel.app/categories/finance.html</loc>
-  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
+  <lastmod>2025-10-28T13:52:55+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://toolstree.vercel.app/categories/image.html</loc>
-  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
+  <lastmod>2025-10-28T13:52:55+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://toolstree.vercel.app/categories/networking.html</loc>
+  <lastmod>2025-10-28T13:52:55+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://toolstree.vercel.app/categories/seo-marketing.html</loc>
+  <lastmod>2025-10-28T13:52:55+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://toolstree.vercel.app/categories/misc.html</loc>
-  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
+  <lastmod>2025-10-28T13:52:56+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://toolstree.vercel.app/index.html</loc>
-  <lastmod>2025-10-13T05:30:01+00:00</lastmod>
+  <lastmod>2025-10-28T13:52:56+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 

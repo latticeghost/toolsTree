@@ -11,6 +11,8 @@ module.exports = {
     './categories/image.html',
     './categories/misc.html',
     './categories/text.html',
+    './categories/networking.html',
+    './categories/seo-marketing.html',
     './tools/case-converter.html',
     './tools/character-counter.html',
     './tools/compound-interest.html',
@@ -38,6 +40,13 @@ module.exports = {
     './tools/jwt-debugger.html',
     './tools/css-grid-generator.html',
     './tools/mermaid-editor.html',
+    './tools/ip-lookup.html',
+    './tools/subnet-calculator.html',
+    './tools/url-parser.html',
+    './tools/ip-blacklist-checker.html',
+    './tools/utm-builder.html',
+    './tools/serp-previewer.html',
+    './tools/meta-tag-generator.html',
   ],
   darkMode: 'class',
   theme: {
@@ -47,7 +56,8 @@ module.exports = {
         'tt-secondary': '#4f46e5',
       },
       fontFamily: {
-        sans: ['Roboto Mono', 'monospace'],
+        // Use Inter as the default sans-serif font
+        sans: ['Inter', 'sans-serif'],
       }
     },
   },

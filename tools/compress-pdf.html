@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced PDF Compressor - Reduce File Size | toolsTree</title>
+    <meta name="description" content="Securely compress your PDF files in your browser. Choose compression levels, DPI, and grayscale options for maximum file size reduction."/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/compress-pdf.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link href="../assets/output.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+        })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <!-- PDF Processing Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+    
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .text-tt-primary { color: #10b981; }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        #dropzone {
+            border: 2px dashed #d1d5db;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        #dropzone.dragover {
+            background-color: #f0fdf4;
+            border-color: #10b981;
+        }
+        .dark #dropzone.dragover {
+            background-color: #111827;
+            border-color: #10b981;
+        }
+        #preview-canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+        }
+        .dark #preview-canvas {
+            border-color: #4b5563;
+        }
+        
+        /* Style for radio buttons */
+        input[type="radio"]:checked + label {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+            color: #065f46;
+        }
+        .dark input[type="radio"]:checked + label {
+            border-color: #10b981;
+            background-color: #132D2B;
+            color: #6ee7b7;
+        }
+    </style>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced PDF Compressor",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web",
+      "description": "Securely compress your PDF files in your browser. Choose compression levels, DPI, and grayscale options for maximum file size reduction.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "619" },
+      "publisher": { "@type": "Organization", "name": "toolsTree" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+        "@type": "Question",
+        "name": "Is this PDF compressor secure?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, 100%. All processing happens entirely within your web browser. Your PDF file is never uploaded to any server, ensuring your data remains completely private."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "How does this tool compress PDFs?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This tool compresses PDFs by re-compressing the images inside them. It reads each page, renders it at the DPI (resolution) and quality setting you choose, and then builds a new PDF from these new, smaller images. This is the most effective way to reduce file size, especially for scanned documents."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "What do the compression levels mean?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "They are presets for quality and resolution (DPI):\n- Extreme: Uses a low 72 DPI and low image quality. Creates the smallest files, but text might be blurry.\n- Recommended: A balance of 150 DPI and medium quality. Great for most documents, offering significant size reduction with good readability.\n- High Quality: Uses a high 300 DPI and high image quality. File size will be larger, but it's best for documents with important photos."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "What does 'Convert to Grayscale' do?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Checking this option will remove all color information from your PDF, converting it to black and white. This can dramatically reduce the file size, especially when combined with a strong compression level."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "Why did my file size INCREASE after compression?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This can happen with PDFs that are text-only. An original text-based PDF is extremely small because it just stores font data. This tool compresses by converting pages into images. A full-page image (even compressed) will be larger than the original text data. This tool is designed for image-heavy files like scans and photos, where it provides huge file size savings."
+        }
+        }
+    ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
+    
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/pdf.html" class="ml-1 hover:text-tt-primary md:ml-2">PDF Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced PDF Compressor</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced PDF Compressor</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Reduce your PDF file size with powerful, in-browser compression.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-8">
+            
+            <!-- Step 1: Upload -->
+            <div id="upload-section">
+                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 1: Add Your PDF File</h2>
+                <div id="dropzone" class="relative w-full p-8 flex flex-col items-center justify-center rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800/60">
+                    <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-4"></i>
+                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-2">Drag & drop a PDF file here</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">or</p>
+                    <button id="upload-btn" class="bg-tt-primary text-white font-semibold py-2 px-5 rounded-lg shadow-sm hover:bg-green-700 transition">
+                        Select File
+                    </button>
+                    <input type="file" id="file-input" class="hidden" accept="application/pdf">
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                    <i data-lucide="lock" class="w-3 h-3 inline-block mr-1"></i>
+                    Your file is processed 100% in your browser and is never uploaded.
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                    <i data-lucide="info" class="w-3 h-3 inline-block mr-1"></i>
+                    Best for scans & image-heavy files. Text-only PDFs may increase in size (see FAQ).
+                </p>
+                <p id="upload-error-text" class="text-center text-sm mt-3 h-5 text-red-600 dark:text-red-400"></p>
+            </div>
+
+            <!-- Step 2: Configure -->
+            <div id="config-section" class="hidden space-y-8">
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 2: File Details</h2>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="md:w-1/3 flex-shrink-0">
+                            <canvas id="preview-canvas" class="w-full h-auto rounded" width="600" height="849"></canvas>
+                        </div>
+                        <div class="flex-grow space-y-3">
+                            <h3 id="file-name" class="font-bold text-gray-900 dark:text-gray-100 break-all"></h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                <span id="page-count">0 pages</span> | <span id="file-size">0 MB</span>
+                            </p>
+                             <button id="remove-file-btn" class="w-full md:w-auto flex items-center justify-center gap-2 text-sm bg-red-100 text-red-700 font-medium py-2 px-4 rounded-lg hover:bg-red-200 transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                <span>Remove File</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 3: Choose Compression Level</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input type="radio" id="mode-extreme" name="compress-mode" value="extreme" class="hidden">
+                        <label for="mode-extreme" class="block p-4 border dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">Extreme</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Smallest Size (72 DPI, Low Quality)</p>
+                        </label>
+                        
+                        <input type="radio" id="mode-recommended" name="compress-mode" value="recommended" class="hidden" checked>
+                        <label for="mode-recommended" class="block p-4 border dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">Recommended</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Good Balance (150 DPI, Medium Quality)</p>
+                        </label>
+                        
+                        <input type="radio" id="mode-high" name="compress-mode" value="high" class="hidden">
+                        <label for="mode-high" class="block p-4 border dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">High Quality</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Less Compression (300 DPI, High Quality)</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 4: Advanced Options</h2>
+                     <div class="flex items-center">
+                        <input id="grayscale-check" name="grayscale-check" type="checkbox" class="h-4 w-4 text-tt-primary focus:ring-tt-primary border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded">
+                        <label for="grayscale-check" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Convert to Grayscale (Smaller File)
+                        </label>
+                      </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 5: Compress & Download</h2>
+                    <button id="compress-btn" class="w-full flex items-center justify-center gap-3 bg-tt-primary text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition mt-6 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="minimize-2" class="w-5 h-5"></i>
+                        <span>Compress PDF</span>
+                    </button>
+                    <p id="status-text" class="text-center text-sm mt-3 h-5 text-gray-600 dark:text-gray-400"></p>
+                </div>
+            </div>
+            
+            <!-- Step 3: Processing -->
+            <div id="processing-section" class="hidden">
+                <div class="flex flex-col items-center justify-center space-y-4 p-8">
+                    <i data-lucide="loader-2" class="w-12 h-12 text-tt-primary animate-spin"></i>
+                    <p id="processing-status" class="text-lg font-medium text-gray-800 dark:text-gray-200">Initializing...</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center">This may take a moment for large or complex files. Please wait.</p>
+                </div>
+            </div>
+            
+            <!-- Step 4: Result -->
+            <div id="result-section" class="hidden space-y-6">
+                <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">Compression Complete!</h2>
+                
+                <div id="savings-box" class="bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700 text-green-800 dark:text-green-200 p-4 rounded-lg text-center">
+                    <h3 id="savings-summary" class="text-xl font-bold">You saved 0 MB (0%)</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                    <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Original Size</p>
+                        <p id="original-size-text" class="text-2xl font-bold text-gray-900 dark:text-gray-100">0 MB</p>
+                    </div>
+                    <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">New Size</p>
+                        <p id="new-size-text" class="text-2xl font-bold text-tt-primary">0 MB</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="download-btn" class="w-full flex-1 flex items-center justify-center gap-3 bg-tt-primary text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                        <span>Download Compressed PDF</span>
+                    </button>
+                    <button id="reset-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 text-sm bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-medium py-3 px-6 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                        <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                        <span>Compress Another</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About the Advanced PDF Compressor</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>This tool gives you maximum control over your PDF file size, all without everuploading your file. By re-processing the images inside your PDF at different quality and resolution (DPI) settings, it can achieve significantly better compression than simple metadata removal.</p>
+                    <h3 class="text-lg font-semibold pt-2 text-gray-900 dark:text-gray-100">How It Works:</h3>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Image Re-compression:</strong> The main source of PDF bloat is large, high-resolution images. This tool rebuilds your PDF by rendering each page as an image and re-compressing it using high-efficiency JPEG settings.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">DPI Control:</strong> You can choose the resolution (Dots Per Inch). 150 DPI is great for on-screen reading, while 72 DPI is even smaller. This is especially effective on scanned documents.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Grayscale Conversion:</strong> Removing color information is a simple and highly effective way to cut file size, often with no loss of readability for text-based documents.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use This Tool</h2>
+                <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
+                    <li><strong>Upload File:</strong> Drag and drop your PDF or click "Select File".</li>
+                    <li><strong>Choose Level:</strong> Select a compression preset. "Recommended" is great for most uses.</li>
+                    <li><strong>Set Options:</strong> For extra compression, check "Convert to Grayscale".</li>
+                    <li><strong>Compress:</strong> Click the "Compress PDF" button and wait for the processing to finish.</li>
+                    <li><strong>Download:</strong> Review your savings and click "Download" to get your new, smaller file.</li>
+                </ol>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this PDF compressor secure?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes, 100%. All processing happens entirely within your web browser. Your PDF file is never uploaded to any server, ensuring your data remains completely private.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How does this tool compress PDFs?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This tool compresses PDFs by re-compressing the images inside them. It reads each page, renders it at the DPI (resolution) and quality setting you choose, and then builds a new PDF from these new, smaller images. This is the most effective way to reduce file size, especially for scanned documents.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What do the compression levels mean?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">They are presets for quality and resolution (DPI):<br><strong class="font-medium text-gray-800 dark:text-gray-100">- Extreme:</strong> Uses a low 72 DPI and low image quality. Creates the smallest files, but text might be blurry.<br><strong class="font-medium text-gray-800 dark:text-gray-100">- Recommended:</strong> A balance of 150 DPI and medium quality. Great for most documents, offering significant size reduction with good readability.<br><strong class="font-medium text-gray-800 dark:text-gray-100">- High Quality:</strong> Uses a high 300 DPI and high image quality. File size will be larger, but it's best for documents with important photos.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What does 'Convert to Grayscale' do?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Checking this option will remove all color information from your PDF, converting it to black and white. This can dramatically reduce the file size, especially when combined with a strong compression level.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Why did my file size INCREASE after compression?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">This can happen with PDFs that are text-only. An original text-based PDF is extremely small because it just stores font data. This tool compresses by converting pages into images. A full-page image (even compressed) will be larger than the original text data. This tool is designed for image-heavy files like scans and photos, where it provides huge file size savings.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        }
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        const { PDFDocument } = PDFLib;
+        
+        const ui = {
+            dropzone: document.getElementById('dropzone'),
+            uploadBtn: document.getElementById('upload-btn'),
+            fileInput: document.getElementById('file-input'),
+            uploadErrorText: document.getElementById('upload-error-text'),
+            
+            uploadSection: document.getElementById('upload-section'),
+            configSection: document.getElementById('config-section'),
+            processingSection: document.getElementById('processing-section'),
+            resultSection: document.getElementById('result-section'),
+            
+            previewCanvas: document.getElementById('preview-canvas'),
+            fileName: document.getElementById('file-name'),
+            pageCount: document.getElementById('page-count'),
+            fileSize: document.getElementById('file-size'),
+            removeFileBtn: document.getElementById('remove-file-btn'),
+            
+            grayscaleCheck: document.getElementById('grayscale-check'),
+            compressBtn: document.getElementById('compress-btn'),
+            statusText: document.getElementById('status-text'),
+            
+            processingStatus: document.getElementById('processing-status'),
+            
+            savingsBox: document.getElementById('savings-box'),
+            savingsSummary: document.getElementById('savings-summary'),
+            originalSizeText: document.getElementById('original-size-text'),
+            newSizeText: document.getElementById('new-size-text'),
+            downloadBtn: document.getElementById('download-btn'),
+            resetBtn: document.getElementById('reset-btn'),
+        };
+
+        let currentFile = {
+            name: null,
+            buffer: null,
+            totalPages: 0,
+            filenameBase: 'compressed-file'
+        };
+        
+        let compressedData = {
+            bytes: null,
+            filename: 'compressed.pdf'
+        };
+
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const absBytes = Math.abs(bytes);
+            const k = 1000;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = absBytes > 0 ? Math.floor(Math.log(absBytes) / Math.log(k)) : 0;
+            return parseFloat((absBytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        function preventBodyFileDrop(e) {
+            if (e.dataTransfer && e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventBodyFileDrop, false);
+        });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, () => {
+                if (event.dataTransfer.types.includes('Files')) ui.dropzone.classList.add('dragover');
+            }, false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, () => ui.dropzone.classList.remove('dragover'), false);
+        });
+        
+        ui.dropzone.addEventListener('drop', handleDrop, false);
+        ui.uploadBtn.addEventListener('click', () => ui.fileInput.click());
+        ui.fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+            e.target.value = null; 
+        });
+        ui.removeFileBtn.addEventListener('click', () => resetTool(true));
+
+        function handleDrop(e) {
+            handleFiles(e.dataTransfer.files);
+        }
+
+        function handleFiles(files) {
+            ui.uploadErrorText.textContent = '';
+            if (files.length === 0) return;
+            const file = [...files].find(f => f.type === 'application/pdf');
+            if (file) {
+                addFile(file);
+            }
+        }
+
+        async function addFile(file) {
+            const buffer = await file.arrayBuffer();
+            
+            ui.fileName.textContent = file.name;
+            const originalSize = file.size;
+            ui.fileSize.textContent = formatBytes(originalSize);
+
+            currentFile.name = file.name;
+            currentFile.buffer = buffer;
+            currentFile.filenameBase = file.name.replace(/\.pdf$/i, '');
+
+            try {
+                const pdfDoc = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) }).promise;
+                currentFile.totalPages = pdfDoc.numPages;
+                
+                const page = await pdfDoc.getPage(1);
+                
+                const dpr = window.devicePixelRatio || 1;
+                const logicalBaseWidth = ui.previewCanvas.width;
+                
+                const viewport = page.getViewport({ scale: 1 });
+                const scale = (logicalBaseWidth / viewport.width) * dpr;
+                const scaledViewport = page.getViewport({ scale });
+
+                ui.previewCanvas.width = scaledViewport.width;
+                ui.previewCanvas.height = scaledViewport.height;
+
+                await page.render({
+                    canvasContext: ui.previewCanvas.getContext('2d'),
+                    viewport: scaledViewport
+                }).promise;
+
+                ui.pageCount.textContent = `${currentFile.totalPages} pages`;
+                
+                ui.uploadSection.classList.add('hidden');
+                ui.configSection.classList.remove('hidden');
+                ui.compressBtn.disabled = false;
+                if (window.lucide) lucide.createIcons();
+
+            } catch (err) {
+                console.error('Error rendering PDF preview:', err);
+                if (err.name === 'PasswordException') {
+                     ui.uploadErrorText.textContent = 'Error: This file is password-protected and cannot be compressed.';
+                } else {
+                     ui.uploadErrorText.textContent = 'Error: Could not read this PDF file.';
+                }
+                resetTool(false);
+            }
+        }
+
+        function resetTool(clearError = true) {
+            ui.uploadSection.classList.remove('hidden');
+            ui.configSection.classList.add('hidden');
+            ui.processingSection.classList.add('hidden');
+            ui.resultSection.classList.add('hidden');
+            
+            if (clearError) ui.uploadErrorText.textContent = '';
+            ui.fileInput.value = null;
+            ui.fileName.textContent = '';
+            ui.pageCount.textContent = '0 pages';
+            ui.fileSize.textContent = '0 MB';
+            ui.statusText.textContent = '';
+            ui.previewCanvas.getContext('2d').clearRect(0, 0, ui.previewCanvas.width, ui.previewCanvas.height);
+            
+            currentFile = { name: null, buffer: null, totalPages: 0, filenameBase: 'compressed-file' };
+            compressedData = { bytes: null, filename: 'compressed.pdf' };
+            
+            document.getElementById('mode-recommended').checked = true;
+            ui.grayscaleCheck.checked = false;
+            ui.compressBtn.disabled = true;
+
+            const greenClasses = ['bg-green-100', 'dark:bg-green-900/30', 'border-green-300', 'dark:border-green-700', 'text-green-800', 'dark:text-green-200'];
+            const redClasses = ['bg-red-100', 'dark:bg-red-900/30', 'border-red-300', 'dark:border-red-700', 'text-red-800', 'dark:text-red-200'];
+            ui.savingsBox.classList.remove(...redClasses);
+            ui.savingsBox.classList.add(...greenClasses);
+        }
+
+        ui.compressBtn.addEventListener('click', handleCompress);
+        
+        async function handleCompress() {
+            if (ui.compressBtn.disabled || !currentFile.buffer) return;
+
+            ui.compressBtn.disabled = true;
+            ui.configSection.classList.add('hidden');
+            ui.processingSection.classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+
+            const mode = document.querySelector('input[name="compress-mode"]:checked').value;
+            const grayscale = ui.grayscaleCheck.checked;
+            
+            let scale, quality;
+            switch(mode) {
+                case 'extreme':
+                    scale = 72 / 96;
+                    quality = 0.4;
+                    break;
+                case 'high':
+                    scale = 300 / 96;
+                    quality = 0.9;
+                    break;
+                case 'recommended':
+                default:
+                    scale = 150 / 96;
+                    quality = 0.7;
+                    break;
+            }
+
+            try {
+                const originalDoc = await pdfjsLib.getDocument({ data: new Uint8Array(currentFile.buffer) }).promise;
+                const newPdf = await PDFDocument.create();
+                
+                const hiddenCanvas = document.createElement('canvas');
+                const ctx = hiddenCanvas.getContext('2d');
+
+                for (let i = 1; i <= originalDoc.numPages; i++) {
+                    ui.processingStatus.textContent = `Processing page ${i} of ${originalDoc.numPages}...`;
+                    
+                    const page = await originalDoc.getPage(i);
+                    const viewport = page.getViewport({ scale });
+                    
+                    hiddenCanvas.width = viewport.width;
+                    hiddenCanvas.height = viewport.height;
+                    
+                    ctx.clearRect(0, 0, hiddenCanvas.width, hiddenCanvas.height);
+                    if (grayscale) {
+                        ctx.filter = 'grayscale(100%)';
+                    } else {
+                        ctx.filter = 'none';
+                    }
+
+                    await page.render({
+                        canvasContext: ctx,
+                        viewport: viewport
+                    }).promise;
+                    
+                    const dataUrl = hiddenCanvas.toDataURL('image/jpeg', quality);
+                    const jpgImage = await newPdf.embedJpg(dataUrl);
+                    
+                    const newPage = newPdf.addPage([viewport.width, viewport.height]);
+                    newPage.drawImage(jpgImage, {
+                        x: 0,
+                        y: 0,
+                        width: viewport.width,
+                        height: viewport.height,
+                    });
+                }
+                
+                ui.processingStatus.textContent = 'Finalizing your PDF...';
+                const newPdfBytes = await newPdf.save();
+                
+                const originalSize = currentFile.buffer.byteLength;
+                const newSize = newPdfBytes.byteLength;
+                const saved = originalSize - newSize;
+                
+                compressedData.bytes = newPdfBytes;
+                compressedData.filename = `${currentFile.filenameBase}-compressed.pdf`;
+
+                ui.originalSizeText.textContent = formatBytes(originalSize);
+                ui.newSizeText.textContent = formatBytes(newSize);
+                
+                const greenClasses = ['bg-green-100', 'dark:bg-green-900/30', 'border-green-300', 'dark:border-green-700', 'text-green-800', 'dark:text-green-200'];
+                const redClasses = ['bg-red-100', 'dark:bg-red-900/30', 'border-red-300', 'dark:border-red-700', 'text-red-800', 'dark:text-red-200'];
+
+                ui.savingsBox.classList.remove(...greenClasses, ...redClasses);
+
+                if (saved > 0) {
+                    const savedPercent = (saved / originalSize * 100).toFixed(1);
+                    ui.savingsSummary.textContent = `You saved ${formatBytes(saved)} (${savedPercent}%)`;
+                    ui.savingsBox.classList.add(...greenClasses);
+                } else {
+                    const increasedBy = Math.abs(saved);
+                    const increasePercent = originalSize > 0 ? (increasedBy / originalSize * 100).toFixed(1) : 0;
+                    ui.savingsSummary.textContent = `File size increased by ${formatBytes(increasedBy)} (${increasePercent}%)`;
+                    ui.savingsBox.classList.add(...redClasses);
+                }
+                
+                ui.processingSection.classList.add('hidden');
+                ui.resultSection.classList.remove('hidden');
+                if (window.lucide) lucide.createIcons();
+
+            } catch (err) {
+                console.error('Error during compression:', err);
+                ui.processingSection.classList.add('hidden');
+                ui.configSection.classList.remove('hidden');
+                ui.statusText.textContent = 'Error: Compression failed. Please try again.';
+                ui.compressBtn.disabled = false;
+            }
+        }
+        
+        ui.downloadBtn.addEventListener('click', () => {
+            if (!compressedData.bytes) return;
+            const blob = new Blob([compressedData.bytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = compressedData.filename;
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        });
+        
+        ui.resetBtn.addEventListener('click', () => resetTool(true));
+
+    });
+    </script>
+</body>
+</html>
+

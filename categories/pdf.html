@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online PDF Tools & Utilities | toolsTree</title>
+  <meta name="description" content="A complete toolkit to merge, split, compress, convert, and manage your PDF documents for free.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="canonical" href="https://toolstree.vercel.app/categories/pdf.html">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link href="../assets/output.css" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-N1KEVGM2VP');
+  </script>
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (theme === 'dark' || (!theme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {
+        console.error("Error applying initial theme:", e);
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+  <script src="https://unpkg.com/lucide@latest" defer></script> 
+  <script>
+    window.GLOBAL_ROOT_PATH = '../';
+  </script>
+  
+  <style>
+    :root { --tt-primary-stroke: #10b981; }
+    .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "PDF Tools",
+    "description": "A complete toolkit to merge, split, compress, convert, and manage your PDF documents for free.",
+    "url": "https://toolstree.vercel.app/categories/pdf.html",
+    "publisher": {
+      "@type": "Organization",
+      "name": "toolsTree"
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Merge PDF", "url": "https://toolstree.vercel.app/tools/merge-pdf.html" },
+        { "@type": "ListItem", "position": 2, "name": "Split PDF", "url": "https://toolstree.vercel.app/tools/split-pdf.html" },
+        { "@type": "ListItem", "position": 3, "name": "Compress PDF", "url": "https://toolstree.vercel.app/tools/compress-pdf.html" },
+        { "@type": "ListItem", "position": 4, "name": "PDF to JPG", "url": "https://toolstree.vercel.app/tools/pdf-to-jpg.html" },
+        { "@type": "ListItem", "position": 5, "name": "JPG to PDF", "url": "https://toolstree.vercel.app/tools/jpg-to-pdf.html" },
+        { "@type": "ListItem", "position": 6, "name": "PDF to Word", "url": "https://toolstree.vercel.app/tools/pdf-to-word.html" },
+        { "@type": "ListItem", "position": 7, "name": "Word to PDF", "url": "https://toolstree.vercel.app/tools/word-to-pdf.html" }
+      ]
+    }
+  }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen font-sans">
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+    
+    <nav class="flex mb-6" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+            <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+            <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">PDF Tools</span></div></li>
+        </ol>
+    </nav>
+    
+    <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center p-3 rounded-full bg-tt-primary/10 mb-4">
+            <i data-lucide="file-text" class="w-8 h-8 text-tt-primary"></i>
+        </div>
+      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">PDF Tools</h1>
+      <p class="text-lg text-gray-600 mt-2 dark:text-gray-300">A complete toolkit to merge, split, compress, convert, and manage your PDF documents.</p>
+    </div>
+
+    <div id="pdf-tools" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+    </main>
+
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+        const ALL_TOOLS_PDF = [
+            { name: "Advanced PDF Merger", url: "../tools/merge-pdf.html", category: "PDF", icon: "files", color: "text-red-600", description: "Combine multiple PDF files into one single document." },
+            { name: "PDF Splitter", url: "../tools/split-pdf.html", category: "PDF", icon: "file-minus-2", color: "text-red-500", description: "Extract specific pages or split a PDF into multiple files." },
+            { name: "Advanced PDF Compressor", url: "../tools/compress-pdf.html", category: "PDF", icon: "minimize-2", color: "text-red-700", description: "Reduce the file size of your PDF documents." },
+            { name: "PDF to JPG/PNG Converter", url: "../tools/pdf-to-jpg.html", category: "PDF", icon: "file-image", color: "text-blue-500", description: "Convert each PDF page into a high-quality JPG image." },
+            { name: "Image to PDF Converter", url: "../tools/image-to-pdf.html", category: "PDF", icon: "image", color: "text-blue-600", description: "Combine one or more JPG images into a single PDF file." },
+        ];
+
+        const renderTools = (tools, containerId) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = tools.map((tool, index) => `
+                <a href="${tool.url}" 
+                   class="group block bg-white p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 space-y-2 dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 hover:border-tt-primary dark:hover:border-tt-primary/50 opacity-0"
+                   style="animation: fadeIn 0.5s ease-out ${index * 0.05}s forwards;">
+
+                  <i data-lucide="${tool.icon}" class="w-7 h-7 mb-2 ${tool.color} transition group-hover:scale-110"></i>
+                  <h2 class="text-base font-semibold text-gray-800 dark:text-gray-100">${tool.name}</h2>
+                  <p class="text-gray-500 text-sm dark:text-gray-400">${tool.description || 'Quick access tool.'}</p>
+                </a>`).join('');
+            window.lucide.createIcons();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof window.injectLayout === 'function') {
+                window.injectLayout(false);
+            } else {
+                console.warn('`injectLayout` function not found. Header/footer will not be injected.');
+            }
+            renderTools(ALL_TOOLS_PDF, 'pdf-tools');
+        });
+    </script>
+</body>
+</html>

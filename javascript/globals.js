@@ -51,7 +51,7 @@ const FOOTER_HTML = (rootPath) => `
 
 // --- 2. TOOL DATA (Centralized for Global Search) ---
 const ALL_TOOLS = [
-    { name: "Character Code & Data Converter", url: "tools/data-converter.html", category: "Data & Developer", icon: "replace", color: "text-tt-primary", description: "Convert Unicode, Hex, Binary, Base64, and URL encoding." },
+    { name: "Advanced Data Converter", url: "tools/data-converter.html", category: "Data & Developer", icon: "replace", color: "text-tt-primary", description: "Convert Unicode, Hex, Binary, Base64, and URL encoding." },
     { name: "JSON Formatter, Validator & Minifier", url: "tools/json-formatter.html", category: "Data & Developer", icon: "box", color: "text-purple-600", description: "Format, validate, and minify your JSON data instantly." },
     { name: "CSS Grid Generator & Visual Builder", url: "../tools/css-grid-generator.html", category: "Data & Developer", icon: "layout-grid", color: "text-tt-primary", description: "Visually build complex CSS Grid layouts, named areas, and track definitions." },
     { name: "Advanced CSS Gradient Generator", url: "tools/css-gradient-generator.html", category: "Data & Developer", icon: "palette", color: "text-purple-600", description: "Visually create and customize stunning CSS gradients." },
@@ -85,12 +85,13 @@ const ALL_TOOLS = [
     { name: "UTM Campaign URL Builder", url: "../tools/utm-builder.html", category: "SEO & Marketing", icon: "link", color: "text-blue-600", description: "Create trackable campaign URLs with UTM parameters." },
     { name: "SERP (Search Engine Results Page) Snippet Preview Tool", url: "../tools/serp-previewer.html", category: "SEO & Marketing", icon: "search", color: "text-green-600", description: "See how your page title and meta description look on Google." },
     { name: "Advanced Meta Tag Generator", url: "../tools/meta-tag-generator.html", category: "SEO & Marketing", icon: "tag", color: "text-indigo-600", description: "Generate essential meta tags (title, description, OG) for your pages." },
-    
-
-
+    { name: "Advanced PDF Merger", url: "../tools/merge-pdf.html", category: "PDF", icon: "files", color: "text-red-600", description: "Combine multiple PDF files into one single document." },
+    { name: "PDF Splitter", url: "../tools/split-pdf.html", category: "PDF", icon: "file-minus-2", color: "text-red-500", description: "Extract specific pages or split a PDF into multiple files." },
+    { name: "Advanced PDF Compressor", url: "../tools/compress-pdf.html", category: "PDF", icon: "minimize-2", color: "text-red-700", description: "Reduce the file size of your PDF documents." },
+    { name: "PDF to JPG/PNG Converter", url: "../tools/pdf-to-jpg.html", category: "PDF", icon: "file-image", color: "text-blue-500", description: "Convert each PDF page into a high-quality JPG image." },
+    { name: "Image to PDF Converter", url: "../tools/image-to-pdf.html", category: "PDF", icon: "image", color: "text-blue-600", description: "Combine one or more JPG images into a single PDF file." },
 ];
 
-// --- 3. THEME MANAGEMENT LOGIC (FUTURE-PROOF) ---
 const ThemeManager = {
     init() {
         this.updateToggleIcon(document.documentElement.classList.contains('dark'));
@@ -126,7 +127,6 @@ const ThemeManager = {
     }
 };
 
-// --- 4. SEARCH & UTILITIES ---
 const debounce = (func, delay) => {
     let timeout;
     return (...args) => {
@@ -146,7 +146,7 @@ const setupGlobalSearch = (rootPath) => {
         const q = query.toLowerCase().trim();
         if (q.length < 2) {
             searchResults.classList.add('opacity-0', '-translate-y-2', 'scale-95');
-            setTimeout(() => searchResults.classList.add('hidden'), 300); // Hide after animation
+            setTimeout(() => searchResults.classList.add('hidden'), 300);
             return;
         }
 
@@ -157,13 +157,13 @@ const setupGlobalSearch = (rootPath) => {
                 <a href="${rootPath}${tool.url.replace(/^\.\.\//, '')}" class="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition border-b border-gray-200 dark:border-gray-800 last:border-b-0">
                     <i data-lucide="${tool.icon}" class="w-4 h-4 ${tool.color} mr-3"></i>
                     <div class="flex flex-col overflow-hidden">
-                        <div class="text-sm font-medium text-gray-800 dark:text-gray-100 whitespace-nowrap">${tool.name}</div>
+                        <div class="text-sm font-medium text-gray-800 dark:text-gray-100">${tool.name}</div>
                         <div class="text-xs text-gray-500 dark:text-gray-400">${tool.category.replace(/&/g, ' & ')} Tools</div>
                     </div>
                 </a>
             `).join('');
             searchResults.classList.remove('hidden');
-            setTimeout(() => { // Use timeout to allow DOM to update before animating
+            setTimeout(() => {
                 searchResults.classList.remove('opacity-0', '-translate-y-2', 'scale-95');
             }, 10);
             window.lucide.createIcons();
@@ -187,7 +187,6 @@ const setupGlobalSearch = (rootPath) => {
     });
 };
 
-// --- 5. MAIN LAYOUT INJECTION ---
 window.injectLayout = (includeSearch) => {
     const rootPath = window.GLOBAL_ROOT_PATH || '';
     const body = document.body;
@@ -215,13 +214,11 @@ window.animateToolCards = (cardSelector = '.tool-card') => {
     document.addEventListener('DOMContentLoaded', () => {
         const cards = document.querySelectorAll(cardSelector);
         cards.forEach((card, index) => {
-            // Add initial state classes
             card.classList.add('opacity-0', 'transform', 'translate-y-4', 'transition-all', 'duration-500', 'ease-out');
             
-            // Remove classes after a staggered delay to trigger animation
             setTimeout(() => {
                 card.classList.remove('opacity-0', 'translate-y-4');
-            }, 100 + (index * 50)); // Staggered delay
+            }, 100 + (index * 50));
         });
     });
 };

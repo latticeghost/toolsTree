@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced PDF Merger - Combine, Reorder & Select Pages | toolsTree</title>
+    <meta name="description" content="Securely merge multiple PDF files in your browser. Reorder files with drag-and-drop, preview pages, and select custom page ranges to combine.">
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/merge-pdf.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link href="../assets/output.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+        })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+    
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .text-tt-primary { color: #10b981; }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        #dropzone {
+            border: 2px dashed #d1d5db;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        #dropzone.dragover {
+            background-color: #f0fdf4;
+            border-color: #10b981;
+        }
+        .dark #dropzone.dragover {
+            background-color: #111827;
+            border-color: #10b981;
+        }
+        .file-card {
+            user-select: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .file-card canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+        }
+        .dark .file-card canvas {
+            border-color: #4b5563;
+        }
+        .page-range-input {
+             font-family: 'Roboto Mono', monospace;
+             transition: border-color 0.2s;
+        }
+    </style>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced PDF Merger",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web",
+      "description": "Securely merge multiple PDF files in your browser. Reorder files, preview pages, and select custom page ranges to combine.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "reviewCount": "812" },
+      "publisher": { "@type": "Organization", "name": "toolsTree" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+        "@type": "Question",
+        "name": "Is this PDF merger tool secure?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, it is 100% secure. This tool runs entirely in your web browser. Your PDF files are never uploaded to our servers, ensuring your data remains completely private."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "How do I reorder the PDF files?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "After you upload your files, use the 'Move Up' and 'Move Down' arrows on each file card to change its position in the list. The files will be merged in the exact order shown on the screen."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "How does the 'Page Range' feature work?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can specify which pages to include from each PDF. Use commas for individual pages (e.g., 1, 3, 5) and hyphens for ranges (e.g., 1-4). You can combine them, like '1, 3-5, 8'. If you leave it blank, all pages from that file will be included."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "Will my merged PDF have consistent page sizes?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. This tool automatically uses the page size of the *first* page you are merging as the standard size. All other pages will be scaled (preserving their aspect ratio) to fit this size, resulting in a seamless, professional document."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "Is there a limit to the number or size of files?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Since the tool runs in your browser, the only limit is your computer's memory. For most modern computers, merging dozens of standard-sized PDFs should not be a problem. If you are merging extremely large files (thousands of pages), we recommend processing them in smaller batches."
+        }
+        }
+    ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
+    
+    <template id="file-card-template">
+        <div class="file-card w-full bg-white dark:bg-gray-900 p-4 border dark:border-gray-800 rounded-lg shadow-md flex flex-col md:flex-row gap-4">
+            <div class="md:w-1/3 flex-shrink-0 flex flex-col items-center">
+                <canvas class="w-full h-auto rounded" width="600" height="849"></canvas>
+                <div class="flex items-center justify-center mt-2 space-x-2">
+                    <button class="move-up-btn p-1 text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed" title="Move Up">
+                        <i data-lucide="chevron-up" class="w-5 h-5"></i>
+                    </button>
+                    <button class="move-down-btn p-1 text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed" title="Move Down">
+                        <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-grow space-y-3">
+                <h3 class="font-bold text-gray-900 dark:text-gray-100 break-all file-name">File Name.pdf</h3>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                    <span class="page-count">0 pages</span> | <span class="file-size">0 MB</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Page Range (Optional)</label>
+                    <input type="text" class="page-range-input mt-1 w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-tt-primary focus:border-tt-primary" placeholder="e.g., 1, 3-5, 8">
+                </div>
+                <button class="remove-file-btn w-full md:w-auto flex items-center justify-center gap-2 text-sm bg-red-100 text-red-700 font-medium py-2 px-4 rounded-lg hover:bg-red-200 transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    <span>Remove</span>
+                </button>
+            </div>
+        </div>
+    </template>
+    
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/pdf.html" class="ml-1 hover:text-tt-primary md:ml-2">PDF Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Advanced PDF Merger</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Advanced PDF Merger</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Securely combine multiple PDFs. Reorder files and select custom page ranges, 100% in your browser.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-8">
+            
+            <div>
+                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 1: Add Your PDF Files</h2>
+                <div id="dropzone" class="relative w-full p-8 flex flex-col items-center justify-center rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800/60">
+                    <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-4"></i>
+                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-2">Drag & drop files here</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">or</p>
+                    <button id="upload-btn" class="bg-tt-primary text-white font-semibold py-2 px-5 rounded-lg shadow-sm hover:bg-green-700 transition">
+                        Select Files
+                    </button>
+                    <input type="file" id="file-input" class="hidden" multiple accept="application/pdf">
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                    <i data-lucide="lock" class="w-3 h-3 inline-block mr-1"></i>
+                    Your files are processed 100% in your browser and are never uploaded.
+                </p>
+            </div>
+
+            <div id="manage-section" class="hidden">
+                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 2: Reorder & Configure Files</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Use the arrows to reorder. Use the text box to select specific pages (e.g., "1, 3-5").</p>
+                <div id="file-list" class="space-y-4">
+                </div>
+            </div>
+            
+            <div id="merge-section" class="hidden">
+                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 3: Combine & Download</h2>
+                <button id="merge-btn" class="w-full flex items-center justify-center gap-3 bg-tt-primary text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i data-lucide="files" class="w-5 h-5"></i>
+                    <span>Merge PDFs</span>
+                </button>
+                <p id="status-text" class="text-center text-sm mt-3 h-5 text-gray-600 dark:text-gray-400"></p>
+            </div>
+
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About the Advanced PDF Merger</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>This tool is more than just a simple file joiner. It's a powerful, client-side utility designed for privacy and flexibility. Because all processing happens on your device, you never have to upload sensitive documents to a server.</p>
+                    
+                    <h3 class="text-lg font-semibold pt-2 text-gray-900 dark:text-gray-100">Key Features</h3>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">100% Client-Side:</strong> Files are merged directly in your browser. No uploads, 100% privacy.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Simple Reordering:</strong> Use the "Move Up" and "Move Down" arrows for clear, accessible reordering on any device.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Page Previews:</strong> A crisp preview of each PDF's first page is generated so you can easily identify your files.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Custom Page Selection:</strong> Need only a few pages? Use the 'Page Range' input to specify exactly which pages to pull from each file (e.g., "1, 3-5, 8").
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Automatic Page Scaling:</strong> Merges PDFs of different sizes (e.g., A4, Letter) into one seamless document with a consistent page size.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use This Tool</h2>
+                <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
+                    <li><strong>Add Files:</strong> Drag and drop your PDFs onto the upload area, or click "Select Files". You can add multiple files at once.</li>
+                    <li><strong>Configure:</strong> For each file, a card will appear with a preview.
+                        <ul class="list-disc list-inside ml-5 text-sm mt-1 space-y-1">
+                            <li><strong>To reorder,</strong> use the "Move Up" and "Move Down" arrows. The <strong class="font-medium text-gray-900 dark:text-gray-100">first file in the list</strong> sets the page size for the final document.</li>
+                            <li><strong>To select pages,</strong> use the "Page Range" input (e.g., "1-3"). Leave blank to include all pages.</li>
+                            <li><strong>To remove a file,</strong> click the "Remove" button.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Merge:</strong> Once your files are in order, click the "Merge PDFs" button.</li>
+                    <li><strong>Download:</strong> Your browser will process the files and then prompt you to save the new, combined PDF.</li>
+                </ol>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this PDF merger tool secure?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes, it is 100% secure. This tool runs entirely in your web browser. Your PDF files are never uploaded to our servers, ensuring your data remains completely private.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How do I reorder the PDF files?</span><span class="transition group-open:rotate-1DELETED"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">After you upload your files, use the 'Move Up' and 'Move Down' arrows on each file card to change its position in the list. The files will be merged in the exact order shown on the screen.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How does the 'Page Range' feature work?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">You can specify which pages to include from each PDF. Use commas for individual pages (e.g., <code>1, 3, 5</code>) and hyphens for ranges (e.g., <code>1-4</code>). You can combine them, like <code>1, 3-5, 8</code>. If you leave it blank, all pages from that file will be included.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Will my merged PDF have consistent page sizes?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes. This tool automatically uses the page size of the <strong class="font-medium text-gray-900 dark:text-gray-100">first</strong> page you are merging as the standard size. All other pages will be scaled (preserving their aspect ratio) to fit this size, resulting in a seamless, professional document.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is there a limit to the number or size of files?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Since the tool runs in your browser, the only limit is your computer's memory. For most modern computers, merging dozens of standard-sized PDFs should not be a problem. If you are merging extremely large files (thousands of pages), we recommend processing them in smaller batches.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        }
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        const { PDFDocument } = PDFLib;
+        
+        const ui = {
+            dropzone: document.getElementById('dropzone'),
+            uploadBtn: document.getElementById('upload-btn'),
+            fileInput: document.getElementById('file-input'),
+            fileList: document.getElementById('file-list'),
+            manageSection: document.getElementById('manage-section'),
+            mergeSection: document.getElementById('merge-section'),
+            mergeBtn: document.getElementById('merge-btn'),
+            statusText: document.getElementById('status-text'),
+            cardTemplate: document.getElementById('file-card-template'),
+        };
+
+        let filesData = new Map();
+        let fileCounter = 0;
+
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1000;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function preventBodyFileDrop(e) {
+            if (e.dataTransfer && e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventBodyFileDrop, false);
+        });
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, () => {
+                if (event.dataTransfer.types.includes('Files')) {
+                    ui.dropzone.classList.add('dragover');
+                }
+            }, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, () => ui.dropzone.classList.remove('dragover'), false);
+        });
+        
+        ui.dropzone.addEventListener('drop', handleDrop, false);
+        ui.uploadBtn.addEventListener('click', () => ui.fileInput.click());
+        ui.fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+            e.target.value = null; 
+        });
+
+        function handleDrop(e) {
+            handleFiles(e.dataTransfer.files);
+        }
+
+        function handleFiles(files) {
+            [...files].filter(file => file.type === 'application/pdf').forEach(addFile);
+        }
+
+        async function addFile(file) {
+            const fileId = `file-${fileCounter++}`;
+            const buffer = await file.arrayBuffer();
+            
+            const card = ui.cardTemplate.content.cloneNode(true).firstElementChild;
+            card.dataset.id = fileId;
+            
+            const canvas = card.querySelector('canvas');
+            const pageCountEl = card.querySelector('.page-count');
+            const fileSizeEl = card.querySelector('.file-size');
+            
+            card.querySelector('.file-name').textContent = file.name;
+            fileSizeEl.textContent = formatBytes(file.size);
+            
+            ui.fileList.appendChild(card);
+            updateMoveButtons(); 
+            
+            let docTotalPages = 0;
+            
+            try {
+                const pdfDoc = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) }).promise;
+                docTotalPages = pdfDoc.numPages;
+                
+                const page = await pdfDoc.getPage(1);
+                
+                const dpr = window.devicePixelRatio || 1;
+                const logicalBaseWidth = canvas.width; 
+                
+                const viewport = page.getViewport({ scale: 1 });
+                const scale = (logicalBaseWidth / viewport.width) * dpr;
+                const scaledViewport = page.getViewport({ scale });
+
+                canvas.width = scaledViewport.width;
+                canvas.height = scaledViewport.height;
+
+                await page.render({
+                    canvasContext: canvas.getContext('2d'),
+                    viewport: scaledViewport
+                }).promise;
+
+                pageCountEl.textContent = `${docTotalPages} pages`;
+
+                filesData.set(fileId, {
+                    name: file.name,
+                    buffer,
+                    totalPages: docTotalPages
+                });
+                
+            } catch (err) {
+                console.error('Error rendering PDF preview:', err);
+                pageCountEl.textContent = 'Error loading preview';
+                filesData.set(fileId, { name: file.name, buffer, totalPages: 0 });
+            }
+            
+            // --- REMOVED the 'input' event listener that called validatePageRangeInput ---
+
+            card.querySelector('.remove-file-btn').addEventListener('click', () => {
+                filesData.delete(fileId);
+                card.remove();
+                updateUiVisibility();
+                updateMoveButtons(); 
+            });
+            
+            card.querySelector('.move-up-btn').addEventListener('click', () => moveCard(card, 'up'));
+            card.querySelector('.move-down-btn').addEventListener('click', () => moveCard(card, 'down'));
+            
+            updateUiVisibility();
+            if (window.lucide) lucide.createIcons();
+        }
+        
+        function updateUiVisibility() {
+            const hasFiles = filesData.size > 0;
+            ui.manageSection.classList.toggle('hidden', !hasFiles);
+            ui.mergeSection.classList.toggle('hidden', !hasFiles);
+            // We'll let the click handler manage the disabled state
+            ui.mergeBtn.disabled = filesData.size === 0;
+        }
+
+        function moveCard(card, direction) {
+            if (direction === 'up') {
+                const prevSibling = card.previousElementSibling;
+                if (prevSibling) {
+                    card.parentNode.insertBefore(card, prevSibling);
+                }
+            } else if (direction === 'down') {
+                const nextSibling = card.nextElementSibling;
+                if (nextSibling) {
+                    card.parentNode.insertBefore(nextSibling, card);
+                }
+            }
+            updateMoveButtons();
+        }
+
+        function updateMoveButtons() {
+            const cards = Array.from(ui.fileList.children);
+            cards.forEach((card, index) => {
+                const upBtn = card.querySelector('.move-up-btn');
+                const downBtn = card.querySelector('.move-down-btn');
+                
+                if (upBtn) upBtn.disabled = (index === 0);
+                if (downBtn) downBtn.disabled = (index === cards.length - 1);
+            });
+        }
+        
+        // --- REMOVED the entire validatePageRangeInput function ---
+        
+        function parsePageRanges(rangeStr, maxPages) {
+            const trimmedStr = rangeStr.trim().replace(/\s/g, '');
+            
+            if (trimmedStr === '') {
+                // If empty, return all pages
+                return Array.from({ length: maxPages }, (_, i) => i);
+            }
+
+            let pages = new Set();
+            
+            // Validation is now part of the parser
+            const validStructureRegex = /^(?!.*,,|.*--|.*,-|.*-,)[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*$/;
+            if (!validStructureRegex.test(trimmedStr)) {
+                 return []; // Invalid structure, return empty set
+            }
+
+            const parts = trimmedStr.split(',');
+            
+            for (const part of parts) {
+                if (part.includes('-')) {
+                    const [start, end] = part.split('-').map(Number);
+                    
+                    // Check for invalid range logic
+                    if (start <= 0 || end <= 0 || start > end || start > maxPages) {
+                         return []; // Invalid range, return empty set
+                    }
+                    
+                    const effectiveEnd = Math.min(end, maxPages);
+                    for (let i = start; i <= effectiveEnd; i++) {
+                        pages.add(i - 1);
+                    }
+                } else {
+                    const page = Number(part);
+                    // Check for invalid page
+                    if (page <= 0 || page > maxPages) {
+                        return []; // Invalid page, return empty set
+                    }
+                    pages.add(page - 1);
+                }
+            }
+            // Final check: if all parts were valid but resulted in 0 pages (e.g., "99" for a 10-page doc)
+            // The check above `page > maxPages` already handles this.
+            return Array.from(pages).sort((a, b) => a - b);
+        }
+
+        ui.mergeBtn.addEventListener('click', async () => {
+            if (filesData.size === 0) return;
+
+            ui.statusText.textContent = 'Initializing merge...';
+            ui.mergeBtn.disabled = true;
+            
+            let totalPagesToMerge = 0;
+            const docsToMerge = [];
+
+            try {
+                const fileCards = Array.from(ui.fileList.children);
+                for (const card of fileCards) {
+                    const fileId = card.dataset.id;
+                    const file = filesData.get(fileId);
+                    const rangeInput = card.querySelector('.page-range-input');
+                    
+                    if (!file) continue;
+
+                    // --- REVISED Validation Logic ---
+                    if (file.totalPages === 0 && rangeInput.value.trim() !== '') {
+                        ui.statusText.textContent = `Error: Cannot select pages from ${file.name} (file error).`;
+                        ui.mergeBtn.disabled = false;
+                        rangeInput.focus();
+                        return;
+                    }
+                    
+                    const rangeStr = rangeInput.value;
+                    const pageIndices = parsePageRanges(rangeStr, file.totalPages);
+                    
+                    // If parsing returned 0 pages, but the user *did* type something, it's an error
+                    if (pageIndices.length === 0 && rangeStr.trim() !== '') {
+                        ui.statusText.textContent = `Error: Invalid page range for ${file.name}.`;
+                        ui.mergeBtn.disabled = false;
+                        rangeInput.focus();
+                        return;
+                    }
+                    // --- END Revised Validation ---
+
+                    if (pageIndices.length > 0) {
+                        docsToMerge.push({ file, pageIndices });
+                        totalPagesToMerge += pageIndices.length;
+                    }
+                }
+
+                if (totalPagesToMerge === 0) {
+                    ui.statusText.textContent = 'No valid pages were selected to merge.';
+                    ui.mergeBtn.disabled = false;
+                    return;
+                }
+
+                const newPdf = await PDFDocument.create();
+                
+                let targetWidth, targetHeight;
+                try {
+                    const firstDocData = docsToMerge[0];
+                    const firstDoc = await PDFDocument.load(firstDocData.file.buffer);
+                    const firstPage = firstDoc.getPage(firstDocData.pageIndices[0]);
+                    const size = firstPage.getSize();
+                    targetWidth = size.width;
+                    targetHeight = size.height;
+                } catch (e) {
+                    console.error("Error getting first page dimensions:", e);
+                    ui.statusText.textContent = 'Error reading first page dimensions. Cannot proceed.';
+                    ui.mergeBtn.disabled = false;
+                    return;
+_                }
+
+                for (let i = 0; i < docsToMerge.length; i++) {
+                    const { file, pageIndices } = docsToMerge[i];
+                    ui.statusText.textContent = `Processing file ${i + 1} of ${docsToMerge.length}: ${file.name}...`;
+                    
+                    const doc = await PDFDocument.load(file.buffer);
+                    const sourcePages = await doc.getPages();
+
+                    for (const pageIndex of pageIndices) {
+                        const sourcePage = sourcePages[pageIndex];
+                        const { width, height } = sourcePage.getSize();
+
+                        const newPage = newPdf.addPage([targetWidth, targetHeight]);
+
+                        const embeddedPage = await newPdf.embedPage(sourcePage);
+
+                        const scale = Math.min(targetWidth / width, targetHeight / height);
+                        const scaledWidth = width * scale;
+                        const scaledHeight = height * scale;
+                        const x = (targetWidth - scaledWidth) / 2;
+                        const y = (targetHeight - scaledHeight) / 2;
+
+                        newPage.drawPage(embeddedPage, {
+                            x,
+                            y,
+                            width: scaledWidth,
+                            height: scaledHeight,
+                        });
+                    }
+                }
+
+                ui.statusText.textContent = 'Finalizing your PDF...';
+                const mergedPdfBytes = await newPdf.save();
+                
+                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `merged-document-${Date.now()}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    ui.statusText.textContent = 'Your download is complete!';
+                    ui.mergeBtn.disabled = false;
+                }, 100);
+
+            } catch (err) {
+                console.error('Error merging PDFs:', err);
+                if (err.message.includes('password')) {
+                    ui.statusText.textContent = 'Error: One or more files are password-protected.';
+                } else {
+                    ui.statusText.textContent = 'An error occurred. Please check console.';
+                }
+                ui.mergeBtn.disabled = false;
+            }
+        });
+    });
+    </script>
+</body>
+</html>

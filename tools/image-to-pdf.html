@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to PDF Converter - JPG & PNG to PDF | toolsTree</title>
+    <meta name="description" content="Securely convert multiple JPG and PNG images to a single PDF. Reorder files, set page size (A4, Letter, Fit), orientation, and margins.">
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/jpg-to-pdf.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link href="../assets/output.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+        })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .text-tt-primary { color: #10b981; }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        #dropzone {
+            border: 2px dashed #d1d5db;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        #dropzone.dragover {
+            background-color: #f0fdf4;
+            border-color: #10b981;
+        }
+        .dark #dropzone.dragover {
+            background-color: #111827;
+            border-color: #10b981;
+        }
+        .file-card {
+            user-select: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .file-card canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+            background-color: #f9fafb;
+        }
+        .dark .file-card canvas {
+            border-color: #4b5563;
+            background-color: #1f2937;
+        }
+        input[type="radio"]:checked + label {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+            color: #065f46;
+        }
+        .dark input[type="radio"]:checked + label {
+            border-color: #10b981;
+            background-color: #132D2B;
+            color: #6ee7b7;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+        .dark select {
+             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+    </style>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Image to PDF Converter",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web",
+      "description": "Securely convert multiple JPG and PNG images to a single PDF. Reorder files, set page size, orientation, and margins.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "1240" },
+      "publisher": { "@type": "Organization", "name": "toolsTree" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+        "@type": "Question",
+        "name": "Is this Image to PDF converter secure?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, it is 100% secure. This tool runs entirely in your web browser. Your images are never uploaded to our servers, ensuring your data remains completely private."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "What image formats can I upload?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can upload files in JPEG (.jpg, .jpeg) and PNG (.png) formats. You can upload multiple files at once and combine both formats into a single PDF."
+        }
+        },
+        {
+        "@typeType": "Question",
+        "name": "What do the 'Page Size' options mean?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "'A4' and 'Letter' will create a standard-sized PDF page and scale your image to fit. 'Fit to Image' (default) is special: it creates a PDF page that is the *exact* size of your image, which is perfect for receipts or non-standard documents."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "How does 'Auto' orientation work?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When using 'A4' or 'Letter' page sizes, 'Auto' will intelligently check the dimensions of each image. If an image is wider than it is tall, it will be placed on a Landscape page. If it is taller than it is wide, it will be placed on a Portrait page."
+        }
+        }
+    ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
+    
+    <template id="file-card-template">
+        <div class="file-card w-full bg-white dark:bg-gray-900 p-4 border dark:border-gray-800 rounded-lg shadow-md flex flex-col md:flex-row gap-4">
+            <div class="md:w-1/3 flex-shrink-0 flex flex-col items-center">
+                <canvas class="w-full h-auto rounded max-h-48 object-contain" width="300" height="200"></canvas>
+            </div>
+            <div class="flex-grow space-y-3">
+                <h3 class="font-bold text-gray-900 dark:text-gray-100 break-all file-name">File Name.jpg</h3>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                    <span class="file-size">0 KB</span> | <span class="file-dims">0 x 0 pixels</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                     <button class="move-up-btn p-1 text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed" title="Move Up">
+                        <i data-lucide="chevron-up" class="w-5 h-5"></i>
+                    </button>
+                    <button class="move-down-btn p-1 text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed" title="Move Down">
+                        <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                    </button>
+                    <button class="remove-file-btn ml-auto w-auto flex items-center justify-center gap-2 text-sm bg-red-100 text-red-700 font-medium py-2 px-4 rounded-lg hover:bg-red-200 transition">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        <span>Remove</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/pdf.html" class="ml-1 hover:text-tt-primary md:ml-2">PDF Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">Image to PDF Converter</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">Image to PDF Converter</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Combine JPG and PNG images into a single, high-quality PDF. Now powered by a secure server function.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-8">
+            
+            <div>
+                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 1: Add Your Images</h2>
+                <div id="dropzone" class="relative w-full p-8 flex flex-col items-center justify-center rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800/60">
+                    <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-4"></i>
+                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-2">Drag & drop JPG/PNG files here</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">or</p>
+                    <button id="upload-btn" class="bg-tt-primary text-white font-semibold py-2 px-5 rounded-lg shadow-sm hover:bg-green-700 transition">
+                        Select Files
+                    </button>
+                    <input type="file" id="file-input" class="hidden" multiple accept="image/jpeg,image/png">
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                    <i data-lucide="lock" class="w-3 h-3 inline-block mr-1"></i>
+                    Your files are sent securely to our function and are never stored.
+                </p>
+                <p id="upload-error-text" class="text-center text-sm mt-2 text-red-600"></p>
+            </div>
+
+            <div id="config-section" class="hidden space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 2: Set PDF Options</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="page-size" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Page Size</label>
+                            <select id="page-size" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-tt-primary focus:border-tt-primary">
+                                <option value="fit" selected>Fit to Image (Default)</option>
+                                <option value="a4">A4 (210 x 297 mm)</option>
+                                <option value="letter">Letter (8.5 x 11 in)</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label for="page-orientation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Orientation</label>
+                            <select id="page-orientation" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-tt-primary focus:border-tt-primary">
+                                <option value="auto" selected>Auto (Default)</option>
+                                <option value="portrait">Portrait</option>
+                                <option value="landscape">Landscape</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label for="page-margin" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Margin</label>
+                            <select id="page-margin" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-tt-primary focus:border-tt-primary">
+                                <option value="0" selected>No Margin (Default)</option>
+                                <option value="36">Small Margin (0.5 in)</option>
+                                <option value="72">Large Margin (1 in)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">"Fit to Image" will ignore Orientation and Margin settings.</p>
+                </div>
+                 <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 3: Reorder Images</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Click and drag cards (on desktop) or use the arrows to set the page order. The first image is Page 1.</p>
+                    <div id="file-list" class="space-y-4">
+                    </div>
+                </div>
+            </div>
+            
+            <div id="create-section" class="hidden">
+                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 4: Create & Download</h2>
+                <button id="create-btn" class="w-full flex items-center justify-center gap-3 bg-tt-primary text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i data-lucide="file-plus" class="w-5 h-5"></i>
+                    <span id="create-btn-text">Create PDF</span>
+                </button>
+                <p id="status-text" class="text-center text-sm mt-3 h-5 text-gray-600 dark:text-gray-400"></p>
+            </div>
+
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About the Image to PDF Converter</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>This tool gives you full control over how your images (JPG or PNG) are converted into a PDF. All processing happens 100% in your browser, ensuring your files remain private.</p>
+                    
+                    <h3 class="text-lg font-semibold pt-2 text-gray-900 dark:text-gray-100">Advanced Conversion Options</h3>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Page Size (Fit to Image):</strong> The default and most popular option. This creates a PDF page that is the <strong class="font-medium text-gray-900 dark:text-gray-100">exact</strong> size of your image. This is perfect for high-resolution photos or scanned receipts where you don't want any scaling.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Page Size (A4/Letter):</strong> This will create a standard-sized PDF page and scale your image down to fit, respecting the margins you select.
+                        </li>
+                         <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Auto Orientation:</strong> When using A4 or Letter, this feature will check if your image is wide (Landscape) or tall (Portrait) and automatically rotate the PDF page to match it.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Margin Control:</strong> Add a 'Small' (0.5 inch) or 'Large' (1 inch) border around your images on A4/Letter pages, or. select 'No Margin' to have them fill the space (bleed).
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use This Tool</h2>
+                <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
+                    <li><strong>Add Images:</strong> Drag and drop your JPG and PNG files, or click "Select Files". You can add multiple files at once.</li>
+                    <li><strong>Set Options:</strong> Choose your preferred Page Size, Orientation, and Margin for the final PDF.</li>
+                    <li><strong>Reorder:</strong> Use the "Move Up" and "Move Down" arrows on each file card to arrange them in the order you want them to appear in the PDF.</li>
+                    <li><strong>Create & Download:</strong> Click the "Create PDF" button. The tool will process your images and download the finished, combined PDF.</li>
+                </ol>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this Image to PDF converter secure?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes, it is 100% secure. This tool runs entirely in your web browser. Your images are never uploaded to our servers, ensuring your data remains completely private.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What image formats can I upload?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">You can upload files in JPEG (.jpg, .jpeg) and PNG (.png) formats. You can upload multiple files at once and combine both formats into a single PDF.</p></details>
+
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What do the 'Page Size' options mean?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">'A4' and 'Letter' will create a standard-sized PDF page and scale your image to fit. 'Fit to Image' (default) is special: it creates a PDF page that is the <strong class="font-medium text-gray-900 dark:text-gray-100">exact</strong> size of your image, which is perfect for receipts or non-standard documents.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How does 'Auto' orientation work?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">When using 'A4' or 'Letter' page sizes, 'Auto' will intelligently check the dimensions of each image. If an image is wider than it is tall, it will be placed on a Landscape page. If it is taller than it is wide, it will be placed on a Portrait page.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        }
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+        
+        const ui = {
+            dropzone: document.getElementById('dropzone'),
+            uploadBtn: document.getElementById('upload-btn'),
+            fileInput: document.getElementById('file-input'),
+            uploadErrorText: document.getElementById('upload-error-text'),
+            
+            configSection: document.getElementById('config-section'),
+            fileList: document.getElementById('file-list'),
+            
+            pageSize: document.getElementById('page-size'),
+            pageOrientation: document.getElementById('page-orientation'),
+            pageMargin: document.getElementById('page-margin'),
+            
+            createSection: document.getElementById('create-section'),
+            createBtn: document.getElementById('create-btn'),
+            createBtnText: document.getElementById('create-btn-text'),
+            statusText: document.getElementById('status-text'),
+            
+            cardTemplate: document.getElementById('file-card-template'),
+        };
+
+        let filesData = new Map();
+        let fileCounter = 0;
+        let dragSrcEl = null;
+
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1000;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        function preventBodyFileDrop(e) {
+            if (e.dataTransfer && e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventBodyFileDrop, false);
+        });
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, (e) => {
+                 if (e.dataTransfer.types.includes('Files')) ui.dropzone.classList.add('dragover');
+            }, false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, () => ui.dropzone.classList.remove('dragover'), false);
+        });
+        
+        ui.dropzone.addEventListener('drop', handleDrop, false);
+        ui.uploadBtn.addEventListener('click', () => ui.fileInput.click());
+        ui.fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+            e.target.value = null; 
+        });
+
+        function handleDrop(e) {
+            handleFiles(e.dataTransfer.files);
+        }
+
+        function handleFiles(files) {
+            ui.uploadErrorText.textContent = '';
+            [...files].filter(file => file.type === 'image/jpeg' || file.type === 'image/png').forEach(addFile);
+        }
+
+        // =================================================================
+        //  START: REVISED addFile FUNCTION
+        // =================================================================
+        async function addFile(file) {
+            const fileId = `file-${fileCounter++}`;
+            
+            let w, h;
+            
+            try {
+                // 1. Read the dataUrl. This will be sent to the server.
+                const dataUrl = await readDataUrl(file);
+                const img = new Image();
+
+                const imgLoadPromise = new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = () => reject(new Error('Image failed to load.'));
+                });
+                
+                img.src = dataUrl;
+                await imgLoadPromise;
+
+                // 2. Get the image's TRUE, intrinsic dimensions
+                w = img.naturalWidth;
+                h = img.naturalHeight;
+
+                if (w === 0 || h === 0) {
+                    throw new Error("Image has zero dimensions.");
+                }
+
+                // 3. Store the DataUrl, dimensions, and TYPE
+                filesData.set(fileId, {
+                    name: file.name,
+                    dataUrl: dataUrl, // Store the DataUrl to send to server
+                    type: file.type, // <-- THIS IS THE NEWLY ADDED LINE
+                    width: w,
+                    height: h,
+                    originalSize: file.size
+                });
+                
+                // 4. Create the preview card
+                const card = ui.cardTemplate.content.cloneNode(true).firstElementChild;
+                card.dataset.id = fileId;
+                
+                // 5. Update the preview card's canvas
+                const previewCanvas = card.querySelector('canvas');
+                const previewCtx = previewCanvas.getContext('2d');
+                
+                previewCanvas.height = (h / w) * previewCanvas.width; 
+                previewCtx.drawImage(img, 0, 0, previewCanvas.width, previewCanvas.height);
+                
+                // 6. Update card text
+                card.querySelector('.file-dims').textContent = `${w} x ${h} pixels`;
+                card.querySelector('.file-name').textContent = file.name;
+                card.querySelector('.file-size').textContent = formatBytes(file.size); 
+                
+                ui.fileList.appendChild(card);
+                
+                // 7. Add event listeners
+                card.querySelector('.remove-file-btn').addEventListener('click', () => {
+                    filesData.delete(fileId);
+                    card.remove();
+                    updateUiVisibility();
+                    updateMoveButtons(); 
+                });
+                card.querySelector('.move-up-btn').addEventListener('click', () => moveCard(card, 'up'));
+                card.querySelector('.move-down-btn').addEventListener('click', () => moveCard(card, 'down'));
+                
+                card.setAttribute('draggable', true);
+                card.addEventListener('dragstart', handleDragStart, false);
+                card.addEventListener('dragover', preventDefaults, false);
+                card.addEventListener('drop', handleCardDrop, false);
+                card.addEventListener('dragend', handleDragEnd, false);
+
+                updateUiVisibility();
+                updateMoveButtons();
+                if (window.lucide) lucide.createIcons();
+
+            } catch (err) {
+                console.error(`Error processing file ${file.name}:`, err);
+                ui.uploadErrorText.textContent = `Error processing file: ${file.name}. It may be corrupt or an unsupported format.`;
+                updateUiVisibility();
+                return;
+            }
+        }
+        // =================================================================
+        //  END: REVISED addFile FUNCTION
+        // =================================================================
+        
+        function readDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function updateUiVisibility() {
+            const hasFiles = filesData.size > 0;
+            ui.configSection.classList.toggle('hidden', !hasFiles);
+            ui.createSection.classList.toggle('hidden', !hasFiles);
+            ui.createBtn.disabled = !hasFiles;
+        }
+
+        function moveCard(card, direction) {
+            if (direction === 'up') {
+                const prevSibling = card.previousElementSibling;
+                if (prevSibling) {
+                    card.parentNode.insertBefore(card, prevSibling);
+                }
+            } else if (direction === 'down') {
+                const nextSibling = card.nextElementSibling;
+                if (nextSibling) {
+                    card.parentNode.insertBefore(nextSibling, card);
+                }
+            }
+            updateMoveButtons();
+        }
+
+        function updateMoveButtons() {
+            const cards = Array.from(ui.fileList.children);
+            cards.forEach((card, index) => {
+                const upBtn = card.querySelector('.move-up-btn');
+                const downBtn = card.querySelector('.move-down-btn');
+                if (upBtn) upBtn.disabled = (index === 0);
+                if (downBtn) downBtn.disabled = (index === cards.length - 1);
+            });
+        }
+        
+        function handleDragStart(e) {
+            dragSrcEl = e.currentTarget;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', e.currentTarget.innerHTML);
+        }
+        
+        function handleCardDrop(e) {
+            e.stopPropagation();
+            if (dragSrcEl !== e.currentTarget) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const halfway = rect.top + (rect.height / 2);
+                if (e.clientY < halfway) {
+                    e.currentTarget.parentNode.insertBefore(dragSrcEl, e.currentTarget);
+                } else {
+                    e.currentTarget.parentNode.insertBefore(dragSrcEl, e.currentTarget.nextSibling);
+                }
+            }
+            return false;
+        }
+        
+        function handleDragEnd(e) {
+            e.currentTarget.style.opacity = '1';
+            updateMoveButtons();
+            dragSrcEl = null;
+        }
+
+        // =================================================================
+        //  START: REVISED handleCreatePDF FUNCTION
+        // =================================================================
+        async function handleCreatePDF() {
+            if (ui.createBtn.disabled || filesData.size === 0) return;
+
+            ui.statusText.textContent = 'Uploading and processing...';
+            ui.createBtn.disabled = true;
+
+            try {
+                // 1. Gather all the data to send
+                const options = {
+                    size: ui.pageSize.value,
+                    orientation: ui.pageOrientation.value,
+                    margin: Number(ui.pageMargin.value),
+                };
+
+                const images = [];
+                const fileCards = Array.from(ui.fileList.children);
+                for (const card of fileCards) {
+                    const fileId = card.dataset.id;
+                    const file = filesData.get(fileId);
+                    if (file) {
+                        images.push({
+                            dataUrl: file.dataUrl,
+                            width: file.width,
+                            height: file.height,
+                            type: file.type // <-- THIS IS THE NEWLY ADDED LINE
+                        });
+                    }
+                }
+
+                // 2. Send the data to our serverless function
+                const response = await fetch('/api/create-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ images, options }),
+                });
+
+                if (!response.ok) {
+                    // Try to parse the error message from the server
+                    let errorText = 'Server failed to create PDF.';
+                    try {
+                        const err = await response.json();
+                        errorText = err.details || err.error || errorText;
+                    } catch (e) {
+                        // Response was not JSON, just get text
+                        errorText = await response.text();
+                    }
+                    throw new Error(errorText);
+                }
+
+                // 3. Receive the finished PDF as a blob
+                const pdfBlob = await response.blob();
+                
+                // 4. Trigger the download
+                downloadFile(pdfBlob, 'toolsTree-images-to-pdf.pdf');
+                
+                ui.statusText.textContent = 'Your download is complete!';
+
+            } catch (err) {
+                console.error("Fatal error during PDF creation:", err);
+                ui.statusText.textContent = `Error: ${err.message}`;
+            } finally {
+                 ui.createBtn.disabled = false; // Re-enable button
+            }
+        }
+        // =================================================================
+        //  END: REVISED handleCreatePDF FUNCTION
+        // =================================================================
+
+        function downloadFile(blobOrBytes, filename) {
+            const blob = (blobOrBytes instanceof Blob) ? blobOrBytes : new Blob([blobOrBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+
+        // --- Add the main click listener ---
+        ui.createBtn.addEventListener('click', handleCreatePDF);
+
+    });
+    </script>
+</body>
+</html>

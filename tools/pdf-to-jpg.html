@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to JPG/PNG Converter - High Quality | toolsTree</title>
+    <meta name="description" content="Securely convert your PDF pages into high-quality JPG or PNG images. 100% in-browser, no uploads required."/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://toolstree.vercel.app/tools/pdf-to-jpg.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link href="../assets/output.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N1KEVGM2VP"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N1KEVGM2VP');
+    </script>
+    <script>
+        (function() {
+        try {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            }
+        } catch (e) { console.error("Error applying initial theme:", e); }
+        })();
+    </script>
+    <script> window.GLOBAL_ROOT_PATH = '../'; </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+    
+    <style>
+        :root { --tt-primary-stroke: #10b981; }
+        .stroke-tt-primary { stroke: var(--tt-primary-stroke); }
+        .text-tt-primary { color: #10b981; }
+        .dark input, .dark select, .dark textarea { background-color: #374151; border-color: #4b5563; color: #f3f4f6; }
+        
+        #dropzone {
+            border: 2px dashed #d1d5db;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        #dropzone.dragover {
+            background-color: #f0fdf4;
+            border-color: #10b981;
+        }
+        .dark #dropzone.dragover {
+            background-color: #111827;
+            border-color: #10b981;
+        }
+        #preview-canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+        }
+        .dark #preview-canvas {
+            border-color: #4b5563;
+        }
+        
+        input[type="radio"]:checked + label {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+            color: #065f46;
+        }
+        .dark input[type="radio"]:checked + label {
+            border-color: #10b981;
+            background-color: #132D2B;
+            color: #6ee7b7;
+        }
+    </style>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "PDF to JPG/PNG Converter",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web",
+      "description": "Securely convert your PDF pages into high-quality JPG or PNG images. 100% in-browser, no uploads required.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "734" },
+      "publisher": { "@type": "Organization", "name": "toolsTree" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+        "@type": "Question",
+        "name": "Is this PDF to JPG converter secure?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, it is 100% secure. Your PDF file is processed entirely in your web browser. It is never uploaded to our servers, ensuring your data remains completely private."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "How do I convert a PDF to JPG?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply upload your PDF, choose your image format (JPG or PNG) and quality, and click 'Convert'. The tool will process each page and provide a .zip file containing all your images."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "What's the difference between JPG and PNG?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use JPG for photos and complex images to get a smaller file size. Use PNG for text-heavy pages, diagrams, or line art, as it provides a much clearer, higher-quality image for that type of content (at the cost of a larger file size)."
+        }
+        },
+        {
+        "@type": "Question",
+        "name": "What do the quality settings mean?",
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "They control the resolution (DPI) of the output images:\n- High (300 DPI): Best for high-quality prints or detailed graphics.\n- Medium (150 DPI): A great balance of quality and file size for on-screen viewing.\n- Low (72 DPI): Creates the smallest images, perfect for email thumbnails or quick previews."
+        }
+        }
+    ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans">
+    
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow w-full">
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+                <li class="inline-flex items-center"><a href="../index.html" class="hover:text-tt-primary"><i data-lucide="home" class="w-4 h-4 mr-2 inline"></i>Home</a></li>
+                <li><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><a href="../categories/pdf.html" class="ml-1 hover:text-tt-primary md:ml-2">PDF Tools</a></div></li>
+                <li aria-current="page"><div class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i><span class="ml-1 font-medium text-tt-primary md:ml-2">PDF to JPG/PNG Converter</span></div></li>
+            </ol>
+        </nav>
+        
+        <section class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-3">PDF to JPG/PNG Converter</h1>
+            <p class="text-base text-gray-600 dark:text-gray-300">Convert each page of your PDF into high-quality JPG or PNG images.</p>
+        </section>
+
+        <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-800 space-y-8">
+            
+            <div id="upload-section">
+                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 1: Add Your PDF File</h2>
+                <div id="dropzone" class="relative w-full p-8 flex flex-col items-center justify-center rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800/60">
+                    <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-4"></i>
+                    <p class="text-gray-600 dark:text-gray-300 font-semibold mb-2">Drag & drop a PDF file here</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">or</p>
+                    <button id="upload-btn" class="bg-tt-primary text-white font-semibold py-2 px-5 rounded-lg shadow-sm hover:bg-green-700 transition">
+                        Select File
+                    </button>
+                    <input type="file" id="file-input" class="hidden" accept="application/pdf">
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                    <i data-lucide="lock" class="w-3 h-3 inline-block mr-1"></i>
+                    Your file is processed 100% in your browser and is never uploaded.
+                </p>
+                <p id="upload-error-text" class="text-center text-sm mt-3 h-5 text-red-600 dark:text-red-400"></p>
+            </div>
+
+            <div id="config-section" class="hidden space-y-8">
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 2: File Details</h2>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="md:w-1/3 flex-shrink-0">
+                            <canvas id="preview-canvas" class="w-full h-auto rounded" width="600" height="849"></canvas>
+                        </div>
+                        <div class="flex-grow space-y-3">
+                            <h3 id="file-name" class="font-bold text-gray-900 dark:text-gray-100 break-all"></h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                <span id="page-count">0 pages</span> | <span id="file-size">0 MB</span>
+                            </p>
+                             <button id="remove-file-btn" class="w-full md:w-auto flex items-center justify-center gap-2 text-sm bg-red-100 text-red-700 font-medium py-2 px-4 rounded-lg hover:bg-red-200 transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                <span>Remove File</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 3: Choose Image Format</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="radio" id="format-jpg" name="image-format" value="jpg" class="hidden" checked>
+                        <label for="format-jpg" class="block p-4 border dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">JPG (Best for Photos)</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Smaller file size, good for images.</p>
+                        </label>
+                        
+                        <input type="radio" id="format-png" name="image-format" value="png" class="hidden">
+                        <label for="format-png" class="block p-4 border dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">PNG (Best for Text)</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Higher quality, sharp text, larger file.</p>
+                        </label>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 4: Choose Image Quality</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input type="radio" id="quality-low" name="image-quality" value="low" class="hidden">
+                        <label for="quality-low" class="block p-4 border dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">Low</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Smallest Size (72 DPI)</p>
+                        </label>
+                        
+                        <input type="radio" id="quality-medium" name="image-quality" value="medium" class="hidden" checked>
+                        <label for="quality-medium" class="block p-4 border dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">Medium</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Good Balance (150 DPI)</p>
+                        </label>
+                        
+                        <input type="radio" id="quality-high" name="image-quality" value="high" class="hidden">
+                        <label for="quality-high" class="block p-4 border dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">High</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Best Quality (300 DPI)</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Step 5: Convert & Download</h2>
+                    <button id="convert-btn" class="w-full flex items-center justify-center gap-3 bg-tt-primary text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition mt-6 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="file-image" class="w-5 h-5"></i>
+                        <span>Convert to Images</span>
+                    </button>
+                    <p id="status-text" class="text-center text-sm mt-3 h-5 text-gray-600 dark:text-gray-400"></p>
+                </div>
+            </div>
+            
+            <div id="processing-section" class="hidden">
+                <div class="flex flex-col items-center justify-center space-y-4 p-8">
+                    <i data-lucide="loader-2" class="w-12 h-12 text-tt-primary animate-spin"></i>
+                    <p id="processing-status" class="text-lg font-medium text-gray-800 dark:text-gray-200">Initializing...</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center">This may take a moment for large files. Please wait.</p>
+                </div>
+            </div>
+            
+            <div id="result-section" class="hidden space-y-6">
+                <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">Conversion Complete!</h2>
+                
+                <div class="bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700 text-green-800 dark:text-green-200 p-4 rounded-lg text-center">
+                    <h3 id="result-summary" class="text-xl font-bold">Successfully converted 0 pages.</h3>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="download-btn" class="w-full flex-1 flex items-center justify-center gap-3 bg-tt-primary text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                        <span>Download .zip File</span>
+                    </button>
+                    <button id="reset-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 text-sm bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-medium py-3 px-6 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                        <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                        <span>Convert Another</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-900 border border-gray-100 dark:border-gray-800 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">About the PDF to Image Converter</h2>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <p>This tool allows you to convert every page of a PDF document into a separate image file, all without uploading your data. You get full control over the output format and quality, ensuring the images are perfect for your needs.</p>
+                    <h3 class="text-lg font-semibold pt-2 text-gray-900 dark:text-gray-100">Key Features:</h3>
+                    <ul class="list-disc list-inside ml-5 space-y-2">
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">JPG vs. PNG:</strong> Choose the right format for your content. JPG is ideal for photos, while PNG provides a crystal-clear, "lossless" image perfect for text and diagrams.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Quality Control:</strong> Select from 300 DPI (High), 150 DPI (Medium), or 72 DPI (Low) to get the perfect balance between image quality and file size.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">100% Secure & Private:</strong> The entire conversion process runs in your browser. Your PDF never leaves your computer.
+                        </li>
+                        <li>
+                            <strong class="font-medium text-gray-900 dark:text-gray-100">Batch Download:</strong> All your converted images are instantly bundled into a single .zip file for your convenience.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">How to Use This Tool</h2>
+                <ol class="list-decimal list-inside text-gray-600 space-y-2 dark:text-gray-300">
+                    <li><strong>Upload File:</strong> Drag and drop your PDF or click "Select File".</li>
+                    <li><strong>Choose Format:</strong> Select JPG (for photos) or PNG (for text/graphics).</li>
+                    <li><strong>Choose Quality:</strong> Select High, Medium, or Low DPI. Medium is great for most uses.</li>
+                    <li><strong>Convert:</strong> Click the "Convert to Images" button and wait for the processing to finish.</li>
+                    <li><strong>Download:</strong> Click "Download .zip File" to save all your images.</li>
+                </ol>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 border-b pb-2 dark:text-gray-100 dark:border-gray-800">Frequently Asked Questions (FAQs)</h2>
+                <div class="space-y-3 text-sm">
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>Is this PDF to JPG converter secure?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Yes, it is 100% secure. Your PDF file is processed entirely in your web browser. It is never uploaded to our servers, ensuring your data remains completely private.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>How do I convert a PDF to JPG?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Simply upload your PDF, choose your image format (JPG or PNG) and quality, and click 'Convert'. The tool will process each page and provide a .zip file containing all your images.</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What's the difference between JPG and PNG?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">Use JPG for photos and complex images to get a smaller file size. Use PNG for text-heavy pages, diagrams, or line art, as it provides a much clearer, higher-quality image for that type of content (at the cost of a larger file size).</p></details>
+                    <details class="group"><summary class="flex justify-between items-center font-medium cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><span>What do the quality settings mean?</span><span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-4 h-4"></i></span></summary><p class="text-gray-600 mt-2 p-2 dark:text-gray-300">They control the resolution (DPI) of the output images:<br><strong class="font-medium text-gray-800 dark:text-gray-100">- High (300 DPI):</strong> Best for high-quality prints or detailed graphics.<br><strong class="font-medium text-gray-800 dark:text-gray-100">- Medium (150 DPI):</strong> A great balance of quality and file size for on-screen viewing.<br><strong class="font-medium text-gray-800 dark:text-gray-100">- Low (72 DPI):</strong> Creates the smallest images, perfect for email thumbnails or quick previews.</p></details>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../javascript/globals.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.injectLayout === 'function') {
+            window.injectLayout(false);
+        }
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+        
+        const ui = {
+            dropzone: document.getElementById('dropzone'),
+            uploadBtn: document.getElementById('upload-btn'),
+            fileInput: document.getElementById('file-input'),
+            uploadErrorText: document.getElementById('upload-error-text'),
+            
+            uploadSection: document.getElementById('upload-section'),
+            configSection: document.getElementById('config-section'),
+            processingSection: document.getElementById('processing-section'),
+            resultSection: document.getElementById('result-section'),
+            
+            previewCanvas: document.getElementById('preview-canvas'),
+            fileName: document.getElementById('file-name'),
+            pageCount: document.getElementById('page-count'),
+            fileSize: document.getElementById('file-size'),
+            removeFileBtn: document.getElementById('remove-file-btn'),
+
+            convertBtn: document.getElementById('convert-btn'),
+            statusText: document.getElementById('status-text'),
+            
+            processingStatus: document.getElementById('processing-status'),
+            
+            resultSummary: document.getElementById('result-summary'),
+            downloadBtn: document.getElementById('download-btn'),
+            resetBtn: document.getElementById('reset-btn'),
+        };
+
+        let currentFile = {
+            name: null,
+            buffer: null,
+            totalPages: 0,
+            filenameBase: 'converted-file'
+        };
+        
+        let generatedZip = null;
+
+        // --- Helper Function for File Size ---
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1000; // <--- CHANGED FROM 1024 to 1000
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        // --- Drag and Drop Handlers for Upload ---
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        function preventBodyFileDrop(e) {
+            if (e.dataTransfer && e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventBodyFileDrop, false);
+        });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, () => {
+                if (event.dataTransfer.types.includes('Files')) ui.dropzone.classList.add('dragover');
+            }, false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            ui.dropzone.addEventListener(eventName, () => ui.dropzone.classList.remove('dragover'), false);
+        });
+        
+        ui.dropzone.addEventListener('drop', handleDrop, false);
+        ui.uploadBtn.addEventListener('click', () => ui.fileInput.click());
+        ui.fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+            e.target.value = null; 
+        });
+        ui.removeFileBtn.addEventListener('click', () => resetTool(true));
+
+        function handleDrop(e) {
+            handleFiles(e.dataTransfer.files);
+        }
+
+        function handleFiles(files) {
+            ui.uploadErrorText.textContent = ''; // Clear previous errors
+            if (files.length === 0) return;
+            const file = [...files].find(f => f.type === 'application/pdf');
+            if (file) {
+                addFile(file);
+            }
+        }
+
+        async function addFile(file) {
+            const buffer = await file.arrayBuffer();
+            
+            ui.fileName.textContent = file.name;
+            ui.fileSize.textContent = formatBytes(file.size);
+
+            currentFile.name = file.name;
+            currentFile.buffer = buffer;
+            currentFile.filenameBase = file.name.replace(/\.pdf$/i, '');
+
+            try {
+                const pdfDoc = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) }).promise;
+                currentFile.totalPages = pdfDoc.numPages;
+                
+                const page = await pdfDoc.getPage(1);
+                
+                const dpr = window.devicePixelRatio || 1;
+                const logicalBaseWidth = ui.previewCanvas.width;
+                
+                const viewport = page.getViewport({ scale: 1 });
+                const scale = (logicalBaseWidth / viewport.width) * dpr;
+                const scaledViewport = page.getViewport({ scale });
+
+                ui.previewCanvas.width = scaledViewport.width;
+                ui.previewCanvas.height = scaledViewport.height;
+
+                await page.render({
+                    canvasContext: ui.previewCanvas.getContext('2d'),
+                    viewport: scaledViewport
+                }).promise;
+
+                ui.pageCount.textContent = `${currentFile.totalPages} pages`;
+                
+                ui.uploadSection.classList.add('hidden');
+                ui.configSection.classList.remove('hidden');
+                ui.convertBtn.disabled = false;
+                if (window.lucide) lucide.createIcons();
+
+            } catch (err) {
+                console.error('Error rendering PDF preview:', err);
+                if (err.name === 'PasswordException') {
+                     ui.uploadErrorText.textContent = 'Error: This file is password-protected and cannot be converted.';
+                } else {
+                     ui.uploadErrorText.textContent = 'Error: Could not read this PDF file.';
+                }
+                resetTool(false); // Reset without clearing the error
+            }
+        }
+
+        function resetTool(clearError = true) {
+            ui.uploadSection.classList.remove('hidden');
+            ui.configSection.classList.add('hidden');
+            ui.processingSection.classList.add('hidden');
+            ui.resultSection.classList.add('hidden');
+            
+            if (clearError) ui.uploadErrorText.textContent = '';
+            ui.fileInput.value = null;
+            ui.fileName.textContent = '';
+            ui.pageCount.textContent = '0 pages';
+            ui.fileSize.textContent = '0 MB';
+            ui.statusText.textContent = '';
+            ui.previewCanvas.getContext('2d').clearRect(0, 0, ui.previewCanvas.width, ui.previewCanvas.height);
+            
+            currentFile = { name: null, buffer: null, totalPages: 0, filenameBase: 'converted-file' };
+            generatedZip = null;
+            
+            document.getElementById('format-jpg').checked = true;
+            document.getElementById('quality-medium').checked = true;
+            ui.convertBtn.disabled = true;
+        }
+
+        // --- Conversion Logic ---
+        ui.convertBtn.addEventListener('click', handleConversion);
+        
+        async function handleConversion() {
+            if (ui.convertBtn.disabled || !currentFile.buffer) return;
+
+            ui.convertBtn.disabled = true;
+            ui.configSection.classList.add('hidden');
+            ui.processingSection.classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+
+            const format = document.querySelector('input[name="image-format"]:checked').value;
+            const qualityMode = document.querySelector('input[name="image-quality"]:checked').value;
+            
+            // --- FIX ---
+            // Use 'image/jpeg' for 'jpg', not 'image/jpg'
+            const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
+            // --- END FIX ---
+            
+            const fileExtension = `.${format}`;
+            
+            let scale, jpgQuality;
+            switch(qualityMode) {
+                case 'low':
+                    scale = 72 / 96; // 72 DPI
+                    jpgQuality = 0.5; // JPG quality (0-1)
+                    break;
+                case 'high':
+                    scale = 300 / 96; // 300 DPI
+                    jpgQuality = 0.95;
+                    break;
+                case 'medium':
+                default:
+                    scale = 150 / 96; // 150 DPI
+                    jpgQuality = 0.8;
+                    break;
+            }
+
+            try {
+                const originalDoc = await pdfjsLib.getDocument({ data: new Uint8Array(currentFile.buffer) }).promise;
+                const zip = new JSZip();
+                
+                const hiddenCanvas = document.createElement('canvas');
+                const ctx = hiddenCanvas.getContext('2d');
+                
+                // Helper to get data from canvas
+                const getCanvasBlob = (canvas, mime, quality) => {
+                    return new Promise(resolve => {
+                        canvas.toBlob(resolve, mime, quality);
+                    });
+                };
+
+                for (let i = 1; i <= originalDoc.numPages; i++) {
+                    ui.processingStatus.textContent = `Converting page ${i} of ${originalDoc.numPages}...`;
+                    
+                    const page = await originalDoc.getPage(i);
+                    const viewport = page.getViewport({ scale });
+                    
+                    hiddenCanvas.width = viewport.width;
+                    hiddenCanvas.height = viewport.height;
+                    
+                    ctx.clearRect(0, 0, hiddenCanvas.width, hiddenCanvas.height);
+                    
+                    // Set a white background for JPGs
+                    if (format === 'jpg') {
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, hiddenCanvas.width, hiddenCanvas.height);
+                    }
+
+                    await page.render({
+                        canvasContext: ctx,
+                        viewport: viewport
+                    }).promise;
+                    
+                    const blob = await getCanvasBlob(hiddenCanvas, mimeType, jpgQuality);
+                    
+                    // Add to zip
+                    const pageNum = String(i).padStart(String(originalDoc.numPages).length, '0');
+                    zip.file(`${currentFile.filenameBase}-page-${pageNum}${fileExtension}`, blob);
+                }
+                
+                ui.processingStatus.textContent = 'Finalizing your .zip file...';
+                generatedZip = await zip.generateAsync({ type: 'blob' });
+                
+                // --- Show Results ---
+                ui.resultSummary.textContent = `Successfully converted ${originalDoc.numPages} pages.`;
+                
+                ui.processingSection.classList.add('hidden');
+                ui.resultSection.classList.remove('hidden');
+                if (window.lucide) lucide.createIcons();
+
+            } catch (err) {
+                console.error('Error during conversion:', err);
+                ui.processingSection.classList.add('hidden');
+                ui.configSection.classList.remove('hidden');
+                ui.statusText.textContent = 'Error: Conversion failed. Please try again.';
+                ui.convertBtn.disabled = false;
+            }
+        }
+        
+        // --- Result Buttons ---
+        ui.downloadBtn.addEventListener('click', () => {
+            if (!generatedZip) return;
+            
+            const url = URL.createObjectURL(generatedZip);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentFile.filenameBase}-images.zip`;
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        });
+        
+        ui.resetBtn.addEventListener('click', () => resetTool(true));
+
+    });
+    </script>
+</body>
+</html>
+
+

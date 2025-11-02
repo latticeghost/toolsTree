@@ -2,6 +2,10 @@
   "name": "toolstree",
   "version": "1.0.0",
   "description": "Free Online Tools & Utilities",
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "sharp": "^0.33.3"
+  },
   "devDependencies": {
     "tailwindcss": "^3.4.3"
   },

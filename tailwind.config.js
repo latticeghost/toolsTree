@@ -47,6 +47,11 @@ module.exports = {
     './tools/utm-builder.html',
     './tools/serp-previewer.html',
     './tools/meta-tag-generator.html',
+    './tools/merge-pdf.html',
+    './tools/split-pdf.html',
+    './tools/compress-pdf.html',
+    './tools/pdf-to-jpg.html',
+    './tools/image-to-pdf.html'
   ],
   darkMode: 'class',
   theme: {
